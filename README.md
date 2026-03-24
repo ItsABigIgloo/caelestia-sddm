@@ -1,6 +1,6 @@
 # 🌌 Caelestia SDDM Theme
 
-A sleek, obsidian-inspired login interface designed specifically for **CaelestiaOS**. Built with QML, this theme focuses on a minimalist "card" aesthetic, high-contrast cyan accents, and full integration with the Caelestia Shell ecosystem.
+A sleek, obsidian-inspired login interface designed specifically for **Caelestia**. Built with QML, this theme focuses on a minimalist "card" aesthetic, high-contrast cyan accents, and full integration with the Caelestia Shell ecosystem.
 
 ![Caelestia SDDM Preview](https://github.com/user-attachments/assets/4cfbae88-3837-4a82-900f-c16ed202049a)
 
@@ -23,3 +23,24 @@ cd caelestia-sddm
 chmod +x install.sh
 ./install.sh
 ```
+### The Longer Way (Too cool for scripts)
+`sudo cp -r ~/projects/caelestia-sddm /usr/share/sddm/themes/caelestia`
+Edit /etc/sddm.conf (or /etc/sddm.conf.d/theme.conf):
+```
+[Theme]
+Current=caelestia
+```
+
+## 🧪 TESTING- Preview the theme without logging out
+
+`sddm-greeter --test-mode --theme /usr/share/sddm/themes/caelestia`
+
+## 🤝 Requirements
+
+Caelestia shell meets all the basic requirements, don't you worry!
+
+for everyone not on Caelestia Shell:
+* **SDDM** duh
+* **qt6-svg**
+* **qt6-virtualkeyboard**
+* **JetBrains Mono Font**
