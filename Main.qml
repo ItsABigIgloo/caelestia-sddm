@@ -51,7 +51,7 @@ Rectangle {
                     style: Text.Outline
                     styleColor: "#000000"
                     font.pixelSize: 84
-                    font.family: "JetBrains Mono"
+                    font.family: "Rubik"
                     color: "#e2e2e2"
                 }
                 Text {
@@ -60,7 +60,7 @@ Rectangle {
                     style: Text.Outline
                     styleColor: "#000000"
                     font.pixelSize: 22
-                    font.family: "JetBrains Mono"
+                    font.family: "Rubik"
                     color: "#919191"
                 }
             }
@@ -100,7 +100,7 @@ Rectangle {
                 model: userModel
                 currentIndex: userModel.lastIndex
                 textRole: "name"
-                font.family: "JetBrains Mono"
+                font.family: "Rubik"
                 font.pixelSize: 20
 
                 background: Rectangle {
@@ -150,7 +150,7 @@ Rectangle {
                 echoMode: TextInput.Password
                 placeholderText: "Password"
                 placeholderTextColor: "#595959"
-                font.family: "JetBrains Mono"
+                font.family: "Rubik"
                 font.pixelSize: 22
                 color: "#e2e2e2"
                 horizontalAlignment: TextInput.AlignHCenter
@@ -204,7 +204,7 @@ Rectangle {
                 model: sessionModel
                 currentIndex: sessionModel.lastIndex
                 textRole: "name"
-                font.family: "JetBrains Mono"
+                font.family: "Rubik"
                 font.pixelSize: 18
 
                 background: Rectangle {
