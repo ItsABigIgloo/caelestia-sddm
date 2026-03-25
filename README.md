@@ -2,7 +2,7 @@
 
 A sleek, obsidian-inspired login interface designed specifically for **Caelestia**. Built with QML, this theme focuses on a minimalist "card" aesthetic, high-contrast cyan accents, and full integration with the Caelestia Shell ecosystem.
 
-![Caelestia SDDM Preview](<"https://github.com/user-attachments/assets/fbe88fda-3a4c-4570-b3b1-5a5318693165">)
+![Caelestia SDDM Preview](<https://github.com/user-attachments/assets/fbe88fda-3a4c-4570-b3b1-5a5318693165>)
 
 ## ✨ Features
 
