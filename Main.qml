@@ -29,12 +29,23 @@ Rectangle {
     Rectangle {
         id: mainCard
         width: 550
-        height: 850
+        height: 800
         anchors.centerIn: parent
-        color: "#e61b1b1b"
         radius: 30
-        border.color: "#994cdadb"
-        border.width: 3
+        border.color: "#BF4cdadb"
+        border.width: 1
+
+        // Native QML vertical gradient
+        gradient: Gradient {
+            GradientStop {
+                position: 0.5
+                color: "#BF1b1b1b"
+            } // Top (Dark)
+            GradientStop {
+                position: 1.0
+                color: "#BF4cdadb"
+            } // Bottom (Cyan)
+        }
 
         ColumnLayout {
             anchors.fill: parent
@@ -71,7 +82,7 @@ Rectangle {
                 Layout.preferredWidth: 220
                 Layout.preferredHeight: 220
                 radius: 110
-                color: "#131313"
+                color: "#BF131313"
                 border.color: "#4cdadb"
                 border.width: 2
                 clip: true
@@ -104,7 +115,7 @@ Rectangle {
                 font.pixelSize: 20
 
                 background: Rectangle {
-                    color: "#131313"
+                    color: "#BF131313"
                     radius: 30
                     border.color: "#353535"
                     border.width: 1
@@ -136,7 +147,7 @@ Rectangle {
                         context.lineTo(width, 0);
                         context.lineTo(width / 2, height);
                         context.closePath();
-                        context.fillStyle = "#353535";
+                        context.fillStyle = "#4cdadb";
                         context.fill();
                     }
                 }
@@ -149,14 +160,14 @@ Rectangle {
                 Layout.preferredHeight: 55
                 echoMode: TextInput.Password
                 placeholderText: "Password"
-                placeholderTextColor: "#595959"
+                placeholderTextColor: "#e2e2e2"
                 font.family: "Rubik"
                 font.pixelSize: 22
                 color: "#e2e2e2"
                 horizontalAlignment: TextInput.AlignHCenter
 
                 background: Rectangle {
-                    color: "#131313"
+                    color: "#BF131313"
                     radius: 35
                     border.color: passwordField.activeFocus ? "#4cdadb" : "#353535"
                 }
@@ -208,7 +219,7 @@ Rectangle {
                 font.pixelSize: 18
 
                 background: Rectangle {
-                    color: "#131313"
+                    color: "#BF131313"
                     radius: 20
                     border.color: "#353535"
                     border.width: 1
@@ -217,7 +228,7 @@ Rectangle {
                 contentItem: Text {
                     text: sessionPicker.displayText
                     font: sessionPicker.font
-                    color: "#4cdadb"
+                    color: "#e2e2e2"
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
 
@@ -240,7 +251,7 @@ Rectangle {
                         context.lineTo(width, 0);
                         context.lineTo(width / 2, height);
                         context.closePath();
-                        context.fillStyle = "#353535";
+                        context.fillStyle = "#4cdadb";
                         context.fill();
                     }
                 }
