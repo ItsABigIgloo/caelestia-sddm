@@ -25,7 +25,9 @@ chmod +x install.sh
 ```
 ### The Longer Way (Too cool for scripts)
 `sudo cp -r ~/projects/caelestia-sddm /usr/share/sddm/themes/caelestia`
+
 Edit /etc/sddm.conf (or /etc/sddm.conf.d/theme.conf):
+
 ```
 [Theme]
 Current=caelestia
