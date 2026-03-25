@@ -18,7 +18,7 @@ A sleek, obsidian-inspired login interface designed specifically for **Caelestia
 Clone the repository and run the automated install script:
 
 ```bash
-git clone [https://github.com/ItsABigIgloo/caelestia-sddm.git](https://github.com/ItsABigIgloo/caelestia-sddm.git)
+git clone https://github.com/ItsABigIgloo/caelestia-sddm.git
 cd caelestia-sddm
 chmod +x install.sh
 ./install.sh
