@@ -89,16 +89,36 @@ Rectangle {
                 Image {
                     id: avatarImage
                     anchors.fill: parent
-                    anchors.margins: 22
+                    anchors.margins: 20
+                    fillMode: Image.PreserveAspectFit
+                    asynchronous: true
+
                     source: {
                         if (userPicker.currentIndex !== -1) {
-                            var icon = userModel.data(userModel.index(userPicker.currentIndex, 0), Qt.UserRole + 2);
-                            return (icon && icon !== "") ? "file://" + icon : "assets/logo.png";
+                            var userName = userModel.data(userModel.index(userPicker.currentIndex, 0), Qt.UserRole + 1);
+
+                            var faceIcon = "file:///home/" + userName + "/.face.icon";
+                            var faceFile = "file:///home/" + userName + "/.face";
+
+                            var modelIcon = userModel.data(userModel.index(userPicker.currentIndex, 0), Qt.UserRole + 2);
+
+                            if (modelIcon && modelIcon !== "") {
+                                return "file://" + modelIcon;
+                            } else {
+                                return faceIcon;
+                            }
                         }
                         return "assets/logo.png";
                     }
-                    fillMode: Image.PreserveAspectFit
-                    asynchronous: true
+
+                    onStatusChanged: {
+                        if (status === Image.Error && source.toString().includes(".face.icon")) {
+                            var userName = userModel.data(userModel.index(userPicker.currentIndex, 0), Qt.UserRole + 1);
+                            source = "file:///home/" + userName + "/.face";
+                        } else if (status === Image.Error) {
+                            source = "assets/logo.png";
+                        }
+                    }
                 }
             }
 
@@ -209,8 +229,11 @@ Rectangle {
             ComboBox {
                 id: sessionPicker
                 Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: 220
+
+                // 1. Remove fixed Layout.preferredWidth and use implicitWidth
+                implicitWidth: contentItem.implicitWidth + (indicator.width * 2) + 20
                 Layout.preferredHeight: 40
+
                 model: sessionModel
                 currentIndex: sessionModel.lastIndex
                 textRole: "name"
@@ -218,6 +241,7 @@ Rectangle {
                 font.pixelSize: 18
 
                 background: Rectangle {
+                    // The background will now naturally follow the ComboBox width
                     color: "#BF131313"
                     radius: 20
                     border.color: "#353535"
@@ -225,22 +249,23 @@ Rectangle {
                 }
 
                 contentItem: Text {
+                    // 2. Reference the displayText to calculate size
                     text: sessionPicker.displayText
                     font: sessionPicker.font
                     color: "#e2e2e2"
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
 
-                    leftPadding: 0
-                    rightPadding: 0
-
-                    anchors.fill: parent
+                    // 3. Add horizontal padding so text isn't cramped
+                    leftPadding: 15
+                    rightPadding: 15
                 }
 
                 indicator: Canvas {
                     id: canvas
-                    x: sessionPicker.width - 24
-                    y: (sessionPicker.height - 6) / 2
+                    // 4. Anchor the arrow to the right side of the control
+                    x: sessionPicker.width - width - 10
+                    y: (sessionPicker.height - height) / 2
                     width: 10
                     height: 6
                     onPaint: {
