@@ -29,6 +29,7 @@ The provided installer handles all dependencies, system configurations, and perm
 
 3.  **Verify the setup:**
     ```bash
+    chmod +x scripts/check.sh
     ./scripts/check.sh
     ```
 
