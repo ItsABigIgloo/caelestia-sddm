@@ -11,7 +11,6 @@ THEME_NAME="caelestia"
 DEPENDENCIES=(
     "sddm" 
     "qt6-svg" 
-    "qt6-multimedia" 
     "qt6-virtualkeyboard" 
     "ffmpeg"
 )
