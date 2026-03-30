@@ -64,5 +64,5 @@ for everyone not on Caelestia Shell:
 * **ffmpeg**
 * **qt6-svg**
 * **qt6-virtualkeyboard**
-* **JetBrains Mono Font** (preferred)
-* **Rubik Font** (fallback, optional)
+* **Rubik Font** (default, preferred)
+* **System Sans fallback** (automatic if Rubik is unavailable)

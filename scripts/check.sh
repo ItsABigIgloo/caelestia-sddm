@@ -87,10 +87,10 @@ else
     fail "Material Symbols Outlined missing (power/reboot icons will not render)"
 fi
 
-if fc-list | grep -Eiq 'JetBrains Mono|Rubik|Noto Sans|DejaVu Sans|Sans'; then
-    ok "At least one UI text fallback font is installed"
+if fc-list | grep -Eiq 'Rubik|Sans'; then
+    ok "Rubik or a system Sans font is installed"
 else
-    fail "No usable UI text fallback font found"
+    fail "No usable UI text font found (Rubik/Sans)"
 fi
 
 echo

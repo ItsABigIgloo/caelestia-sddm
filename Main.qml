@@ -67,7 +67,7 @@ Rectangle {
             }
         }
 
-        return firstAvailable(["JetBrains Mono", "Rubik", "Noto Sans", "DejaVu Sans", "Sans"]);
+        return firstAvailable(["Rubik", "Sans"]);
     }
     property real baseFontSize: boundedNumber(config.FontSize, 12, 10, 24)
     property real avatarBaseSize: boundedNumber(config.AvatarSize, 128, 64, 320)
