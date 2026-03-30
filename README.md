@@ -44,13 +44,7 @@ sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh
 ```
 
 **Automatic Posthook:**
-If you want to apply changes immediately without rebooting, after setting wallpaper, set:
-inside `~/.config/caelestia/cli.json`:
-```json
-"wallpaper": {
-    "postHook": "sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh"
-},
-```
+If you want FULL automatic without reboot use posthook, see [POSTHOOK.md](POSTHOOK.md).
 > **For a deeper explanation of templating and sync flow, see [TEMPLATING.md](TEMPLATING.md).**
 
 ## ⚙️ Configuration
