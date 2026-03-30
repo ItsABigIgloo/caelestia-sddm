@@ -1,34 +1,45 @@
 # 🌌 Caelestia SDDM Theme
 
-A sleek, obsidian-inspired login interface designed specifically for **Caelestia**. Built with QML, this theme focuses on a minimalist "card" aesthetic, high-contrast cyan accents, and full integration with the Caelestia Shell ecosystem.
+A sleek, obsidian-inspired login interface designed specifically for **CaelestiaOS**. Built with QML, this theme features a minimalist card aesthetic, glassmorphism, and full integration with the Caelestia desktop ecosystem.
 
-![Caelestia SDDM Preview](<https://github.com/user-attachments/assets/fbe88fda-3a4c-4570-b3b1-5a5318693165>)
+![Caelestia SDDM Preview](https://github.com/user-attachments/assets/fbe88fda-3a4c-4570-b3b1-5a5318693165)
 
 ## ✨ Features
 
-* **Dynamic Gradient UI:** Deep surfaces using dynamic colors.
-* **Dynamic Accents:** Interactive elements highlighted with Caelestia's dynamic primary color.
-* **Glassmorphism:** Translucent central card (80% opacity) for background integration.
-* **Optimized for Arch:** Lightweight QML implementation with Virtual Keyboard support.
-* **Smart Fallback:** Automatically uses system avatars or falls back to the Caelestia logo.
+* **Dynamic Sync:** Automatically matches your SDDM background and accent colors to your current Hyprland theme upon reboot.
+* **Multimedia Support:** Supports static images (`.jpg`, `.png`), animated GIFs, and video backgrounds (`.mp4`, `.webm`).
+* **Glassmorphism:** A translucent central card with dynamic opacity for seamless background integration.
+* **Smart Fallbacks:** Automatically uses system user avatars (~/.face.icon) or falls back to the Caelestia logo.
 
 ## 🛠️ Installation
 
-### Clone this git to ~/caelestia-sddm
+The provided installer handles all dependencies, system configurations, and permissions automatically.
 
-`sudo cp -r ~/caelestia-sddm /usr/share/sddm/themes/caelestia`
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/your-username/caelestia-sddm.git](https://github.com/your-username/caelestia-sddm.git)
+    cd caelestia-sddm
+    ```
 
-Edit /etc/sddm.conf (or /etc/sddm.conf.d/theme.conf):
+2.  **Run the universal installer:**
+    ```bash
+    chmod +x scripts/install.sh
+    ./scripts/install.sh
+    ```
 
-```
-[Theme]
-Current=caelestia
-```
+3.  **Verify the setup:**
+    ```bash
+    ./scripts/check.sh
+    ```
 
-### To sync wallpaper and colors
-```
-# run the sync script
-./sync.sh
+## 🔄 How the Sync Works
+
+[cite_start]This theme includes a systemd service (`caelestia-sync.service`) that triggers during the shutdown/reboot process[cite: 96]. It identifies the active user, pulls the latest wallpaper and theme configuration from the Caelestia state folder, and applies them to the login screen for your next boot.
+
+**Manual Sync:**
+If you want to apply changes immediately without rebooting, run:
+```bash
+/usr/share/sddm/themes/caelestia/scripts/sync.sh
 ```
 
 ## ⚙️ Configuration
@@ -48,6 +59,8 @@ Caelestia shell meets all the basic requirements, except for SDDM(which is a req
 
 for everyone not on Caelestia Shell:
 * **SDDM** duh
+* **qt6-multimedia**
+* **ffmpeg**
 * **qt6-svg**
 * **qt6-virtualkeyboard**
 * **JetBrains Mono Font** (preferred)
