@@ -30,26 +30,26 @@ AvatarSize=128
 
 # Color Scheme
 # Do not touch these!
-mPrimary=#4cdadb
-mOnPrimary=#002022
+mPrimary=#{{ primary.hex }}
+mOnPrimary=#{{ onPrimary.hex }}
 
-mSecondary=#95f4f5
-mOnSecondary=#003738
+mSecondary=#{{ secondary.hex }}
+mOnSecondary=#{{ onSecondary.hex }}
 
-mTertiary=#86d0ff
-mOnTertiary=#00344d
+mTertiary=#{{ tertiary.hex }}
+mOnTertiary=#{{ onTertiary.hex }}
 
-mError=#ffb4ab
-mOnError=#690005
+mError=#{{ error.hex }}
+mOnError=#{{ onError.hex }}
 
-mSurface=#131313
-mOnSurface=#e2e2e2
+mSurface=#{{ surface.hex }}
+mOnSurface=#{{ onSurface.hex }}
 
-mSurfaceVariant=#353535
-mOnSurfaceVariant=#919191
+mSurfaceVariant=#{{ surfaceVariant.hex }}
+mOnSurfaceVariant=#{{ onSurfaceVariant.hex }}
 
-mOutline=#7d7d7d
-mShadow=#000000
+mOutline=#{{ outline.hex }}
+mShadow=#{{ shadow.hex }}
 
-mHover=#4cdadb
-mOnHover=#002022
+mHover=#{{ primary.hex }}
+mOnHover=#{{ onPrimary.hex }}
