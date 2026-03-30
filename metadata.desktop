@@ -1,8 +1,10 @@
-[Desktop Entry]
+[SddmGreeterTheme]
 Name=Caelestia SDDM
 Comment=Minimalist CaelestiaOS Login Theme
-Type=shell
+Type=sddm-theme
 Version=1.0
 Author=Christopher Bennett
 MainScript=Main.qml
 ConfigFile=theme.conf
+QtVersion=6
+X-SDDM-Theme-InterfaceVersion=2
