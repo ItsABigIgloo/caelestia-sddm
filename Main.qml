@@ -38,11 +38,9 @@ Rectangle {
 
     property string backgroundSource: {
         var source = config.background ? config.background.toString().trim() : "";
-
-        if (!source || source.charAt(0) === "#") {
-            return "assets/background.png";
+        if (!source || source === "") {
+            return "assets/background.png"; // Absolute fallback
         }
-
         return source;
     }
     property string fontFamily: {
