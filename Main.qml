@@ -106,16 +106,41 @@ Rectangle {
         return Qt.rgba(baseColor.r, baseColor.g, baseColor.b, alphaValue);
     }
 
-    Image {
-        id: background
+    Item {
+        id: backgroundContainer
         anchors.fill: parent
-        source: backgroundSource
-        fillMode: Image.PreserveAspectCrop
 
-        onStatusChanged: {
-            if (status === Image.Error) {
-                console.log("Background missing, using fallback color");
-            }
+        property string src: backgroundSource
+        property bool isVideo: src.endsWith(".mp4") || src.endsWith(".webm")
+        property bool isGif: src.endsWith(".gif")
+
+        // Static Image (Fallback & Standard)
+        Image {
+            anchors.fill: parent
+            source: backgroundContainer.src
+            fillMode: Image.PreserveAspectCrop
+            visible: !backgroundContainer.isVideo && !backgroundContainer.isGif
+            asynchronous: true
+        }
+
+        // Animated GIF Support. trying to please everyone i guess.
+        AnimatedImage {
+            anchors.fill: parent
+            source: backgroundContainer.src
+            fillMode: Image.PreserveAspectCrop
+            visible: backgroundContainer.isGif
+        }
+
+        // Video Background Support because someone will not pick this shit.
+        Video {
+            anchors.fill: parent
+            source: backgroundContainer.src
+            fillMode: VideoOutput.PreserveAspectCrop
+            loops: MediaPlayer.Infinite
+            running: backgroundContainer.isVideo
+            autoPlay: true
+            muted: true // Always mute login screens!
+            visible: backgroundContainer.isVideo
         }
     }
 
