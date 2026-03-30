@@ -44,3 +44,8 @@ It should finish without prompting for a password.
 
 - This is for user-triggered posthook execution.
 - The systemd service (`caelestia-sync.service`) runs separately and does not use your interactive sudo session.
+
+## FINAL RESULT:
+
+https://github.com/user-attachments/assets/071bdb4d-8559-4a6e-929b-d34d40a225a6
+
