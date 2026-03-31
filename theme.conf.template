@@ -6,26 +6,32 @@ background=assets/background.png
 fontFamily="Rubik"
 
 # Card Drop shadows [true | false]
-dropShadows=false
+dropShadows=true
 
-# Blur radius for the background [numbers]
-blurRadius=0
+# Background blur [true | false]
+blurEnabled=true
+
+# Background blur strength [0.0 to 1.0]
+blurStrength=0.6
 
 # Card Opacity [0 to 1]
-cardOpacity=0.95
+cardOpacity=0.80
+
+# Background overlay opacity [0 to 1]
+overlayOpacity=0.4
 
 # Power Buttons radius (roundness)
 buttonRadius=20
 
 # Password input radius (roundness)
-passwordInputRadius=20
+passwordInputRadius=30
 
 # Card Border radius (roundness)
-cardRadius=20
+cardRadius=80
 
 # Default values
-FontSize=12
-AvatarSize=128
+FontSize=11
+AvatarSize=120
 
 # Color Scheme
 # Do not touch these!

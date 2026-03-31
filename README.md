@@ -88,6 +88,8 @@ This keeps `~/.face.icon` synced to `~/.face` and fixes incorrect avatar images.
 
 ## Requirements
 
+> **Note:** This theme requires **Qt 6.2+** for background blur effects (`MultiEffect`). Most modern distributions ship with Qt 6.2+, but verify your version with `pacman -Q qt6-declarative`.
+
 Caelestia Shell meets all the basic requirements, except for SDDM (which is required for an SDDM theme).
 
 For everyone not on Caelestia Shell:
@@ -95,8 +97,8 @@ For everyone not on Caelestia Shell:
 * **qt6-declarative**
 * **qt6-5compat**
 * **qt6-multimedia**
-* **ffmpeg**
 * **qt6-svg**
 * **qt6-virtualkeyboard**
+* **ffmpeg**
 * **Material Symbols Outlined** (required for power/reboot icons)
 * **Rubik Font** (default text)

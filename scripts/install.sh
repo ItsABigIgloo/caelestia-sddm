@@ -44,6 +44,8 @@ sudo mkdir -p "$INSTALL_DIR"
 
 # Copy core theme files
 sudo cp "$PROJECT_ROOT/Main.qml" "$INSTALL_DIR/"
+sudo cp "$PROJECT_ROOT/qmldir" "$INSTALL_DIR/"
+sudo cp -r "$PROJECT_ROOT/components" "$INSTALL_DIR/"
 sudo cp "$PROJECT_ROOT/caelestia-sddm.qmlproject" "$INSTALL_DIR/"
 sudo cp "$PROJECT_ROOT/metadata.desktop" "$INSTALL_DIR/"
 sudo cp "$PROJECT_ROOT/theme.conf" "$INSTALL_DIR/"
@@ -64,14 +66,14 @@ mkdir -p "$HOME/.config/caelestia/templates"
 cp "$INSTALL_DIR/theme.conf.template" "$HOME/.config/caelestia/templates/sddm-theme.conf"
 echo "✓ Template created at ~/.config/caelestia/templates/sddm-theme.conf"
 
-# 3. Install the Systemd Service from the /components folder
-if [ -f "$PROJECT_ROOT/components/caelestia-sync.service" ]; then
-    sudo cp "$PROJECT_ROOT/components/caelestia-sync.service" /etc/systemd/system/
+# 3. Install the Systemd Service
+if [ -f "$PROJECT_ROOT/scripts/caelestia-sync.service" ]; then
+    sudo cp "$PROJECT_ROOT/scripts/caelestia-sync.service" /etc/systemd/system/
     sudo systemctl daemon-reload
     sudo systemctl enable caelestia-sync.service
     echo "✓ Service installed and enabled"
 else
-    echo "✗ Error: caelestia-sync.service not found in /components/"
+    echo "✗ Error: caelestia-sync.service not found in /scripts/"
     exit 1
 fi
 
