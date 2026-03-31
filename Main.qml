@@ -1,88 +1,42 @@
+import Qt5Compat.GraphicalEffects
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import Qt5Compat.GraphicalEffects
 
 Rectangle {
     id: root
-    width: 1920
-    height: 1080
-    color: mSurface
-
-    function toNumber(value, fallbackValue) {
-        var num = Number(value);
-        return isFinite(num) ? num : fallbackValue;
-    }
-
-    function boundedNumber(value, fallbackValue, minValue, maxValue) {
-        var num = toNumber(value, fallbackValue);
-
-        if (num < minValue) {
-            return minValue;
-        }
-
-        if (num > maxValue) {
-            return maxValue;
-        }
-
-        return num;
-    }
-
-    function toBool(value, fallbackValue) {
-        if (value === undefined || value === null || value === "") {
-            return fallbackValue;
-        }
-
-        var normalized = String(value).toLowerCase();
-        return normalized === "true" || normalized === "1" || normalized === "yes" || normalized === "on";
-    }
 
     property string backgroundSource: {
         var source = config.background ? config.background.toString().trim() : "";
-        if (!source || source === "") {
-            return "assets/background.png"; // Absolute fallback
-        }
+        if (!source || source === "")
+            return "assets/background.png";
+
+        // Absolute fallback
         return source;
     }
-
     property string fontFamily: {
         var availableFonts = Qt.fontFamilies();
-
-        function firstAvailable(candidates) {
-            for (var i = 0; i < candidates.length; i++) {
-                if (availableFonts.indexOf(candidates[i]) !== -1) {
-                    return candidates[i];
-                }
-            }
-            return "sans-serif";
-        }
-
         var family = config.fontFamily;
-        if (!family || family === "") {
+        if (!family || family === "")
             family = config.Font;
-        }
 
         if (family && family !== "") {
             family = family.toString().replace(/^"|"$/g, "");
-            if (availableFonts.indexOf(family) !== -1) {
+            if (availableFonts.indexOf(family) !== -1)
                 return family;
-            }
-        }
 
+        }
         return firstAvailable(["Rubik", "Sans"]);
     }
-
+    // Sizes and dimensions
     property real baseFontSize: boundedNumber(config.FontSize, 12, 10, 24)
     property real avatarBaseSize: boundedNumber(config.AvatarSize, 128, 64, 320)
     property real avatarFrameSize: Math.max(96, Math.round(avatarBaseSize * 1.72))
     property real avatarInset: Math.max(8, Math.round(avatarFrameSize * 0.09))
-    property bool dropShadows: toBool(config.dropShadows, false)
-    property real blurRadius: boundedNumber(config.blurRadius, 0, 0, 64)
-    property real cardOpacity: boundedNumber(config.cardOpacity, 0.95, 0.0, 1.0)
     property real buttonRadius: boundedNumber(config.buttonRadius, 20, 0, 64)
     property real passwordInputRadius: boundedNumber(config.passwordInputRadius, 20, 0, 64)
     property real cardRadius: boundedNumber(config.cardRadius, 30, 0, 80)
-
+    // Colors
     property color mPrimary: config.mPrimary ? config.mPrimary : (config.accent ? config.accent : "#4cdadb")
     property color mOnPrimary: config.mOnPrimary ? config.mOnPrimary : "#002022"
     property color mSecondary: config.mSecondary ? config.mSecondary : "#95f4f5"
@@ -99,21 +53,62 @@ Rectangle {
     property color mShadow: config.mShadow ? config.mShadow : "#000000"
     property color mHover: config.mHover ? config.mHover : mPrimary
     property color mOnHover: config.mOnHover ? config.mOnHover : mOnPrimary
-
+    // Effects
+    property bool dropShadows: toBool(config.dropShadows, false)
+    property real blurRadius: boundedNumber(config.blurRadius, 0, 0, 64)
+    property real cardOpacity: boundedNumber(config.cardOpacity, 0.95, 0, 1)
     property real overlayOpacity: 0.4
     property real cardShadowOpacity: 0.55
+
+    function firstAvailable(candidates) {
+        for (var i = 0; i < candidates.length; i++) {
+            if (availableFonts.indexOf(candidates[i]) !== -1)
+                return candidates[i];
+
+        }
+        return "sans-serif";
+    }
+
+    function toNumber(value, fallbackValue) {
+        var num = Number(value);
+        return isFinite(num) ? num : fallbackValue;
+    }
+
+    function boundedNumber(value, fallbackValue, minValue, maxValue) {
+        var num = toNumber(value, fallbackValue);
+        if (num < minValue)
+            return minValue;
+
+        if (num > maxValue)
+            return maxValue;
+
+        return num;
+    }
+
+    function toBool(value, fallbackValue) {
+        if (value === undefined || value === null || value === "")
+            return fallbackValue;
+
+        var normalized = String(value).toLowerCase();
+        return normalized === "true" || normalized === "1" || normalized === "yes" || normalized === "on";
+    }
 
     function withAlpha(baseColor, alphaValue) {
         return Qt.rgba(baseColor.r, baseColor.g, baseColor.b, alphaValue);
     }
 
+    width: 1920
+    height: 1080
+    color: mSurface
+
     Item {
         id: backgroundContainer
-        anchors.fill: parent
 
         property string src: backgroundSource
         property bool isVideo: src.endsWith(".mp4") || src.endsWith(".webm")
         property bool isGif: src.endsWith(".gif")
+
+        anchors.fill: parent
 
         // Only support static image for now
         Image {
@@ -123,6 +118,7 @@ Rectangle {
             visible: !backgroundContainer.isVideo && !backgroundContainer.isGif
             asynchronous: true
         }
+
     }
 
     Rectangle {
@@ -133,6 +129,7 @@ Rectangle {
 
     Item {
         id: cardContainer
+
         width: 550
         height: 800
         anchors.centerIn: parent
@@ -148,6 +145,7 @@ Rectangle {
 
         Rectangle {
             id: mainCard
+
             anchors.fill: parent
             radius: cardRadius
             border.color: withAlpha(mPrimary, cardOpacity)
@@ -158,16 +156,20 @@ Rectangle {
                 anchors.fill: parent
                 radius: cardRadius
                 opacity: cardOpacity
+
                 gradient: Gradient {
                     GradientStop {
                         position: 0.5
                         color: withAlpha(mSurface, 0.92)
                     }
+
                     GradientStop {
-                        position: 1.0
+                        position: 1
                         color: withAlpha(mPrimary, 0.36)
                     }
+
                 }
+
             }
 
             ColumnLayout {
@@ -178,8 +180,10 @@ Rectangle {
                 ColumnLayout {
                     Layout.alignment: Qt.AlignHCenter
                     spacing: 10
+
                     Text {
                         id: clock
+
                         Layout.alignment: Qt.AlignHCenter
                         text: Qt.formatTime(new Date(), "hh:mm AP")
                         style: Text.Outline
@@ -188,6 +192,7 @@ Rectangle {
                         font.family: fontFamily
                         color: mOnSurface
                     }
+
                     Text {
                         Layout.alignment: Qt.AlignHCenter
                         text: Qt.formatDate(new Date(), "dddd, d MMMM yyyy")
@@ -197,10 +202,12 @@ Rectangle {
                         font.family: fontFamily
                         color: mOnSurfaceVariant
                     }
+
                 }
 
                 Rectangle {
                     id: avatarFrame
+
                     Layout.alignment: Qt.AlignHCenter
                     Layout.preferredWidth: avatarFrameSize
                     Layout.preferredHeight: avatarFrameSize
@@ -210,6 +217,7 @@ Rectangle {
 
                     Rectangle {
                         id: avatarMask
+
                         anchors.fill: parent
                         radius: avatarFrame.radius
                         color: "white"
@@ -218,87 +226,78 @@ Rectangle {
 
                     Image {
                         id: avatarImage
-                        anchors.fill: parent
-                        fillMode: Image.PreserveAspectCrop
-                        asynchronous: true
-                        smooth: true
-                        mipmap: true
-                        layer.enabled: true
-                        layer.effect: OpacityMask {
-                            maskSource: avatarMask
-                        }
+
                         property var avatarCandidates: ["assets/logo.png"]
                         property int avatarCandidateIndex: 0
                         property int roleHomeDir: Qt.UserRole + 3
                         property int roleIcon: Qt.UserRole + 4
 
                         function toSourceUrl(pathOrUrl) {
-                            if (!pathOrUrl || pathOrUrl === "") {
+                            if (!pathOrUrl || pathOrUrl === "")
                                 return "";
-                            }
 
                             var value = String(pathOrUrl);
-                            if (value.startsWith("file://") || value.startsWith("qrc:/") || value.startsWith(":/") || value.startsWith("http://") || value.startsWith("https://")) {
+                            if (value.startsWith("file://") || value.startsWith("qrc:/") || value.startsWith(":/") || value.startsWith("http://") || value.startsWith("https://"))
                                 return value;
-                            }
 
-                            if (value.startsWith("/")) {
+                            if (value.startsWith("/"))
                                 return "file://" + value;
-                            }
 
                             return value;
                         }
 
                         function appendCandidate(list, value) {
                             var normalized = toSourceUrl(value);
-                            if (normalized !== "" && list.indexOf(normalized) === -1) {
+                            if (normalized !== "" && list.indexOf(normalized) === -1)
                                 list.push(normalized);
-                            }
+
                         }
 
                         function rebuildAvatarCandidates() {
                             var list = [];
-
                             appendCandidate(list, "assets/avatar.face.icon");
                             appendCandidate(list, "assets/avatar.face");
-
                             if (userPicker.currentIndex >= 0 && userPicker.currentIndex < userModel.count) {
                                 var modelIndex = userModel.index(userPicker.currentIndex, 0);
-
                                 var icon = userModel.data(modelIndex, roleIcon);
                                 var homeDir = userModel.data(modelIndex, roleHomeDir);
-
                                 appendCandidate(list, icon);
-
                                 if (homeDir && homeDir !== "") {
                                     appendCandidate(list, homeDir + "/.face.icon");
                                     appendCandidate(list, homeDir + "/.face");
                                 }
                             }
-
                             appendCandidate(list, "assets/logo.png");
-
                             avatarCandidates = list;
                             avatarCandidateIndex = 0;
                         }
 
+                        anchors.fill: parent
+                        fillMode: Image.PreserveAspectCrop
+                        asynchronous: true
+                        smooth: true
+                        mipmap: true
+                        layer.enabled: true
                         source: avatarCandidates.length > 0 ? avatarCandidates[avatarCandidateIndex] : "assets/logo.png"
-
                         onStatusChanged: {
-                            if (status === Image.Error && avatarCandidateIndex < avatarCandidates.length - 1) {
+                            if (status === Image.Error && avatarCandidateIndex < avatarCandidates.length - 1)
                                 avatarCandidateIndex += 1;
-                            }
+
                         }
+                        Component.onCompleted: rebuildAvatarCandidates()
 
                         Connections {
-                            target: userPicker
-
                             function onCurrentIndexChanged() {
                                 avatarImage.rebuildAvatarCandidates();
                             }
+
+                            target: userPicker
                         }
 
-                        Component.onCompleted: rebuildAvatarCandidates()
+                        layer.effect: OpacityMask {
+                            maskSource: avatarMask
+                        }
+
                     }
 
                     Rectangle {
@@ -308,10 +307,12 @@ Rectangle {
                         border.color: mPrimary
                         border.width: 2
                     }
+
                 }
 
                 ComboBox {
                     id: userPicker
+
                     Layout.alignment: Qt.AlignHCenter
                     Layout.preferredWidth: 380
                     Layout.preferredHeight: 55
@@ -338,7 +339,6 @@ Rectangle {
                         rightPadding: 0
                         topPadding: 0
                         bottomPadding: 0
-
                         anchors.fill: parent
                     }
 
@@ -358,10 +358,12 @@ Rectangle {
                             context.fill();
                         }
                     }
+
                 }
 
                 TextField {
                     id: passwordField
+
                     Layout.alignment: Qt.AlignHCenter
                     Layout.preferredWidth: 380
                     Layout.preferredHeight: 55
@@ -372,28 +374,32 @@ Rectangle {
                     font.pixelSize: Math.round(baseFontSize * 1.83)
                     color: mOnSurface
                     horizontalAlignment: TextInput.AlignHCenter
+                    onAccepted: sddm.login(userPicker.currentText, text, sessionPicker.currentIndex)
 
                     background: Rectangle {
                         color: withAlpha(mSurface, cardOpacity)
                         radius: passwordInputRadius
                         border.color: passwordField.activeFocus ? mPrimary : mOutline
                     }
-                    onAccepted: sddm.login(userPicker.currentText, text, sessionPicker.currentIndex)
+
                 }
 
                 Row {
                     Layout.alignment: Qt.AlignHCenter
                     spacing: 50
+
                     Button {
                         id: shutBtn
+
                         hoverEnabled: true
                         onClicked: sddm.powerOff()
+
                         background: Rectangle {
                             radius: buttonRadius
                             color: "transparent"
                         }
-                        contentItem: Text {
 
+                        contentItem: Text {
                             text: "\ue8ac"
                             font.family: "Material Symbols Outlined"
                             font.pixelSize: Math.round(baseFontSize * 3.5)
@@ -401,16 +407,20 @@ Rectangle {
                             verticalAlignment: Text.AlignVCenter
                             color: (shutBtn.hovered || shutBtn.down) ? mError : mOnSurface
                         }
+
                     }
 
                     Button {
                         id: rebBtn
+
                         hoverEnabled: true
                         onClicked: sddm.reboot()
+
                         background: Rectangle {
                             radius: buttonRadius
                             color: "transparent"
                         }
+
                         contentItem: Text {
                             text: "\uf053"
                             font.family: "Material Symbols Outlined"
@@ -419,16 +429,17 @@ Rectangle {
                             verticalAlignment: Text.AlignVCenter
                             color: (rebBtn.hovered || rebBtn.down) ? mHover : mOnSurface
                         }
+
                     }
+
                 }
 
                 ComboBox {
                     id: sessionPicker
-                    Layout.alignment: Qt.AlignHCenter
 
+                    Layout.alignment: Qt.AlignHCenter
                     implicitWidth: contentItem.implicitWidth + (indicator.width * 2) + 20
                     Layout.preferredHeight: 40
-
                     model: sessionModel
                     currentIndex: sessionModel.lastIndex
                     textRole: "name"
@@ -454,6 +465,7 @@ Rectangle {
 
                     indicator: Canvas {
                         id: canvas
+
                         x: sessionPicker.width - width - 10
                         y: (sessionPicker.height - height) / 2
                         width: 10
@@ -469,8 +481,13 @@ Rectangle {
                             context.fill();
                         }
                     }
+
                 }
+
             }
+
         }
+
     }
+
 }
