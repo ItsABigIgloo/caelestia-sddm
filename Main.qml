@@ -141,14 +141,14 @@ Rectangle {
                 return ;
             }
             if (event.key === Qt.Key_Up) {
-                if (sessionModel.count > 0 && sessionPicker.currentIndex < sessionModel.count - 1)
-                    sessionPicker.currentIndex += 1;
+                if (sessionModel.count > 0 && sessionPicker.currentIndex > 0)
+                    sessionPicker.currentIndex -= 1;
 
                 return ;
             }
             if (event.key === Qt.Key_Down) {
-                if (sessionModel.count > 0 && sessionPicker.currentIndex > 0)
-                    sessionPicker.currentIndex -= 1;
+                if (sessionModel.count > 0 && sessionPicker.currentIndex < sessionModel.count - 1)
+                    sessionPicker.currentIndex += 1;
 
                 return ;
             }

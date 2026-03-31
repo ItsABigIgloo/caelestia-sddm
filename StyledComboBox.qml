@@ -60,7 +60,8 @@ ComboBox {
     }
 
     delegate: ItemDelegate {
-        width: root.width
+        // Fixed inset to fit inside popup borders and rounded corners
+        width: root.width - 16
 
         contentItem: Text {
             text: model[root.textRole]
@@ -84,8 +85,10 @@ ComboBox {
         implicitHeight: contentItem.implicitHeight
 
         contentItem: ListView {
-            clip: true
             implicitHeight: Math.min(contentHeight, 250)
+            // add some margin so it doesn't look cramped
+            leftMargin: 2
+            rightMargin: 2
             model: root.popup.visible ? root.delegateModel : null
             currentIndex: root.highlightedIndex
 
