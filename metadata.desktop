@@ -1,7 +1,7 @@
 [SddmGreeterTheme]
 Name=Caelestia SDDM
-Comment=Minimalist CaelestiaOS Login Theme
-Description=Minimalist CaelestiaOS Login Theme
+Comment=Minimalist Calestia Shell Login Theme
+Description=Minimalist Calestia Shell Login Theme
 Type=sddm-theme
 Version=1.0
 Author=Christopher Bennett

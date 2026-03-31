@@ -8,15 +8,15 @@
 
 </div>
 
-<p align="center">A dynamic, adaptive login interface for <strong>CaelestiaOS</strong>. Built with QML, this theme focuses on wallpaper-driven colors, synchronized visuals, and seamless integration with the Caelestia desktop ecosystem.</p>
+<p align="center">A dynamic, adaptive login interface for <strong>Caelestia Shell</strong>. Built with QML, this theme focuses on wallpaper-driven colors, synchronized visuals, and seamless integration with the Caelestia desktop ecosystem.</p>
 
 ![Caelestia SDDM Preview](https://github.com/user-attachments/assets/5e6cf46d-afce-4b84-91bd-9c88028006d5)
 
 ## Features
 
 * **Dynamic Sync:** Automatically matches your SDDM background and accent colors to your current Hyprland theme upon reboot.
-* **Multimedia Support:** Supports static images (`.jpg`, `.png`), animated GIFs, and video backgrounds (`.mp4`, `.webm`).
-* **Glassmorphism:** A translucent central card with dynamic opacity for seamless background integration.
+* **Multimedia Support:** Supports static images (`.jpg`, `.png`), (TODO: animated GIFs, and video backgrounds (`.mp4`, `.webm`)).
+* **Glassmorphism:** A translucent central card with dynamic opacity and blur for seamless background integration.
 * **Smart Avatar Fallbacks:** Uses `userModel.icon`, then `~/.face.icon`, then `~/.face`, then falls back to the Caelestia logo.
 * **Qt6 Theme Runtime:** Configured with `QtVersion=6` for modern SDDM greeter compatibility.
 
@@ -70,8 +70,9 @@ To customize the theme config, modify it only through the Caelestia config:
 Do not edit `/usr/share/sddm/themes/caelestia/theme.conf` directly, since this will be overwritten by Caelestia templating system.
 
 
-## TESTING- Preview the theme without logging out
+## Testing
 
+Preview the theme without logging out:
 ```bash
 sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/caelestia
 ```
