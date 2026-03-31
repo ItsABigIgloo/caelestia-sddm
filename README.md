@@ -10,7 +10,7 @@
 
 <p align="center">A dynamic, adaptive login interface for <strong>CaelestiaOS</strong>. Built with QML, this theme focuses on wallpaper-driven colors, synchronized visuals, and seamless integration with the Caelestia desktop ecosystem.</p>
 
-![Caelestia SDDM Preview](https://github.com/user-attachments/assets/fbe88fda-3a4c-4570-b3b1-5a5318693165)
+![Caelestia SDDM Preview](https://github.com/user-attachments/assets/5e6cf46d-afce-4b84-91bd-9c88028006d5)
 
 ## Features
 
