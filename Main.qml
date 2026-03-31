@@ -115,7 +115,7 @@ Rectangle {
         property bool isVideo: src.endsWith(".mp4") || src.endsWith(".webm")
         property bool isGif: src.endsWith(".gif")
 
-        // Static Image (Fallback & Standard)
+        // Only support static image for now
         Image {
             anchors.fill: parent
             source: backgroundContainer.src

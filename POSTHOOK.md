@@ -14,7 +14,7 @@ Edit `~/.config/caelestia/cli.json` and set:
 
 ## 2) Allow passwordless sudo for this one command
 
-Without this, posthook may fail or wait for sudo input.
+Without this, posthook will fail because it waits for sudo input.
 
 Create a sudoers drop-in:
 

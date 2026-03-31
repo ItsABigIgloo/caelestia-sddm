@@ -44,14 +44,13 @@ The provided installer handles all dependencies, system configurations, and perm
 
 ## How the Sync Works
 
-This theme already includes a systemd service (`caelestia-sync.service`) that triggers during the shutdown/reboot process. It identifies the active user, pulls the latest wallpaper and theme configuration from the Caelestia state folder, and applies them to the login screen for your next boot.
+This theme already includes a systemd service (`caelestia-sync.service`) that triggers during the shutdown/reboot process. It identifies the active user, pulls the latest wallpaper, avatar icons and theme configuration from the Caelestia state folder, and applies them to the login screen for your next boot.
 
 **Manual Sync:**
 If you want to apply changes immediately without rebooting, run:
 ```bash
 sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh
 ```
-This also syncs `~/.face` and `~/.face.icon` into theme assets so SDDM can always read the avatar.
 
 **Automatic Posthook:**
 If you want fully automatic sync without reboot, use posthook. See [POSTHOOK.md](POSTHOOK.md).
@@ -73,17 +72,19 @@ Do not edit `/usr/share/sddm/themes/caelestia/theme.conf` directly, since this w
 
 ## TESTING- Preview the theme without logging out
 
-`sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/caelestia`
+```bash
+sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/caelestia
+```
 
 ## Troubleshooting
 
 **Avatar not updating or showing stale image**
 
 ```bash
-sudo ./scripts/fix-avatar-links.sh
+sudo ./scripts/fix-avatar.sh
 ```
 
-This keeps `~/.face.icon` synced to `~/.face` and prevents stale avatar images.
+This keeps `~/.face.icon` synced to `~/.face` and fixes incorrect avatar images.
 
 ## Requirements
 

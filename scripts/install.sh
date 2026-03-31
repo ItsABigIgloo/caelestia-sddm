@@ -17,7 +17,7 @@ DEPENDENCIES=(
     "ffmpeg"
 )
 
-echo "🔍 Checking dependencies..."
+echo "Checking dependencies..."
 MISSING_PKGS=()
 
 for pkg in "${DEPENDENCIES[@]}"; do
@@ -37,7 +37,7 @@ fi
 
 INSTALL_DIR="/usr/share/sddm/themes/$THEME_NAME"
 
-echo "🌌 Installing Caelestia SDDM Theme..."
+echo "Installing Caelestia SDDM Theme..."
 
 # 1. Create theme directory and copy project files
 sudo mkdir -p "$INSTALL_DIR"
@@ -61,7 +61,7 @@ else
     exit 1
 fi
 
-# 4. Fix permissions so sync.sh can update assets without sudo later
+# 4. Fix permissions so sync.sh have proper root access
 sudo chown -R root:root "$INSTALL_DIR"
 sudo chmod -R 755 "$INSTALL_DIR"
 sudo chmod -R 777 "$INSTALL_DIR/assets"
