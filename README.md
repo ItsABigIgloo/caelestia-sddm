@@ -9,7 +9,8 @@ A sleek, obsidian-inspired login interface designed specifically for **Caelestia
 * **Dynamic Sync:** Automatically matches your SDDM background and accent colors to your current Hyprland theme upon reboot.
 * **Multimedia Support:** Supports static images (`.jpg`, `.png`), animated GIFs, and video backgrounds (`.mp4`, `.webm`).
 * **Glassmorphism:** A translucent central card with dynamic opacity for seamless background integration.
-* **Smart Fallbacks:** Automatically uses system user avatars (~/.face.icon) or falls back to the Caelestia logo.
+* **Smart Avatar Fallbacks:** Uses `userModel.icon`, then `~/.face.icon`, then `~/.face`, then falls back to the Caelestia logo.
+* **Qt6 Theme Runtime:** Configured with `QtVersion=6` for modern SDDM greeter compatibility.
 
 ## 🛠️ Installation
 
@@ -42,6 +43,7 @@ If you want to apply changes immediately without rebooting, run:
 ```bash
 sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh
 ```
+This also syncs `~/.face` and `~/.face.icon` into theme assets so SDDM can always read the avatar.
 
 **Automatic Posthook:**
 If you want FULL automatic without reboot use posthook, see [POSTHOOK.md](POSTHOOK.md).
@@ -63,7 +65,17 @@ Do not edit `/usr/share/sddm/themes/caelestia/theme.conf` directly, since this w
 
 ## 🧪 TESTING- Preview the theme without logging out
 
-`sddm-greeter --test-mode --theme /usr/share/sddm/themes/caelestia`
+`sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/caelestia`
+
+## 🩹 Troubleshooting
+
+**Avatar not updating or showing stale image**
+
+```bash
+sudo ./scripts/fix-avatar-links.sh
+```
+
+This keeps `~/.face.icon` synced to `~/.face` and prevents stale avatar images.
 
 ## 🤝 Requirements
 
@@ -71,6 +83,8 @@ Caelestia shell meets all the basic requirements, except for SDDM(which is a req
 
 for everyone not on Caelestia Shell:
 * **SDDM** duh
+* **qt6-declarative**
+* **qt6-5compat**
 * **qt6-multimedia**
 * **ffmpeg**
 * **qt6-svg**
