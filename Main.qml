@@ -386,6 +386,7 @@ Rectangle {
                     spacing: 50
                     Button {
                         id: shutBtn
+                        hoverEnabled: true
                         onClicked: sddm.powerOff()
                         background: Rectangle {
                             radius: buttonRadius
@@ -398,12 +399,13 @@ Rectangle {
                             font.pixelSize: Math.round(baseFontSize * 3.5)
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            color: shutBtn.hovered ? mError : mOnSurface
+                            color: (shutBtn.hovered || shutBtn.down) ? mError : mOnSurface
                         }
                     }
 
                     Button {
                         id: rebBtn
+                        hoverEnabled: true
                         onClicked: sddm.reboot()
                         background: Rectangle {
                             radius: buttonRadius
@@ -415,7 +417,7 @@ Rectangle {
                             font.pixelSize: Math.round(baseFontSize * 3.5)
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            color: rebBtn.hovered ? mHover : mOnSurface
+                            color: (rebBtn.hovered || rebBtn.down) ? mHover : mOnSurface
                         }
                     }
                 }
