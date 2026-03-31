@@ -1,7 +1,7 @@
+// Requires Qt 6.2+ for MultiEffect
 import Qt5Compat.GraphicalEffects
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-// Requires Qt 6.2+ for MultiEffect
 import QtQuick.Effects
 import QtQuick.Layouts 1.15
 
@@ -67,8 +67,7 @@ Rectangle {
     property int shadowSamples: 32
     // State
     property bool firstInput: true
-    // Password buffer - cleared on user change, Escape, or after login attempt
-    // Note: For security, this buffer should be cleared as soon as possible
+    // Internal buffer for password input
     property string buffer: ""
 
     // ---- Utility functions ---- //
@@ -110,9 +109,9 @@ Rectangle {
     }
 
     function restoreFocus() {
-        if (!keyHandler.activeFocus) {
+        if (!keyHandler.activeFocus)
             keyHandler.forceActiveFocus();
-        }
+
     }
 
     function clearBuffer() {
@@ -132,62 +131,56 @@ Rectangle {
         Keys.onPressed: function(event) {
             // Handle first input activation - capture the activating character
             if (root.firstInput) {
-                if (event.text && event.text !== "" && event.text.length === 1) {
+                if (event.text && event.text !== "" && event.text.length === 1)
                     root.buffer = event.text;
-                }
-                root.firstInput = false;
-                return;
-            }
 
+                root.firstInput = false;
+                return ;
+            }
             // Handle Escape key - reset to idle state
             if (event.key === Qt.Key_Escape) {
                 root.firstInput = true;
                 clearBuffer();
-                return;
+                return ;
             }
-
             // Handle navigation keys
             if (event.key === Qt.Key_Right) {
                 if (userModel.count > 0 && userPicker.currentIndex < userModel.count - 1) {
                     userPicker.currentIndex += 1;
                     clearBuffer();
                 }
-                return;
+                return ;
             }
             if (event.key === Qt.Key_Left) {
                 if (userModel.count > 0 && userPicker.currentIndex > 0) {
                     userPicker.currentIndex -= 1;
                     clearBuffer();
                 }
-                return;
+                return ;
             }
             if (event.key === Qt.Key_Up) {
                 if (sessionModel.count > 0 && sessionPicker.currentIndex > 0)
                     sessionPicker.currentIndex -= 1;
 
-                return;
+                return ;
             }
             if (event.key === Qt.Key_Down) {
                 if (sessionModel.count > 0 && sessionPicker.currentIndex < sessionModel.count - 1)
                     sessionPicker.currentIndex += 1;
 
-                return;
+                return ;
             }
-
             // Handle backspace
             if (event.key === Qt.Key_Backspace) {
                 root.buffer = root.buffer.slice(0, -1);
-                return;
+                return ;
             }
-
             // Handle enter/return for login
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
                 sddm.login(userPicker.currentText, root.buffer, sessionPicker.currentIndex);
-                // Clear buffer after login attempt for security
                 clearBuffer();
-                return;
+                return ;
             }
-
             // Handle regular character input for password
             if (event.text && event.text !== "" && event.text.length === 1)
                 root.buffer += event.text;
@@ -268,6 +261,7 @@ Rectangle {
         opacity: firstInput ? 1 : 0
         scale: firstInput ? 1 : 0.8
         layer.enabled: true
+
         layer.effect: DropShadow {
             transparentBorder: true
             horizontalOffset: 0
@@ -282,6 +276,7 @@ Rectangle {
                 duration: root.animDurationNormal
                 easing.type: Easing.OutCubic
             }
+
         }
 
         Behavior on scale {
@@ -289,7 +284,9 @@ Rectangle {
                 duration: root.animDurationNormal
                 easing.type: Easing.OutCubic
             }
+
         }
+
     }
 
     Item {
