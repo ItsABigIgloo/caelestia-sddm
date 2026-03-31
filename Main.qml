@@ -1,6 +1,7 @@
 import Qt5Compat.GraphicalEffects
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Effects
 import QtQuick.Layouts 1.15
 
 Rectangle {
@@ -12,7 +13,6 @@ Rectangle {
         if (!source || source === "")
             return "assets/background.png";
 
-        // Absolute fallback
         return source;
     }
     property string fontFamily: {
@@ -55,12 +55,15 @@ Rectangle {
     property color mHover: config.mHover ? config.mHover : mPrimary
     property color mOnHover: config.mOnHover ? config.mOnHover : mOnPrimary
     // Effects
-    property bool dropShadows: toBool(config.dropShadows, false)
-    property real blurRadius: boundedNumber(config.blurRadius, 0, 0, 64)
+    property bool dropShadows: toBool(config.dropShadows, true)
+    property bool blurEnabled: toBool(config.blurEnabled, true)
+    property real blurStrength: boundedNumber(config.blurStrength, 1.0, 0, 1)
     property real cardOpacity: boundedNumber(config.cardOpacity, 0.95, 0, 1)
-    property real overlayOpacity: 0.4
-    property real cardShadowOpacity: 0.55
+    property real overlayOpacity: boundedNumber(config.overlayOpacity, 0.4, 0, 1)
+    property bool firstInput: true
+    property string buffer: ""
 
+    // ---- Utility functions ---- //
     function firstAvailable(candidates) {
         for (var i = 0; i < candidates.length; i++) {
             if (availableFonts.indexOf(candidates[i]) !== -1)
@@ -98,35 +101,118 @@ Rectangle {
         return Qt.rgba(baseColor.r, baseColor.g, baseColor.b, alphaValue);
     }
 
+    function restoreFocus() {
+        keyHandler.forceActiveFocus();
+    }
+
     // ---- Basic Properties ---- //
     width: 1920
     height: 1080
     color: mSurface
 
     Item {
-        id: backgroundContainer
+        id: keyHandler
+
+        focus: true
+        Keys.onPressed: {
+            if (root.firstInput) {
+                root.firstInput = false;
+                return ;
+            }
+            if (event.key === Qt.Key_Escape) {
+                root.firstInput = true;
+                root.buffer = "";
+                return ;
+            }
+            if (event.key === Qt.Key_Right) {
+                if (userPicker.currentIndex < userModel.count - 1)
+                    userPicker.currentIndex += 1;
+
+                return ;
+            }
+            if (event.key === Qt.Key_Left) {
+                if (userPicker.currentIndex > 0)
+                    userPicker.currentIndex -= 1;
+
+                return ;
+            }
+            if (event.key === Qt.Key_Up) {
+                if (sessionPicker.currentIndex < sessionModel.count - 1)
+                    sessionPicker.currentIndex += 1;
+
+                return ;
+            }
+            if (event.key === Qt.Key_Down) {
+                if (sessionPicker.currentIndex > 0)
+                    sessionPicker.currentIndex -= 1;
+
+                return ;
+            }
+            if (event.key === Qt.Key_Backspace) {
+                root.buffer = root.buffer.slice(0, -1);
+                return ;
+            }
+            if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
+                sddm.login(userPicker.currentText, root.buffer, sessionPicker.currentIndex);
+                root.buffer = "";
+                return ;
+            }
+            if (event.text && event.text !== "")
+                root.buffer += event.text;
+
+        }
+    }
+
+    Image {
+        id: background
 
         property string src: backgroundSource
         property bool isVideo: src.endsWith(".mp4") || src.endsWith(".webm")
         property bool isGif: src.endsWith(".gif")
 
         anchors.fill: parent
+        source: background.src
+        fillMode: Image.PreserveAspectCrop
+        visible: !background.isVideo && !background.isGif
+        asynchronous: true
+        smooth: true
+        mipmap: true
+        layer.enabled: true
+        layer.smooth: true
+        layer.mipmap: true
 
-        // Only support static image for now
-        Image {
+        Rectangle {
             anchors.fill: parent
-            source: backgroundContainer.src
-            fillMode: Image.PreserveAspectCrop
-            visible: !backgroundContainer.isVideo && !backgroundContainer.isGif
-            asynchronous: true
+            color: mShadow
+            opacity: firstInput ? 0 : overlayOpacity
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                }
+
+            }
+
         }
 
     }
 
-    Rectangle {
-        anchors.fill: parent
-        color: mShadow
-        opacity: overlayOpacity
+    MultiEffect {
+        source: background
+        anchors.fill: background
+        blurEnabled: root.blurEnabled
+        blur: firstInput ? 0 : root.blurStrength
+        blurMax: 64
+        blurMultiplier: 1
+        autoPaddingEnabled: false
+
+        Behavior on blur {
+            NumberAnimation {
+                duration: 400
+            }
+
+        }
+
     }
 
     Item {
@@ -135,14 +221,20 @@ Rectangle {
         width: 550
         height: 800
         anchors.centerIn: parent
+        scale: firstInput ? 0.5 : 1
+        opacity: firstInput ? 0 : 1
 
-        Rectangle {
+        DropShadow {
             anchors.fill: mainCard
-            anchors.leftMargin: 0
-            anchors.topMargin: 10
-            radius: cardRadius
-            color: withAlpha(mShadow, cardShadowOpacity)
+            horizontalOffset: 0
+            verticalOffset: 10
+            radius: 16
+            samples: 32
+            spread: 0.2
+            color: withAlpha(mShadow, 0.55)
+            source: mainCard
             visible: dropShadows
+            transparentBorder: true
         }
 
         Rectangle {
@@ -323,6 +415,17 @@ Rectangle {
                     textRole: "name"
                     font.family: fontFamily
                     font.pixelSize: Math.round(baseFontSize * 1.67)
+                    focusPolicy: Qt.ClickFocus
+                    onActivated: restoreFocus()
+
+                    Keys.onPressed: {
+                        if (!popup.visible) {
+                            if (event.key === Qt.Key_Space || event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                                event.accepted = true;
+                                restoreFocus();
+                            }
+                        }
+                    }
 
                     background: Rectangle {
                         color: withAlpha(mSurface, cardOpacity)
@@ -361,27 +464,186 @@ Rectangle {
                         }
                     }
 
+                    delegate: ItemDelegate {
+                        width: userPicker.width
+
+                        contentItem: Text {
+                            text: model[userPicker.textRole]
+                            font: userPicker.font
+                            color: userPicker.highlightedIndex === index ? mOnPrimary : mOnSurface
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            anchors.fill: parent
+                        }
+
+                        background: Rectangle {
+                            color: userPicker.highlightedIndex === index ? mPrimary : "transparent"
+                            radius: passwordInputRadius
+                        }
+                    }
+
+                    popup: Popup {
+                        y: userPicker.height - 1
+                        width: userPicker.width
+                        implicitHeight: contentItem.implicitHeight
+
+                        contentItem: ListView {
+                            clip: true
+                            implicitHeight: Math.min(contentHeight, 250)
+                            model: userPicker.popup.visible ? userPicker.delegateModel : null
+                            currentIndex: userPicker.highlightedIndex
+
+                            ScrollIndicator.vertical: ScrollIndicator {}
+                        }
+
+                        background: Rectangle {
+                            color: withAlpha(mSurface, cardOpacity)
+                            border.color: mOutline
+                            border.width: 1
+                            radius: passwordInputRadius
+                        }
+                    }
+
                 }
 
-                TextField {
-                    id: passwordField
+                Rectangle {
+                    id: passwordInput
 
                     Layout.alignment: Qt.AlignHCenter
                     Layout.preferredWidth: 380
                     Layout.preferredHeight: 55
-                    echoMode: TextInput.Password
-                    placeholderText: "Password"
-                    placeholderTextColor: mOnSurface
-                    font.family: fontFamily
-                    font.pixelSize: Math.round(baseFontSize * 1.83)
-                    color: mOnSurface
-                    horizontalAlignment: TextInput.AlignHCenter
-                    onAccepted: sddm.login(userPicker.currentText, text, sessionPicker.currentIndex)
+                    color: withAlpha(mSurface, cardOpacity)
+                    radius: passwordInputRadius
+                    border.color: mOutline
+                    border.width: 1
 
-                    background: Rectangle {
-                        color: withAlpha(mSurface, cardOpacity)
+                    Text {
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.leftMargin: 17
+                        font.family: "Material Symbols Outlined"
+                        font.pixelSize: Math.round(baseFontSize * 1.5)
+                        text: "\ue897"
+                        color: mOnSurfaceVariant
+                    }
+
+                    Rectangle {
+                        anchors.centerIn: parent
+                        color: "transparent"
+                        width: 250
+                        height: 50
+                        clip: true
+
+                        Text {
+                            anchors.centerIn: parent
+                            font.family: fontFamily
+                            font.pixelSize: Math.round(baseFontSize * 1.5)
+                            text: "Enter your password"
+                            color: mOnSurfaceVariant
+                            opacity: root.buffer === "" ? 1 : 0
+
+                            Behavior on opacity {
+                                NumberAnimation {
+                                    duration: 100
+                                }
+
+                            }
+
+                        }
+
+                        RowLayout {
+                            anchors.centerIn: parent
+                            spacing: 8
+
+                            Repeater {
+                                id: passwordDots
+
+                                model: root.buffer.length
+
+                                Rectangle {
+                                    radius: passwordInputRadius
+                                    width: 12
+                                    height: 12
+                                    color: mOnSurface
+                                }
+
+                            }
+
+                            Rectangle {
+                                id: cursorIndicator
+
+                                property bool blink: true
+
+                                visible: root.buffer !== ""
+                                width: 2
+                                height: 25
+                                color: mOnSurface
+                                opacity: blink ? 1 : 0
+
+                                Timer {
+                                    running: true
+                                    repeat: true
+                                    interval: 530
+                                    onTriggered: cursorIndicator.blink = !cursorIndicator.blink
+                                }
+
+                                Behavior on opacity {
+                                    NumberAnimation {
+                                        duration: 200
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    Rectangle {
+                        id: loginButton
+
                         radius: passwordInputRadius
-                        border.color: passwordField.activeFocus ? mPrimary : mOutline
+                        width: 35
+                        height: 35
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.rightMargin: 8
+                        color: root.buffer === "" ? mSurfaceVariant : mPrimary
+
+                        Text {
+                            anchors.centerIn: parent
+                            font.family: "Material Symbols Outlined"
+                            font.pixelSize: Math.round(baseFontSize * 1.67)
+                            text: "\ue5c8"
+                            color: root.buffer === "" ? mOnSurface : mOnPrimary
+
+                            Behavior on color {
+                                ColorAnimation {
+                                    duration: 200
+                                }
+
+                            }
+
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                sddm.login(userPicker.currentText, root.buffer, sessionPicker.currentIndex);
+                                root.buffer = "";
+                                restoreFocus();
+                            }
+                        }
+
+                        Behavior on color {
+                            ColorAnimation {
+                                duration: 200
+                            }
+
+                        }
+
                     }
 
                 }
@@ -394,7 +656,11 @@ Rectangle {
                         id: shutBtn
 
                         hoverEnabled: true
-                        onClicked: sddm.powerOff()
+                        focusPolicy: Qt.ClickFocus
+                        onClicked: {
+                            sddm.powerOff();
+                            restoreFocus();
+                        }
 
                         background: Rectangle {
                             radius: buttonRadius
@@ -416,7 +682,11 @@ Rectangle {
                         id: rebBtn
 
                         hoverEnabled: true
-                        onClicked: sddm.reboot()
+                        focusPolicy: Qt.ClickFocus
+                        onClicked: {
+                            sddm.reboot();
+                            restoreFocus();
+                        }
 
                         background: Rectangle {
                             radius: buttonRadius
@@ -440,13 +710,24 @@ Rectangle {
                     id: sessionPicker
 
                     Layout.alignment: Qt.AlignHCenter
-                    implicitWidth: contentItem.implicitWidth + (indicator.width * 2) + 20
+                    Layout.preferredWidth: 380
                     Layout.preferredHeight: 40
                     model: sessionModel
                     currentIndex: sessionModel.lastIndex
                     textRole: "name"
                     font.family: fontFamily
                     font.pixelSize: Math.round(baseFontSize * 1.5)
+                    focusPolicy: Qt.ClickFocus
+                    onActivated: restoreFocus()
+
+                    Keys.onPressed: {
+                        if (!popup.visible) {
+                            if (event.key === Qt.Key_Space || event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                                event.accepted = true;
+                                restoreFocus();
+                            }
+                        }
+                    }
 
                     background: Rectangle {
                         color: withAlpha(mSurface, cardOpacity)
@@ -460,9 +741,10 @@ Rectangle {
                         font: sessionPicker.font
                         color: mOnSurface
                         verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
+                        horizontalAlignment: Qt.AlignHCenter
                         leftPadding: 15
                         rightPadding: 15
+                        anchors.fill: parent
                     }
 
                     indicator: Canvas {
@@ -484,8 +766,88 @@ Rectangle {
                         }
                     }
 
+                    delegate: ItemDelegate {
+                        width: sessionPicker.width
+
+                        contentItem: Text {
+                            text: model[sessionPicker.textRole]
+                            font: sessionPicker.font
+                            color: sessionPicker.highlightedIndex === index ? mOnPrimary : mOnSurface
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Qt.AlignHCenter
+                            anchors.fill: parent
+                            anchors.leftMargin: 15
+                            anchors.rightMargin: 15
+                        }
+
+                        background: Rectangle {
+                            color: sessionPicker.highlightedIndex === index ? mPrimary : "transparent"
+                            radius: passwordInputRadius
+                        }
+
+                    }
+
+                    popup: Popup {
+                        width: sessionPicker.width
+                        implicitHeight: contentItem.implicitHeight
+
+                        contentItem: ListView {
+                            clip: true
+                            implicitHeight: Math.min(contentHeight, 250)
+                            model: sessionPicker.popup.visible ? sessionPicker.delegateModel : null
+                            currentIndex: sessionPicker.highlightedIndex
+
+                            ScrollIndicator.vertical: ScrollIndicator {}
+                        }
+
+                        background: Rectangle {
+                            color: withAlpha(mSurface, cardOpacity)
+                            border.color: mOutline
+                            border.width: 1
+                            radius: passwordInputRadius
+                        }
+
+                    }
+
                 }
 
+            }
+
+        }
+
+        Behavior on scale {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.OutBack
+            }
+
+        }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.OutBack
+            }
+
+        }
+
+    }
+
+    Text {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 30
+        font.family: fontFamily
+        font.pixelSize: Math.round(baseFontSize * 1.5)
+        font.italic: true
+        opacity: root.firstInput ? 1 : 0
+        color: mOnSurfaceVariant
+        text: "Press any key to login"
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.OutCubic
             }
 
         }

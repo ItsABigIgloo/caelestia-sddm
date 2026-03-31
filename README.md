@@ -95,8 +95,8 @@ For everyone not on Caelestia Shell:
 * **qt6-declarative**
 * **qt6-5compat**
 * **qt6-multimedia**
-* **ffmpeg**
 * **qt6-svg**
 * **qt6-virtualkeyboard**
+* **ffmpeg**
 * **Material Symbols Outlined** (required for power/reboot icons)
 * **Rubik Font** (default text)
