@@ -1,10 +1,18 @@
-# 🌌 Caelestia SDDM Theme
+<div align="center">
 
-A sleek, obsidian-inspired login interface designed specifically for **CaelestiaOS**. Built with QML, this theme features a minimalist card aesthetic, glassmorphism, and full integration with the Caelestia desktop ecosystem.
+# Caelestia SDDM Theme
+
+![Issues](https://img.shields.io/github/issues/ItsABigIgloo/caelestia-sddm?style=for-the-badge)
+[![Caelestia Shell](https://img.shields.io/badge/Caelestia-Shell-111827?style=for-the-badge)](https://github.com/caelestia-dots/shell)
+[![Caelestia](https://img.shields.io/badge/Caelestia-Repository-0f172a?style=for-the-badge)](https://github.com/caelestia-dots/caelestia)
+
+</div>
+
+<p align="center">A dynamic, adaptive login interface for <strong>CaelestiaOS</strong>. Built with QML, this theme focuses on wallpaper-driven colors, synchronized visuals, and seamless integration with the Caelestia desktop ecosystem.</p>
 
 ![Caelestia SDDM Preview](https://github.com/user-attachments/assets/fbe88fda-3a4c-4570-b3b1-5a5318693165)
 
-## ✨ Features
+## Features
 
 * **Dynamic Sync:** Automatically matches your SDDM background and accent colors to your current Hyprland theme upon reboot.
 * **Multimedia Support:** Supports static images (`.jpg`, `.png`), animated GIFs, and video backgrounds (`.mp4`, `.webm`).
@@ -12,13 +20,13 @@ A sleek, obsidian-inspired login interface designed specifically for **Caelestia
 * **Smart Avatar Fallbacks:** Uses `userModel.icon`, then `~/.face.icon`, then `~/.face`, then falls back to the Caelestia logo.
 * **Qt6 Theme Runtime:** Configured with `QtVersion=6` for modern SDDM greeter compatibility.
 
-## 🛠️ Installation
+## Installation
 
 The provided installer handles all dependencies, system configurations, and permissions automatically.
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/your-username/caelestia-sddm.git](https://github.com/your-username/caelestia-sddm.git)
+    git clone https://github.com/ItsABigIgloo/caelestia-sddm.git
     cd caelestia-sddm
     ```
 
@@ -34,7 +42,7 @@ The provided installer handles all dependencies, system configurations, and perm
     ./scripts/check.sh
     ```
 
-## 🔄 How the Sync Works
+## How the Sync Works
 
 This theme already includes a systemd service (`caelestia-sync.service`) that triggers during the shutdown/reboot process. It identifies the active user, pulls the latest wallpaper and theme configuration from the Caelestia state folder, and applies them to the login screen for your next boot.
 
@@ -46,15 +54,15 @@ sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh
 This also syncs `~/.face` and `~/.face.icon` into theme assets so SDDM can always read the avatar.
 
 **Automatic Posthook:**
-If you want FULL automatic without reboot use posthook, see [POSTHOOK.md](POSTHOOK.md).
+If you want fully automatic sync without reboot, use posthook. See [POSTHOOK.md](POSTHOOK.md).
 > **For a deeper explanation of templating and sync flow, see [TEMPLATING.md](TEMPLATING.md).**
 
-## ⚙️ Configuration
+## Configuration
 
-To Customize the theme config modify it ONLY through the Caelestia config:
+To customize the theme config, modify it only through the Caelestia config:
 
 1. Edit `~/.config/caelestia/sddm-theme.conf`
-2. Select a wallpaper (to tigger color generation)
+2. Select a wallpaper (to trigger color generation)
 2. Apply sync:
    ```bash
    sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh
@@ -63,11 +71,11 @@ To Customize the theme config modify it ONLY through the Caelestia config:
 Do not edit `/usr/share/sddm/themes/caelestia/theme.conf` directly, since this will be overwritten by Caelestia templating system.
 
 
-## 🧪 TESTING- Preview the theme without logging out
+## TESTING- Preview the theme without logging out
 
 `sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/caelestia`
 
-## 🩹 Troubleshooting
+## Troubleshooting
 
 **Avatar not updating or showing stale image**
 
@@ -77,11 +85,11 @@ sudo ./scripts/fix-avatar-links.sh
 
 This keeps `~/.face.icon` synced to `~/.face` and prevents stale avatar images.
 
-## 🤝 Requirements
+## Requirements
 
-Caelestia shell meets all the basic requirements, except for SDDM(which is a requirement or an SDDM theme).
+Caelestia Shell meets all the basic requirements, except for SDDM (which is required for an SDDM theme).
 
-for everyone not on Caelestia Shell:
+For everyone not on Caelestia Shell:
 * **SDDM** duh
 * **qt6-declarative**
 * **qt6-5compat**
@@ -90,4 +98,4 @@ for everyone not on Caelestia Shell:
 * **qt6-svg**
 * **qt6-virtualkeyboard**
 * **Material Symbols Outlined** (required for power/reboot icons)
-* **Rubik Font** (default texts)
+* **Rubik Font** (default text)
