@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import Qt5Compat.GraphicalEffects
 
 Rectangle {
     id: root
@@ -205,16 +206,27 @@ Rectangle {
                     Layout.preferredHeight: avatarFrameSize
                     radius: avatarFrameSize / 2
                     color: withAlpha(mSurface, cardOpacity)
-                    border.color: mPrimary
-                    border.width: 2
                     clip: true
+
+                    Rectangle {
+                        id: avatarMask
+                        anchors.fill: parent
+                        radius: avatarFrame.radius
+                        color: "white"
+                        visible: false
+                    }
 
                     Image {
                         id: avatarImage
                         anchors.fill: parent
-                        anchors.margins: avatarInset
-                        fillMode: Image.PreserveAspectFit
+                        fillMode: Image.PreserveAspectCrop
                         asynchronous: true
+                        smooth: true
+                        mipmap: true
+                        layer.enabled: true
+                        layer.effect: OpacityMask {
+                            maskSource: avatarMask
+                        }
                         property var avatarCandidates: ["assets/logo.png"]
                         property int avatarCandidateIndex: 0
                         property int roleHomeDir: Qt.UserRole + 3
@@ -284,6 +296,14 @@ Rectangle {
                         }
 
                         Component.onCompleted: rebuildAvatarCandidates()
+                    }
+
+                    Rectangle {
+                        anchors.fill: parent
+                        radius: avatarFrame.radius
+                        color: "transparent"
+                        border.color: mPrimary
+                        border.width: 2
                     }
                 }
 
