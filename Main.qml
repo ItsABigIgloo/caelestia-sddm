@@ -43,6 +43,7 @@ Rectangle {
         }
         return source;
     }
+
     property string fontFamily: {
         var availableFonts = Qt.fontFamilies();
 
@@ -69,6 +70,7 @@ Rectangle {
 
         return firstAvailable(["Rubik", "Sans"]);
     }
+
     property real baseFontSize: boundedNumber(config.FontSize, 12, 10, 24)
     property real avatarBaseSize: boundedNumber(config.AvatarSize, 128, 64, 320)
     property real avatarFrameSize: Math.max(96, Math.round(avatarBaseSize * 1.72))
@@ -120,7 +122,6 @@ Rectangle {
             visible: !backgroundContainer.isVideo && !backgroundContainer.isGif
             asynchronous: true
         }
-        
     }
 
     Rectangle {
@@ -214,33 +215,75 @@ Rectangle {
                         anchors.margins: avatarInset
                         fillMode: Image.PreserveAspectFit
                         asynchronous: true
+                        property var avatarCandidates: ["assets/logo.png"]
+                        property int avatarCandidateIndex: 0
+                        property int roleHomeDir: Qt.UserRole + 3
+                        property int roleIcon: Qt.UserRole + 4
 
-                        source: {
-                            if (userPicker.currentIndex !== -1) {
-                                var userName = userModel.data(userModel.index(userPicker.currentIndex, 0), Qt.UserRole + 1);
+                        function toSourceUrl(pathOrUrl) {
+                            if (!pathOrUrl || pathOrUrl === "") {
+                                return "";
+                            }
 
-                                var faceIcon = "file:///home/" + userName + "/.face.icon";
-                                var faceFile = "file:///home/" + userName + "/.face";
+                            var value = String(pathOrUrl);
+                            if (value.startsWith("file://") || value.startsWith("qrc:/") || value.startsWith(":/") || value.startsWith("http://") || value.startsWith("https://")) {
+                                return value;
+                            }
 
-                                var modelIcon = userModel.data(userModel.index(userPicker.currentIndex, 0), Qt.UserRole + 2);
+                            if (value.startsWith("/")) {
+                                return "file://" + value;
+                            }
 
-                                if (modelIcon && modelIcon !== "") {
-                                    return "file://" + modelIcon;
-                                } else {
-                                    return faceIcon;
+                            return value;
+                        }
+
+                        function appendCandidate(list, value) {
+                            var normalized = toSourceUrl(value);
+                            if (normalized !== "" && list.indexOf(normalized) === -1) {
+                                list.push(normalized);
+                            }
+                        }
+
+                        function rebuildAvatarCandidates() {
+                            var list = [];
+
+                            if (userPicker.currentIndex >= 0 && userPicker.currentIndex < userModel.count) {
+                                var modelIndex = userModel.index(userPicker.currentIndex, 0);
+
+                                var icon = userModel.data(modelIndex, roleIcon);
+                                var homeDir = userModel.data(modelIndex, roleHomeDir);
+
+                                appendCandidate(list, icon);
+
+                                if (homeDir && homeDir !== "") {
+                                    appendCandidate(list, homeDir + "/.face.icon");
+                                    appendCandidate(list, homeDir + "/.face");
                                 }
                             }
-                            return "assets/logo.png";
+
+                            appendCandidate(list, "assets/logo.png");
+
+                            avatarCandidates = list;
+                            avatarCandidateIndex = 0;
                         }
 
+                        source: avatarCandidates.length > 0 ? avatarCandidates[avatarCandidateIndex] : "assets/logo.png"
+
                         onStatusChanged: {
-                            if (status === Image.Error && source.toString().includes(".face.icon")) {
-                                var userName = userModel.data(userModel.index(userPicker.currentIndex, 0), Qt.UserRole + 1);
-                                source = "file:///home/" + userName + "/.face";
-                            } else if (status === Image.Error) {
-                                source = "assets/logo.png";
+                            if (status === Image.Error && avatarCandidateIndex < avatarCandidates.length - 1) {
+                                avatarCandidateIndex += 1;
                             }
                         }
+
+                        Connections {
+                            target: userPicker
+
+                            function onCurrentIndexChanged() {
+                                avatarImage.rebuildAvatarCandidates();
+                            }
+                        }
+
+                        Component.onCompleted: rebuildAvatarCandidates()
                     }
                 }
 
