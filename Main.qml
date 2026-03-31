@@ -616,11 +616,13 @@ Rectangle {
 
                 Row {
                     Layout.alignment: Qt.AlignHCenter
-                    spacing: 50
+                    spacing: 20
 
                     PowerButton {
                         id: shutBtn
 
+                        width: 70
+                        height: 70
                         iconText: "\ue8ac"
                         normalColor: mOnSurface
                         hoverColor: mError
@@ -632,6 +634,8 @@ Rectangle {
                     PowerButton {
                         id: rebBtn
 
+                        width: 70
+                        height: 70
                         iconText: "\uf053"
                         normalColor: mOnSurface
                         hoverColor: mHover
