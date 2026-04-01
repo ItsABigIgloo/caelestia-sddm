@@ -47,7 +47,7 @@ Button {
         radius: width / 2
         color: Qt.rgba(Theme.mSurface.r, Theme.mSurface.g, Theme.mSurface.b, 0.2)
         border.color: Qt.rgba(Theme.mOutline.r, Theme.mOutline.g, Theme.mOutline.b, 0.4)
-        border.width: 1
+        border.width: 2
 
         Behavior on color {
             ColorAnimation {

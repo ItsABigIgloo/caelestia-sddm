@@ -23,7 +23,7 @@ ComboBox {
         color: Theme.withAlpha(Theme.mSurface, Theme.cardOpacity)
         radius: Theme.passwordInputRadius
         border.color: Theme.mOutline
-        border.width: 1
+        border.width: 2
     }
 
     contentItem: Text {
@@ -101,7 +101,7 @@ ComboBox {
         background: Rectangle {
             color: Theme.withAlpha(Theme.mSurface, Theme.cardOpacity)
             border.color: Theme.mOutline
-            border.width: 1
+            border.width: 2
             radius: Theme.passwordInputRadius
         }
 

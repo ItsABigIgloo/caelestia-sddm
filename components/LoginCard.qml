@@ -59,7 +59,7 @@ Item {
         anchors.fill: parent
         radius: Theme.cardRadius
         border.color: Theme.withAlpha(Theme.mPrimary, Theme.cardOpacity)
-        border.width: 1
+        border.width: 2
         opacity: Theme.cardOpacity
 
         ColumnLayout {

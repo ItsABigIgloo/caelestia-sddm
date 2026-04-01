@@ -27,7 +27,7 @@ Rectangle {
 
         return Theme.mOutline;
     }
-    border.width: (isError || isAuthenticating) ? 2 : 1
+    border.width: 2
 
     Text {
         renderType: Text.NativeRendering
@@ -224,13 +224,6 @@ Rectangle {
 
     Behavior on border.color {
         ColorAnimation {
-            duration: Theme.animDurationFast
-        }
-
-    }
-
-    Behavior on border.width {
-        NumberAnimation {
             duration: Theme.animDurationFast
         }
 
