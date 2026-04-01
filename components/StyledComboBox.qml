@@ -55,10 +55,12 @@ ComboBox {
     }
 
     delegate: ItemDelegate {
+        // Fixed inset to fit inside popup borders and rounded corners
+        // Note: This 16px inset is required - making it dynamic breaks item width calculation
         width: root.width - 16
 
         contentItem: Text {
-            text: model[root.textRole]
+            text: root.textRole ? model[root.textRole] : modelData
             font: root.font
             color: root.highlightedIndex === index ? Theme.mOnPrimary : Theme.mOnSurface
             verticalAlignment: Text.AlignVCenter
@@ -76,14 +78,20 @@ ComboBox {
     popup: Popup {
         y: root.height - 1
         width: root.width
-        implicitHeight: contentItem.implicitHeight
+        implicitHeight: popupList.implicitHeight
 
         contentItem: ListView {
-            implicitHeight: Math.min(contentHeight, 250)
+            id: popupList
+
+            // add some margin so it doesn't look cramped when there are few items
+            topMargin: 6
+            bottomMargin: 6
             leftMargin: 2
             rightMargin: 2
-            model: root.popup.visible ? root.delegateModel : null
+            implicitHeight: Math.min(contentHeight + topMargin + bottomMargin, 250)
+            model: root.delegateModel
             currentIndex: root.highlightedIndex
+            clip: true
 
             ScrollIndicator.vertical: ScrollIndicator {
             }
