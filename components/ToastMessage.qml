@@ -37,7 +37,7 @@ Rectangle {
         Text {
             renderType: Text.NativeRendering
             font.family: "Material Symbols Outlined"
-            font.pixelSize: Math.round(Theme.baseFontSize * 1.33)
+            font.pixelSize: Math.round(Theme.baseFontSize * 1.55)
             text: "\ue000"
             color: Theme.mOnError
         }
@@ -45,7 +45,7 @@ Rectangle {
         Text {
             renderType: Text.NativeRendering
             font.family: Theme.fontFamily
-            font.pixelSize: Math.round(Theme.baseFontSize * 1.17)
+            font.pixelSize: Math.round(Theme.baseFontSize * 1.45)
             text: root.message
             color: Theme.mOnError
         }
