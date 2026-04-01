@@ -15,14 +15,24 @@ Item {
     property alias userPicker: userPicker
     property alias sessionPicker: sessionPicker
     property bool isError: false
+    property bool isAuthenticating: false
 
     function showError(msg) {
         root.isError = true;
+        root.isAuthenticating = false;
         toast.show(msg);
     }
 
     function clearError() {
         root.isError = false;
+    }
+
+    function showAuthenticating() {
+        root.isAuthenticating = true;
+    }
+
+    function clearAuthenticating() {
+        root.isAuthenticating = false;
     }
 
     implicitWidth: 550
@@ -95,6 +105,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 buffer: root.buffer
                 isError: root.isError
+                isAuthenticating: root.isAuthenticating
                 onRestoreFocus: root.onRestoreFocus
                 onLogin: root.onLogin
             }

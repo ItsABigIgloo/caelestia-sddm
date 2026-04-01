@@ -9,12 +9,24 @@ Rectangle {
     property var onLogin: null
     property var onRestoreFocus: null
     property bool isError: false
+    property bool isAuthenticating: false
 
     implicitWidth: 380
     implicitHeight: 55
     color: Theme.withAlpha(Theme.mSurface, Theme.cardOpacity)
     radius: Theme.passwordInputRadius
-    border.color: isError ? Theme.mError : Theme.mOutline
+    border.color: {
+        if (isError)
+            return Theme.mError;
+
+        if (isAuthenticating)
+            return Theme.mTertiary;
+
+        if (buffer !== "")
+            return Theme.mPrimary;
+
+        return Theme.mOutline;
+    }
     border.width: isError ? 2 : 1
 
     Text {
@@ -161,6 +173,22 @@ Rectangle {
     Behavior on border.width {
         NumberAnimation {
             duration: Theme.animDurationFast
+        }
+
+    }
+
+    SequentialAnimation on border.color {
+        running: isAuthenticating && !isError
+        loops: Animation.Infinite
+
+        ColorAnimation {
+            to: Qt.lighter(Theme.mTertiary, 1.3)
+            duration: 800
+        }
+
+        ColorAnimation {
+            to: Theme.mTertiary
+            duration: 800
         }
 
     }

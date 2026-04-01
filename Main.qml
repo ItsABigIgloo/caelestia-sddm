@@ -81,14 +81,25 @@ Rectangle {
                 root.buffer = root.buffer.slice(0, -1);
                 return ;
             }
+            // DEBUG: Shift+F to simulate failed login (remove for production)
+            if (event.key === Qt.Key_F && (event.modifiers & Qt.ShiftModifier)) {
+                loginCard.showError("Incorrect password");
+                clearBuffer();
+                return ;
+            }
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
+                loginCard.showAuthenticating();
                 sddm.login(loginCard.userPicker.currentText, root.buffer, loginCard.sessionPicker.currentIndex);
                 clearBuffer();
                 return ;
             }
-            if (event.text && event.text !== "" && event.text.length === 1)
-                root.buffer += event.text;
+            if (event.text && event.text !== "" && event.text.length === 1) {
+                // Clear error state when user starts typing after a failed attempt
+                if (loginCard.isError)
+                    loginCard.clearError();
 
+                root.buffer += event.text;
+            }
         }
     }
 
@@ -159,6 +170,7 @@ Rectangle {
         buffer: root.buffer
         onRestoreFocus: restoreFocus
         onLogin: function() {
+            loginCard.showAuthenticating();
             sddm.login(loginCard.userPicker.currentText, root.buffer, loginCard.sessionPicker.currentIndex);
             clearBuffer();
             restoreFocus();
@@ -167,12 +179,14 @@ Rectangle {
 
     Connections {
         function onLoginFailed() {
+            loginCard.clearAuthenticating();
             loginCard.showError("Incorrect password");
             clearBuffer();
             restoreFocus();
         }
 
         function onLoginSucceeded() {
+            loginCard.clearAuthenticating();
             loginCard.clearError();
         }
 
