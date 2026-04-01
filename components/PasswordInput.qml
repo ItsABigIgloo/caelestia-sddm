@@ -27,7 +27,7 @@ Rectangle {
 
         return Theme.mOutline;
     }
-    border.width: isError ? 2 : 1
+    border.width: (isError || isAuthenticating) ? 2 : 1
 
     Text {
         renderType: Text.NativeRendering
