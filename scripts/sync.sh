@@ -42,8 +42,5 @@ if [[ -f "$CAEL_STATE/wallpaper/current" ]]; then
     # Copy and set permissions
     cp -f "$CAEL_STATE/wallpaper/current" "$THEME_DIR/assets/$TARGET"
     chmod 644 "$THEME_DIR/assets/$TARGET"
-
-    # Force the path into theme.conf
-    sed -i "s|^background=.*|background=assets/$TARGET|" "$THEME_DIR/theme.conf"
     echo "✓ Synced $TARGET"
 fi
