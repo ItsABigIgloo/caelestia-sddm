@@ -60,7 +60,6 @@ QtObject {
     // debug
     property bool debugMode: toBool(getConfig("debugMode"), false)
 
-
     function getConfig(key) {
         if (!configAvailable)
             return undefined;
@@ -106,7 +105,6 @@ QtObject {
     function withAlpha(baseColor, alphaValue) {
         return Qt.rgba(baseColor.r, baseColor.g, baseColor.b, alphaValue);
     }
-
 
     Component.onCompleted: {
         configAvailable = (typeof config !== 'undefined');

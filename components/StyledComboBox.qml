@@ -8,6 +8,7 @@ ComboBox {
     property var onRestoreFocus: function() {
     }
 
+    hoverEnabled: true
     focusPolicy: Qt.ClickFocus
     onActivated: onRestoreFocus()
     Keys.onPressed: function(event) {
@@ -22,8 +23,16 @@ ComboBox {
     background: Rectangle {
         color: Theme.withAlpha(Theme.mSurface, Theme.cardOpacity)
         radius: Theme.passwordInputRadius
-        border.color: Theme.mOutline
+        border.color: (root.hovered || root.popup.visible) ? Theme.mHover : Theme.mOutline
         border.width: 2
+
+        Behavior on border.color {
+            ColorAnimation {
+                duration: 200
+            }
+
+        }
+
     }
 
     contentItem: Text {
@@ -58,18 +67,19 @@ ComboBox {
         // Fixed inset to fit inside popup borders and rounded corners
         // Note: This 16px inset is required - making it dynamic breaks item width calculation
         width: root.width - 16
+        hoverEnabled: true
 
         contentItem: Text {
             text: root.textRole ? model[root.textRole] : modelData
             font: root.font
-            color: root.highlightedIndex === index ? Theme.mOnPrimary : Theme.mOnSurface
+            color: (root.highlightedIndex === index || hovered) ? Theme.mOnPrimary : Theme.mOnSurface
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Qt.AlignHCenter
             anchors.fill: parent
         }
 
         background: Rectangle {
-            color: root.highlightedIndex === index ? Theme.mPrimary : "transparent"
+            color: (root.highlightedIndex === index || parent.hovered) ? Theme.mPrimary : "transparent"
             radius: Theme.passwordInputRadius
         }
 
