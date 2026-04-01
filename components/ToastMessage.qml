@@ -6,7 +6,7 @@ Rectangle {
     id: root
 
     property string message: ""
-    property alias isOpen: opacityAnimationWrapper.isOpen
+    property bool isOpen: false
 
     signal dismissed()
 
@@ -24,55 +24,30 @@ Rectangle {
     implicitHeight: toastContent.implicitHeight + 24
     color: Theme.withAlpha(Theme.mError, 0.95)
     radius: Theme.buttonRadius
-    visible: isOpen
+    opacity: isOpen ? 1 : 0
+    scale: isOpen ? 1 : 0.6
+    visible: opacity > 0
 
-    Item {
-        id: opacityAnimationWrapper
+    RowLayout {
+        id: toastContent
 
-        property bool isOpen: false
+        anchors.centerIn: parent
+        spacing: 12
 
-        anchors.fill: parent
-        opacity: isOpen ? 1 : 0
-        scale: isOpen ? 1 : 0.8
-
-        RowLayout {
-            id: toastContent
-
-            anchors.centerIn: parent
-            spacing: 12
-
-            Text {
-                renderType: Text.NativeRendering
-                font.family: "Material Symbols Outlined"
-                font.pixelSize: Math.round(Theme.baseFontSize * 1.33)
-                text: "\ue000"
-                color: Theme.mOnError
-            }
-
-            Text {
-                renderType: Text.NativeRendering
-                font.family: Theme.fontFamily
-                font.pixelSize: Math.round(Theme.baseFontSize * 1.17)
-                text: root.message
-                color: Theme.mOnError
-            }
-
+        Text {
+            renderType: Text.NativeRendering
+            font.family: "Material Symbols Outlined"
+            font.pixelSize: Math.round(Theme.baseFontSize * 1.33)
+            text: "\ue000"
+            color: Theme.mOnError
         }
 
-        Behavior on opacity {
-            NumberAnimation {
-                duration: Theme.animDurationNormal
-                easing.type: Easing.OutCubic
-            }
-
-        }
-
-        Behavior on scale {
-            NumberAnimation {
-                duration: Theme.animDurationNormal
-                easing.type: Easing.OutBack
-            }
-
+        Text {
+            renderType: Text.NativeRendering
+            font.family: Theme.fontFamily
+            font.pixelSize: Math.round(Theme.baseFontSize * 1.17)
+            text: root.message
+            color: Theme.mOnError
         }
 
     }
@@ -94,6 +69,22 @@ Rectangle {
         }
 
         target: root
+    }
+
+    Behavior on opacity {
+        NumberAnimation {
+            duration: Theme.animDurationNormal
+            easing.type: isOpen ? Easing.OutCubic : Easing.InCubic
+        }
+
+    }
+
+    Behavior on scale {
+        NumberAnimation {
+            duration: Theme.animDurationNormal
+            easing.type: isOpen ? Easing.OutCubic : Easing.InBack
+        }
+
     }
 
 }
