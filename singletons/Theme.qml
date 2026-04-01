@@ -4,28 +4,22 @@ pragma Singleton
 QtObject {
     id: theme
 
+    property bool configAvailable: false
     property string backgroundSource: {
-        var source = "";
-        try {
-            if (typeof config !== 'undefined' && config.background)
-                source = config.background.toString().trim();
+        if (configAvailable && config.background) {
+            var source = config.background.toString().trim();
+            if (source && source !== "")
+                return source;
 
-        } catch (e) {
         }
-        if (!source || source === "")
-            return "assets/background.png";
-
-        return source;
+        return "assets/background.png";
     }
     property string fontFamily: {
         var availableFonts = Qt.fontFamilies();
         var family = "";
-        try {
-            if (typeof config !== 'undefined' && config.fontFamily)
-                family = config.fontFamily;
+        if (configAvailable && config.fontFamily)
+            family = config.fontFamily;
 
-        } catch (e) {
-        }
         if (family && family !== "") {
             family = family.toString().replace(/^"|"$/g, "");
             if (availableFonts.indexOf(family) !== -1)
@@ -69,13 +63,11 @@ QtObject {
     property int shadowSamples: 32
 
     function getConfig(key) {
-        try {
-            if (typeof config !== 'undefined' && config[key] !== undefined)
-                return config[key];
+        if (!configAvailable)
+            return undefined;
 
-        } catch (e) {
-        }
-        return undefined;
+        var value = config[key];
+        return value !== undefined ? value : undefined;
     }
 
     function firstAvailable(candidates) {
@@ -116,4 +108,7 @@ QtObject {
         return Qt.rgba(baseColor.r, baseColor.g, baseColor.b, alphaValue);
     }
 
+    Component.onCompleted: {
+        configAvailable = (typeof config !== 'undefined');
+    }
 }

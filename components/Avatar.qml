@@ -78,6 +78,14 @@ Rectangle {
         }
         Component.onCompleted: rebuildAvatarCandidates()
 
+        Connections {
+            function onCurrentIndexChanged() {
+                avatarImage.rebuildAvatarCandidates();
+            }
+
+            target: root.userPicker
+        }
+
         layer.effect: OpacityMask {
 
             maskSource: Rectangle {

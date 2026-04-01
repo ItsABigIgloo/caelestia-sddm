@@ -9,8 +9,6 @@ Rectangle {
     property var onLogin: null
     property var onRestoreFocus: null
 
-    signal loginRequested(string username, string password, int sessionIndex)
-
     implicitWidth: 380
     implicitHeight: 55
     color: Theme.withAlpha(Theme.mSurface, Theme.cardOpacity)
