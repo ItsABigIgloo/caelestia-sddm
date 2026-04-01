@@ -163,6 +163,17 @@ Rectangle {
 
     }
 
+    Connections {
+        function onIsErrorChanged() {
+            if (isError) {
+                authPulseAnim.stop();
+                border.color = Theme.mError;
+            }
+        }
+
+        target: root
+    }
+
     Behavior on border.color {
         ColorAnimation {
             duration: Theme.animDurationFast
@@ -178,6 +189,8 @@ Rectangle {
     }
 
     SequentialAnimation on border.color {
+        id: authPulseAnim
+
         running: isAuthenticating && !isError
         loops: Animation.Infinite
 
