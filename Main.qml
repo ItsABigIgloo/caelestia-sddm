@@ -82,13 +82,24 @@ Rectangle {
                 return ;
             }
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
+                loginCard.showAuthenticating();
                 sddm.login(loginCard.userPicker.currentText, root.buffer, loginCard.sessionPicker.currentIndex);
                 clearBuffer();
                 return ;
             }
-            if (event.text && event.text !== "" && event.text.length === 1)
-                root.buffer += event.text;
+            if (event.text && event.text !== "" && event.text.length === 1) {
+                // Clear error state when user starts typing after a failed attempt
+                if (loginCard.isError)
+                    loginCard.clearError();
 
+                root.buffer += event.text;
+            }
+            // DEBUG: Shift+F to simulate failed login (toggle via debugMode in theme.conf)
+            if (Theme.debugMode && event.key === Qt.Key_F && (event.modifiers & Qt.ShiftModifier)) {
+                loginCard.showError("Incorrect password");
+                clearBuffer();
+                return ;
+            }
         }
     }
 
@@ -159,10 +170,27 @@ Rectangle {
         buffer: root.buffer
         onRestoreFocus: restoreFocus
         onLogin: function() {
+            loginCard.showAuthenticating();
             sddm.login(loginCard.userPicker.currentText, root.buffer, loginCard.sessionPicker.currentIndex);
             clearBuffer();
             restoreFocus();
         }
+    }
+
+    Connections {
+        function onLoginFailed() {
+            loginCard.clearAuthenticating();
+            loginCard.showError("Incorrect password");
+            clearBuffer();
+            restoreFocus();
+        }
+
+        function onLoginSucceeded() {
+            loginCard.clearAuthenticating();
+            loginCard.clearError();
+        }
+
+        target: sddm
     }
 
     Text {

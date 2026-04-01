@@ -56,6 +56,7 @@ QtObject {
     property real blurStrength: boundedNumber(getConfig("blurStrength"), 1, 0, 1)
     property real cardOpacity: boundedNumber(getConfig("cardOpacity"), 0.95, 0, 1)
     property real overlayOpacity: boundedNumber(getConfig("overlayOpacity"), 0.4, 0, 1)
+    property bool debugMode: toBool(getConfig("debugMode"), false)
     property int animDurationFast: 200
     property int animDurationNormal: 300
     property int animDurationSlow: 400

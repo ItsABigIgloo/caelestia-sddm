@@ -1,10 +1,37 @@
 [General]
+# ============================================================================
+# BACKGROUND
+# ============================================================================
 # Path to the background image
 background=assets/background.png
 
+# ============================================================================
+# TYPOGRAPHY
+# ============================================================================
 # Font Family
 fontFamily="Rubik"
 
+# Font Size
+FontSize=11
+
+# Avatar Size
+AvatarSize=120
+
+# ============================================================================
+# BORDER RADIUS (roundness)
+# ============================================================================
+# Power Buttons
+buttonRadius=20
+
+# Password Input
+passwordInputRadius=30
+
+# Card Border
+cardRadius=80
+
+# ============================================================================
+# VISUAL EFFECTS
+# ============================================================================
 # Card Drop shadows [true | false]
 dropShadows=true
 
@@ -20,21 +47,16 @@ cardOpacity=0.80
 # Background overlay opacity [0 to 1]
 overlayOpacity=0.4
 
-# Power Buttons radius (roundness)
-buttonRadius=20
+# ============================================================================
+# DEBUG
+# ============================================================================
+# Debug mode (enable debug keyboard shortcuts) [true | false]
+debugMode=false
 
-# Password input radius (roundness)
-passwordInputRadius=30
-
-# Card Border radius (roundness)
-cardRadius=80
-
-# Default values
-FontSize=11
-AvatarSize=120
-
-# Color Scheme
-# Do not touch these!
+# ============================================================================
+# COLOR SCHEME
+# ============================================================================
+# Do not touch these! (auto-synced by Caelestia)
 mPrimary=#{{ primary.hex }}
 mOnPrimary=#{{ onPrimary.hex }}
 
