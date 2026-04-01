@@ -35,6 +35,9 @@ Rectangle {
         id: keyHandler
 
         focus: true
+        Component.onCompleted: {
+            keyHandler.forceActiveFocus();
+        }
         Keys.onPressed: function(event) {
             if (root.firstInput) {
                 if (event.text && event.text !== "" && event.text.length === 1)
