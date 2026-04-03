@@ -1,6 +1,7 @@
 import Qt5Compat.GraphicalEffects
 import QtQuick 2.15
 import QtQuick.Effects
+import QtQuick.Window 2.15
 import "components"
 import "singletons"
 
@@ -27,8 +28,11 @@ Rectangle {
         root.buffer = "";
     }
 
-    width: 1920
-    height: 1080
+    // Primary screen detection for multi-monitor setups
+    property var primaryScreen: Qt.application.screens[0]
+    property real primaryCenterX: primaryScreen ? primaryScreen.virtualX + primaryScreen.width / 2 : width / 2
+    property real primaryCenterY: primaryScreen ? primaryScreen.virtualY + primaryScreen.height / 2 : height / 2
+
     color: Theme.mSurface
 
     Item {
@@ -158,12 +162,15 @@ Rectangle {
     WelcomeHeading {
         userName: root.userName
         isActive: root.firstInput
+        x: root.primaryCenterX - width / 2
+        y: root.primaryCenterY - height / 2
     }
 
     LoginCard {
         id: loginCard
 
-        anchors.centerIn: parent
+        x: root.primaryCenterX - loginCard.width / 2
+        y: root.primaryCenterY - loginCard.height / 2
         isActive: root.firstInput
         usersModel: userModel
         sessionsModel: sessionModel
@@ -195,9 +202,8 @@ Rectangle {
 
     Text {
         renderType: Text.NativeRendering
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 30
+        x: root.primaryCenterX - width / 2
+        y: root.primaryScreen ? root.primaryScreen.virtualY + root.primaryScreen.height - 30 - height : parent.height - 30 - height
         font.family: Theme.fontFamily
         font.pixelSize: Math.round(Theme.baseFontSize * 1.5)
         font.italic: true

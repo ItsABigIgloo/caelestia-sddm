@@ -9,7 +9,6 @@ Text {
     property bool isActive: true
 
     renderType: Text.NativeRendering
-    anchors.centerIn: parent
     text: userName ? "Welcome, " + userName : "Welcome"
     font.family: Theme.fontFamily
     font.pixelSize: Math.round(Theme.baseFontSize * 8)
