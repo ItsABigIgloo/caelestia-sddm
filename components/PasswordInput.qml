@@ -14,7 +14,7 @@ Rectangle {
     implicitWidth: 380
     implicitHeight: 55
     color: Theme.withAlpha(Theme.mSurface, Theme.cardOpacity)
-    radius: Theme.passwordInputRadius
+    radius: Math.min(Theme.elementRadius, Math.min(root.width, root.height) / 2)
     border.color: {
         if (isError)
             return Theme.mError;
@@ -75,7 +75,7 @@ Rectangle {
                 model: root.buffer.length
 
                 Rectangle {
-                    radius: Theme.passwordInputRadius
+                    radius: Math.min(Theme.elementRadius, width / 2)
                     width: 12
                     height: 12
                     color: Theme.mOnSurface
@@ -117,7 +117,7 @@ Rectangle {
     Rectangle {
         id: loginButton
 
-        radius: Theme.passwordInputRadius
+        radius: Math.min(Theme.elementRadius, Math.min(width, height) / 2)
         width: 35
         height: 35
         anchors.right: parent.right

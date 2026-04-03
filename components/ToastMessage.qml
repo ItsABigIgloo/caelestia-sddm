@@ -23,7 +23,7 @@ Rectangle {
     implicitWidth: toastContent.implicitWidth + 48
     implicitHeight: toastContent.implicitHeight + 24
     color: Theme.withAlpha(Theme.mError, 0.95)
-    radius: Theme.buttonRadius
+    radius: Math.min(Theme.elementRadius, Math.min(root.width, root.height) / 2)
     opacity: isOpen ? 1 : 0
     scale: isOpen ? 1 : 0.6
     visible: opacity > 0

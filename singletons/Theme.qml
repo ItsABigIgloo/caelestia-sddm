@@ -25,8 +25,7 @@ QtObject {
     property real avatarBaseSize: boundedNumber(getConfig("AvatarSize"), 128, 64, 320)
     property real avatarFrameSize: Math.max(96, Math.round(avatarBaseSize * 1.72))
     property real avatarInset: Math.max(8, Math.round(avatarFrameSize * 0.09))
-    property real buttonRadius: boundedNumber(getConfig("buttonRadius"), 20, 0, 64)
-    property real passwordInputRadius: boundedNumber(getConfig("passwordInputRadius"), 20, 0, 64)
+    property real elementRadius: boundedNumber(getConfig("elementRadius"), 20, 0, 64)
     property real cardRadius: boundedNumber(getConfig("cardRadius"), 30, 0, 80)
     // colors
     property color mPrimary: getConfig("mPrimary") || "#4cdadb"
