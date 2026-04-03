@@ -61,7 +61,6 @@ Item {
         radius: Theme.cardRadius
         border.color: Theme.withAlpha(Theme.mPrimary, Theme.cardOpacity)
         border.width: 2
-        opacity: Theme.cardOpacity
 
         ColumnLayout {
             anchors.fill: parent
@@ -150,7 +149,7 @@ Item {
 
                 Layout.alignment: Qt.AlignHCenter
                 Layout.preferredWidth: 380
-                Layout.preferredHeight: 40
+                Layout.preferredHeight: 55
                 model: root.sessionsModel
                 currentIndex: {
                     if (!root.sessionsModel || root.sessionsModel.count <= 0)
@@ -170,12 +169,12 @@ Item {
         gradient: Gradient {
             GradientStop {
                 position: 0.5
-                color: Theme.withAlpha(Theme.mSurface, 0.92)
+                color: Theme.withAlpha(Theme.mSurface, Theme.cardOpacity * 0.92)
             }
 
             GradientStop {
                 position: 1
-                color: Theme.withAlpha(Theme.mPrimary, 0.36)
+                color: Theme.withAlpha(Theme.mPrimary, Theme.cardOpacity * 0.36)
             }
 
         }
