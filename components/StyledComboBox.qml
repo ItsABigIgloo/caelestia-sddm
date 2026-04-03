@@ -28,7 +28,7 @@ ComboBox {
 
     background: Rectangle {
         color: Theme.withAlpha(Theme.mSurface, Theme.cardOpacity)
-        radius: Theme.passwordInputRadius
+        radius: Math.min(Theme.elementRadius, Math.min(root.width, root.height) / 2)
         border.color: (root.hovered || root.popup.visible) ? Theme.mHover : Theme.mOutline
         border.width: 2
 
@@ -86,7 +86,7 @@ ComboBox {
 
         background: Rectangle {
             color: (root.highlightedIndex === index || parent.hovered) ? Theme.mPrimary : "transparent"
-            radius: Theme.passwordInputRadius
+            radius: Math.min(Theme.elementRadius, Math.min(parent.width, parent.height) / 2)
         }
 
     }
@@ -120,7 +120,7 @@ ComboBox {
             color: Theme.withAlpha(Theme.mSurface, Theme.cardOpacity)
             border.color: Theme.mOutline
             border.width: 2
-            radius: Theme.passwordInputRadius
+            radius: Math.min(Theme.elementRadius, Math.min(root.width, popupList.implicitHeight) / 2)
         }
 
     }
