@@ -10,17 +10,16 @@
 
 <p align="center">A dynamic, adaptive login interface for <strong>Caelestia Shell</strong>. Built with QML, this theme focuses on wallpaper-driven colors, synchronized visuals, and seamless integration with the Caelestia desktop ecosystem.</p>
 
-<video src="https://github.com/user-attachments/assets/2fac31f1-0007-4d1d-8966-5ba34ccf7222
-" width="" controls autoplay loop>
-</video>
-
-## Features
-
-* **Dynamic Sync:** Automatically matches your SDDM background and accent colors to your current Hyprland theme upon reboot.
-* **Multimedia Support:** Supports static images (`.jpg`, `.jpeg` and `.png`).
-* **Glassmorphism:** A translucent central card with dynamic opacity and blur for seamless background integration.
-* **Smart Avatar Fallbacks:** Uses `userModel.icon`, then `~/.face.icon`, then `~/.face`, then falls back to the Caelestia logo.
-* **Qt6 Theme Runtime:** Configured with `QtVersion=6` for modern SDDM greeter compatibility.
+<table>
+  <tr>
+    <td>
+      <video src="https://github.com/user-attachments/assets/2fac31f1-0007-4d1d-8966-5ba34ccf7222" width="400" controls autoplay loop muted></video>
+    </td>
+    <td>
+      <video src="https://github.com/user-attachments/assets/6e58f631-56e0-4750-b088-9aeb6d54fa01" width="400" controls autoplay loop muted></video>
+    </td>
+  </tr>
+</table>
 
 ## Installation
 
@@ -43,15 +42,17 @@ The provided installer handles all dependencies, system configurations, and perm
     ```
     Available themes:
 
-      1) minimalist
+      1) locklike
+      2) minimalist
+      3) minimalistV2
 
-    Select theme to install [1-1]:
+    Select theme to install [1-3]:
     ```
 
 > **Note:** Re-running the installer will automatically clean up the previous installation before installing a new theme.
-> To Switch theme simply re-run the install script and choose your desired theme.
+> To Switch theme simply re-run the install script again and choose your desired theme.
 
-## How the Sync Works
+## Sync Setup
 
 This theme already includes a systemd service (`caelestia-sync.service`) that triggers during the shutdown/reboot process. It identifies the active user, pulls the latest wallpaper, avatar icons and theme configuration from the Caelestia state folder, and applies them to the login screen for your next boot.
 
@@ -62,8 +63,7 @@ sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh
 ```
 
 **Automatic Posthook:**
-If you want fully automatic sync without reboot, use posthook. See [POSTHOOK.md](POSTHOOK.md).
-> **For a deeper explanation of templating and sync flow, see [TEMPLATING.md](TEMPLATING.md).**
+If you want a fully automated sync without reboot, use posthook. See **[POSTHOOK.md](POSTHOOK.md)**.
 
 ## Configuration
 
@@ -78,6 +78,7 @@ To customize the theme config, modify it only through the Caelestia config:
 
 Do not edit `/usr/share/sddm/themes/caelestia/theme.conf` directly, since this will be overwritten by Caelestia templating system.
 
+> **For a deeper explanation of templating and sync flow, see [TEMPLATING.md](TEMPLATING.md).**
 
 ## Testing
 
@@ -98,11 +99,9 @@ This keeps `~/.face.icon` synced to `~/.face` and fixes incorrect avatar images.
 
 ## Requirements
 
-> **Note:** This theme requires **Qt 6.2+** for background blur effects (`MultiEffect`). Most modern distributions ship with Qt 6.2+, but verify your version with `pacman -Q qt6-declarative`.
+> **Note:** This theme was made for Caelestia Shell, you can still use it on other setups but dynamic colors and wallpapers wont work..
 
-Caelestia Shell meets all the basic requirements, except for SDDM (which is required for an SDDM theme).
-
-For everyone not on Caelestia Shell:
+List of requirements:
 * **SDDM** duh
 * **qt6-declarative**
 * **qt6-5compat**
