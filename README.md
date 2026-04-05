@@ -16,7 +16,7 @@
 ## Features
 
 * **Dynamic Sync:** Automatically matches your SDDM background and accent colors to your current Hyprland theme upon reboot.
-* **Multimedia Support:** Supports static images (`.jpg`, `.png`), (TODO: animated GIFs, and video backgrounds (`.mp4`, `.webm`)).
+* **Multimedia Support:** Supports static images (`.jpg`, `.jpeg` and `.png`).
 * **Glassmorphism:** A translucent central card with dynamic opacity and blur for seamless background integration.
 * **Smart Avatar Fallbacks:** Uses `userModel.icon`, then `~/.face.icon`, then `~/.face`, then falls back to the Caelestia logo.
 * **Qt6 Theme Runtime:** Configured with `QtVersion=6` for modern SDDM greeter compatibility.
@@ -31,17 +31,24 @@ The provided installer handles all dependencies, system configurations, and perm
     cd caelestia-sddm
     ```
 
-2.  **Run the universal installer:**
+2.  **Run the installer:**
     ```bash
     chmod +x scripts/install.sh
     ./scripts/install.sh
     ```
 
-3.  **Verify the setup:**
-    ```bash
-    chmod +x scripts/check.sh
-    ./scripts/check.sh
+3.  **Select a theme:**
+    The installer will prompt you to choose from available themes:
     ```
+    Available themes:
+
+      1) minimalist
+
+    Select theme to install [1-1]:
+    ```
+
+> **Note:** Re-running the installer will automatically clean up the previous installation before installing a new theme.
+> To Switch theme simply re-run the install script and choose your desired theme.
 
 ## How the Sync Works
 
