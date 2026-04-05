@@ -40,6 +40,7 @@ QtObject {
     property color mOnSurface: getConfig("mOnSurface") || "#e2e2e2"
     property color mSurfaceVariant: getConfig("mSurfaceVariant") || "#353535"
     property color mOnSurfaceVariant: getConfig("mOnSurfaceVariant") || "#919191"
+    property color mSurfaceContainer: getConfig("mSurfaceContainer") || "#1a211d"
     property color mOutline: getConfig("mOutline") || "#7d7d7d"
     property color mShadow: getConfig("mShadow") || "#000000"
     property color mHover: getConfig("mHover") || mPrimary

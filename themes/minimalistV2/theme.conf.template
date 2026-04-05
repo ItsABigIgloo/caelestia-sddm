@@ -66,6 +66,8 @@ mOnSurface=#{{ onSurface.hex }}
 mSurfaceVariant=#{{ surfaceVariant.hex }}
 mOnSurfaceVariant=#{{ onSurfaceVariant.hex }}
 
+mSurfaceContainer=#{{ surfaceContainer.hex }}
+
 mOutline=#{{ outline.hex }}
 mShadow=#{{ shadow.hex }}
 

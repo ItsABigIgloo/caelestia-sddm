@@ -44,11 +44,11 @@ Item {
     DropShadow {
         anchors.fill: mainCard
         horizontalOffset: 0
-        verticalOffset: 10
+        verticalOffset: 4
         radius: Theme.shadowRadius
         samples: Theme.shadowSamples
-        spread: 0.2
-        color: Theme.withAlpha(Theme.mShadow, 0.55)
+        spread: 0.05
+        color: Theme.withAlpha(Theme.mShadow, 0.25)
         source: mainCard
         visible: Theme.dropShadows
         transparentBorder: true
@@ -59,122 +59,116 @@ Item {
 
         anchors.fill: parent
         radius: Theme.cardRadius
-        border.color: Theme.withAlpha(Theme.mPrimary, Theme.cardOpacity)
-        border.width: 2
+        color: Theme.mSurface
 
-        ColumnLayout {
+        Rectangle {
             anchors.fill: parent
-            anchors.margins: 40
-            spacing: 30
+            anchors.margins: 16
+            radius: Theme.cardRadius - 16
+            color: Theme.mSurfaceContainer
 
-            Clock {
-                Layout.alignment: Qt.AlignHCenter
-            }
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: 40
+                spacing: 30
 
-            Avatar {
-                id: avatar
-
-                Layout.alignment: Qt.AlignHCenter
-                userPicker: root.userPicker
-                userModel: root.usersModel
-            }
-
-            StyledComboBox {
-                id: userPicker
-
-                Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: 380
-                Layout.preferredHeight: 55
-                model: root.usersModel
-                currentIndex: {
-                    if (!root.usersModel || root.usersModel.count <= 0)
-                        return -1;
-
-                    var idx = root.usersModel.lastIndex;
-                    return idx >= 0 && idx < root.usersModel.count ? idx : 0;
+                Clock {
+                    Layout.alignment: Qt.AlignHCenter
                 }
-                textRole: "name"
-                font.family: Theme.fontFamily
-                font.pixelSize: Math.round(Theme.baseFontSize * 1.67)
-                onRestoreFocus: root.onRestoreFocus
-            }
 
-            PasswordInput {
-                id: passwordInput
+                Avatar {
+                    id: avatar
 
-                Layout.alignment: Qt.AlignHCenter
-                buffer: root.buffer
-                isError: root.isError
-                isAuthenticating: root.isAuthenticating
-                onRestoreFocus: root.onRestoreFocus
-                onLogin: root.onLogin
-            }
+                    Layout.alignment: Qt.AlignHCenter
+                    userPicker: root.userPicker
+                    userModel: root.usersModel
+                }
 
-            Row {
-                Layout.alignment: Qt.AlignHCenter
-                spacing: 20
+                StyledComboBox {
+                    id: userPicker
 
-                PowerButton {
-                    id: shutBtn
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.preferredWidth: 380
+                    Layout.preferredHeight: 55
+                    model: root.usersModel
+                    currentIndex: {
+                        if (!root.usersModel || root.usersModel.count <= 0)
+                            return -1;
 
-                    width: 70
-                    height: 70
-                    iconText: "\ue8ac"
-                    normalColor: Theme.mOnSurface
-                    hoverColor: Theme.mError
-                    onRestoreFocus: root.onRestoreFocus
-                    onClickedAction: function() {
-                        sddm.powerOff();
+                        var idx = root.usersModel.lastIndex;
+                        return idx >= 0 && idx < root.usersModel.count ? idx : 0;
                     }
-                }
-
-                PowerButton {
-                    id: rebBtn
-
-                    width: 70
-                    height: 70
-                    iconText: "\uf053"
-                    normalColor: Theme.mOnSurface
-                    hoverColor: Theme.mHover
+                    textRole: "name"
+                    font.family: Theme.fontFamily
+                    font.pixelSize: Math.round(Theme.baseFontSize * 1.67)
                     onRestoreFocus: root.onRestoreFocus
-                    onClickedAction: function() {
-                        sddm.reboot();
+                }
+
+                PasswordInput {
+                    id: passwordInput
+
+                    Layout.alignment: Qt.AlignHCenter
+                    buffer: root.buffer
+                    isError: root.isError
+                    isAuthenticating: root.isAuthenticating
+                    onRestoreFocus: root.onRestoreFocus
+                    onLogin: root.onLogin
+                }
+
+                Row {
+                    Layout.alignment: Qt.AlignHCenter
+                    spacing: 20
+
+                    PowerButton {
+                        id: shutBtn
+
+                        width: 70
+                        height: 70
+                        iconText: "\ue8ac"
+                        normalColor: Theme.mOnSurface
+                        hoverColor: Theme.mError
+                        onRestoreFocus: root.onRestoreFocus
+                        onClickedAction: function() {
+                            sddm.powerOff();
+                        }
                     }
+
+                    PowerButton {
+                        id: rebBtn
+
+                        width: 70
+                        height: 70
+                        iconText: "\uf053"
+                        normalColor: Theme.mOnSurface
+                        hoverColor: Theme.mHover
+                        onRestoreFocus: root.onRestoreFocus
+                        onClickedAction: function() {
+                            sddm.reboot();
+                        }
+                    }
+
                 }
 
-            }
+                StyledComboBox {
+                    id: sessionPicker
 
-            StyledComboBox {
-                id: sessionPicker
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.preferredWidth: 380
+                    Layout.preferredHeight: 55
+                    model: root.sessionsModel
+                    currentIndex: {
+                        if (!root.sessionsModel || root.sessionsModel.count <= 0)
+                            return -1;
 
-                Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: 380
-                Layout.preferredHeight: 55
-                model: root.sessionsModel
-                currentIndex: {
-                    if (!root.sessionsModel || root.sessionsModel.count <= 0)
-                        return -1;
-
-                    var idx = root.sessionsModel.lastIndex;
-                    return idx >= 0 && idx < root.sessionsModel.count ? idx : 0;
+                        var idx = root.sessionsModel.lastIndex;
+                        return idx >= 0 && idx < root.sessionsModel.count ? idx : 0;
+                    }
+                    textRole: "name"
+                    font.family: Theme.fontFamily
+                    font.pixelSize: Math.round(Theme.baseFontSize * 1.5)
+                    onRestoreFocus: root.onRestoreFocus
                 }
-                textRole: "name"
-                font.family: Theme.fontFamily
-                font.pixelSize: Math.round(Theme.baseFontSize * 1.5)
-                onRestoreFocus: root.onRestoreFocus
-            }
 
-        }
-
-        gradient: Gradient {
-            GradientStop {
-                position: 0.5
-                color: Theme.withAlpha(Theme.mSurface, Theme.cardOpacity * 0.92)
-            }
-
-            GradientStop {
-                position: 1
-                color: Theme.withAlpha(Theme.mPrimary, Theme.cardOpacity * 0.36)
             }
 
         }
