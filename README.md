@@ -10,7 +10,8 @@
 
 <p align="center">A dynamic, adaptive login interface for <strong>Caelestia Shell</strong>. Built with QML, this theme focuses on wallpaper-driven colors, synchronized visuals, and seamless integration with the Caelestia desktop ecosystem.</p>
 
-<video src="https://github.com/user-attachments/assets/cb04b8e6-4600-4d9a-a3bf-747291333535" controls="controls" style="max-width: 100%;">
+<video src="https://github.com/user-attachments/assets/2fac31f1-0007-4d1d-8966-5ba34ccf7222
+" width="" controls autoplay loop>
 </video>
 
 ## Features
