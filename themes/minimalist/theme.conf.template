@@ -1,0 +1,73 @@
+[General]
+# ============================================================================
+# TYPOGRAPHY
+# ============================================================================
+# Font Family
+fontFamily="Rubik"
+
+# Font Size
+FontSize=11
+
+# Avatar Size
+AvatarSize=120
+
+# ============================================================================
+# BORDER RADIUS (roundness)
+# ============================================================================
+# UI Elements (inputs, combo boxes, toast)
+elementRadius=25
+
+# Login Card
+cardRadius=75
+
+# ============================================================================
+# VISUAL EFFECTS
+# ============================================================================
+# Card Drop shadows [true | false]
+dropShadows=true
+
+# Background blur [true | false]
+blurEnabled=true
+
+# Background blur strength [0.0 to 1.0]
+blurStrength=0.6
+
+# Card Opacity [0 to 1]
+cardOpacity=0.35
+
+# Background overlay opacity [0 to 1]
+overlayOpacity=0.4
+
+# ============================================================================
+# DEBUG
+# ============================================================================
+# Debug mode (enable debug keyboard shortcuts) [true | false]
+debugMode=false
+
+# ============================================================================
+# COLOR SCHEME
+# ============================================================================
+# Do not touch these! (auto-synced by Caelestia)
+mPrimary=#{{ primary.hex }}
+mOnPrimary=#{{ onPrimary.hex }}
+
+mSecondary=#{{ secondary.hex }}
+mOnSecondary=#{{ onSecondary.hex }}
+
+mTertiary=#{{ tertiary.hex }}
+mOnTertiary=#{{ onTertiary.hex }}
+
+mError=#{{ error.hex }}
+mOnError=#{{ onError.hex }}
+
+mSurface=#{{ surface.hex }}
+mOnSurface=#{{ onSurface.hex }}
+
+mSurfaceVariant=#{{ surfaceVariant.hex }}
+mOnSurfaceVariant=#{{ onSurfaceVariant.hex }}
+
+mOutline=#{{ outline.hex }}
+mShadow=#{{ shadow.hex }}
+
+mHover=#{{ primary.hex }}
+mOnHover=#{{ onPrimary.hex }}

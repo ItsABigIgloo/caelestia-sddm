@@ -4,10 +4,40 @@ set -e
 # Dynamically find the project root regardless of where this script is called from
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+THEMES_DIR="$PROJECT_ROOT/themes"
 
 THEME_NAME="caelestia"
+INSTALL_DIR="/usr/share/sddm/themes/$THEME_NAME"
+
+# --- Sudo check ---
+echo "Caelestia SDDM Theme Installer"
+echo "This script requires sudo privileges to install the theme."
+echo ""
+if ! sudo -v; then
+    echo "✗ Sudo authentication failed. Exiting."
+    exit 1
+fi
+echo "✓ Sudo authenticated"
+# -----------------
+
+# --- Check for existing installation ---
+if [[ -d "$INSTALL_DIR" ]]; then
+    echo ""
+    echo "============================================================"
+    echo "                    CLEAN UP / UPDATE"
+    echo "============================================================"
+    echo "Previous installation exists, cleaning and updating..."
+    chmod +x "$SCRIPT_DIR/uninstall.sh"
+    "$SCRIPT_DIR/uninstall.sh"
+fi
+# ------------------------
 
 # --- Dependency Check ---
+echo ""
+echo "============================================================"
+echo "                       INSTALL THEME"
+echo "============================================================"
+
 DEPENDENCIES=(
     "sddm"
     "qt6-declarative"
@@ -35,35 +65,59 @@ else
 fi
 # ------------------------
 
-INSTALL_DIR="/usr/share/sddm/themes/$THEME_NAME"
+# --- Theme Selection ---
+echo ""
+echo "Available themes:"
+echo ""
 
-echo "Installing Caelestia SDDM Theme..."
+# Get list of available themes
+THEMES=()
+THEME_NUM=1
+for theme_path in "$THEMES_DIR"/*/; do
+    if [ -d "$theme_path" ]; then
+        theme_name=$(basename "$theme_path")
+        THEMES+=("$theme_name")
+        echo "  $THEME_NUM) $theme_name"
+        ((THEME_NUM++))
+    fi
+done
 
-# 1. Create theme directory and copy only necessary theme files
+if [ ${#THEMES[@]} -eq 0 ]; then
+    echo "✗ Error: No themes found in $THEMES_DIR"
+    exit 1
+fi
+
+echo ""
+read -p "Select theme to install [1-${#THEMES[@]}]: " selection
+
+# Validate selection
+if ! [[ "$selection" =~ ^[0-9]+$ ]] || [ "$selection" -lt 1 ] || [ "$selection" -gt ${#THEMES[@]} ]; then
+    echo "✗ Invalid selection"
+    exit 1
+fi
+
+SELECTED_THEME="${THEMES[$((selection-1))]}"
+THEME_SOURCE="$THEMES_DIR/$SELECTED_THEME"
+
+echo ""
+echo "Installing Caelestia SDDM Theme ($SELECTED_THEME)..."
+
+# 1. Create theme directory and copy selected theme files
 sudo mkdir -p "$INSTALL_DIR"
 
-# Copy core theme files
-sudo cp "$PROJECT_ROOT/Main.qml" "$INSTALL_DIR/"
-sudo cp -r "$PROJECT_ROOT/components" "$INSTALL_DIR/"
-sudo cp -r "$PROJECT_ROOT/singletons" "$INSTALL_DIR/"
-sudo cp "$PROJECT_ROOT/caelestia-sddm.qmlproject" "$INSTALL_DIR/"
-sudo cp "$PROJECT_ROOT/metadata.desktop" "$INSTALL_DIR/"
-sudo cp "$PROJECT_ROOT/theme.conf" "$INSTALL_DIR/"
-sudo cp "$PROJECT_ROOT/theme.conf.template" "$INSTALL_DIR/"
+# Copy all files from selected theme
+sudo cp -r "$THEME_SOURCE"/* "$INSTALL_DIR/"
 
-# Copy assets
-sudo cp -r "$PROJECT_ROOT/assets" "$INSTALL_DIR/"
-
-# Copy only sync script (not dev tools or installers)
+# Copy universal sync script
 sudo mkdir -p "$INSTALL_DIR/scripts"
 sudo cp "$PROJECT_ROOT/scripts/sync.sh" "$INSTALL_DIR/scripts/"
 
-echo "✓ Copied theme to $INSTALL_DIR"
+echo "✓ Copied theme '$SELECTED_THEME' to $INSTALL_DIR"
 
 # 2. Create template configuration in user's home directory
 echo "Creating color template configuration..."
 mkdir -p "$HOME/.config/caelestia/templates"
-cp "$INSTALL_DIR/theme.conf.template" "$HOME/.config/caelestia/templates/sddm-theme.conf"
+cp "$THEME_SOURCE/theme.conf.template" "$HOME/.config/caelestia/templates/sddm-theme.conf"
 echo "✓ Template created at ~/.config/caelestia/templates/sddm-theme.conf"
 
 # 3. Install the Systemd Service
@@ -109,15 +163,25 @@ echo -e "[Theme]\nCurrent=caelestia" | sudo tee /etc/sddm.conf.d/caelestia.conf 
 echo "✓ Created /etc/sddm.conf.d/caelestia.conf"
 
 
-echo "✅ Installation Complete! Use './scripts/check.sh' to verify."
+echo "✅ Installation Complete!"
 echo "Set: Current=$THEME_NAME"
 cat <<"EOF"
-     ______           __          __  _       
-    / ____/___ ____  / /__  _____/ /_(_)___ _ 
-   / /   / __ `/ _ \/ / _ \/ ___/ __/ / __ `/ 
-  / /___/ /_/ /  __/ /  __(__  ) /_/ / /_/ /  
-  \____/\__,_/\___/_/\___/____/\__/_/\__,_/                                             
+     ______           __          __  _
+    / ____/___ ____  / /__  _____/ /_(_)___ _
+   / /   / __ `/ _ \/ / _ \/ ___/ __/ / __ `/
+  / /___/ /_/ /  __/ /  __(__  ) /_/ / /_/ /
+  \____/\__,_/\___/_/\___/____/\__/_/\__,_/
 EOF
 
 echo "------------------------------------------------"
-echo "Installation Complete!"
+
+# Ask to run post-install checks
+read -p "Run post-install checks? [Y/n]: " run_check
+if [[ -z "$run_check" ]] || [[ "$run_check" =~ ^[Yy]$ ]]; then
+    echo ""
+    echo "============================================================"
+    echo "                    POST-INSTALL CHECKS"
+    echo "============================================================"
+    chmod +x "$SCRIPT_DIR/check.sh"
+    "$SCRIPT_DIR/check.sh"
+fi
