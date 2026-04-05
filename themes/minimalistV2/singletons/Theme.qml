@@ -47,6 +47,7 @@ QtObject {
     property color mOnHover: getConfig("mOnHover") || mOnPrimary
     // effects
     property bool dropShadows: toBool(getConfig("dropShadows"), true)
+    property bool cardBorder: toBool(getConfig("cardBorder"), false)
     property bool blurEnabled: toBool(getConfig("blurEnabled"), true)
     property real blurStrength: boundedNumber(getConfig("blurStrength"), 1, 0, 1)
     property real cardOpacity: boundedNumber(getConfig("cardOpacity"), 0.95, 0, 1)

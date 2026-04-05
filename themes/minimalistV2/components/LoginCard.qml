@@ -41,6 +41,18 @@ Item {
     scale: isActive ? 0.5 : 1
     opacity: isActive ? 0 : 1
 
+    Rectangle {
+        id: cardBorder
+
+        anchors.fill: mainCard
+        anchors.margins: Theme.cardBorder ? -2 : 0
+        radius: Theme.cardRadius + (Theme.cardBorder ? 2 : 0)
+        color: "transparent"
+        border.color: Theme.mHover
+        border.width: Theme.cardBorder ? 2 : 0
+        z: -1
+    }
+
     DropShadow {
         anchors.fill: mainCard
         horizontalOffset: 0
