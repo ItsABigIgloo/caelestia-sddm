@@ -30,7 +30,7 @@ dropShadows=true
 blurEnabled=true
 
 # Background blur strength [0.0 to 1.0]
-blurStrength=0.6
+blurStrength=0.5
 
 # Card Opacity [0 to 1]
 cardOpacity=0.35

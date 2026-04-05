@@ -59,13 +59,13 @@ Item {
 
         anchors.fill: parent
         radius: Theme.cardRadius
-        color: Theme.mSurface
+        color: Theme.withAlpha(Theme.mSurface, Theme.cardOpacity)
 
         Rectangle {
             anchors.fill: parent
             anchors.margins: 16
             radius: Theme.cardRadius - 16
-            color: Theme.mSurfaceContainer
+            color: Theme.withAlpha(Theme.mOnSecondary, Theme.cardOpacity * 1.55)
 
             ColumnLayout {
                 anchors.fill: parent
