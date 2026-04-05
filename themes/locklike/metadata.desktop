@@ -1,0 +1,10 @@
+[SddmGreeterTheme]
+Name=Caelestia SDDM
+Description=Minimalist CaelestiaOS Login Theme
+Author=AkhiLeith
+Type=sddm-theme
+Version=1.0
+MainScript=Main.qml
+QtVersion=6
+X-SDDM-Theme-InterfaceVersion=2
+GreeterEnvironment=QML_XHR_ALLOW_FILE_READ=1

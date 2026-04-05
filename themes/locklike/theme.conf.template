@@ -1,0 +1,34 @@
+[General]
+# ============================================================================
+# Clock
+# ============================================================================
+# 12 hours or 24 Hours true=12 [true | false]
+ap=false
+
+# Maincard blur strength [0.0 to 1.0] (not implemented as of now)
+blur=0.8
+
+# ============================================================================
+# COLOR SCHEME
+# ============================================================================
+# Do not touch these! (auto-synced by Caelestia)
+background=#{{ background.hex }}
+mainCard=#{{ background.hex }}
+subComponents=#{{ surfaceContainer.hex }}
+text=#{{ text.hex }}
+textDark=#{{ tertiary.hex }}
+primary=#{{ primary_paletteKeyColor.hex }}
+onPrimary=#{{ onPrimary.hex }}
+secondary=#{{ secondary.hex }}
+onSecondary=#{{ onSecondary.hex }}
+tertiary=#{{ tertiary.hex }}
+onTertiary=#{{ onTertiary.hex }}
+onSuccess=#{{ onSuccess.hex }}
+inverseOnSurface=#{{ inverseOnSurface.hex }}
+surface=#{{ surface.hex }}
+surfaceVariant=#{{ surfaceVariant.hex }}
+surfaceContainerLow=#{{ surfaceContainerLow.hex }}
+surfaceContainer=#{{ surfaceContainer.hex }}
+surfaceContainerHigh=#{{ surfaceContainerHigh.hex }}
+outline=#{{ outline.hex }}
+error=#{{ error.hex }}
