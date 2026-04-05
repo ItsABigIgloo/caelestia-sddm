@@ -37,7 +37,7 @@ Item {
 
     enabled: !isActive
     implicitWidth: 550
-    implicitHeight: 800
+    implicitHeight: 830
     scale: isActive ? 0.5 : 1
     opacity: isActive ? 0 : 1
 
