@@ -32,7 +32,7 @@ Rectangle {
         }
     }
 
-    Image {
+    AnimatedImage {
         id: background
         anchors.fill: parent
         source: "assets/background"
