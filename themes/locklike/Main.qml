@@ -293,6 +293,7 @@ Rectangle {
                             Layout.fillWidth: true
                             Layout.alignment: Qt.AlignHCenter
                             Logo {
+                                skipIntroAnimation: root.firstInput
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
                                 Layout.leftMargin: 15 
                                 Layout.topMargin: 30
