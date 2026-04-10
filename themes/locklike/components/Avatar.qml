@@ -4,14 +4,14 @@ import Qt5Compat.GraphicalEffects
 Rectangle {
     id: root
 
-    radius: 120
+    radius: root.height / 2
     color: "black"
     clip: true
 
     Image {
         id: avatarImage
 
-        property var avatarCandidates: ["../assets/avatar.face.icon", "../assets/avatar.face", "../assets/avatar.jpg"]
+        property var avatarCandidates: ["../assets/avatar.face.icon", "../assets/avatar.face", "../assets/avatar.jpg", "../assets/avatar.png"]
         property int avatarCandidateIndex: 0
 
         Timer {
@@ -27,8 +27,10 @@ Rectangle {
             }
         }
 
+        mipmap: true
+        smooth: true
+
         anchors.fill: parent
-        source: ""
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
         layer.enabled: true
