@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Effects
+import QtQuick.Window
 import Qt5Compat.GraphicalEffects
 import "components"
 
@@ -15,8 +16,10 @@ Rectangle {
     property bool firstInput: true
     property bool loading: false
     property string buffer
+    property real scaleFactor: Math.min(Screen.width / 1920, Screen.height / 1080)
 
     onBufferChanged: {
+        console.log(root.scaleFactor)
         return // ill make animations for typing
     }
 
