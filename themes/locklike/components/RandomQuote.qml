@@ -33,6 +33,22 @@ Item {
         ListElement { text: "Knowledge speaks, but wisdom listens."; author: "Jimi Hendrix" }
         ListElement { text: "Reality is wrong, dreams are for real."; author: "Tupac Shakur" }
         ListElement { text: "Everything should be made as simple as possible, but not simpler."; author: "Albert Einstein" }
+        ListElement { text: "All of us had to live their lives drunk on something, else we had no cause to keep pushing on."; author: "Kenny Ackermann" }
+        ListElement { text: "A slave to money holds a whip just so he can act like he owns a slave bought by money. But he is not aware of one thing, the truth is all of us are slaves to something."; author: "Askeladd" }
+        ListElement { text: "This world is cruel but it's also, it's also beautiful."; author: "Mikasa Ackermann" }
+        ListElement { text: "My god, a moment of bliss. Why isn't that enough for a lifetime?"; author: "Fyodor Dostoevsky" }
+        ListElement { text: "Life is not a problem to be solved, but a reality to be experienced."; author: "Søren Kierkegaard" }
+        ListElement { text: "It's not death a man should fear, but he should fear never beginning to live."; author: "Marcus Aurelius" }
+        ListElement { text: "It takes the whole life to learn how to live, and what will perhaps make you wonder more, it takes the whole of life to learn how to die."; author: "Seneca" }
+        ListElement { text: "You don't have enemies, the truth is that nobody has them."; author: "Thors Snorresson" }
+        ListElement { text: "It's better to shoot and miss, than to let time run out and wonder what if."; author: "Michael Jordan" }
+        ListElement { text: "Believe in yourself."; author: "Someone" }
+        ListElement { text: "Take the chance and you may lose. Take not a chance, and you have already lost."; author: "Søren Kierkegaard" }
+        ListElement { text: "Failure is success in progress."; author: "Albert Einstein" }
+        ListElement { text: "Keep moving forward."; author: "Eren Yeager" }
+        ListElement { text: "Linux is only free if your time has no value."; author: "Jamie Zawinski" }
+        ListElement { text: "So Nvidia, fuck you!"; author: "Linus Torvalds" }
+        ListElement { text: "I use Arch btw."; author: "Many people" }
     }
     Column {
         anchors.centerIn: parent
