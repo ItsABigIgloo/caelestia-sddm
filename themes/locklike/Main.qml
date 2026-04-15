@@ -209,7 +209,7 @@ Rectangle {
                 Rectangle {
                     id: topLeftRect
                     width: 365
-                    height: root.height / 6
+                    height: 180
                     color: config.subComponents
                     topLeftRadius: mainCard.radius / 2
                     radius: mainCard.radius / 4
@@ -258,8 +258,8 @@ Rectangle {
 
                 Rectangle {
                     id: middleLeftRect
-                    width: 365 
-                    height: root.height / 3.2
+                    width: 365
+                    Layout.fillHeight: true
                     color: config.subComponents
                     radius: mainCard.radius / 4
                     clip: true
@@ -382,7 +382,7 @@ Rectangle {
                 Rectangle {
                     id: bottomLeftRect
                     width: 365 
-                    height: root.height / 6
+                    height: 180
                     color: config.subComponents
                     bottomLeftRadius: mainCard.radius / 2
                     radius: mainCard.radius / 4
