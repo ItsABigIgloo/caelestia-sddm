@@ -78,10 +78,16 @@ Rectangle {
             }
             layer.enabled: true
             layer.effect: DropShadow {
-                color: "#80000000"
+                color: Qt.rgba(
+                    parseInt(config.background.substring(1,3), 16)/255,
+                    parseInt(config.background.substring(3,5), 16)/255,
+                    parseInt(config.background.substring(5,7), 16)/255,
+                    0.5
+                )
                 horizontalOffset: 0
                 verticalOffset: 0
-                radius: 8
+                radius: 16
+                scale: 1.5
             }
         }
         Text{
@@ -90,10 +96,10 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
             font.family: "Rubik"
-            font.pointSize: 18
+            font.pointSize: 15
             font.italic: true
             opacity: root.firstInput ? 1.0 : 0.0
-            color: "#c4c7c6"
+            color: config.text
             text: "Press a key on your Keyboard to login"
 
             Behavior on opacity{
@@ -229,7 +235,7 @@ Rectangle {
                     }
                     Text {
                         renderType: Text.NativeRendering
-                        width: topLeftRect.width - 40 
+                        width: topLeftRect.width - 40
 
                         text: "<span style='color:" + config.text + ";'>" 
                             + topLeftRect.welcomeString + " </span>"
@@ -278,7 +284,7 @@ Rectangle {
                             color: "#111111"
                             text: ">"
                             font.family: "CaskaydiaCove NF"
-                            font.pointSize: 15 
+                            font.pointSize: 15
                         }
                     }
                     ColumnLayout {
@@ -504,8 +510,6 @@ Rectangle {
                         renderType: Text.NativeRendering
                         Layout.alignment: Qt.AlignHCenter
                         text: Qt.formatDate(new Date(), "dddd,   d  MMMM  yyyy")
-                        style: Text.Outline
-                        styleColor: "#000000"
                         font.pixelSize: 28
                         font.family: "Rubik"
                         font.bold: false
@@ -603,7 +607,7 @@ Rectangle {
                                     radius: 30
                                     width: 12
                                     height: 12
-                                    color: "white"
+                                    color: config.text
                                 }
 
                             }
@@ -613,7 +617,7 @@ Rectangle {
                                 visible: root.buffer === "" ? false: true
                                 width: 1 
                                 height: 21
-                                color: "white"
+                                color: config.text
                                 opacity: invisible ? 0 : 1
                                 Behavior on opacity{NumberAnimation{duration: 200}}
                                 Timer {
