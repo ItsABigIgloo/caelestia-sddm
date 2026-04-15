@@ -16,22 +16,21 @@ Rectangle {
     property bool firstInput: true
     property bool loading: false
     property string buffer
-    property real scaleFactor: Math.min(Screen.width / 1920, Screen.height / 1080)
 
     onBufferChanged: {
-        console.log(root.scaleFactor)
-        return // ill make animations for typing
+        // ill make animations for typing
+        return;
     }
 
     Connections {
         target: sddm
         function onLoginFailed() {
-            root.buffer = ""
-            root.loading = false
-            shakeRotation.start()
+            root.buffer = "";
+            root.loading = false;
+            shakeRotation.start();
         }
         function onLoginSucceeded() {
-            root.loading = false
+            root.loading = false;
         }
     }
 
@@ -50,10 +49,10 @@ Rectangle {
             anchors.fill: parent
             color: "#000000"
             opacity: firstInput ? 0.0 : 0.4
-            Behavior on opacity{
-                NumberAnimation{
+            Behavior on opacity {
+                NumberAnimation {
                     duration: 300
-                    easing: Easing.InOutCubic 
+                    easing: Easing.InOutCubic
                 }
             }
         }
@@ -78,19 +77,14 @@ Rectangle {
             }
             layer.enabled: true
             layer.effect: DropShadow {
-                color: Qt.rgba(
-                    parseInt(config.background.substring(1,3), 16)/255,
-                    parseInt(config.background.substring(3,5), 16)/255,
-                    parseInt(config.background.substring(5,7), 16)/255,
-                    0.5
-                )
+                color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, 0.5)
                 horizontalOffset: 0
                 verticalOffset: 0
                 radius: 16
                 scale: 1.5
             }
         }
-        Text{
+        Text {
             renderType: Text.NativeRendering
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
@@ -102,69 +96,69 @@ Rectangle {
             color: config.text
             text: "Press a key on your Keyboard to login"
 
-            Behavior on opacity{
-                NumberAnimation{
-                    duration: 300 
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
                     easing.type: Easing.OutCubic
                 }
             }
         }
     }
 
-    Item{
+    Item {
         id: keylogger
         focus: true
         Keys.onPressed: {
             if (root.firstInput) {
-                root.firstInput = false
+                root.firstInput = false;
                 return;
             }
             if (event.key === Qt.Key_Escape) {
-                root.firstInput = true
-                root.buffer = ""
-                return; 
+                root.firstInput = true;
+                root.buffer = "";
+                return;
             }
             if (event.key === Qt.Key_Right) {
                 if (userPicker.currentIndex < userModel.count - 1) {
-                    userPicker.currentIndex += 1
-                }   
-                return; 
+                    userPicker.currentIndex += 1;
+                }
+                return;
             }
             if (event.key === Qt.Key_Left) {
                 if (userPicker.currentIndex > 0) {
-                    userPicker.currentIndex -= 1
+                    userPicker.currentIndex -= 1;
                 }
-                return; 
+                return;
             }
 
             if (event.key === Qt.Key_Up) {
                 if (sessionPicker.currentIndex < sessionPicker.count - 1) {
-                    sessionPicker.currentIndex += 1
-                }   
-                return; 
+                    sessionPicker.currentIndex += 1;
+                }
+                return;
             }
             if (event.key === Qt.Key_Down) {
                 if (sessionPicker.currentIndex > 0) {
-                    sessionPicker.currentIndex -= 1
+                    sessionPicker.currentIndex -= 1;
                 }
-                return; 
+                return;
             }
 
             if (event.key === Qt.Key_Backspace) {
-                root.buffer = root.buffer.slice(0, -1)
-                return
+                root.buffer = root.buffer.slice(0, -1);
+                return;
             }
 
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
-                sddm.login(userPicker.currentText, root.buffer, sessionPicker.currentIndex)
-                root.loading = true
-                return; 
+                sddm.login(userPicker.currentText, root.buffer, sessionPicker.currentIndex);
+                root.loading = true;
+                return;
             }
-            root.buffer += event.text
+            root.buffer += event.text;
         }
     }
 
-    MultiEffect{
+    MultiEffect {
         blurEnabled: true
         source: background
         blur: root.firstInput ? 0 : 1.0
@@ -173,33 +167,33 @@ Rectangle {
         blurMax: 64
         anchors.fill: background
         Behavior on blur {
-            NumberAnimation{
+            NumberAnimation {
                 duration: 400
                 easing: Easing.InOutCubic
-                }
             }
+        }
     }
 
     Rectangle {
         id: mainCard
-        width: 1300 
-        height: 750 
+        width: 1300
+        height: 750
         scale: firstInput ? 0.5 : 1.0
         opacity: firstInput ? 0.0 : 1.0
         anchors.centerIn: parent
         radius: 40
         color: config.mainCard
 
-        Behavior on scale{
-            NumberAnimation{
-                duration: 300 
+        Behavior on scale {
+            NumberAnimation {
+                duration: 300
                 easing.type: Easing.OutBack
             }
         }
 
-        Behavior on opacity{
-            NumberAnimation{
-                duration: 300 
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 300
                 easing.type: Easing.OutBack
             }
         }
@@ -222,25 +216,22 @@ Rectangle {
                     property string welcomeString
 
                     function getPhase() {
-                        var now = new Date()
-                        var hour = now.getHours()
+                        var now = new Date();
+                        var hour = now.getHours();
 
                         if (hour >= 20 || hour < 4) {
-                            welcomeString = "Good night"
+                            welcomeString = "Good night";
                         } else if (hour >= 4 && hour < 10) {
-                            welcomeString = "Good morning"
+                            welcomeString = "Good morning";
                         } else {
-                            welcomeString = "Good day"
+                            welcomeString = "Good day";
                         }
                     }
                     Text {
                         renderType: Text.NativeRendering
                         width: topLeftRect.width - 40
 
-                        text: "<span style='color:" + config.text + ";'>" 
-                            + topLeftRect.welcomeString + " </span>"
-                            + "<span style='color:" + config.primary + ";'>" 
-                            + userPicker.displayText + "</span>"
+                        text: "<span style='color:" + config.text + ";'>" + topLeftRect.welcomeString + " </span>" + "<span style='color:" + config.primary + ";'>" + userPicker.displayText + "</span>"
 
                         textFormat: Text.RichText
 
@@ -250,11 +241,11 @@ Rectangle {
                         font.pixelSize: 40
                         wrapMode: Text.WordWrap
                         horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter 
+                        verticalAlignment: Text.AlignVCenter
                     }
 
-                    Timer{
-                        interval: 60000 
+                    Timer {
+                        interval: 60000
                         running: true
                         onTriggered: topLeftRect.getPhase()
                         repeat: true
@@ -270,13 +261,13 @@ Rectangle {
                     radius: mainCard.radius / 4
                     clip: true
                     Rectangle {
-                        width: 30 
-                        height: 40 
-                        radius: 12 
+                        width: 30
+                        height: 40
+                        radius: 12
                         anchors.left: parent.left
                         anchors.top: parent.top
-                        anchors.leftMargin: 15 
-                        anchors.topMargin: 15 
+                        anchors.leftMargin: 15
+                        anchors.topMargin: 15
                         color: config.primary
                         Text {
                             renderType: Text.NativeRendering
@@ -298,13 +289,13 @@ Rectangle {
                             Layout.leftMargin: 33
                             Layout.topMargin: 24
                         }
-                        RowLayout{
+                        RowLayout {
                             Layout.fillWidth: true
                             Layout.alignment: Qt.AlignHCenter
                             Logo {
                                 skipIntroAnimation: root.firstInput
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-                                Layout.leftMargin: 15 
+                                Layout.leftMargin: 15
                                 Layout.topMargin: 30
                                 Layout.preferredWidth: 130
                                 Layout.preferredHeight: 130
@@ -316,78 +307,78 @@ Rectangle {
                                 text: "WM     :\nUSER   :\nUP     :\nBATTERY:"
                                 color: config.text
                                 font.pixelSize: 16
-                                font.family:  "CaskaydiaCove NF"
+                                font.family: "CaskaydiaCove NF"
                                 lineHeight: 30
                                 lineHeightMode: Text.FixedHeight
-                                Layout.preferredWidth: 80 
+                                Layout.preferredWidth: 80
                             }
                             Text {
                                 renderType: Text.NativeRendering
                                 property string displayText: sessionPicker.currentText.split(" ")[0] // idk if i want it like that, but i dont know DEs that have more than one word as a name, that avoids something like that "Plasma (Wayland)"
                                 Layout.leftMargin: 0
                                 Layout.topMargin: middleLeftRect.height / 10
-                                text: displayText + "\n" + userPicker.currentText  +"\n" + "WIP" +"\n" + "WIP"
+                                text: displayText + "\n" + userPicker.currentText + "\n" + "WIP" + "\n" + "WIP"
                                 color: config.text
                                 font.pixelSize: 16
-                                font.family:  "CaskaydiaCove NF"
+                                font.family: "CaskaydiaCove NF"
                                 lineHeight: 30
                                 lineHeightMode: Text.FixedHeight
-                                Layout.preferredWidth: 100 
+                                Layout.preferredWidth: 100
                             }
                         }
                         RowLayout {
-                            spacing: 20 
+                            spacing: 20
                             Layout.alignment: Qt.AlignHCenter
-                            Layout.topMargin: 20 
+                            Layout.topMargin: 20
                             Layout.leftMargin: 16
                             Rectangle {
-                                width: 30 
-                                height: 30 
+                                width: 30
+                                height: 30
                                 color: config.background
-                                radius: 12 
+                                radius: 12
                             }
                             Rectangle {
-                                width: 30 
-                                height: 30 
+                                width: 30
+                                height: 30
                                 color: config.primary
-                                radius: 12 
+                                radius: 12
                             }
                             Rectangle {
-                                width: 30 
-                                height: 30 
+                                width: 30
+                                height: 30
                                 color: config.text
-                                radius: 12 
+                                radius: 12
                             }
                             Rectangle {
-                                width: 30 
-                                height: 30 
+                                width: 30
+                                height: 30
                                 color: config.textDark
-                                radius: 12 
+                                radius: 12
                             }
                             Rectangle {
-                                width: 30 
-                                height: 30 
+                                width: 30
+                                height: 30
                                 color: config.secondary
-                                radius: 12 
+                                radius: 12
                             }
                             Rectangle {
-                                width: 30 
-                                height: 30 
+                                width: 30
+                                height: 30
                                 color: config.onSuccess
-                                radius: 12 
+                                radius: 12
                             }
                             Rectangle {
-                                width: 30 
-                                height: 30 
+                                width: 30
+                                height: 30
                                 color: config.inverseOnSurface
-                                radius: 12 
+                                radius: 12
                             }
                         }
                     }
                 }
                 Rectangle {
                     id: bottomLeftRect
-                    width: 365 
+                    width: 365
                     height: 180
                     color: config.subComponents
                     bottomLeftRadius: mainCard.radius / 2
@@ -402,14 +393,18 @@ Rectangle {
                         width: 160
                         radius: mainCard.radius / 2
                         color: config.onSecondary
-                        Behavior on scale{NumberAnimation{duration: 100}}
+                        Behavior on scale {
+                            NumberAnimation {
+                                duration: 100
+                            }
+                        }
                         MaterialIcon {
+                            id: powerIcon
                             property bool hovered: false
                             anchors.left: parent.left
                             anchors.top: parent.top
                             anchors.leftMargin: 34
                             anchors.topMargin: 20
-                            id: powerIcon
                             text: "\ue8ac"
                             color: config.primary
                             pointSize: 70
@@ -418,17 +413,17 @@ Rectangle {
                             anchors.fill: parent
                             hoverEnabled: true
                             onPressed: {
-                                powerBtn.scale = 0.98
+                                powerBtn.scale = 0.98;
                             }
                             onReleased: {
-                                powerBtn.scale = 1
-                                sddm.powerOff()
+                                powerBtn.scale = 1;
+                                sddm.powerOff();
                             }
                             onEntered: {
-                                powerBtn.scale = 1.02
+                                powerBtn.scale = 1.02;
                             }
                             onExited: {
-                                powerBtn.scale = 1
+                                powerBtn.scale = 1;
                             }
                         }
                     }
@@ -443,13 +438,17 @@ Rectangle {
                         width: 160
                         radius: mainCard.radius / 2
                         color: config.onSecondary
-                        Behavior on scale{NumberAnimation{duration: 100}}
+                        Behavior on scale {
+                            NumberAnimation {
+                                duration: 100
+                            }
+                        }
                         MaterialIcon {
+                            id: restartIcon
                             anchors.left: parent.left
                             anchors.top: parent.top
                             anchors.leftMargin: 34
                             anchors.topMargin: 20
-                            id: restartIcon
                             text: "\ue863"
                             color: config.secondary
                             pointSize: 70
@@ -458,17 +457,17 @@ Rectangle {
                             anchors.fill: parent
                             hoverEnabled: true
                             onPressed: {
-                                rebootBtn.scale = 0.98
+                                rebootBtn.scale = 0.98;
                             }
                             onReleased: {
-                                rebootBtn.scale = 1
-                                sddm.reboot()
+                                rebootBtn.scale = 1;
+                                sddm.reboot();
                             }
                             onEntered: {
-                                rebootBtn.scale = 1.02
+                                rebootBtn.scale = 1.02;
                             }
                             onExited: {
-                                rebootBtn.scale = 1
+                                rebootBtn.scale = 1;
                             }
                         }
                     }
@@ -483,8 +482,8 @@ Rectangle {
                 Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     color: "transparent"
-                    width: 300 
-                    height: 45 
+                    width: 300
+                    height: 45
                 }
 
                 ColumnLayout {
@@ -495,11 +494,9 @@ Rectangle {
                         Layout.alignment: Qt.AlignHCenter
                         textFormat: Text.RichText
                         text: {
-                            var time = ap
-                                ? Qt.formatTime(new Date(), "hh:mm AP")
-                                : Qt.formatTime(new Date(), "hh:mm")
+                            var time = ap ? Qt.formatTime(new Date(), "hh:mm AP") : Qt.formatTime(new Date(), "hh:mm");
 
-                            return time.replace(":", "<span style='color:" + config.primary + "'>:</span>")
+                            return time.replace(":", "<span style='color:" + config.primary + "'>:</span>");
                         }
                         font.pixelSize: 84
                         font.family: "Rubik"
@@ -517,7 +514,7 @@ Rectangle {
                     }
                 }
 
-                Item{
+                Item {
                     height: 80
                 }
 
@@ -527,7 +524,7 @@ Rectangle {
                     Layout.preferredHeight: 230
                 }
 
-                Item{
+                Item {
                     height: 40
                 }
 
@@ -536,30 +533,69 @@ Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     color: config.subComponents
                     radius: 30
-                    width: 340 
+                    width: 340
                     height: 40
                     Text {
                         renderType: Text.NativeRendering
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.leftMargin: 17 
+                        anchors.leftMargin: 17
                         font.family: "Material Symbols Rounded"
-                        font.pointSize:  15 
+                        font.pointSize: 15
                         text: "\ue897"
-                        color:  '#a8a8a8' 
-                        Behavior on opacity{ColorAnimation{duration: 100}}
+                        color: '#a8a8a8'
+                        Behavior on opacity {
+                            ColorAnimation {
+                                duration: 100
+                            }
+                        }
                     }
                     SequentialAnimation {
                         id: shakeRotation
                         running: false
 
-                        NumberAnimation { target: inputRect; property: "rotation"; to: -6; duration: 50 }
-                        NumberAnimation { target: inputRect; property: "rotation"; to: 6; duration: 50 }
-                        NumberAnimation { target: inputRect; property: "rotation"; to: -4; duration: 50 }
-                        NumberAnimation { target: inputRect; property: "rotation"; to: 4; duration: 50 }
-                        NumberAnimation { target: inputRect; property: "rotation"; to: -2; duration: 50 }
-                        NumberAnimation { target: inputRect; property: "rotation"; to: 2; duration: 50 }
-                        NumberAnimation { target: inputRect; property: "rotation"; to: 0; duration: 50 }
+                        NumberAnimation {
+                            target: inputRect
+                            property: "rotation"
+                            to: -6
+                            duration: 50
+                        }
+                        NumberAnimation {
+                            target: inputRect
+                            property: "rotation"
+                            to: 6
+                            duration: 50
+                        }
+                        NumberAnimation {
+                            target: inputRect
+                            property: "rotation"
+                            to: -4
+                            duration: 50
+                        }
+                        NumberAnimation {
+                            target: inputRect
+                            property: "rotation"
+                            to: 4
+                            duration: 50
+                        }
+                        NumberAnimation {
+                            target: inputRect
+                            property: "rotation"
+                            to: -2
+                            duration: 50
+                        }
+                        NumberAnimation {
+                            target: inputRect
+                            property: "rotation"
+                            to: 2
+                            duration: 50
+                        }
+                        NumberAnimation {
+                            target: inputRect
+                            property: "rotation"
+                            to: 0
+                            duration: 50
+                        }
                     }
 
                     SequentialAnimation {
@@ -567,8 +603,18 @@ Rectangle {
                         loops: Animation.Infinite
                         running: root.loading
 
-                        ColorAnimation { target: inputRect; property: "color"; to: config.inverseOnSurface; duration: 350 }
-                        ColorAnimation { target: inputRect; property: "color"; to: config.subComponents; duration: 350 }
+                        ColorAnimation {
+                            target: inputRect
+                            property: "color"
+                            to: config.inverseOnSurface
+                            duration: 350
+                        }
+                        ColorAnimation {
+                            target: inputRect
+                            property: "color"
+                            to: config.subComponents
+                            duration: 350
+                        }
                     }
 
                     SequentialAnimation {
@@ -576,8 +622,18 @@ Rectangle {
                         loops: Animation.Infinite
                         running: root.loading
 
-                        ColorAnimation { target: inputBorders; property: "color"; to: config.inverseOnSurface; duration: 350 }
-                        ColorAnimation { target: inputBorders; property: "color"; to: config.subComponents; duration: 350 }
+                        ColorAnimation {
+                            target: inputBorders
+                            property: "color"
+                            to: config.inverseOnSurface
+                            duration: 350
+                        }
+                        ColorAnimation {
+                            target: inputBorders
+                            property: "color"
+                            to: config.subComponents
+                            duration: 350
+                        }
                     }
 
                     Rectangle {
@@ -585,7 +641,7 @@ Rectangle {
                         anchors.centerIn: parent
                         color: config.subComponents
                         radius: 30
-                        width: 250 
+                        width: 250
                         height: 40
                         clip: true
                         Text {
@@ -595,8 +651,12 @@ Rectangle {
                             text: "Enter your password"
                             color: '#6e6e6e'
                             font.family: "CaskaydiaCove NF"
-                            opacity: root.buffer === "" ? 1: 0
-                            Behavior on opacity{NumberAnimation{duration: 100}}
+                            opacity: root.buffer === "" ? 1 : 0
+                            Behavior on opacity {
+                                NumberAnimation {
+                                    duration: 100
+                                }
+                            }
                         }
                         RowLayout {
                             anchors.centerIn: parent
@@ -609,17 +669,20 @@ Rectangle {
                                     height: 12
                                     color: config.text
                                 }
-
                             }
                             Rectangle {
                                 id: textIndicator
                                 property bool invisible: true
-                                visible: root.buffer === "" ? false: true
-                                width: 1 
+                                visible: root.buffer === "" ? false : true
+                                width: 1
                                 height: 21
                                 color: config.text
                                 opacity: invisible ? 0 : 1
-                                Behavior on opacity{NumberAnimation{duration: 200}}
+                                Behavior on opacity {
+                                    NumberAnimation {
+                                        duration: 200
+                                    }
+                                }
                                 Timer {
                                     running: true
                                     repeat: true
@@ -636,24 +699,32 @@ Rectangle {
                         height: 30
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.rightMargin: 8 
+                        anchors.rightMargin: 8
                         color: root.buffer === "" ? config.inverseOnSurface : config.primary
-                        Behavior on color{ColorAnimation{duration: 200}}
+                        Behavior on color {
+                            ColorAnimation {
+                                duration: 200
+                            }
+                        }
                         Text {
                             renderType: Text.NativeRendering
                             anchors.centerIn: parent
                             font.family: "Material Symbols Rounded"
-                            font.pointSize:  17
+                            font.pointSize: 17
                             text: "\ue941"
                             color: root.buffer === "" ? config.text : config.mainCard
-                            Behavior on color{ColorAnimation{duration: 200}}
+                            Behavior on color {
+                                ColorAnimation {
+                                    duration: 200
+                                }
+                            }
                         }
-                        MouseArea{
+                        MouseArea {
                             anchors.fill: parent
-                            cursorShape: root.buffer === "" ?  Qt.ArrowCursor : Qt.PointingHandCursor 
+                            cursorShape: root.buffer === "" ? Qt.ArrowCursor : Qt.PointingHandCursor
                             onClicked: {
-                                sddm.login(userPicker.currentText, root.buffer, sessionPicker.currentIndex)
-                                root.loading = true
+                                sddm.login(userPicker.currentText, root.buffer, sessionPicker.currentIndex);
+                                root.loading = true;
                             }
                         }
                     }
@@ -661,8 +732,8 @@ Rectangle {
                 Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     color: "transparent"
-                    width: 300 
-                    height: 60 
+                    width: 300
+                    height: 60
                 }
             }
 
@@ -672,25 +743,25 @@ Rectangle {
                 Rectangle {
                     id: topRightRect
                     width: 365
-                    height: 355 
+                    height: 355
                     color: config.subComponents
                     topRightRadius: mainCard.radius / 2
                     radius: mainCard.radius / 4
-                    RandomQuote{
-                        maxWidth: topRightRect.width - 40 
-                        color: config.text    
+                    RandomQuote {
+                        maxWidth: topRightRect.width - 40
+                        color: config.text
                     }
                 }
                 Rectangle {
                     id: bottomRightRect
                     width: 365
-                    height: 355 
+                    height: 355
                     color: config.subComponents
                     bottomRightRadius: mainCard.radius / 2
                     radius: mainCard.radius / 4
                     Image {
                         id: dino
-                        width : 300
+                        width: 300
                         height: 150
                         source: "assets/dino.png"
                         anchors.centerIn: parent
@@ -709,7 +780,7 @@ Rectangle {
                         font.pointSize: 12
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 50 
+                        anchors.bottomMargin: 50
                     }
                 }
             }
@@ -719,15 +790,15 @@ Rectangle {
     ComboBox {
         // invisible just for now
         id: userPicker
-        width: 190 
-        height: 50 
+        width: 190
+        height: 50
         anchors.right: parent.right
         anchors.top: parent.top
         model: userModel
         currentIndex: userModel.lastIndex
         textRole: "name"
         font.family: "Rubik"
-        font.pixelSize: 20 
+        font.pixelSize: 20
         visible: false
 
         background: Rectangle {
@@ -773,8 +844,8 @@ Rectangle {
     ComboBox {
         // this is too, invisible right now
         id: sessionPicker
-        width: 190 
-        height: 50 
+        width: 190
+        height: 50
         model: sessionModel
         currentIndex: sessionModel.lastIndex
         textRole: "name"
