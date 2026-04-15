@@ -70,7 +70,6 @@ If you want a fully automated sync without reboot, use posthook. See **[POSTHOOK
 To customize the theme config, modify it only through the Caelestia config:
 
 1. Edit `~/.config/caelestia/sddm-theme.conf`
-2. Select a wallpaper (to trigger color generation)
 2. Apply sync:
    ```bash
    sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh

@@ -135,7 +135,7 @@ fi
 sudo chown -R root:root "$INSTALL_DIR"
 sudo chmod -R 755 "$INSTALL_DIR"
 sudo chmod -R 777 "$INSTALL_DIR/assets"
-sudo chmod 666 "$INSTALL_DIR/theme.conf"
+sudo chmod 644 "$INSTALL_DIR/theme.conf"
 sudo chmod +x "$INSTALL_DIR/scripts/sync.sh"
 
 #5. Set the Current theme to Caelestia in SDDM configuration
@@ -163,6 +163,12 @@ echo -e "[Theme]\nCurrent=caelestia" | sudo tee /etc/sddm.conf.d/caelestia.conf 
 echo "✓ Created /etc/sddm.conf.d/caelestia.conf"
 
 
+# 6. Run sync script
+echo "Running initial sync..."
+sudo "$INSTALL_DIR/scripts/sync.sh"
+echo "✓ Initial sync complete"
+
+echo ""
 echo "✅ Installation Complete!"
 echo "Set: Current=$THEME_NAME"
 cat <<"EOF"
