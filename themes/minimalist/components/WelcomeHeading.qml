@@ -25,7 +25,7 @@ Text {
         verticalOffset: 6
         radius: 24
         samples: 40
-        color: Theme.withAlpha(Theme.mShadow, 0.65)
+        color: Theme.withAlpha(Theme.mSurface, 0.65)
     }
 
     Behavior on opacity {
