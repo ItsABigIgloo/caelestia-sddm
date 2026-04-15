@@ -176,7 +176,7 @@ Rectangle {
 
     Rectangle {
         id: mainCard
-        width: 1300
+        width: 1350
         height: 750
         scale: firstInput ? 0.5 : 1.0
         opacity: firstInput ? 0.0 : 1.0
@@ -208,10 +208,10 @@ Rectangle {
 
                 Rectangle {
                     id: topLeftRect
-                    width: 365
+                    width: 390
                     height: 180
                     color: config.subComponents
-                    topLeftRadius: mainCard.radius / 2
+                    topLeftRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
                     property string welcomeString
 
@@ -255,39 +255,44 @@ Rectangle {
 
                 Rectangle {
                     id: middleLeftRect
-                    width: 365
+                    width: 390
                     Layout.fillHeight: true
                     color: config.subComponents
                     radius: mainCard.radius / 4
                     clip: true
-                    Rectangle {
-                        width: 30
-                        height: 40
-                        radius: 12
-                        anchors.left: parent.left
-                        anchors.top: parent.top
-                        anchors.leftMargin: 15
-                        anchors.topMargin: 15
-                        color: config.primary
-                        Text {
-                            renderType: Text.NativeRendering
-                            anchors.centerIn: parent
-                            color: "#111111"
-                            text: ">"
-                            font.family: "CaskaydiaCove NF"
-                            font.pointSize: 15
+                    RowLayout {
+                        Rectangle {
+                            width: 30
+                            height: 40
+                            radius: 12
+                            anchors.left: parent.left
+                            anchors.top: parent.top
+                            anchors.leftMargin: 30
+                            anchors.topMargin: 20
+                            color: config.primary
+                            Text {
+                                renderType: Text.NativeRendering
+                                anchors.centerIn: parent
+                                color: "#111111"
+                                text: ">"
+                                font.family: "CaskaydiaCove NF"
+                                font.pointSize: 15
+                            }
                         }
-                    }
-                    ColumnLayout {
-                        spacing: 23
                         Text {
                             renderType: Text.NativeRendering
                             color: config.text
-                            text: "  caelestiafetch.sh"
+                            text: "caelestiafetch.sh"
                             font.family: "CaskaydiaCove NF"
                             font.pointSize: 13
-                            Layout.leftMargin: 33
-                            Layout.topMargin: 24
+                            Layout.leftMargin: 35
+                            Layout.topMargin: 29
+                        }
+                    }
+                    ColumnLayout {
+                        Item{
+                            width:30
+                            height: 60
                         }
                         RowLayout {
                             Layout.fillWidth: true
@@ -295,42 +300,45 @@ Rectangle {
                             Logo {
                                 skipIntroAnimation: root.firstInput
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-                                Layout.leftMargin: 15
-                                Layout.topMargin: 30
+                                Layout.leftMargin: 25
+                                Layout.topMargin: 50
                                 Layout.preferredWidth: 130
                                 Layout.preferredHeight: 130
                             }
-                            Text {
-                                renderType: Text.NativeRendering
-                                Layout.leftMargin: 12
-                                Layout.topMargin: middleLeftRect.height / 10
-                                text: "WM     :\nUSER   :\nUP     :\nBATTERY:"
-                                color: config.text
-                                font.pixelSize: 16
-                                font.family: "CaskaydiaCove NF"
-                                lineHeight: 30
-                                lineHeightMode: Text.FixedHeight
-                                Layout.preferredWidth: 80
-                            }
-                            Text {
-                                renderType: Text.NativeRendering
-                                property string displayText: sessionPicker.currentText.split(" ")[0] // idk if i want it like that, but i dont know DEs that have more than one word as a name, that avoids something like that "Plasma (Wayland)"
-                                Layout.leftMargin: 0
-                                Layout.topMargin: middleLeftRect.height / 10
-                                text: displayText + "\n" + userPicker.currentText + "\n" + "WIP" + "\n" + "WIP"
-                                color: config.text
-                                font.pixelSize: 16
-                                font.family: "CaskaydiaCove NF"
-                                lineHeight: 30
-                                lineHeightMode: Text.FixedHeight
-                                Layout.preferredWidth: 100
+                            RowLayout {
+                                spacing: 10
+                                Text {
+                                    renderType: Text.NativeRendering
+                                    Layout.leftMargin: 12
+                                    Layout.topMargin: middleLeftRect.height / 10
+                                    text: "WM     :\nUSER   :\nUP     :\nBATTERY:"
+                                    color: config.text
+                                    font.pixelSize: 18
+                                    font.family: "CaskaydiaCove NF"
+                                    lineHeight: 30
+                                    lineHeightMode: Text.FixedHeight
+                                    Layout.preferredWidth: 80
+                                }
+                                Text {
+                                    renderType: Text.NativeRendering
+                                    property string displayText: sessionPicker.currentText.split(" ")[0] // idk if i want it like that, but i dont know DEs that have more than one word as a name, that avoids something like that "Plasma (Wayland)"
+                                    Layout.leftMargin: 0
+                                    Layout.topMargin: middleLeftRect.height / 10
+                                    text: displayText + "\n" + userPicker.currentText + "\n" + "WIP" + "\n" + "WIP"
+                                    color: config.text
+                                    font.pixelSize: 18
+                                    font.family: "CaskaydiaCove NF"
+                                    lineHeight: 30
+                                    lineHeightMode: Text.FixedHeight
+                                    Layout.preferredWidth: 100
+                                }
                             }
                         }
                         RowLayout {
                             spacing: 20
                             Layout.alignment: Qt.AlignHCenter
+                            Layout.leftMargin: 30
                             Layout.topMargin: 20
-                            Layout.leftMargin: 16
                             Rectangle {
                                 width: 30
                                 height: 30
@@ -378,24 +386,23 @@ Rectangle {
                 }
                 Rectangle {
                     id: bottomLeftRect
-                    width: 365
+                    width: 390
                     height: 180
-                    color: config.subComponents
-                    bottomLeftRadius: mainCard.radius / 2
+                    color: "transparent"
+                    bottomLeftRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
                     Rectangle {
                         id: powerBtn
                         anchors.left: parent.left
                         anchors.top: parent.top
-                        anchors.leftMargin: 15
-                        anchors.margins: 10
-                        height: 160
-                        width: 160
-                        radius: mainCard.radius / 2
-                        color: config.onSecondary
-                        Behavior on scale {
-                            NumberAnimation {
-                                duration: 100
+                        height: bottomLeftRect.height
+                        width: bottomLeftRect.height + 10
+                        radius: bottomLeftRect.radius
+                        bottomLeftRadius: mainCard.radius / 1.9
+                        color: config.subComponents
+                        Behavior on color {
+                            ColorAnimation {
+                                duration: 200
                             }
                         }
                         MaterialIcon {
@@ -403,8 +410,8 @@ Rectangle {
                             property bool hovered: false
                             anchors.left: parent.left
                             anchors.top: parent.top
-                            anchors.leftMargin: 34
-                            anchors.topMargin: 20
+                            anchors.leftMargin: 50
+                            anchors.topMargin: 30
                             text: "\ue8ac"
                             color: config.primary
                             pointSize: 70
@@ -412,18 +419,19 @@ Rectangle {
                         MouseArea {
                             anchors.fill: parent
                             hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
                             onPressed: {
-                                powerBtn.scale = 0.98;
+                                
                             }
                             onReleased: {
-                                powerBtn.scale = 1;
+                                
                                 sddm.powerOff();
                             }
                             onEntered: {
-                                powerBtn.scale = 1.02;
+                                powerBtn.color = config.inverseOnSurface;
                             }
                             onExited: {
-                                powerBtn.scale = 1;
+                                powerBtn.color = config.subComponents;
                             }
                         }
                     }
@@ -432,23 +440,21 @@ Rectangle {
                         id: rebootBtn
                         anchors.right: parent.right
                         anchors.top: parent.top
-                        anchors.margins: 10
-                        anchors.rightMargin: 15
-                        height: 160
-                        width: 160
-                        radius: mainCard.radius / 2
-                        color: config.onSecondary
-                        Behavior on scale {
-                            NumberAnimation {
-                                duration: 100
+                        height: bottomLeftRect.height
+                        width: bottomLeftRect.height + 10
+                        radius: bottomLeftRect.radius
+                        color: config.subComponents
+                        Behavior on color {
+                            ColorAnimation {
+                                duration: 200
                             }
                         }
                         MaterialIcon {
                             id: restartIcon
                             anchors.left: parent.left
                             anchors.top: parent.top
-                            anchors.leftMargin: 34
-                            anchors.topMargin: 20
+                            anchors.leftMargin: 47
+                            anchors.topMargin: 30
                             text: "\ue863"
                             color: config.secondary
                             pointSize: 70
@@ -456,18 +462,19 @@ Rectangle {
                         MouseArea {
                             anchors.fill: parent
                             hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
                             onPressed: {
-                                rebootBtn.scale = 0.98;
+                                
                             }
                             onReleased: {
-                                rebootBtn.scale = 1;
+                                
                                 sddm.reboot();
                             }
                             onEntered: {
-                                rebootBtn.scale = 1.02;
+                                rebootBtn.color = config.inverseOnSurface;
                             }
                             onExited: {
-                                rebootBtn.scale = 1;
+                                rebootBtn.color = config.subComponents;
                             }
                         }
                     }
@@ -742,10 +749,10 @@ Rectangle {
                 Layout.alignment: Qt.AlignRight
                 Rectangle {
                     id: topRightRect
-                    width: 365
+                    width: 390
                     height: 355
                     color: config.subComponents
-                    topRightRadius: mainCard.radius / 2
+                    topRightRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
                     RandomQuote {
                         maxWidth: topRightRect.width - 40
@@ -754,10 +761,10 @@ Rectangle {
                 }
                 Rectangle {
                     id: bottomRightRect
-                    width: 365
+                    width: 390
                     height: 355
                     color: config.subComponents
-                    bottomRightRadius: mainCard.radius / 2
+                    bottomRightRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
                     Image {
                         id: dino
