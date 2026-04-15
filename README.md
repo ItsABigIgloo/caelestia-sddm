@@ -84,8 +84,10 @@ Do not edit `/usr/share/sddm/themes/caelestia/theme.conf` directly, since this w
 
 Preview the theme without logging out:
 ```bash
-sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/caelestia
+QML_XHR_ALLOW_FILE_READ=1 sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/caelestia
 ```
+
+> **Note:** The `QML_XHR_ALLOW_FILE_READ` environment variable is required for test mode. In production, SDDM sets this automatically via the theme's `GreeterEnvironment` configuration.
 
 ## Troubleshooting
 
