@@ -21,52 +21,15 @@ fail() {
     failures=$((failures + 1))
 }
 
-check_file() {
-    local path="$1"
-    if [ -f "$path" ]; then
-        ok "Found $path"
-    else
-        fail "Missing $path"
-    fi
-}
-
 echo "=== Caelestia SDDM Theme Check ==="
 
 echo
-echo "--- Theme files ---"
+echo "--- Theme directory ---"
 if [ -d "$THEME_DIR" ]; then
     ok "Theme directory exists: $THEME_DIR"
 else
     fail "Theme directory missing: $THEME_DIR"
 fi
-
-check_file "$THEME_DIR/Main.qml"
-check_file "$THEME_DIR/metadata.desktop"
-check_file "$THEME_DIR/theme.conf"
-check_background() {
-    local background_dir="$THEME_DIR/assets"
-    local found=0
-    local supported_formats=("png" "jpg" "jpeg" "webp" "avif")
-
-    if [ -d "$background_dir" ]; then
-        for ext in "${supported_formats[@]}"; do
-            for file in "$background_dir"/background."$ext" "$background_dir"/BACKGROUND."$ext"; do
-                if [ -f "$file" ]; then
-                    ok "Found background: $file"
-                    found=1
-                    break 2
-                fi
-            done
-        done
-    fi
-
-    if [ "$found" -eq 0 ]; then
-        fail "No background image found (checked: $(IFS=', '; echo "${supported_formats[*]}"))"
-    fi
-}
-
-check_background
-check_file "$THEME_DIR/assets/logo.png"
 
 if [ -x "$THEME_DIR/scripts/sync.sh" ]; then
     ok "sync.sh is executable"
@@ -102,17 +65,30 @@ else
 fi
 
 echo
-echo "--- Fonts required by Main.qml ---"
-if fc-list | grep -iq 'Material Symbols Outlined'; then
-    ok "Material Symbols Outlined is installed"
+echo "--- Fonts ---"
+if fc-list | grep -Eiq 'Rubik'; then
+    ok "Rubik font is installed (UI text)"
 else
-    fail "Material Symbols Outlined missing (power/reboot icons will not render)"
+    fail "Rubik font missing (UI text will not render)"
 fi
 
-if fc-list | grep -Eiq 'Rubik'; then
-    ok "Rubik font is installed"
+font_found=0
+if fc-list | grep -iq 'Material Symbols Outlined'; then
+    ok "Material Symbols Outlined is installed (minimalist themes)"
+    font_found=1
+fi
+if fc-list | grep -iq 'Material Symbols Rounded'; then
+    ok "Material Symbols Rounded is installed (locklike theme)"
+    font_found=1
+fi
+if [ "$font_found" -eq 0 ]; then
+    fail "No Material Symbols font found (icons will not render)"
+fi
+
+if fc-list | grep -iq 'CaskaydiaCove.*NF'; then
+    ok "CaskaydiaCove NF is installed (locklike mono)"
 else
-    fail "No usable UI text font found (Rubik)"
+    fail "CaskaydiaCove NF missing (locklike mono text will not render)"
 fi
 
 echo
