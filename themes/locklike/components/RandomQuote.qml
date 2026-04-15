@@ -5,7 +5,6 @@ Item {
     anchors.fill: parent 
     property alias color: quote.color 
     property alias maxWidth: quote.width
-    property int index: Math.floor(Math.random() * quotesModel.count)
     Item {
         Component.onCompleted: {
             const xhr = new XMLHttpRequest()

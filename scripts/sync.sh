@@ -2,7 +2,7 @@
 set -o pipefail
 
 THEME_DIR="/usr/share/sddm/themes/caelestia"
-REAL_USER=$(ls /home | grep -v "lost+found" | head -n 1)
+REAL_USER=${SUDO_USER:-$(ls /home | grep -v "lost+found" | head -n 1)}
 REAL_HOME="/home/$REAL_USER"
 CAEL_STATE="$REAL_HOME/.local/state/caelestia"
 
