@@ -8,7 +8,7 @@ Edit `~/.config/caelestia/cli.json` and set:
 
 ```json
 "wallpaper": {
-    "postHook": "sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh"
+    "postHook": "sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh --posthook"
 }
 ```
 If you dont have `cli.json` file setup, get them from (Under "Example Configuration"):
