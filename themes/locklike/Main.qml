@@ -400,6 +400,7 @@ Rectangle {
                         radius: bottomLeftRect.radius
                         bottomLeftRadius: mainCard.radius / 1.9
                         color: config.subComponents
+                        clip: true
                         Behavior on color {
                             ColorAnimation {
                                 duration: 200
@@ -416,22 +417,11 @@ Rectangle {
                             color: config.primary
                             pointSize: 70
                         }
-                        MouseArea {
+                        LayerState {
                             anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            onPressed: {
-                                
-                            }
-                            onReleased: {
-                                
-                                sddm.powerOff();
-                            }
-                            onEntered: {
-                                powerBtn.color = config.inverseOnSurface;
-                            }
-                            onExited: {
-                                powerBtn.color = config.subComponents;
+
+                            onClicked: {
+                                sddm.poweroff();
                             }
                         }
                     }
@@ -444,6 +434,7 @@ Rectangle {
                         width: bottomLeftRect.height + 10
                         radius: bottomLeftRect.radius
                         color: config.subComponents
+                        clip: true
                         Behavior on color {
                             ColorAnimation {
                                 duration: 200
@@ -459,22 +450,11 @@ Rectangle {
                             color: config.secondary
                             pointSize: 70
                         }
-                        MouseArea {
+                        LayerState {
                             anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            onPressed: {
-                                
-                            }
-                            onReleased: {
-                                
+
+                            onClicked: {
                                 sddm.reboot();
-                            }
-                            onEntered: {
-                                rebootBtn.color = config.inverseOnSurface;
-                            }
-                            onExited: {
-                                rebootBtn.color = config.subComponents;
                             }
                         }
                     }
