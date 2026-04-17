@@ -109,13 +109,13 @@ Rectangle {
         id: keylogger
         focus: true
         Keys.onPressed: {
-            if (root.firstInput) {
-                root.firstInput = false;
-                return;
-            }
             if (event.key === Qt.Key_Escape) {
                 root.firstInput = true;
                 root.buffer = "";
+                return;
+            }
+            if (root.firstInput) {
+                root.firstInput = false;
                 return;
             }
             if (event.key === Qt.Key_Right) {
