@@ -57,31 +57,48 @@ Rectangle {
             }
         }
 
-        Text {
-            id: welcomeText
-            renderType: Text.NativeRendering
-            text: topLeftRect.welcomeString + " " + userPicker.displayText
-            font.pointSize: 70
-            font.family: "Rubik"
-            color: config.text
-            opacity: root.firstInput ? 1 : 0
+        Rectangle {
+            id: welcomeTextRect
+            width: welcomeText.width + 50
+            height: welcomeText.height + 30
+            color: config.background
             anchors.centerIn: parent
+            radius: mainCard.radius
+            layer.enabled: true
+                layer.effect: DropShadow {
+                color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, 0.5)
+                horizontalOffset: 0
+                verticalOffset: 0
+                radius: 16
+                scale: 1.5
+            }
+            Text {
+                id: welcomeText
+                renderType: Text.NativeRendering
+                text: "<span style='color:" + config.text + ";'>" + topLeftRect.welcomeString + " " + "</span>" + "<span style='color:" + config.primary + ";'>" + userPicker.displayText + "</span>"
+                textFormat: Text.RichText
+                font.pointSize: 70
+                font.family: "Roboto"
+                color: config.text
+                opacity: root.firstInput ? 1 : 0
+                anchors.centerIn: parent
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, 0.5)
+                    horizontalOffset: 0
+                    verticalOffset: 0
+                    radius: 16
+                    scale: 1.5
+                }
+            }
             PropertyAnimation {
-                target: welcomeText
+                target: welcomeTextRect
                 property: "scale"
                 from: 0.1
                 to: 1
                 duration: 600
                 easing.type: Easing.OutBack
                 running: root.firstInput ? true : false
-            }
-            layer.enabled: true
-            layer.effect: DropShadow {
-                color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, 0.5)
-                horizontalOffset: 0
-                verticalOffset: 0
-                radius: 16
-                scale: 1.5
             }
         }
         Text {
