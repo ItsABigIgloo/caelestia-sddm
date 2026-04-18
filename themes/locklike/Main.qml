@@ -27,6 +27,8 @@ Rectangle {
         function onLoginFailed() {
             root.buffer = "";
             root.loading = false;
+            inputRect.color = config.subComponents;
+            inputBorders.color = config.subComponents;
             shakeRotation.start();
         }
         function onLoginSucceeded() {
