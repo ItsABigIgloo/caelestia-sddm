@@ -5,19 +5,15 @@ THEME_DIR="/usr/share/sddm/themes/caelestia"
 
 if [ -n "$SUDO_USER" ]; then
     REAL_USER="$SUDO_USER"
-elif command -v logname &>/dev/null && [ -n "$(logname 2>/dev/null)" ]; then
-    REAL_USER="$(logname)"
-elif [ "$(id -u)" -ne 0 ]; then
-    REAL_USER="$(whoami)"
 else
-    echo "ERROR: Cannot determine target user." >&2
+    echo "ERROR: Cannot determine target user. Run with sudo." >&2
     exit 1
 fi
 REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
 
 CAEL_STATE="$REAL_HOME/.local/state/caelestia"
 
-# 1. Generate colors from the current Caelestia scheme settings FIRST
+# 1. Generate FRESH colors from the current Caelestia scheme settings FIRST
 if [ "$1" = "--posthook" ]; then
     : # Skip color generation when run as posthook (--posthook)
     echo "✓ Running as posthook, skipping color generation"

@@ -2,7 +2,6 @@
 
 THEME_NAME="caelestia"
 THEME_DIR="/usr/share/sddm/themes/${THEME_NAME}"
-SERVICE_NAME="caelestia-sync.service"
 
 failures=0
 warnings=0
@@ -108,19 +107,6 @@ if command -v pacman >/dev/null 2>&1; then
     fi
 else
     warn "pacman not found, skipping package checks"
-fi
-
-echo
-echo "--- Optional service check ---"
-if [ -f "/etc/systemd/system/${SERVICE_NAME}" ]; then
-    ok "Service file exists: /etc/systemd/system/${SERVICE_NAME}"
-    if systemctl is-enabled "$SERVICE_NAME" >/dev/null 2>&1; then
-        ok "Service is enabled: $SERVICE_NAME"
-    else
-        warn "Service is not enabled: $SERVICE_NAME"
-    fi
-else
-    warn "Service file missing: /etc/systemd/system/${SERVICE_NAME}"
 fi
 
 echo

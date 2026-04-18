@@ -120,25 +120,14 @@ mkdir -p "$HOME/.config/caelestia/templates"
 cp "$THEME_SOURCE/theme.conf.template" "$HOME/.config/caelestia/templates/sddm-theme.conf"
 echo "✓ Template created at ~/.config/caelestia/templates/sddm-theme.conf"
 
-# 3. Install the Systemd Service
-if [ -f "$PROJECT_ROOT/scripts/caelestia-sync.service" ]; then
-    sudo cp "$PROJECT_ROOT/scripts/caelestia-sync.service" /etc/systemd/system/
-    sudo systemctl daemon-reload
-    sudo systemctl enable caelestia-sync.service
-    echo "✓ Service installed and enabled"
-else
-    echo "✗ Error: caelestia-sync.service not found in /scripts/"
-    exit 1
-fi
-
-# 4. Fix permissions so sync.sh have proper root access
+# 3. Fix permissions so sync.sh have proper root access
 sudo chown -R root:root "$INSTALL_DIR"
 sudo chmod -R 755 "$INSTALL_DIR"
 sudo chmod -R 777 "$INSTALL_DIR/assets"
 sudo chmod 644 "$INSTALL_DIR/theme.conf"
 sudo chmod +x "$INSTALL_DIR/scripts/sync.sh"
 
-#5. Set the Current theme to Caelestia in SDDM configuration
+#4. Set the Current theme to Caelestia in SDDM configuration
 # Force Current theme in all possible config locations
 for config in /usr/lib/sddm/sddm.conf.d/default.conf; do
     if [ -f "$config" ]; then
@@ -169,7 +158,7 @@ DROPIN
 echo "✓ Created /etc/sddm.conf.d/caelestia.conf"
 
 
-# 6. Run sync script
+# 5. Run sync script
 echo "Running initial sync..."
 sudo "$INSTALL_DIR/scripts/sync.sh"
 echo "✓ Initial sync complete"

@@ -54,16 +54,16 @@ The provided installer handles all dependencies, system configurations, and perm
 
 ## Sync Setup
 
-This theme already includes a systemd service (`caelestia-sync.service`) that triggers during the shutdown/reboot process. It identifies the active user, pulls the latest wallpaper, avatar icons and theme configuration from the Caelestia state folder, and applies them to the login screen for your next boot.
+The theme syncs your current wallpaper, avatar, and colors to the SDDM login screen.
 
 **Manual Sync:**
-If you want to apply changes immediately without rebooting, run:
+Manually apply changes immediately without rebooting:
 ```bash
 sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh
 ```
 
 **Automatic Posthook:**
-If you want a fully automated sync without reboot, use posthook. See **[POSTHOOK.md](POSTHOOK.md)**.
+For fully automated sync on every wallpaper change, use posthook. See **[POSTHOOK.md](POSTHOOK.md)**.
 
 ## Configuration
 
