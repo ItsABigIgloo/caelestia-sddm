@@ -2,8 +2,19 @@
 set -o pipefail
 
 THEME_DIR="/usr/share/sddm/themes/caelestia"
-REAL_USER=${SUDO_USER:-$(ls /home | grep -v "lost+found" | head -n 1)}
-REAL_HOME="/home/$REAL_USER"
+
+if [ -n "$SUDO_USER" ]; then
+    REAL_USER="$SUDO_USER"
+elif command -v logname &>/dev/null && [ -n "$(logname 2>/dev/null)" ]; then
+    REAL_USER="$(logname)"
+elif [ "$(id -u)" -ne 0 ]; then
+    REAL_USER="$(whoami)"
+else
+    echo "ERROR: Cannot determine target user." >&2
+    exit 1
+fi
+REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
+
 CAEL_STATE="$REAL_HOME/.local/state/caelestia"
 
 # 1. Generate colors from the current Caelestia scheme settings FIRST
@@ -11,13 +22,12 @@ if [ "$1" = "--posthook" ]; then
     : # Skip color generation when run as posthook (--posthook)
     echo "✓ Running as posthook, skipping color generation"
 elif command -v caelestia &>/dev/null; then
-    export HOME="$REAL_HOME" XDG_CONFIG_HOME="$REAL_HOME/.config" XDG_DATA_HOME="$REAL_HOME/.local/share" XDG_STATE_HOME="$REAL_HOME/.local/state"
-    mapfile -t SCHEME < <(caelestia scheme get --name --mode --variant 2>/dev/null)
+    mapfile -t SCHEME < <(sudo -u "$REAL_USER" caelestia scheme get --name --mode --variant 2>/dev/null)
     NAME="${SCHEME[0]}"
     MODE="${SCHEME[1]}"
     VARIANT="${SCHEME[2]}"
     if [ -n "$NAME" ] && [ -n "$MODE" ] && [ -n "$VARIANT" ]; then
-        caelestia scheme set --name "$NAME" --mode "$MODE" --variant "$VARIANT" 2>/dev/null
+        sudo -u "$REAL_USER" caelestia scheme set --name "$NAME" --mode "$MODE" --variant "$VARIANT" 2>/dev/null
         echo "✓ Generated colors for scheme: $NAME/$MODE/$VARIANT"
     else
         echo "Could not read Caelestia scheme, skipping color generation"
