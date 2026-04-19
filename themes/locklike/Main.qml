@@ -13,7 +13,6 @@ Rectangle {
     color: "#131313"
 
     property bool ap: config.ap === "true" ? true : false
-    property bool firstInputReal: false
     property bool firstInput: true
     property bool loading: false
     property string buffer
@@ -67,8 +66,11 @@ Rectangle {
         id: keylogger
         focus: true
         Keys.onPressed: {
-            root.firstInputReal = true
             if (event.key === Qt.Key_Escape) {
+                if (!root.firstInput) {
+                    blurWidthAnim.start()
+                    blurHeightAnim.start()
+                }
                 root.firstInput = true;
                 root.buffer = "";
                 return;
@@ -185,22 +187,26 @@ Rectangle {
         }
 
         PropertyAnimation {
+            id: blurWidthAnim
             target: welcomeTextRectBlur
             property: "width"
             from: welcomeTextRect.width/10
             to: welcomeTextRect.width
             duration: 600
             easing.type: Easing.OutBack
-            running: root.firstInput && root.firstInputReal ? true : false
         }
         PropertyAnimation {
+            id: blurHeightAnim
             target: welcomeTextRectBlur
             property: "height"
             from: welcomeTextRect.height/10
             to: welcomeTextRect.height
             duration: 600
             easing.type: Easing.OutBack
-            running: root.firstInput && root.firstInputReal ? true : false
+        }
+        Component.onCompleted: {
+            blurWidthAnim.start()
+            blurHeightAnim.start()
         }
     }
 
