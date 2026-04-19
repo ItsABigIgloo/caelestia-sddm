@@ -264,7 +264,7 @@ Rectangle {
         width: 1350
         height: 750
         scale: firstInput ? 0.5 : 1.0
-        opacity: firstInput ? 0.0 : 0.6
+        opacity: firstInput ? 0.0 : 1
         anchors.centerIn: parent
         radius: 40
         color: config.mainCard
