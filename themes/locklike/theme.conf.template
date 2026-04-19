@@ -10,7 +10,7 @@ ap=false
 # ============================================================================
 # Welcome message background opacity [0.0 to 1.0]
 welcomeBgBlurAmount=0.7
-welcomeColorOpacity=0.8
+welcomeColorOpacity=1
 # Welcome message background blur [true | false]
 welcomeBgBlur=true
 

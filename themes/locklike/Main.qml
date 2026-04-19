@@ -165,7 +165,7 @@ Rectangle {
             }
         }
         MultiEffect {
-            blurEnabled: true
+            blurEnabled: welcomeBgBlur
             source: backgroundBlur
             blur: root.welcomeBgBlurAmount
             autoPaddingEnabled: false
