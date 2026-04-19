@@ -5,8 +5,14 @@
 # 12 hours or 24 Hours true=12 [true | false]
 ap=false
 
-# Maincard blur strength [0.0 to 1.0] (not implemented as of now)
-blur=0.8
+# ============================================================================
+# WELCOME MESSAGE
+# ============================================================================
+# Welcome message background opacity [0.0 to 1.0]
+welcomeBgBlurAmount=0.7
+welcomeColorOpacity=1
+# Welcome message background blur [true | false]
+welcomeBgBlur=true
 
 # ============================================================================
 # COLOR SCHEME
