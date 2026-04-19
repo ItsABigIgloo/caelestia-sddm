@@ -60,95 +60,6 @@ Rectangle {
                 }
             }
         }
-
-        Item {
-            id: welcomeBlurClip
-            width: welcomeText.width + 50
-            height: welcomeText.height + 30
-            anchors.centerIn: parent
-            visible: root.welcomeBgBlur && root.firstInput
-            clip: true
-            layer.enabled: true
-            opacity: 0
-
-            MultiEffect {
-                source: background
-                width: background.width
-                height: background.height
-                x: -welcomeBlurClip.x
-                y: -welcomeBlurClip.y
-                blurEnabled: true
-                blur: 0.8
-                blurMax: 32
-                autoPaddingEnabled: false
-            }
-
-            layer.effect: OpacityMask {
-                maskSource: Rectangle {
-                    width: welcomeBlurClip.width
-                    height: welcomeBlurClip.height
-                    radius: mainCard.radius
-                }
-            }
-
-            PropertyAnimation {
-                target: welcomeBlurClip
-                property: "opacity"
-                from: 0
-                to: 1
-                duration: 400
-                easing.type: Easing.OutCubic
-                running: root.firstInput ? true : false
-            }
-        }
-
-        Rectangle {
-            id: welcomeTextRect
-            width: welcomeText.width + 50
-            height: welcomeText.height + 30
-            color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, root.welcomeBgOpacity)
-            anchors.centerIn: parent
-            radius: mainCard.radius
-            Text {
-                id: welcomeText
-                renderType: Text.QtRendering
-                text: "<span style='color:" + config.text + ";'>" + topLeftRect.welcomeString + " " + "</span>" + "<span style='color:" + config.primary + ";'>" + userPicker.displayText + "</span>"
-                textFormat: Text.RichText
-                font.pointSize: 70
-                font.family: "Roboto"
-                color: config.text
-                opacity: root.firstInput ? 1 : 0
-                anchors.centerIn: parent
-            }
-            PropertyAnimation {
-                target: welcomeTextRect
-                property: "scale"
-                from: 0.1
-                to: 1
-                duration: 600
-                easing.type: Easing.OutBack
-                running: root.firstInput ? true : false
-            }
-        }
-        Text {
-            renderType: Text.NativeRendering
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 20
-            font.family: "Rubik"
-            font.pointSize: 15
-            font.italic: true
-            opacity: root.firstInput ? 1.0 : 0.0
-            color: config.text
-            text: "Press a key on your Keyboard to login"
-
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.OutCubic
-                }
-            }
-        }
     }
 
     Item {
@@ -216,6 +127,95 @@ Rectangle {
             NumberAnimation {
                 duration: 400
                 easing: Easing.InOutCubic
+            }
+        }
+    }
+
+    Item {
+        id: welcomeBlurClip
+        width: welcomeText.width + 50
+        height: welcomeText.height + 30
+        anchors.centerIn: parent
+        visible: root.welcomeBgBlur && root.firstInput
+        clip: true
+        layer.enabled: true
+        opacity: 0
+
+        MultiEffect {
+            source: background
+            width: background.width
+            height: background.height
+            x: -welcomeBlurClip.x
+            y: -welcomeBlurClip.y
+            blurEnabled: true
+            blur: 0.8
+            blurMax: 32
+            autoPaddingEnabled: false
+        }
+
+        layer.effect: OpacityMask {
+            maskSource: Rectangle {
+                width: welcomeBlurClip.width
+                height: welcomeBlurClip.height
+                radius: mainCard.radius
+            }
+        }
+
+        PropertyAnimation {
+            target: welcomeBlurClip
+            property: "opacity"
+            from: 0
+            to: 1
+            duration: 400
+            easing.type: Easing.OutCubic
+            running: root.firstInput ? true : false
+        }
+    }
+
+    Rectangle {
+        id: welcomeTextRect
+        width: welcomeText.width + 50
+        height: welcomeText.height + 30
+        color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, root.welcomeBgOpacity)
+        anchors.centerIn: parent
+        radius: mainCard.radius
+        Text {
+            id: welcomeText
+            renderType: Text.QtRendering
+            text: "<span style='color:" + config.text + ";'>" + topLeftRect.welcomeString + " " + "</span>" + "<span style='color:" + config.primary + ";'>" + userPicker.displayText + "</span>"
+            textFormat: Text.RichText
+            font.pointSize: 70
+            font.family: "Roboto"
+            color: config.text
+            opacity: root.firstInput ? 1 : 0
+            anchors.centerIn: parent
+        }
+        PropertyAnimation {
+            target: welcomeTextRect
+            property: "scale"
+            from: 0.1
+            to: 1
+            duration: 600
+            easing.type: Easing.OutBack
+            running: root.firstInput ? true : false
+        }
+    }
+    Text {
+        renderType: Text.NativeRendering
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 20
+        font.family: "Rubik"
+        font.pointSize: 15
+        font.italic: true
+        opacity: root.firstInput ? 1.0 : 0.0
+        color: config.text
+        text: "Press a key on your Keyboard to login"
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.OutCubic
             }
         }
     }
