@@ -16,7 +16,7 @@ Rectangle {
     property bool firstInput: true
     property bool loading: false
     property string buffer
-    property real welcomeBgOpacity: parseFloat(config.welcomeBgOpacity) || 1.0
+    property real welcomeBgBlurAmount: parseFloat(config.welcomeBgBlurAmount) || 1.0
     property bool welcomeBgBlur: config.welcomeBgBlur === "true"
 
     onBufferChanged: {
@@ -167,7 +167,7 @@ Rectangle {
         MultiEffect {
             blurEnabled: true
             source: backgroundBlur
-            blur: 0.5
+            blur: root.welcomeBgBlurAmount
             autoPaddingEnabled: false
             blurMultiplier: 1
             blurMax: 64
