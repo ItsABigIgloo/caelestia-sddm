@@ -93,10 +93,14 @@ QML_XHR_ALLOW_FILE_READ=1 sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/t
 **Avatar not updating or showing stale image**
 
 ```bash
-sudo ./scripts/fix-avatar.sh
+./scripts/fix-avatar.sh
 ```
 
-This keeps `~/.face.icon` synced to `~/.face` and fixes incorrect avatar images.
+**Caelestia dots, states and config files being owned by root**
+
+```bash
+./scripts/fix-permissions.sh
+```
 
 ## Requirements
 

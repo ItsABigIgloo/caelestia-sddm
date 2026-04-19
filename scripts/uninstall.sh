@@ -1,13 +1,27 @@
 #!/usr/bin/env bash
-
 set -euo pipefail
+
+# Prevent running with sudo - the script uses sudo internally for some commands
+if [ "$(id -u)" -eq 0 ]; then
+    echo "ERROR: Do not run this script with sudo. Run it normally." >&2
+    exit 1
+fi
 
 THEME_NAME="caelestia"
 THEME_DIR="/usr/share/sddm/themes/$THEME_NAME"
 TEMPLATE_FILE="$HOME/.config/caelestia/templates/sddm-theme.conf"
 TEMPLATE_DIR="$HOME/.config/caelestia/templates"
 
-echo "Uninstalling Caelestia SDDM Theme..."
+# --- Sudo check ---
+echo "Caelestia SDDM Theme Uninstaller"
+echo "This script requires sudo privileges to remove the theme."
+echo ""
+if ! sudo -v; then
+    echo "✗ Sudo authentication failed. Exiting."
+    exit 1
+fi
+echo "✓ Sudo authenticated"
+# -----------------
 
 # 1. Remove the SDDM theme directory
 echo "Removing SDDM theme from $THEME_DIR..."
@@ -48,4 +62,5 @@ if [[ -d "$TEMPLATE_DIR" ]] && [[ -z "$(ls -A "$TEMPLATE_DIR")" ]]; then
     echo "✓ Removed empty template directory."
 fi
 
+echo ""
 echo "✅ Uninstall complete."

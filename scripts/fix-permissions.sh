@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [ "$(id -u)" -eq 0 ] && [ -z "${SUDO_USER:-}" ]; then
-    echo "ERROR: Do not run this as root directly. Run as: sudo $0" >&2
+# This doesnt require sudo, but still has safeguard
+if [ "$(id -u)" -eq 0 ]; then
+    echo "ERROR: Do not run this script with sudo. Run it normally." >&2
     exit 1
 fi
 

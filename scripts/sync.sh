@@ -1,28 +1,29 @@
 #!/usr/bin/env bash
-set -o pipefail
+set -euo pipefail
 
-THEME_DIR="/usr/share/sddm/themes/caelestia"
-
+# Get the real user and home directory
 if [ -n "$SUDO_USER" ]; then
     REAL_USER="$SUDO_USER"
 else
-    echo "ERROR: Cannot determine target user. Run with sudo." >&2
+    echo "ERROR: Cannot determine target user. Try running with sudo." >&2
     exit 1
 fi
 REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
-
 CAEL_STATE="$REAL_HOME/.local/state/caelestia"
+THEME_DIR="/usr/share/sddm/themes/caelestia"
 
 # 1. Generate FRESH colors from the current Caelestia scheme settings FIRST
-if [ "$1" = "--posthook" ]; then
+if [ "${1:-}" = "--posthook" ]; then
     : # Skip color generation when run as posthook (--posthook)
     echo "✓ Running as posthook, skipping color generation"
 elif command -v caelestia &>/dev/null; then
+    # IMPORTANT: must use sudo -u here
     mapfile -t SCHEME < <(sudo -u "$REAL_USER" caelestia scheme get --name --mode --variant 2>/dev/null)
     NAME="${SCHEME[0]}"
     MODE="${SCHEME[1]}"
     VARIANT="${SCHEME[2]}"
     if [ -n "$NAME" ] && [ -n "$MODE" ] && [ -n "$VARIANT" ]; then
+        # and here
         sudo -u "$REAL_USER" caelestia scheme set --name "$NAME" --mode "$MODE" --variant "$VARIANT" 2>/dev/null
         echo "✓ Generated colors for scheme: $NAME/$MODE/$VARIANT"
     else
