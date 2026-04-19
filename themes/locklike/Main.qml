@@ -131,7 +131,7 @@ Rectangle {
         }
     }
 
-   Rectangle {
+    Rectangle {
         id: welcomeTextRectBlur
         width: welcomeTextRect.width
         height: welcomeTextRect.height
@@ -139,6 +139,14 @@ Rectangle {
         anchors.centerIn: parent
         radius: welcomeTextRect.radius
         clip: true
+        layer.enabled: true
+        layer.effect: OpacityMask {
+            maskSource: Rectangle {
+                width: welcomeTextRectBlur.width
+                height: welcomeTextRectBlur.height
+                radius: welcomeTextRectBlur.radius
+            }
+        }
         AnimatedImage {
             id: backgroundBlur
             anchors.fill: background
