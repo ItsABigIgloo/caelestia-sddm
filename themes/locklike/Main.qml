@@ -16,6 +16,8 @@ Rectangle {
     property bool firstInput: true
     property bool loading: false
     property string buffer
+    property real welcomeBgOpacity: parseFloat(config.welcomeBgOpacity) || 1.0
+    property bool welcomeBgBlur: config.welcomeBgBlur === "true"
 
     onBufferChanged: {
         // ill make animations for typing
@@ -59,24 +61,57 @@ Rectangle {
             }
         }
 
+        Item {
+            id: welcomeBlurClip
+            width: welcomeText.width + 50
+            height: welcomeText.height + 30
+            anchors.centerIn: parent
+            visible: root.welcomeBgBlur && root.firstInput
+            clip: true
+            layer.enabled: true
+            opacity: 0
+
+            MultiEffect {
+                source: background
+                width: background.width
+                height: background.height
+                x: -welcomeBlurClip.x
+                y: -welcomeBlurClip.y
+                blurEnabled: true
+                blur: 0.8
+                blurMax: 32
+                autoPaddingEnabled: false
+            }
+
+            layer.effect: OpacityMask {
+                maskSource: Rectangle {
+                    width: welcomeBlurClip.width
+                    height: welcomeBlurClip.height
+                    radius: mainCard.radius
+                }
+            }
+
+            PropertyAnimation {
+                target: welcomeBlurClip
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 400
+                easing.type: Easing.OutCubic
+                running: root.firstInput ? true : false
+            }
+        }
+
         Rectangle {
             id: welcomeTextRect
             width: welcomeText.width + 50
             height: welcomeText.height + 30
-            color: config.background
+            color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, root.welcomeBgOpacity)
             anchors.centerIn: parent
             radius: mainCard.radius
-            layer.enabled: true
-                layer.effect: DropShadow {
-                color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, 0.5)
-                horizontalOffset: 0
-                verticalOffset: 0
-                radius: 16
-                scale: 1.5
-            }
             Text {
                 id: welcomeText
-                renderType: Text.NativeRendering
+                renderType: Text.QtRendering
                 text: "<span style='color:" + config.text + ";'>" + topLeftRect.welcomeString + " " + "</span>" + "<span style='color:" + config.primary + ";'>" + userPicker.displayText + "</span>"
                 textFormat: Text.RichText
                 font.pointSize: 70
@@ -84,14 +119,6 @@ Rectangle {
                 color: config.text
                 opacity: root.firstInput ? 1 : 0
                 anchors.centerIn: parent
-                layer.enabled: true
-                layer.effect: DropShadow {
-                    color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, 0.5)
-                    horizontalOffset: 0
-                    verticalOffset: 0
-                    radius: 16
-                    scale: 1.5
-                }
             }
             PropertyAnimation {
                 target: welcomeTextRect
