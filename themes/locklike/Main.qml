@@ -13,6 +13,7 @@ Rectangle {
     color: "#131313"
 
     property bool ap: config.ap === "true" ? true : false
+    property bool firstInputReal: false
     property bool firstInput: true
     property bool loading: false
     property string buffer
@@ -66,6 +67,7 @@ Rectangle {
         id: keylogger
         focus: true
         Keys.onPressed: {
+            root.firstInputReal = true
             if (event.key === Qt.Key_Escape) {
                 root.firstInput = true;
                 root.buffer = "";
@@ -134,10 +136,10 @@ Rectangle {
     Rectangle {
         id: welcomeTextRectBlur
         width: welcomeTextRect.width
-        height: welcomeTextRect.height
+        height: welcomeTextRect.height 
         color: "white"
         anchors.centerIn: parent
-        radius: welcomeTextRect.radius
+        radius: mainCard.radius
         clip: true
         layer.enabled: true
         layer.effect: OpacityMask {
@@ -175,11 +177,13 @@ Rectangle {
                 }
             }
         }
+
         Rectangle {
-            anchors.fill: parent
-            color: "#000000"
-            opacity: 0.4
+            anchors.fill: backgroundBlur
+            color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, root.welcomeBgOpacity)
+            opacity: parseFloat(config.welcomeColorOpacity)
         }
+
         PropertyAnimation {
             target: welcomeTextRectBlur
             property: "width"
@@ -187,7 +191,7 @@ Rectangle {
             to: welcomeTextRect.width
             duration: 600
             easing.type: Easing.OutBack
-            running: root.firstInput ? true : false
+            running: root.firstInput && root.firstInputReal ? true : false
         }
         PropertyAnimation {
             target: welcomeTextRectBlur
@@ -196,18 +200,16 @@ Rectangle {
             to: welcomeTextRect.height
             duration: 600
             easing.type: Easing.OutBack
-            running: root.firstInput ? true : false
+            running: root.firstInput && root.firstInputReal ? true : false
         }
     }
 
-    Rectangle {
+    Item {
         id: welcomeTextRect
         width: welcomeText.width + 50
         height: welcomeText.height + 30
-        color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, root.welcomeBgOpacity)
         anchors.centerIn: parent
-        opacity: 0.5
-        radius: mainCard.radius
+        opacity: 1
         Text {
             id: welcomeText
             renderType: Text.QtRendering
