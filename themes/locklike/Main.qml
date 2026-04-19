@@ -131,43 +131,63 @@ Rectangle {
         }
     }
 
-    Item {
-        id: welcomeBlurClip
-        width: welcomeText.width + 50
-        height: welcomeText.height + 30
+   Rectangle {
+        id: welcomeTextRectBlur
+        width: welcomeTextRect.width
+        height: welcomeTextRect.height
+        color: "white"
         anchors.centerIn: parent
-        visible: root.welcomeBgBlur && root.firstInput
+        radius: welcomeTextRect.radius
         clip: true
-        layer.enabled: true
-        opacity: 0
+        AnimatedImage {
+            id: backgroundBlur
+            anchors.fill: background
+            anchors.centerIn: parent
+            source: "assets/background"
+            fillMode: Image.PreserveAspectCrop
 
-        MultiEffect {
-            source: background
-            width: background.width
-            height: background.height
-            x: -welcomeBlurClip.x
-            y: -welcomeBlurClip.y
-            blurEnabled: true
-            blur: 0.8
-            blurMax: 32
-            autoPaddingEnabled: false
-        }
-
-        layer.effect: OpacityMask {
-            maskSource: Rectangle {
-                width: welcomeBlurClip.width
-                height: welcomeBlurClip.height
-                radius: mainCard.radius
+            onStatusChanged: {
+                if (status === Image.Error) {
+                    console.log("Background missing, using fallback color");
+                }
             }
         }
-
+        MultiEffect {
+            blurEnabled: true
+            source: backgroundBlur
+            blur: 0.5
+            autoPaddingEnabled: false
+            blurMultiplier: 1
+            blurMax: 64
+            anchors.fill: backgroundBlur
+            Behavior on blur {
+                NumberAnimation {
+                    duration: 400
+                    easing: Easing.InOutCubic
+                }
+            }
+        }
+        Rectangle {
+            anchors.fill: parent
+            color: "#000000"
+            opacity: 0.4
+        }
         PropertyAnimation {
-            target: welcomeBlurClip
-            property: "opacity"
-            from: 0
-            to: 1
-            duration: 400
-            easing.type: Easing.OutCubic
+            target: welcomeTextRectBlur
+            property: "width"
+            from: welcomeTextRect.width/10
+            to: welcomeTextRect.width
+            duration: 600
+            easing.type: Easing.OutBack
+            running: root.firstInput ? true : false
+        }
+        PropertyAnimation {
+            target: welcomeTextRectBlur
+            property: "height"
+            from: welcomeTextRect.height/10
+            to: welcomeTextRect.height
+            duration: 600
+            easing.type: Easing.OutBack
             running: root.firstInput ? true : false
         }
     }
@@ -178,6 +198,7 @@ Rectangle {
         height: welcomeText.height + 30
         color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, root.welcomeBgOpacity)
         anchors.centerIn: parent
+        opacity: 0.5
         radius: mainCard.radius
         Text {
             id: welcomeText
