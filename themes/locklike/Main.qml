@@ -139,7 +139,7 @@ Rectangle {
         id: welcomeTextRectBlur
         width: welcomeTextRect.width
         height: welcomeTextRect.height 
-        color: "white"
+        color: "transparent"
         anchors.centerIn: parent
         radius: mainCard.radius
         clip: true
@@ -157,6 +157,7 @@ Rectangle {
             anchors.centerIn: parent
             source: "assets/background"
             fillMode: Image.PreserveAspectCrop
+            opacity: root.firstInput ? 1:0
 
             onStatusChanged: {
                 if (status === Image.Error) {
@@ -172,6 +173,7 @@ Rectangle {
             blurMultiplier: 1
             blurMax: 64
             anchors.fill: backgroundBlur
+            opacity: root.firstInput ? 1 : 0
             Behavior on blur {
                 NumberAnimation {
                     duration: 400
@@ -183,7 +185,7 @@ Rectangle {
         Rectangle {
             anchors.fill: backgroundBlur
             color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, root.welcomeBgOpacity)
-            opacity: parseFloat(config.welcomeColorOpacity)
+            opacity: root.firstInput ? parseFloat(config.welcomeColorOpacity) : 0
         }
 
         PropertyAnimation {
@@ -262,7 +264,7 @@ Rectangle {
         width: 1350
         height: 750
         scale: firstInput ? 0.5 : 1.0
-        opacity: firstInput ? 0.0 : 1.0
+        opacity: firstInput ? 0.0 : 0.6
         anchors.centerIn: parent
         radius: 40
         color: config.mainCard
