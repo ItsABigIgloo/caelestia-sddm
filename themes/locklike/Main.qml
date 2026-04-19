@@ -440,7 +440,7 @@ Rectangle {
                             anchors.fill: parent
 
                             onClicked: {
-                                sddm.poweroff();
+                                sddm.powerOff();
                             }
                         }
                     }
