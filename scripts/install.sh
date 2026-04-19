@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
+
+# Prevent running with sudo - the script uses sudo internally for some commands
+if [ "$(id -u)" -eq 0 ]; then
+    echo "ERROR: Do not run this script with sudo. Run it normally." >&2
+    exit 1
+fi
 
 # Dynamically find the project root regardless of where this script is called from
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -117,36 +123,24 @@ echo "✓ Copied theme '$SELECTED_THEME' to $INSTALL_DIR"
 # 2. Create template configuration in user's home directory
 echo "Creating color template configuration..."
 mkdir -p "$HOME/.config/caelestia/templates"
-cp "$THEME_SOURCE/theme.conf.template" "$HOME/.config/caelestia/templates/sddm-theme.conf"
-echo "✓ Template created at ~/.config/caelestia/templates/sddm-theme.conf"
+if [ -f "$THEME_SOURCE/theme.conf.template" ]; then
+    cp "$THEME_SOURCE/theme.conf.template" "$HOME/.config/caelestia/templates/sddm-theme.conf"
+    echo "✓ Template created at ~/.config/caelestia/templates/sddm-theme.conf"
+else
+    echo "No theme.conf.template found, skipping template creation"
+fi
 
 # 3. Fix permissions so sync.sh have proper root access
 sudo chown -R root:root "$INSTALL_DIR"
 sudo chmod -R 755 "$INSTALL_DIR"
-sudo chmod -R 777 "$INSTALL_DIR/assets"
+if [ -d "$INSTALL_DIR/assets" ]; then
+    sudo find "$INSTALL_DIR/assets" -type d -exec chmod 755 {} \;
+    sudo find "$INSTALL_DIR/assets" -type f -exec chmod 644 {} \;
+fi
 sudo chmod 644 "$INSTALL_DIR/theme.conf"
 sudo chmod +x "$INSTALL_DIR/scripts/sync.sh"
 
-#4. Set the Current theme to Caelestia in SDDM configuration
-# Force Current theme in all possible config locations
-for config in /usr/lib/sddm/sddm.conf.d/default.conf; do
-    if [ -f "$config" ]; then
-        sudo sed -i 's/^Current=.*/Current=caelestia/' "$config"
-    fi
-done
-
-# Handle /etc/sddm.conf - create or update
-if [ -f /etc/sddm.conf ]; then
-    # File exists, update the Current setting
-    sudo sed -i 's/^Current=.*/Current=caelestia/' /etc/sddm.conf
-    echo "✓ Updated /etc/sddm.conf"
-else
-    # File doesn't exist, create it
-    echo -e "[Theme]\nCurrent=caelestia" | sudo tee /etc/sddm.conf > /dev/null
-    echo "✓ Created /etc/sddm.conf"
-fi
-
-# Ensure the drop-in exists too
+#4. Set the Current theme via drop-in only
 sudo mkdir -p /etc/sddm.conf.d
 cat <<'DROPIN' | sudo tee /etc/sddm.conf.d/caelestia.conf > /dev/null
 [General]
@@ -156,7 +150,6 @@ GreeterEnvironment=QML_XHR_ALLOW_FILE_READ=1
 Current=caelestia
 DROPIN
 echo "✓ Created /etc/sddm.conf.d/caelestia.conf"
-
 
 # 5. Run sync script
 echo "Running initial sync..."
