@@ -2,7 +2,7 @@
 
 # Caelestia SDDM Theme
 
-![Issues](https://img.shields.io/github/issues/ItsABigIgloo/caelestia-sddm?style=for-the-badge)
+[![Last Updated](https://img.shields.io/github/last-commit/ItsABigIgloo/caelestia-sddm?style=for-the-badge&label=Last%20Updated)](https://github.com/ItsABigIgloo/caelestia-sddm/commit/main)
 [![Caelestia Shell](https://img.shields.io/badge/Caelestia-Shell-111827?style=for-the-badge)](https://github.com/caelestia-dots/shell)
 [![Caelestia](https://img.shields.io/badge/Caelestia-Repository-0f172a?style=for-the-badge)](https://github.com/caelestia-dots/caelestia)
 

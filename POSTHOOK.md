@@ -1,6 +1,6 @@
 # Posthook Setup
 
-Use this if you want `sync.sh` to run automatically right after wallpaper changes (DOESNT REQUIRE REBOOT).
+Use this if you want `sync.sh` to run automatically right after wallpaper changes.
 
 ## 1) Configure the posthook
 
@@ -11,11 +11,11 @@ Edit `~/.config/caelestia/cli.json` and set:
     "postHook": "sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh --posthook"
 }
 ```
-If you dont have `cli.json` file setup, get them from (Under "Example Configuration"):
+If you dont have `cli.json` file setup, get them from:
 
-[https://github.com/caelestia-dots/cli](https://github.com/caelestia-dots/cli#configuring)
+[https://github.com/caelestia-dots/cli](https://github.com/caelestia-dots/cli#configuring) - (Under "Example Configuration")
 
-Simply copy it and paste the content to `~/.config/caelestia/cli.json`.
+Simply copy and paste the content to `~/.config/caelestia/cli.json`.
 
 ## 2) Allow passwordless sudo for this one command
 
@@ -33,7 +33,7 @@ Add this line (replace `your_username`):
 your_username ALL=(root) NOPASSWD: /usr/share/sddm/themes/caelestia/scripts/sync.sh
 ```
 
-This grants passwordless sudo only for the sync script.
+This grants passwordless sudo only for this sync script.
 
 ## 3) Verify
 
@@ -44,11 +44,6 @@ sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh
 ```
 
 It should finish without prompting for a password.
-
-## Notes
-
-- This is for user-triggered posthook execution.
-- The systemd service (`caelestia-sync.service`) runs separately and does not use your interactive sudo session.
 
 ## FINAL RESULT:
 
