@@ -102,6 +102,13 @@ QML_XHR_ALLOW_FILE_READ=1 sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/t
 ./scripts/fix-permissions.sh
 ```
 
+**Display or monitors not matching Hyprland config**
+
+Fixes multi-display positioning and orientation:
+```bash
+./scripts/monitors.sh ~/.config/hypr/Monitors.conf
+```
+
 ## Requirements
 
 > **Note:** This theme was made for Caelestia Shell, you can still use it on other setups but dynamic colors and wallpapers wont work..
