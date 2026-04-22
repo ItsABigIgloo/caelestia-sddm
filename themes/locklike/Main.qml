@@ -70,8 +70,7 @@ Rectangle {
         Keys.onPressed: {
             if (event.key === Qt.Key_Escape) {
                 if (!root.firstInput) {
-                    blurWidthAnim.start()
-                    blurHeightAnim.start()
+
                 }
                 root.firstInput = true;
                 root.buffer = "";
@@ -137,81 +136,20 @@ Rectangle {
         }
     }
 
-    Rectangle {
-        id: welcomeTextRectBlur
-        width: welcomeTextRect.width
-        height: welcomeTextRect.height 
-        color: "transparent"
+    BlurWrapper {
         anchors.centerIn: parent
-        radius: mainCard.radius
-        clip: true
-        layer.enabled: true
-        layer.effect: OpacityMask {
-            maskSource: Rectangle {
-                width: welcomeTextRectBlur.width
-                height: welcomeTextRectBlur.height
-                radius: welcomeTextRectBlur.radius
-            }
-        }
-        AnimatedImage {
-            id: backgroundBlur
-            anchors.fill: background
-            anchors.centerIn: parent
-            source: "assets/background"
-            fillMode: Image.PreserveAspectCrop
-            opacity: root.firstInput ? 1:0
+        targetWidth: welcomeTextRect.width
+        targetHeight: welcomeTextRect.height
 
-            onStatusChanged: {
-                if (status === Image.Error) {
-                    console.log("Background missing, using fallback color");
-                }
-            }
-        }
-        MultiEffect {
-            blurEnabled: welcomeBgBlur
-            source: backgroundBlur
-            blur: root.welcomeBgBlurAmount
-            autoPaddingEnabled: false
-            blurMultiplier: 1
-            blurMax: 64
-            anchors.fill: backgroundBlur
-            opacity: root.firstInput ? 1 : 0
-            Behavior on blur {
-                NumberAnimation {
-                    duration: 400
-                    easing: Easing.InOutCubic
-                }
-            }
-        }
+        animDuration: 600
+        animDurationOpacity: 200
 
-        Rectangle {
-            anchors.fill: backgroundBlur
-            color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, root.welcomeBgOpacity)
-            opacity: root.firstInput ? parseFloat(config.welcomeColorOpacity) : 0
-        }
+        blurAmount: 2
+        bgOpacity: 0.2
+        welcomeBgOpacity: 1
+        bgColor: config.mainCard
 
-        PropertyAnimation {
-            id: blurWidthAnim
-            target: welcomeTextRectBlur
-            property: "width"
-            from: welcomeTextRect.width/10
-            to: welcomeTextRect.width
-            duration: 600
-            easing.type: Easing.OutBack
-        }
-        PropertyAnimation {
-            id: blurHeightAnim
-            target: welcomeTextRectBlur
-            property: "height"
-            from: welcomeTextRect.height/10
-            to: welcomeTextRect.height
-            duration: 600
-            easing.type: Easing.OutBack
-        }
-        Component.onCompleted: {
-            blurWidthAnim.start()
-            blurHeightAnim.start()
-        }
+        visibleState: root.firstInput
     }
 
     Item {
@@ -269,7 +207,7 @@ Rectangle {
         opacity: firstInput ? 0.0 : 1
         anchors.centerIn: parent
         radius: 40
-        color: config.mainCard
+        color: "transparent"
 
         Behavior on scale {
             NumberAnimation {
@@ -289,11 +227,12 @@ Rectangle {
             targetWidth: mainCard.width
             targetHeight: mainCard.height
 
-            animDuration: 800
+            animDuration: 0
 
-            blurAmount: 50
-            bgOpacity: 0.4
-            bgColor: "#1a1a1a"
+            blurAmount: 2
+            bgOpacity: 0.2
+            welcomeBgOpacity: 1
+            bgColor: config.mainCard
 
             visibleState: !root.firstInput
         }
