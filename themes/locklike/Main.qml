@@ -213,19 +213,6 @@ Rectangle {
             blurHeightAnim.start()
         }
     }
-    BlurWrapper {
-        anchors.centerIn: parent
-        targetWidth: welcomeTextRect.width
-        targetHeight: welcomeTextRect.height
-
-        animDuration: 800
-
-        blurAmount: 50
-        bgOpacity: 0.4
-        bgColor: "#1a1a1a"
-
-        visibleState: root.firstInput
-    }
 
     Item {
         id: welcomeTextRect
@@ -296,6 +283,19 @@ Rectangle {
                 duration: 300
                 easing.type: Easing.OutBack
             }
+        }
+        BlurWrapper {
+            anchors.centerIn: parent
+            targetWidth: mainCard.width
+            targetHeight: mainCard.height
+
+            animDuration: 800
+
+            blurAmount: 50
+            bgOpacity: 0.4
+            bgColor: "#1a1a1a"
+
+            visibleState: !root.firstInput
         }
 
         RowLayout {

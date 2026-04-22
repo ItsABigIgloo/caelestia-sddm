@@ -16,7 +16,7 @@ Item {
     property real radius: 20
 
     property bool blurEnabled: true
-    property real blurAmount: 32
+    property real blurAmount: 1
 
     property real bgOpacity: 0.3
     property string bgColor: "#000000"
@@ -64,7 +64,7 @@ Item {
             source: backgroundBlur
 
             blurEnabled: blurCard.blurEnabled
-            blur: blurCard.blurAmount
+            blur: 2.2
             blurMax: 64
             blurMultiplier: 1
             autoPaddingEnabled: false
