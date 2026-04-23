@@ -69,7 +69,7 @@ For fully automated sync on every wallpaper change, use posthook. See **[POSTHOO
 
 To customize the theme config, modify it only through the Caelestia config:
 
-1. Edit `~/.config/caelestia/sddm-theme.conf`
+1. Edit `~/.config/caelestia/templates/sddm-theme.conf`
 2. Apply sync:
    ```bash
    sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh

@@ -18,13 +18,13 @@ if [ "${1:-}" = "--posthook" ]; then
     echo "✓ Running as posthook, skipping color generation"
 elif command -v caelestia &>/dev/null; then
     # IMPORTANT: must use sudo -u here
-    mapfile -t SCHEME < <(sudo -u "$REAL_USER" caelestia scheme get --name --mode --variant 2>/dev/null)
+    mapfile -t SCHEME < <(sudo -H -u "$REAL_USER" caelestia scheme get --name --mode --variant 2>/dev/null)
     NAME="${SCHEME[0]}"
     MODE="${SCHEME[1]}"
     VARIANT="${SCHEME[2]}"
     if [ -n "$NAME" ] && [ -n "$MODE" ] && [ -n "$VARIANT" ]; then
         # and here
-        sudo -u "$REAL_USER" caelestia scheme set --name "$NAME" --mode "$MODE" --variant "$VARIANT" 2>/dev/null
+        sudo -H -u "$REAL_USER" caelestia scheme set --name "$NAME" --mode "$MODE" --variant "$VARIANT" 2>/dev/null
         echo "✓ Generated colors for scheme: $NAME/$MODE/$VARIANT"
     else
         echo "Could not read Caelestia scheme, skipping color generation"
