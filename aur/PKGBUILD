@@ -4,7 +4,7 @@ pkgname=(
   caelestia-sddm-minimalist-git
   caelestia-sddm-minimalistv2-git
 )
-pkgver=r134.22d0a5b
+pkgver=r135.9e8d36b
 pkgrel=1
 arch=('any')
 url='https://github.com/ItsABigIgloo/caelestia-sddm'
@@ -28,8 +28,6 @@ optdepends=(
 )
 makedepends=('git')
 provides=('caelestia-sddm')
-conflicts=('caelestia-sddm')
-backup=('etc/sddm.conf.d/caelestia.conf')
 install=caelestia-sddm.install
 source=("${pkgbase}::git+${url}")
 sha256sums=('SKIP')
@@ -66,16 +64,19 @@ DROPIN
 }
 
 package_caelestia-sddm-locklike-git() {
+  conflicts=('caelestia-sddm' 'caelestia-sddm-minimalist-git' 'caelestia-sddm-minimalistv2-git')
   _package_variant "locklike" \
     "Caelestia SDDM theme - locklike variant mimicking the original lock screen from caelestia"
 }
 
 package_caelestia-sddm-minimalist-git() {
+  conflicts=('caelestia-sddm' 'caelestia-sddm-locklike-git' 'caelestia-sddm-minimalistv2-git')
   _package_variant "minimalist" \
     "Caelestia SDDM theme - minimalist variant with gradient background and simple design"
 }
 
 package_caelestia-sddm-minimalistv2-git() {
+  conflicts=('caelestia-sddm' 'caelestia-sddm-locklike-git' 'caelestia-sddm-minimalist-git')
   _package_variant "minimalistV2" \
     "Caelestia SDDM theme - minimalistV2 variant with improved fonts and modern design following caelestia's UI style"
 }
