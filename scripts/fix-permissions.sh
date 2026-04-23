@@ -11,8 +11,8 @@ REAL_USER="${SUDO_USER:-$(whoami)}"
 REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
 
 for dir in \
+    "$REAL_HOME/.config" \
     "$REAL_HOME/.local/state/caelestia" \
-    "$REAL_HOME/.config/caelestia" \
     "$REAL_HOME/.local/share/caelestia"; do
     if [ -d "$dir" ]; then
         chown -R "$REAL_USER:$REAL_USER" "$dir"
