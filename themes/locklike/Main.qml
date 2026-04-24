@@ -19,6 +19,12 @@ Rectangle {
     property real welcomeBgBlurAmount: parseFloat(config.welcomeBgBlurAmount) || 1.0
     property bool welcomeBgBlur: config.welcomeBgBlur === "true"
     property real mainCardBlurAmount: parseFloat(config.mainCardBlurAmount) || 1.0
+    property real mainCardComponentsOpacity: {
+        var value = parseFloat(config.mainCardComponentsOpacity)
+        if (isNaN(value) || value < 0.6)
+            return 1.0
+        return value
+    }
     property bool mainCardBgBlur: config.mainCardBgBlur === "true"
 
     onBufferChanged: {
@@ -313,6 +319,7 @@ Rectangle {
                     color: config.subComponents
                     topLeftRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
+                    opacity: root.mainCardComponentsOpacity
                     property string welcomeString
 
                     function getPhase() {
@@ -359,6 +366,7 @@ Rectangle {
                     Layout.fillHeight: true
                     color: config.subComponents
                     radius: mainCard.radius / 4
+                    opacity: root.mainCardComponentsOpacity
                     clip: true
                     RowLayout {
                         Rectangle {
@@ -491,6 +499,7 @@ Rectangle {
                     color: "transparent"
                     bottomLeftRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
+                    opacity: root.mainCardComponentsOpacity
                     Rectangle {
                         id: powerBtn
                         anchors.left: parent.left
@@ -834,6 +843,7 @@ Rectangle {
                     color: config.subComponents
                     topRightRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
+                    opacity: root.mainCardComponentsOpacity
                     RandomQuote {
                         maxWidth: topRightRect.width - 40
                         color: config.text
@@ -846,6 +856,7 @@ Rectangle {
                     color: config.subComponents
                     bottomRightRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
+                    opacity: root.mainCardComponentsOpacity
                     Image {
                         id: dino
                         width: 300
