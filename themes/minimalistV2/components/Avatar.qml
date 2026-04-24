@@ -11,7 +11,7 @@ Rectangle {
     implicitWidth: Theme.avatarFrameSize
     implicitHeight: Theme.avatarFrameSize
     radius: Theme.avatarFrameSize / 2
-    color: Theme.withAlpha(Theme.mSurface, Theme.cardOpacity)
+    color: Theme.withAlpha(Theme.mSurface, Theme.outerCardOpacity)
     clip: true
 
     Image {

@@ -71,13 +71,29 @@ Item {
 
         anchors.fill: parent
         radius: Theme.cardRadius
-        color: Theme.withAlpha(Theme.mSurface, Theme.cardOpacity)
+        color: Theme.withAlpha(Theme.mSurface, Theme.outerCardOpacity)
+
+        BlurWrapper {
+            anchors.centerIn: parent
+            targetWidth: mainCard.width
+            targetHeight: mainCard.height
+
+            animDuration: Theme.animDurationNormal
+
+            blurEnabled: Theme.cardBlurEnabled
+            blurAmount: Theme.cardBlurStrength
+            radius: mainCard.radius
+
+            visibleState: !root.isActive
+            z: -1
+        }
 
         Rectangle {
+            id: subCard
             anchors.fill: parent
             anchors.margins: 16
             radius: Theme.cardRadius - 16
-            color: Theme.withAlpha(Theme.mOnSecondary, Theme.cardOpacity * 1.55)
+            color: Theme.withAlpha(Theme.mOnSecondary, Theme.innerCardOpacity)
 
             ColumnLayout {
                 anchors.fill: parent

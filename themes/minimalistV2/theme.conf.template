@@ -22,17 +22,29 @@ elementRadius=25
 cardRadius=75
 
 # ============================================================================
-# VISUAL EFFECTS
+# VISUAL EFFECTS — CARD
 # ============================================================================
 # Card border [true | false]
 cardBorder=false
 
-# Card Opacity [0 to 1]
-cardOpacity=0.35
+# Card frosted glass blur [true | false]
+cardBlurEnabled=true
 
-# Card Drop shadows [true | false]
+# Card blur strength [0.0 to 1.0]
+cardBlurStrength=0.70
+
+# Outer card opacity [0.50 to 1] (minimum 0.50 for visibility)
+outerCardOpacity=0.80
+
+# Inner card opacity [0.15 to 1] (minimum 0.15 for visibility)
+innerCardOpacity=0.30
+
+# Card drop shadows [true | false]
 dropShadows=true
 
+# ============================================================================
+# VISUAL EFFECTS — BACKGROUND
+# ============================================================================
 # Background blur [true | false]
 blurEnabled=true
 
