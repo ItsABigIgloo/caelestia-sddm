@@ -82,6 +82,11 @@ else
     echo "Template file not found, skipped."
 fi
 
+if [[ -f "$TEMPLATE_FILE.bak" ]]; then
+    rm -f "$TEMPLATE_FILE.bak"
+    echo "✓ Removed template backup."
+fi
+
 if [[ -d "$TEMPLATE_DIR" ]] && [[ -z "$(ls -A "$TEMPLATE_DIR")" ]]; then
     rmdir "$TEMPLATE_DIR"
     echo "✓ Removed empty template directory."
