@@ -1,3 +1,6 @@
+# Caelestia SDDM — install/remove hooks
+
+# Detect the real (non-root) user, falling back to the first regular user in /etc/passwd
 _detect_user() {
   if [ -n "${SUDO_USER:-}" ]; then
     echo "$SUDO_USER"
@@ -22,6 +25,7 @@ _rmdir_if_empty() {
   [ -d "$1" ] && [ -z "$(ls -A "$1")" ] && rmdir "$1"
 }
 
+# Removes theme files, config drop-in, caches, and the sync systemd service
 _cleanup_all() {
   local real_user real_home
 
@@ -79,6 +83,7 @@ _print_posthook_instructions() {
   echo "==> Full posthook guide: https://github.com/ItsABigIgloo/caelestia-sddm/blob/main/POSTHOOK.md"
 }
 
+# Copy template, run initial sync, fix ownership, print posthook instructions
 post_install() {
   local theme_dir="/usr/share/sddm/themes/caelestia"
   local real_user
