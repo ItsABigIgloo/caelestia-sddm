@@ -149,7 +149,7 @@ sudo chmod +x "$INSTALL_DIR/scripts/sync.sh"
 sudo mkdir -p /etc/sddm.conf.d
 cat <<'DROPIN' | sudo tee /etc/sddm.conf.d/caelestia.conf >/dev/null
 [General]
-GreeterEnvironment=QML_XHR_ALLOW_FILE_READ=1
+GreeterEnvironment=QML_XHR_ALLOW_FILE_READ=1,QT_QPA_PLATFORM=xcb
 
 [Theme]
 Current=caelestia

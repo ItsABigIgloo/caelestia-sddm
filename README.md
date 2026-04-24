@@ -83,10 +83,10 @@ Do not edit `/usr/share/sddm/themes/caelestia/theme.conf` directly, since this w
 
 Preview the theme without logging out:
 ```bash
-QML_XHR_ALLOW_FILE_READ=1 sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/caelestia
+QML_XHR_ALLOW_FILE_READ=1 QT_QPA_PLATFORM=xcb sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/caelestia
 ```
 
-> **Note:** The `QML_XHR_ALLOW_FILE_READ` environment variable is required for quotes to display in test mode.
+> **Note:** `QML_XHR_ALLOW_FILE_READ=1` is required for quotes to display in test mode. `QT_QPA_PLATFORM=xcb` is required for MultiEffect blur to render correctly.
 
 ## Troubleshooting
 
