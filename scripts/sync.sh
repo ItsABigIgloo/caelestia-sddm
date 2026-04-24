@@ -12,6 +12,9 @@ REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
 CAEL_STATE="$REAL_HOME/.local/state/caelestia"
 THEME_DIR="/usr/share/sddm/themes/caelestia"
 
+# Clear SDDM greeter QML cache
+rm -rf /var/lib/sddm/.cache/sddm-greeter-qt6
+
 # 1. Generate FRESH colors from the current Caelestia scheme settings FIRST
 if [ "${1:-}" = "--posthook" ]; then
     : # Skip color generation when run as posthook (--posthook)

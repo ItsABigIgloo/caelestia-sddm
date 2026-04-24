@@ -33,6 +33,8 @@ _cleanup_all() {
     rm -rf "$real_home/.cache/sddm-greeter-qt6"
   fi
 
+  rm -rf /var/lib/sddm/.cache/sddm-greeter-qt6
+
   rm -f /etc/sddm.conf.d/caelestia.conf
   if [ -d /etc/sddm.conf.d ] && [ -z "$(ls -A /etc/sddm.conf.d)" ]; then
     rmdir /etc/sddm.conf.d

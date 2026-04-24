@@ -48,7 +48,13 @@ else
     echo "Service file not found, skipped."
 fi
 
-# 2. Remove the SDDM theme directory
+# 2. Clear SDDM greeter QML cache
+echo "Clearing SDDM greeter QML cache..."
+sudo rm -rf /var/lib/sddm/.cache/sddm-greeter-qt6
+rm -rf "$HOME/.cache/sddm-greeter-qt6"
+echo "✓ Cleared QML cache."
+
+# 3. Remove the SDDM theme directory
 echo "Removing SDDM theme from $THEME_DIR..."
 if [[ -d "$THEME_DIR" ]]; then
     sudo rm -rf "$THEME_DIR"
@@ -57,7 +63,7 @@ else
     echo "Theme directory not found, skipped."
 fi
 
-# 3. Remove SDDM theme configuration
+# 4. Remove SDDM theme configuration
 echo "Removing SDDM theme configuration..."
 echo "Note: /etc/sddm.conf is left untouched - you may want to manually update Current= setting."
 if [[ -f "/etc/sddm.conf.d/caelestia.conf" ]]; then
@@ -73,7 +79,7 @@ else
     echo "SDDM config drop-in not found, skipped."
 fi
 
-# 4. Remove the template configuration
+# 5. Remove the template configuration
 echo "Removing template file from $TEMPLATE_FILE..."
 if [[ -f "$TEMPLATE_FILE" ]]; then
     rm -f "$TEMPLATE_FILE"

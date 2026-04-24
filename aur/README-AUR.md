@@ -1,10 +1,10 @@
-# How to build using pkgbuild
+# How to build using makepkg for testing
 
 ```bash
 cd aur
 
 # Build packages locally
-makepkg -sf
+makepkg -scf
 
 # Install locklike
 sudo pacman -U caelestia-sddm-locklike-git-*.pkg.tar.zst
