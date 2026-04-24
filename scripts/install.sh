@@ -127,10 +127,10 @@ echo "✓ Copied theme '$SELECTED_THEME' to $INSTALL_DIR"
 
 # 2. Create template configuration in user's home directory
 echo "Creating color template configuration..."
-  mkdir -p "$HOME/.config/caelestia/templates"
-  if [ -f "$THEME_SOURCE/theme.conf.template" ]; then
-    cp "$THEME_SOURCE/theme.conf.template" "$HOME/.config/caelestia/templates/sddm-theme.conf"
-    echo "✓ Template created at ~/.config/caelestia/templates/sddm-theme.conf"
+mkdir -p "$HOME/.config/caelestia/templates"
+if [ -f "$THEME_SOURCE/theme.conf.template" ]; then
+  cp "$THEME_SOURCE/theme.conf.template" "$HOME/.config/caelestia/templates/sddm-theme.conf"
+  echo "✓ Template created at ~/.config/caelestia/templates/sddm-theme.conf"
 else
   echo "No theme.conf.template found, skipping template creation"
 fi

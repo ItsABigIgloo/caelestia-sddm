@@ -27,6 +27,7 @@ optdepends=(
 )
 makedepends=('git')
 provides=('caelestia-sddm')
+replaces=('caelestia-sddm')
 install=caelestia-sddm.install
 source=("${pkgbase}::git+${url}")
 sha256sums=('SKIP')
