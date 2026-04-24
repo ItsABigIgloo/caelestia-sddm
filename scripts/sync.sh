@@ -12,19 +12,22 @@ REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
 CAEL_STATE="$REAL_HOME/.local/state/caelestia"
 THEME_DIR="/usr/share/sddm/themes/caelestia"
 
+# Clear SDDM greeter QML cache
+rm -rf /var/lib/sddm/.cache/sddm-greeter-qt6
+
 # 1. Generate FRESH colors from the current Caelestia scheme settings FIRST
 if [ "${1:-}" = "--posthook" ]; then
     : # Skip color generation when run as posthook (--posthook)
     echo "✓ Running as posthook, skipping color generation"
 elif command -v caelestia &>/dev/null; then
     # IMPORTANT: must use sudo -u here
-    mapfile -t SCHEME < <(sudo -u "$REAL_USER" caelestia scheme get --name --mode --variant 2>/dev/null)
+    mapfile -t SCHEME < <(sudo -H -u "$REAL_USER" caelestia scheme get --name --mode --variant 2>/dev/null)
     NAME="${SCHEME[0]}"
     MODE="${SCHEME[1]}"
     VARIANT="${SCHEME[2]}"
     if [ -n "$NAME" ] && [ -n "$MODE" ] && [ -n "$VARIANT" ]; then
         # and here
-        sudo -u "$REAL_USER" caelestia scheme set --name "$NAME" --mode "$MODE" --variant "$VARIANT" 2>/dev/null
+        sudo -H -u "$REAL_USER" caelestia scheme set --name "$NAME" --mode "$MODE" --variant "$VARIANT" 2>/dev/null
         echo "✓ Generated colors for scheme: $NAME/$MODE/$VARIANT"
     else
         echo "Could not read Caelestia scheme, skipping color generation"

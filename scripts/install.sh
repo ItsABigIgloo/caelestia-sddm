@@ -33,6 +33,11 @@ if [[ -d "$INSTALL_DIR" ]]; then
   echo "                    CLEAN UP / UPDATE"
   echo "============================================================"
   echo "Previous installation exists, cleaning and updating..."
+  if [ -f "$HOME/.config/caelestia/templates/sddm-theme.conf" ]; then
+    rm -f "$HOME/.config/caelestia/templates/sddm-theme.conf.bak"
+    cp "$HOME/.config/caelestia/templates/sddm-theme.conf" "$HOME/.config/caelestia/templates/sddm-theme.conf.bak"
+    echo "✓ Existing template backed up to sddm-theme.conf.bak"
+  fi
   chmod +x "$SCRIPT_DIR/uninstall.sh"
   "$SCRIPT_DIR/uninstall.sh"
 fi
