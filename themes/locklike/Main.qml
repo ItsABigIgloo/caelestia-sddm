@@ -319,7 +319,13 @@ Rectangle {
                     color: config.subComponents
                     topLeftRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
-                    opacity: root.mainCardComponentsOpacity
+                    opacity: root.firstInput ? 0.0 : root.mainCardComponentsOpacity
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 300
+                            easing.type: Easing.OutBack
+                        }
+                    }
                     property string welcomeString
 
                     function getPhase() {
@@ -366,7 +372,13 @@ Rectangle {
                     Layout.fillHeight: true
                     color: config.subComponents
                     radius: mainCard.radius / 4
-                    opacity: root.mainCardComponentsOpacity
+                    opacity: root.firstInput ? 0.0 : root.mainCardComponentsOpacity
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 300
+                            easing.type: Easing.OutBack
+                        }
+                    }
                     clip: true
                     RowLayout {
                         Rectangle {
@@ -499,7 +511,13 @@ Rectangle {
                     color: "transparent"
                     bottomLeftRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
-                    opacity: root.mainCardComponentsOpacity
+                    opacity: root.firstInput ? 0.0 : root.mainCardComponentsOpacity
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 300
+                            easing.type: Easing.OutBack
+                        }
+                    }
                     Rectangle {
                         id: powerBtn
                         anchors.left: parent.left
@@ -598,6 +616,13 @@ Rectangle {
                         font.family: "Rubik"
                         font.bold: true
                         color: config.secondary
+                        opacity: root.firstInput ? 0.0 : root.mainCardComponentsOpacity
+                        Behavior on opacity {
+                            NumberAnimation {
+                                duration: 300
+                                easing.type: Easing.OutBack
+                            }
+                        }
                     }
                     Text {
                         renderType: Text.NativeRendering
@@ -607,6 +632,13 @@ Rectangle {
                         font.family: "Rubik"
                         font.bold: false
                         color: config.textDark
+                        opacity: root.firstInput ? 0.0 : root.mainCardComponentsOpacity
+                        Behavior on opacity {
+                            NumberAnimation {
+                                duration: 300
+                                easing.type: Easing.OutBack
+                            }
+                        }
                     }
                 }
 
@@ -618,6 +650,13 @@ Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     Layout.preferredWidth: 230
                     Layout.preferredHeight: 230
+                    opacity: root.firstInput ? 0.0 : root.mainCardComponentsOpacity
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 300
+                            easing.type: Easing.OutBack
+                        }
+                    }
                 }
 
                 Item {
@@ -631,6 +670,13 @@ Rectangle {
                     radius: 30
                     width: 340
                     height: 40
+                    opacity: root.firstInput ? 0.0 : root.mainCardComponentsOpacity
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 300
+                            easing.type: Easing.OutBack
+                        }
+                    }
                     Text {
                         renderType: Text.NativeRendering
                         anchors.left: parent.left
@@ -843,7 +889,13 @@ Rectangle {
                     color: config.subComponents
                     topRightRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
-                    opacity: root.mainCardComponentsOpacity
+                    opacity: root.firstInput ? 0.0 : root.mainCardComponentsOpacity
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 300
+                            easing.type: Easing.OutBack
+                        }
+                    }
                     RandomQuote {
                         maxWidth: topRightRect.width - 40
                         color: config.text
@@ -856,7 +908,13 @@ Rectangle {
                     color: config.subComponents
                     bottomRightRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
-                    opacity: root.mainCardComponentsOpacity
+                    opacity: root.firstInput ? 0.0 : root.mainCardComponentsOpacity
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 300
+                            easing.type: Easing.OutBack
+                        }
+                    }
                     Image {
                         id: dino
                         width: 300
