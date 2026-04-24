@@ -12,8 +12,6 @@ REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
 
 FACE_FILE="$REAL_HOME/.face"
 FACE_ICON_FILE="$REAL_HOME/.face.icon"
-BACKUP_SUFFIX="$(date +%Y%m%d-%H%M%S)"
-
 if [ ! -f "$FACE_FILE" ]; then
     echo "✗ Missing $FACE_FILE — create .face first, then run this script again." >&2
     exit 1
@@ -26,14 +24,14 @@ echo "✓ Fixed ownership and permissions on $FACE_FILE"
 if [ -L "$FACE_ICON_FILE" ]; then
     link_target="$(readlink "$FACE_ICON_FILE")"
     if [ "$link_target" != ".face" ] && [ "$link_target" != "$FACE_FILE" ]; then
-        mv "$FACE_ICON_FILE" "${FACE_ICON_FILE}.backup-${BACKUP_SUFFIX}"
+        rm -f "$FACE_ICON_FILE"
         ln -s .face "$FACE_ICON_FILE"
         echo "✓ Replaced symlink $FACE_ICON_FILE -> .face"
     fi
 elif [ -e "$FACE_ICON_FILE" ]; then
-    mv "$FACE_ICON_FILE" "${FACE_ICON_FILE}.backup-${BACKUP_SUFFIX}"
+    rm -f "$FACE_ICON_FILE"
     ln -s .face "$FACE_ICON_FILE"
-    echo "✓ Backed up old file and created $FACE_ICON_FILE -> .face"
+    echo "✓ Removed old file and created $FACE_ICON_FILE -> .face"
 else
     ln -s .face "$FACE_ICON_FILE"
     echo "✓ Created $FACE_ICON_FILE -> .face"
