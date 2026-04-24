@@ -17,7 +17,9 @@ Rectangle {
     property bool loading: false
     property string buffer
     property real welcomeBgBlurAmount: parseFloat(config.welcomeBgBlurAmount) || 1.0
+    property real mainCardgBlurAmount: parseFloat(config.mainCardBgBlurAmount) || 1.0
     property bool welcomeBgBlur: config.welcomeBgBlur === "true"
+    property bool mainCardBgBlur: config.welcomeBgBlur === "true"
 
     onBufferChanged: {
         // ill make animations for typing
@@ -210,6 +212,19 @@ Rectangle {
             blurWidthAnim.start()
             blurHeightAnim.start()
         }
+    }
+    BlurWrapper {
+        anchors.centerIn: parent
+        targetWidth: welcomeTextRect.width
+        targetHeight: welcomeTextRect.height
+
+        animDuration: 800
+
+        blurAmount: 50
+        bgOpacity: 0.4
+        bgColor: "#1a1a1a"
+
+        visibleState: root.firstInput
     }
 
     Item {
