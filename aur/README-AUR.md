@@ -3,7 +3,7 @@
 ```bash
 cd aur
 
-# Build pakages locally
+# Build packages locally
 makepkg -sf
 
 # Install locklike
