@@ -18,6 +18,14 @@ Rectangle {
     property string buffer
     property real welcomeBgBlurAmount: parseFloat(config.welcomeBgBlurAmount) || 1.0
     property bool welcomeBgBlur: config.welcomeBgBlur === "true"
+    property real mainCardBlurAmount: parseFloat(config.mainCardBlurAmount) || 1.0
+    property real mainCardComponentsOpacity: {
+        var value = parseFloat(config.mainCardComponentsOpacity)
+        if (isNaN(value) || value < 0.6)
+            return 1.0
+        return value
+    }
+    property bool mainCardBgBlur: config.mainCardBgBlur === "true"
 
     onBufferChanged: {
         // ill make animations for typing
@@ -68,8 +76,8 @@ Rectangle {
         Keys.onPressed: {
             if (event.key === Qt.Key_Escape) {
                 if (!root.firstInput) {
-                    blurWidthAnim.start()
-                    blurHeightAnim.start()
+                    blurWidthAnim.start();
+                    blurHeightAnim.start();
                 }
                 root.firstInput = true;
                 root.buffer = "";
@@ -138,7 +146,7 @@ Rectangle {
     Rectangle {
         id: welcomeTextRectBlur
         width: welcomeTextRect.width
-        height: welcomeTextRect.height 
+        height: welcomeTextRect.height
         color: "transparent"
         anchors.centerIn: parent
         radius: mainCard.radius
@@ -157,7 +165,7 @@ Rectangle {
             anchors.centerIn: parent
             source: "assets/background"
             fillMode: Image.PreserveAspectCrop
-            opacity: root.firstInput ? 1:0
+            opacity: root.firstInput ? 1 : 0
 
             onStatusChanged: {
                 if (status === Image.Error) {
@@ -192,7 +200,7 @@ Rectangle {
             id: blurWidthAnim
             target: welcomeTextRectBlur
             property: "width"
-            from: welcomeTextRect.width/10
+            from: welcomeTextRect.width / 10
             to: welcomeTextRect.width
             duration: 600
             easing.type: Easing.OutBack
@@ -201,14 +209,14 @@ Rectangle {
             id: blurHeightAnim
             target: welcomeTextRectBlur
             property: "height"
-            from: welcomeTextRect.height/10
+            from: welcomeTextRect.height / 10
             to: welcomeTextRect.height
             duration: 600
             easing.type: Easing.OutBack
         }
         Component.onCompleted: {
-            blurWidthAnim.start()
-            blurHeightAnim.start()
+            blurWidthAnim.start();
+            blurHeightAnim.start();
         }
     }
 
@@ -267,7 +275,20 @@ Rectangle {
         opacity: firstInput ? 0.0 : 1
         anchors.centerIn: parent
         radius: 40
-        color: config.mainCard
+        color: "transparent"
+
+        BlurWrapper {
+            anchors.centerIn: parent
+            targetWidth: mainCard.width
+            targetHeight: mainCard.height
+
+            animDuration: 0
+
+            blurAmount: root.mainCardBlurAmount
+            bgColor: config.mainCard
+
+            visibleState: !root.firstInput
+        }
 
         Behavior on scale {
             NumberAnimation {
@@ -298,6 +319,7 @@ Rectangle {
                     color: config.subComponents
                     topLeftRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
+                    opacity: root.mainCardComponentsOpacity
                     property string welcomeString
 
                     function getPhase() {
@@ -344,6 +366,7 @@ Rectangle {
                     Layout.fillHeight: true
                     color: config.subComponents
                     radius: mainCard.radius / 4
+                    opacity: root.mainCardComponentsOpacity
                     clip: true
                     RowLayout {
                         Rectangle {
@@ -375,8 +398,8 @@ Rectangle {
                         }
                     }
                     ColumnLayout {
-                        Item{
-                            width:30
+                        Item {
+                            width: 30
                             height: 60
                         }
                         RowLayout {
@@ -476,6 +499,7 @@ Rectangle {
                     color: "transparent"
                     bottomLeftRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
+                    opacity: root.mainCardComponentsOpacity
                     Rectangle {
                         id: powerBtn
                         anchors.left: parent.left
@@ -819,6 +843,7 @@ Rectangle {
                     color: config.subComponents
                     topRightRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
+                    opacity: root.mainCardComponentsOpacity
                     RandomQuote {
                         maxWidth: topRightRect.width - 40
                         color: config.text
@@ -831,6 +856,7 @@ Rectangle {
                     color: config.subComponents
                     bottomRightRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
+                    opacity: root.mainCardComponentsOpacity
                     Image {
                         id: dino
                         width: 300
