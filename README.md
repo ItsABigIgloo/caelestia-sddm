@@ -10,16 +10,32 @@
 
 <p align="center">A dynamic, adaptive login interface for <strong>Caelestia Shell</strong>. Built with QML, this theme focuses on wallpaper-driven colors, synchronized visuals, and seamless integration with the Caelestia desktop ecosystem.</p>
 
-<table>
-  <tr>
-    <td>
-      <video src="https://github.com/user-attachments/assets/2fac31f1-0007-4d1d-8966-5ba34ccf7222" width="400" controls autoplay loop muted></video>
-    </td>
-    <td>
-      <video src="https://github.com/user-attachments/assets/6e58f631-56e0-4750-b088-9aeb6d54fa01" width="400" controls autoplay loop muted></video>
-    </td>
-  </tr>
-</table>
+<div align="center">
+    <h2> Locklike </h2>
+    <h3></h3>
+</div>
+
+<a href="https://github.com/user-attachments/assets/YOUR_LOCKLIKE_IMAGE_ID">
+<img src="https://github.com/user-attachments/assets/YOUR_LOCKLIKE_IMAGE_ID" alt="Locklike">
+</a>
+
+<div align="center">
+    <h2> MinimalistV2 </h2>
+    <h3></h3>
+</div>
+
+<a href="https://github.com/user-attachments/assets/YOUR_MINIMALISTV2_IMAGE_ID">
+<img src="https://github.com/user-attachments/assets/YOUR_MINIMALISTV2_IMAGE_ID" alt="MinimalistV2">
+</a>
+
+<div align="center">
+    <h2> Minimalist </h2>
+    <h3></h3>
+</div>
+
+<a href="https://github.com/user-attachments/assets/YOUR_MINIMALIST_IMAGE_ID">
+<img src="https://github.com/user-attachments/assets/YOUR_MINIMALIST_IMAGE_ID" alt="Minimalist">
+</a>
 
 ## Installation
 
