@@ -1,11 +1,29 @@
 # Installation & Setup
 
-The provided installer handles all dependencies, system configurations, and permissions automatically.
-
 > [!NOTE]
-> This installer only works on Arch-based distributions. For proper dynamic colors and wallpaper sync, you need to use Caelestia Shell.
+> This SDDM theme only works on Arch-based distributions. For proper dynamic colors and wallpaper sync, you need to use Caelestia Shell.
 
 ## Installation
+
+### AUR (Recommended)
+
+Each theme conflict with each other so only one can be installed.
+
+```bash
+# locklike theme
+yay -S caelestia-sddm-locklike-git
+
+# minimalist theme
+yay -S caelestia-sddm-minimalist-git
+
+# minimalistV2 theme
+yay -S caelestia-sddm-minimalistv2-git
+```
+
+> [!TIP]
+> To switch theme either remove the currently installed one or accept removal on conflict through AUR.
+
+### Manual
 
 1. **Clone the repository:**
     ```bash
@@ -32,10 +50,12 @@ The provided installer handles all dependencies, system configurations, and perm
     ```
 
 > [!NOTE]
-> Re-running the installer will automatically clean up the previous installation before installing a new theme.
-> To Switch theme simply re-run the install script again and choose your desired theme.
+> Re-running the installer will automatically clean up the previous installation.
+> To switch themes simply re-run the install script again and choose your desired theme.
 
-## Sync Setup
+## Usage
+
+### Syncing
 
 The theme syncs your current wallpaper, avatar, and colors to the SDDM login screen.
 
@@ -46,33 +66,56 @@ sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh
 ```
 
 **Automatic Posthook:**
-For fully automated sync on every wallpaper change, use posthook. See **[POSTHOOK.md](POSTHOOK.md)**.
-
-## Configuration
-
-To customize the theme config, modify it only through the Caelestia config:
-
-1. Edit `~/.config/caelestia/templates/sddm-theme.conf`
-2. Apply sync:
-   ```bash
-   sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh
-   ```
-
-> [!NOTE]
-> Do not edit `/usr/share/sddm/themes/caelestia/theme.conf` directly, since this will be overwritten by Caelestia templating system.
+For fully automated sync on every wallpaper change, use Caelestia's posthook.
+- See **[POSTHOOK.md](POSTHOOK.md)**.
 
 > [!TIP]
-> For a deeper explanation of templating and sync flow, see [TEMPLATING.md](TEMPLATING.md).
+> For a deeper explanation of integration with Caelestia and sync flow, see [TEMPLATING.md](TEMPLATING.md).
 
-## Testing
+### Testing
 
-Preview the theme without logging out:
+To quickly preview the theme without logging out:
 ```bash
 QML_XHR_ALLOW_FILE_READ=1 QT_QPA_PLATFORM=xcb sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/caelestia
 ```
 
 > [!NOTE]
 > `QML_XHR_ALLOW_FILE_READ=1` is required for quotes to display in test mode. `QT_QPA_PLATFORM=xcb` is required for MultiEffect blur to render correctly.
+
+## Configuration
+
+> [!WARNING]
+> Do not edit `/usr/share/sddm/themes/caelestia/theme.conf` directly, since this will be overwritten by Caelestia templating system.
+
+To customize the theme config, modify it only through the Caelestia config:
+
+1. Edit `~/.config/caelestia/templates/sddm-theme.conf`
+    ```bash
+    # ============= CONFIG FOR LOCKLIKE ==================
+    [General]
+    # 12 hours or 24 Hours true=12 [true | false]
+    ap=false
+    # Welcome message background opacity [0.0 to 1.0]
+    welcomeBgBlurAmount=0.7
+    welcomeColorOpacity=0.7
+    # mainCard background opacity and blur [0.0 to 2.0]
+    mainCardBlurAmount=0.9
+    mainCardColorOpacity=0.9
+    mainCardComponentsOpacity=0.9
+    # Welcome message background blur [true | false]
+    welcomeBgBlur=true
+    mainCardBgBlur=true
+    ```
+2. Apply sync:
+   ```bash
+   sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh
+   ```
+
+> [!TIP]
+> Your config will be overwritten on every update, so make sure to back them up before updating.
+>```bash
+>cp ~/.config/caelestia/templates/sddm-theme.conf ~/.config/caelestia/templates/sddm-theme.conf.bak
+>```
 
 ## Troubleshooting
 
@@ -95,17 +138,9 @@ Fixes multi-display positioning and orientation:
 ./scripts/monitors.sh ~/.config/hypr/Monitors.conf
 ```
 
-## Requirements
+## Help
 
-> [!NOTE]
-> This theme was made for Caelestia Shell, you can still use it on other setups but dynamic colors and wallpapers won't work.
+If you run into any issues not covered above, reach out through:
 
-List of requirements:
-* **SDDM** duh
-* **qt6-declarative**
-* **qt6-5compat**
-* **qt6-svg**
-* **qt6-virtualkeyboard**
-* **ffmpeg**
-* **Material Symbols Outlined** (required for power/reboot icons)
-* **Rubik Font** (default text)
+* **GitHub Issues** — [Report a bug or request a feature](https://github.com/ItsABigIgloo/caelestia-sddm/issues)
+* **Discord** — [Join the Caelestia community](https://discord.gg/xPTAT7FFSy)

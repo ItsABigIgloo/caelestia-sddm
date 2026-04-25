@@ -75,4 +75,4 @@ Before opening a Pull Request, make sure:
 
 ## Questions?
 
-Feel free to open an issue or join the Caelestia community on Discord for help! - https://discord.gg/gxuC2jJY
+Feel free to open an issue or join the Caelestia community on Discord for help! - https://discord.gg/xPTAT7FFSy
