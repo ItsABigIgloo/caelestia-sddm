@@ -161,17 +161,12 @@ Rectangle {
         }
         AnimatedImage {
             id: backgroundBlur
-            anchors.fill: background
             anchors.centerIn: parent
+            width: root.width
+            height: root.height
             source: "assets/background"
             fillMode: Image.PreserveAspectCrop
             opacity: root.firstInput ? 1 : 0
-
-            onStatusChanged: {
-                if (status === Image.Error) {
-                    console.log("Background missing, using fallback color");
-                }
-            }
         }
         MultiEffect {
             blurEnabled: welcomeBgBlur

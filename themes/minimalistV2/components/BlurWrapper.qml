@@ -34,7 +34,7 @@ Item {
         clip: true
         layer.enabled: true
 
-        Image {
+        AnimatedImage {
             id: backgroundBlur
 
             anchors.centerIn: parent
@@ -42,14 +42,6 @@ Item {
             height: 1080
             source: blurCard.source
             fillMode: Image.PreserveAspectCrop
-            asynchronous: true
-            smooth: true
-            mipmap: true
-            onStatusChanged: {
-                if (status === Image.Error)
-                    console.log("BlurWrapper: Background missing, using fallback color");
-
-            }
         }
 
         MultiEffect {
