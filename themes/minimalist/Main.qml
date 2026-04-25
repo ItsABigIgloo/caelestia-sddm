@@ -103,23 +103,22 @@ Rectangle {
         }
     }
 
-    Image {
+    AnimatedImage {
         id: background
 
         property string src: Theme.backgroundSource
         property bool isVideo: src.endsWith(".mp4") || src.endsWith(".webm")
-        property bool isGif: src.endsWith(".gif")
 
         anchors.fill: parent
         source: background.src
         fillMode: Image.PreserveAspectCrop
-        visible: !background.isVideo && !background.isGif
-        asynchronous: true
-        smooth: true
-        mipmap: true
-        layer.enabled: true
-        layer.smooth: true
-        layer.mipmap: true
+        visible: !background.isVideo
+
+        onStatusChanged: {
+            if (status === Image.Error)
+                console.log("Background missing, using fallback color");
+
+        }
 
         Rectangle {
             anchors.fill: parent
