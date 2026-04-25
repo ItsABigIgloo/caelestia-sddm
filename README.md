@@ -15,8 +15,8 @@
     <h3></h3>
 </div>
 
-<a href="https://github.com/user-attachments/assets/ef7a6a67-40ba-4274-ac58-50f58a18215c">
-<img src="https://github.com/user-attachments/assets/ef7a6a67-40ba-4274-ac58-50f58a18215c" alt="Locklike">
+<a href="https://github.com/user-attachments/assets/777e8b6d-90e4-41bd-a0ed-71f575bbe571">
+<img src="https://github.com/user-attachments/assets/777e8b6d-90e4-41bd-a0ed-71f575bbe571" alt="Locklike">
 </a>
 
 <div align="center">
@@ -24,8 +24,8 @@
     <h3></h3>
 </div>
 
-<a href="https://github.com/user-attachments/assets/ef7a6a67-40ba-4274-ac58-50f58a18215c">
-<img src="https://github.com/user-attachments/assets/ef7a6a67-40ba-4274-ac58-50f58a18215c" alt="MinimalistV2">
+<a href="https://github.com/user-attachments/assets/8d42a467-f6d3-4f77-b495-ac27602d3584">
+<img src="https://github.com/user-attachments/assets/8d42a467-f6d3-4f77-b495-ac27602d3584" alt="MinimalistV2">
 </a>
 
 <div align="center">
@@ -33,8 +33,8 @@
     <h3></h3>
 </div>
 
-<a href="https://github.com/user-attachments/assets/ef7a6a67-40ba-4274-ac58-50f58a18215c">
-<img src="https://github.com/user-attachments/assets/ef7a6a67-40ba-4274-ac58-50f58a18215c" alt="Minimalist">
+<a href="https://github.com/user-attachments/assets/0c907322-d1ea-4e0c-97b3-01db9e92b26b">
+<img src="https://github.com/user-attachments/assets/0c907322-d1ea-4e0c-97b3-01db9e92b26b" alt="Minimalist">
 </a>
 
 ## Installation
