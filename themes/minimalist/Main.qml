@@ -114,12 +114,6 @@ Rectangle {
         fillMode: Image.PreserveAspectCrop
         visible: !background.isVideo
 
-        onStatusChanged: {
-            if (status === Image.Error)
-                console.log("Background missing, using fallback color");
-
-        }
-
         Rectangle {
             anchors.fill: parent
             color: Theme.mShadow

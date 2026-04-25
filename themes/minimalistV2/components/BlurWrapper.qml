@@ -42,12 +42,6 @@ Item {
             height: 1080
             source: blurCard.source
             fillMode: Image.PreserveAspectCrop
-
-            onStatusChanged: {
-                if (status === Image.Error)
-                    console.log("BlurWrapper: Background missing, using fallback color");
-
-            }
         }
 
         MultiEffect {
