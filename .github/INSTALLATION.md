@@ -2,7 +2,7 @@
 
 ## AUR (Recommended):
 
-Each theme conflict with each other so only one can be installed.
+Each theme conflicts with each other, so only one can be installed.
 
 ```bash
 # locklike theme

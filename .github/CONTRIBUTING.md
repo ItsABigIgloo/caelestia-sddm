@@ -4,7 +4,7 @@ Thanks for your interest in contributing to Caelestia SDDM!
 
 ## Types of Contributions
 
-We welcome contributions for anything typically here:
+We welcome all types of contributions:
 
 ### 1. Bug Fixes & General Improvements
 
@@ -21,7 +21,7 @@ We welcome contributions for anything typically here:
 
 ### 2. Adding a New Theme
 
-New themes must follow the current project structure to make sure it's compatibile with the installer, AUR packages, and Caelestia Shell integration.
+New themes must follow the current project structure to make sure it's compatible with the installer, AUR packages, and Caelestia Shell integration.
 
 #### Required Structure
 
