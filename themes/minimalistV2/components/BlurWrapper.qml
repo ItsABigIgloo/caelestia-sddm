@@ -14,7 +14,6 @@ Item {
     property real radius: 20
     property bool blurEnabled: true
     property real blurAmount: 0.6
-    property bool visibleState: true
     property url source: ""
 
     function startAnimation() {
@@ -31,7 +30,6 @@ Item {
         height: blurCard.startHeight
         radius: blurCard.radius
         color: "transparent"
-        opacity: blurCard.visibleState ? 1 : 0
         anchors.centerIn: parent
         clip: true
         layer.enabled: true

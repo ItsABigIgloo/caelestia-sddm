@@ -14,8 +14,8 @@ ColumnLayout {
         Layout.alignment: Qt.AlignHCenter
         textFormat: Text.RichText
         text: {
-            var time = Qt.formatTime(new Date(), "hh:mm");
-            return time.replace(":", "<span style='color:" + Theme.mPrimary + "'>:</span>");
+            var time = Qt.formatTime(new Date(), "hh:mm")
+            return time.replace(":", "<span style='color:" + Theme.mPrimary + "'>:</span>")
         }
         font.pixelSize: Math.round(Theme.baseFontSize * 7.6)
         font.family: Theme.fontFamily

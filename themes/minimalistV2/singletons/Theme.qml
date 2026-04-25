@@ -53,7 +53,7 @@ QtObject {
     property real outerCardOpacity: boundedNumber(getConfig("outerCardOpacity"), 0.75, 0.5, 1)
     property real overlayOpacity: boundedNumber(getConfig("overlayOpacity"), 0.4, 0, 1)
     property bool cardBlurEnabled: toBool(getConfig("cardBlurEnabled"), true)
-    property real cardBlurStrength: boundedNumber(getConfig("cardBlurStrength"), 0.6, 0, 1)
+    property real cardBlurStrength: boundedNumber(getConfig("cardBlurStrength"), 0.75, 0, 1)
     property real innerCardOpacity: boundedNumber(getConfig("innerCardOpacity"), 0.45, 0.15, 1)
     property real elementOpacity: boundedNumber(getConfig("elementOpacity"), 0.5, 0.1, 1)
     property int shadowRadius: 16
