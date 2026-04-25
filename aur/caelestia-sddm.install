@@ -80,7 +80,7 @@ _print_posthook_instructions() {
   echo "==>   3) Verify it works:"
   echo "==>        sudo $theme_dir/scripts/sync.sh"
   echo ""
-  echo "==> Full posthook guide: https://github.com/ItsABigIgloo/caelestia-sddm/blob/main/POSTHOOK.md"
+  echo "==> Full posthook guide: https://github.com/ItsABigIgloo/caelestia-sddm/blob/main/.github/POSTHOOK.md"
 }
 
 # Copy template, run initial sync, fix ownership, print posthook instructions

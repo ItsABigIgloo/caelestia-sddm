@@ -8,7 +8,7 @@
 
 </div>
 
-<p align="center">A dynamic, adaptive login interface for <strong>Caelestia Shell</strong>. Includes multiple themes built with QML, with each focuses on wallpaper-driven colors, synchronized visuals, and seamless integration with the Caelestia desktop ecosystem.</p>
+<p align="center">A dynamic, adaptive login interface for <strong>Caelestia Shell</strong>. Includes multiple themes, with each focuses on wallpaper-driven colors, synchronized visuals, and seamless integration with the Caelestia desktop ecosystem.</p>
 
 <div align="center">
     <h2> Locklike Theme </a> </h2>
@@ -37,6 +37,8 @@
 <img src="https://github.com/user-attachments/assets/0c907322-d1ea-4e0c-97b3-01db9e92b26b" alt="Minimalist">
 </a>
 
+---
+
 ## Requirements
 
 > [!NOTE]
@@ -57,18 +59,14 @@ List of requirements:
 > [!NOTE]
 > Currently only works on **Arch-based** distributions. For proper dynamic colors and wallpaper sync, you also need **Caelestia Shell**.
 
-See [INSTALLATION.md](INSTALLATION.md) for detailed instructions.
-
----
+See [Installation](.github/INSTALLATION.md) for detailed instructions.
 
 ## Contributing
 
 Contributions are welcome!
 
-* For detailed guidelines, see **[CONTRIBUTING.md](CONTRIBUTING.md)**.
+* For detailed guidelines, see **[Contributing](.github/CONTRIBUTING.md)**.
 * For AUR-specific work, see **[aur/README-AUR.md](aur/README-AUR.md)**.
-
----
 
 ## Inspirations
 
@@ -76,8 +74,6 @@ Big thanks to the projects that inspired Caelestia SDDM:
 
 * Noctalia Sddm - https://github.com/mda-dev/noctalia-sddm-theme
 * Caelestia Shell - https://github.com/caelestia-dots/shell
-
----
 
 <br>
 

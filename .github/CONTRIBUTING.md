@@ -36,7 +36,7 @@ themes/<theme-name>/
   caelestia-sddm.qmlproject     # Qt Creator project file
 ```
 > [!TIP]
-> Have a read at [TEMPLATING.md](TEMPLATING.md) to understand how integration with Caelestia works.
+> Have a read at [Templating](TEMPLATING.md) to understand how integration with Caelestia works.
 
 ### 3. AUR Package Updates
 

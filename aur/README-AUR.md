@@ -1,7 +1,7 @@
 # AUR Build & Contribution Guide
 
 > [!NOTE]
-> This guide is for maintainers and contributors working with the AUR package. For general usage, see [INSTALLATION.md](../INSTALLATION.md).
+> This guide is for maintainers and contributors working with the AUR package. For general usage, see [Installation](../.github/INSTALLATION.md).
 
 ## Building Locally
 

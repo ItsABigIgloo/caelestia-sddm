@@ -1,21 +1,18 @@
 # Installation & Setup
 
-> [!NOTE]
-> This SDDM theme only works on Arch-based distributions. For proper dynamic colors and wallpaper sync, you need to use Caelestia Shell.
-
-## Installation
-
-### AUR (Recommended)
+## AUR (Recommended):
 
 Each theme conflict with each other so only one can be installed.
 
 ```bash
 # locklike theme
 yay -S caelestia-sddm-locklike-git
-
+```
+```bash
 # minimalist theme
 yay -S caelestia-sddm-minimalist-git
-
+```
+```bash
 # minimalistV2 theme
 yay -S caelestia-sddm-minimalistv2-git
 ```
@@ -23,7 +20,7 @@ yay -S caelestia-sddm-minimalistv2-git
 > [!TIP]
 > To switch theme either remove the currently installed one or accept removal on conflict through AUR.
 
-### Manual
+## Manual:
 
 1. **Clone the repository:**
     ```bash
@@ -53,9 +50,9 @@ yay -S caelestia-sddm-minimalistv2-git
 > Re-running the installer will automatically clean up the previous installation.
 > To switch themes simply re-run the install script again and choose your desired theme.
 
-## Usage
+---
 
-### Syncing
+## Syncing:
 
 The theme syncs your current wallpaper, avatar, and colors to the SDDM login screen.
 
@@ -67,12 +64,11 @@ sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh
 
 **Automatic Posthook:**
 For fully automated sync on every wallpaper change, use Caelestia's posthook.
-- See **[POSTHOOK.md](POSTHOOK.md)**.
+- See setup details in **[Posthook](POSTHOOK.md)**.
 
-> [!TIP]
-> For a deeper explanation of integration with Caelestia and sync flow, see [TEMPLATING.md](TEMPLATING.md).
+---
 
-### Testing
+## Testing:
 
 To quickly preview the theme without logging out:
 ```bash
@@ -82,7 +78,9 @@ QML_XHR_ALLOW_FILE_READ=1 QT_QPA_PLATFORM=xcb sddm-greeter-qt6 --test-mode --the
 > [!NOTE]
 > `QML_XHR_ALLOW_FILE_READ=1` is required for quotes to display in test mode. `QT_QPA_PLATFORM=xcb` is required for MultiEffect blur to render correctly.
 
-## Configuration
+---
+
+## Configuration:
 
 > [!WARNING]
 > Do not edit `/usr/share/sddm/themes/caelestia/theme.conf` directly, since this will be overwritten by Caelestia templating system.
@@ -112,12 +110,20 @@ To customize the theme config, modify it only through the Caelestia config:
    ```
 
 > [!TIP]
-> Your config will be overwritten on every update, so make sure to back them up before updating.
+> **Your config will be overwritten on every update, so make sure to back them up before updating.**
 >```bash
 >cp ~/.config/caelestia/templates/sddm-theme.conf ~/.config/caelestia/templates/sddm-theme.conf.bak
 >```
 
-## Troubleshooting
+---
+
+## How it works:
+
+For a deeper explanation of integration with Caelestia and sync flow, see **[Templating](TEMPLATING.md).**
+
+---
+
+## Troubleshooting:
 
 **Avatar not updating or showing stale image**
 
@@ -138,7 +144,7 @@ Fixes multi-display positioning and orientation:
 ./scripts/monitors.sh ~/.config/hypr/Monitors.conf
 ```
 
-## Help
+## Help:
 
 If you run into any issues not covered above, reach out through:
 

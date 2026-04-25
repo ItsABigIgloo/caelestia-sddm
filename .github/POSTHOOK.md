@@ -13,9 +13,8 @@ Edit `~/.config/caelestia/cli.json` and set:
 ```
 If you dont have `cli.json` file setup, get them from:
 
-[https://github.com/caelestia-dots/cli](https://github.com/caelestia-dots/cli#configuring) - (Under "Example Configuration")
-
-Simply copy and paste the content to `~/.config/caelestia/cli.json`.
+* Under "Example Configuration" - [https://github.com/caelestia-dots/cli](https://github.com/caelestia-dots/cli#configuring)
+* Simply copy and paste the content to `~/.config/caelestia/cli.json`.
 
 ## 2) Allow passwordless sudo for this one command
 
