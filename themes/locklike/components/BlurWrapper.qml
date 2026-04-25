@@ -24,7 +24,7 @@ Item {
     property real colorOpacity: 1
 
     property bool visibleState: true
-    property url source: "assets/background"
+    property url source: Qt.resolvedUrl("../assets/background")
 
     onVisibleStateChanged: {
         widthAnim.start();
