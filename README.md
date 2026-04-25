@@ -1,6 +1,6 @@
 <div align="center">
 
-# Caelestia SDDM Themes
+# Caelestia SDDM
 
 [![](https://img.shields.io/github/last-commit/ItsABigIgloo/caelestia-sddm?&style=for-the-badge&color=8ad7eb&logo=git&logoColor=D9E0EE&labelColor=1E202B)](https://github.com/ItsABigIgloo/caelestia-sddm/commit/main)
 [![](https://img.shields.io/badge/Caelestia-Shell-8ad7eb?style=for-the-badge&logo=github&logoColor=D9E0EE&labelColor=1E202B)](https://github.com/caelestia-dots/shell)
@@ -8,10 +8,10 @@
 
 </div>
 
-<p align="center">A dynamic, adaptive login interface for <strong>Caelestia Shell</strong>. Built with QML, these themes focuses on wallpaper-driven colors, synchronized visuals, and seamless integration with the Caelestia desktop ecosystem.</p>
+<p align="center">A dynamic, adaptive login interface for <strong>Caelestia Shell</strong>. Includes multiple themes built with QML, with each focuses on wallpaper-driven colors, synchronized visuals, and seamless integration with the Caelestia desktop ecosystem.</p>
 
 <div align="center">
-    <h2> Locklike Theme </h2>
+    <h2> Locklike Theme </a> </h2>
     <h3></h3>
 </div>
 
@@ -20,7 +20,7 @@
 </a>
 
 <div align="center">
-    <h2> MinimalistV2 Theme </h2>
+    <h2> MinimalistV2 Theme </a> </h2>
     <h3></h3>
 </div>
 
@@ -29,7 +29,7 @@
 </a>
 
 <div align="center">
-    <h2> Minimalist Theme </h2>
+    <h2> Minimalist Theme </a> </h2>
     <h3></h3>
 </div>
 
@@ -40,7 +40,7 @@
 ## Requirements
 
 > [!NOTE]
-> This theme was made for Caelestia Shell, you can still use it on other setups but dynamic colors and wallpapers won't work.
+> This sddm themes was made for **Caelestia Shell**, you can still use it on other setups but dynamic colors and wallpapers won't work.
 
 List of requirements:
 * **SDDM** duh
@@ -49,20 +49,40 @@ List of requirements:
 * **qt6-svg**
 * **qt6-virtualkeyboard**
 * **ffmpeg**
-* **Material Symbols Outlined** (required for power/reboot icons)
+* **Material Symbols** (required for icons)
 * **Rubik Font** (default text)
 
 ## Installation
 
 > [!NOTE]
-> Currently only works on Arch-based distributions. For proper dynamic colors and wallpaper sync, you also need Caelestia Shell.
+> Currently only works on **Arch-based** distributions. For proper dynamic colors and wallpaper sync, you also need **Caelestia Shell**.
 
 See [INSTALLATION.md](INSTALLATION.md) for detailed instructions.
 
 ---
 
-<div align="center">
+## Contributing
 
-[![](https://img.shields.io/badge/Caelestia-Made%20With%20Love-86dbd7?style=for-the-badge&logo=github&logoColor=D9E0EE&labelColor=1E202B)](https://github.com/caelestia-dots/caelestia)
+Contributions are welcome!
 
-</div>
+* For detailed guidelines, see **[CONTRIBUTING.md](CONTRIBUTING.md)**.
+* For AUR-specific work, see **[aur/README-AUR.md](aur/README-AUR.md)**.
+
+---
+
+## Inspirations
+
+Big thanks to the projects that inspired Caelestia SDDM:
+
+* Noctalia Sddm - https://github.com/mda-dev/noctalia-sddm-theme
+* Caelestia Shell - https://github.com/caelestia-dots/shell
+
+---
+
+<br>
+
+<p align="center">
+  <a href="https://github.com/caelestia-dots/caelestia">
+    <img src="https://img.shields.io/badge/Made%20with%20%E2%9D%A4%EF%B8%8F%20for-Caelestia-86dbd7?style=for-the-badge&logo=github" alt="Made with ❤️ for Caelestia">
+  </a>
+</p>
