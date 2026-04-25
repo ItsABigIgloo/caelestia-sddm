@@ -1,117 +1,46 @@
 <div align="center">
 
-# Caelestia SDDM Theme
+# Caelestia SDDM
 
-[![Last Updated](https://img.shields.io/github/last-commit/ItsABigIgloo/caelestia-sddm?style=for-the-badge&label=Last%20Updated)](https://github.com/ItsABigIgloo/caelestia-sddm/commit/main)
-[![Caelestia Shell](https://img.shields.io/badge/Caelestia-Shell-111827?style=for-the-badge)](https://github.com/caelestia-dots/shell)
-[![Caelestia](https://img.shields.io/badge/Caelestia-Repository-0f172a?style=for-the-badge)](https://github.com/caelestia-dots/caelestia)
+[![](https://img.shields.io/github/last-commit/ItsABigIgloo/caelestia-sddm?&style=for-the-badge&color=8ad7eb&logo=git&logoColor=D9E0EE&labelColor=1E202B)](https://github.com/ItsABigIgloo/caelestia-sddm/commit/main)
+[![](https://img.shields.io/badge/Caelestia-Shell-8ad7eb?style=for-the-badge&logo=github&logoColor=D9E0EE&labelColor=1E202B)](https://github.com/caelestia-dots/shell)
+[![](https://img.shields.io/badge/Caelestia-Repository-86dbd7?style=for-the-badge&logo=github&logoColor=D9E0EE&labelColor=1E202B)](https://github.com/caelestia-dots/caelestia)
+![](https://img.shields.io/github/repo-size/ItsABigIgloo/caelestia-sddm?color=86dbce&label=SIZE&logo=protondrive&style=for-the-badge&logoColor=D9E0EE&labelColor=1E202B)
 
 </div>
 
-<p align="center">A dynamic, adaptive login interface for <strong>Caelestia Shell</strong>. Built with QML, this theme focuses on wallpaper-driven colors, synchronized visuals, and seamless integration with the Caelestia desktop ecosystem.</p>
+<p align="center">A dynamic, adaptive login interface for <strong>Caelestia Shell</strong>. Includes multiple themes, each focusing on wallpaper-driven colors, synchronized visuals, and seamless integration with the Caelestia desktop ecosystem.</p>
 
-<table>
-  <tr>
-    <td>
-      <video src="https://github.com/user-attachments/assets/2fac31f1-0007-4d1d-8966-5ba34ccf7222" width="400" controls autoplay loop muted></video>
-    </td>
-    <td>
-      <video src="https://github.com/user-attachments/assets/6e58f631-56e0-4750-b088-9aeb6d54fa01" width="400" controls autoplay loop muted></video>
-    </td>
-  </tr>
-</table>
+<div align="center">
+    <h2> Locklike Theme </h2>
+</div>
 
-## Installation
+<a href="https://github.com/user-attachments/assets/3a21a2d3-542a-42fe-b69c-40978eadd42b">
+<img src="https://github.com/user-attachments/assets/3a21a2d3-542a-42fe-b69c-40978eadd42b" alt="Locklike">
+</a>
 
-The provided installer handles all dependencies, system configurations, and permissions automatically.
+<div align="center">
+    <h2> MinimalistV2 Theme </h2>
+</div>
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/ItsABigIgloo/caelestia-sddm.git
-    cd caelestia-sddm
-    ```
+<a href="https://github.com/user-attachments/assets/8d42a467-f6d3-4f77-b495-ac27602d3584">
+<img src="https://github.com/user-attachments/assets/8d42a467-f6d3-4f77-b495-ac27602d3584" alt="MinimalistV2">
+</a>
 
-2.  **Run the installer:**
-    ```bash
-    chmod +x scripts/install.sh
-    ./scripts/install.sh
-    ```
+<div align="center">
+    <h2> Minimalist Theme </h2>
+</div>
 
-3.  **Select a theme:**
-    The installer will prompt you to choose from available themes:
-    ```
-    Available themes:
+<a href="https://github.com/user-attachments/assets/0c907322-d1ea-4e0c-97b3-01db9e92b26b">
+<img src="https://github.com/user-attachments/assets/0c907322-d1ea-4e0c-97b3-01db9e92b26b" alt="Minimalist">
+</a>
 
-      1) locklike
-      2) minimalist
-      3) minimalistV2
-
-    Select theme to install [1-3]:
-    ```
-
-> **Note:** Re-running the installer will automatically clean up the previous installation before installing a new theme.
-> To Switch theme simply re-run the install script again and choose your desired theme.
-
-## Sync Setup
-
-The theme syncs your current wallpaper, avatar, and colors to the SDDM login screen.
-
-**Manual Sync:**
-Manually apply changes immediately without rebooting:
-```bash
-sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh
-```
-
-**Automatic Posthook:**
-For fully automated sync on every wallpaper change, use posthook. See **[POSTHOOK.md](POSTHOOK.md)**.
-
-## Configuration
-
-To customize the theme config, modify it only through the Caelestia config:
-
-1. Edit `~/.config/caelestia/templates/sddm-theme.conf`
-2. Apply sync:
-   ```bash
-   sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh
-   ```
-
-Do not edit `/usr/share/sddm/themes/caelestia/theme.conf` directly, since this will be overwritten by Caelestia templating system.
-
-> **For a deeper explanation of templating and sync flow, see [TEMPLATING.md](TEMPLATING.md).**
-
-## Testing
-
-Preview the theme without logging out:
-```bash
-QML_XHR_ALLOW_FILE_READ=1 QT_QPA_PLATFORM=xcb sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/caelestia
-```
-
-> **Note:** `QML_XHR_ALLOW_FILE_READ=1` is required for quotes to display in test mode. `QT_QPA_PLATFORM=xcb` is required for MultiEffect blur to render correctly.
-
-## Troubleshooting
-
-**Avatar not updating or showing stale image**
-
-```bash
-./scripts/fix-avatar.sh
-```
-
-**Caelestia dots, states and config files being owned by root**
-
-```bash
-./scripts/fix-permissions.sh
-```
-
-**Display or monitors not matching Hyprland config**
-
-Fixes multi-display positioning and orientation:
-```bash
-./scripts/monitors.sh ~/.config/hypr/Monitors.conf
-```
+---
 
 ## Requirements
 
-> **Note:** This theme was made for Caelestia Shell, you can still use it on other setups but dynamic colors and wallpapers wont work..
+> [!NOTE]
+> These SDDM themes was made for **Caelestia Shell**. You can still use it on other setups, but dynamic colors and wallpapers won't work.
 
 List of requirements:
 * **SDDM** duh
@@ -120,5 +49,34 @@ List of requirements:
 * **qt6-svg**
 * **qt6-virtualkeyboard**
 * **ffmpeg**
-* **Material Symbols Outlined** (required for power/reboot icons)
+* **Material Symbols** (required for icons)
 * **Rubik Font** (default text)
+
+## Installation
+
+> [!NOTE]
+> Currently only works on **Arch-based** distributions. For proper dynamic colors and wallpaper sync, you also need **Caelestia Shell**.
+
+See [Installation](.github/INSTALLATION.md) for detailed instructions.
+
+## Contributing
+
+Contributions are welcome!
+
+* For detailed guidelines, see **[Contributing](.github/CONTRIBUTING.md)**.
+* For AUR-specific work, see **[aur/README-AUR.md](aur/README-AUR.md)**.
+
+## Inspirations
+
+Big thanks to the projects that inspired Caelestia SDDM:
+
+* Noctalia Sddm - https://github.com/mda-dev/noctalia-sddm-theme
+* Caelestia Shell - https://github.com/caelestia-dots/shell
+
+<br>
+
+<p align="center">
+  <a href="https://github.com/caelestia-dots/caelestia">
+    <img src="https://img.shields.io/badge/Made%20with%20%E2%9D%A4%EF%B8%8F%20for-Caelestia-86dbd7?style=for-the-badge&logo=github" alt="Made with ❤️ for Caelestia">
+  </a>
+</p>
