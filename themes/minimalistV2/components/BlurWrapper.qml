@@ -15,7 +15,7 @@ Item {
     property bool blurEnabled: true
     property real blurAmount: 0.6
     property bool visibleState: true
-    property url source: Qt.resolvedUrl("../assets/background")
+    property url source: ""
 
     function startAnimation() {
         widthAnim.start();
@@ -61,7 +61,6 @@ Item {
             blur: blurCard.blurAmount
             blurMax: 64
             autoPaddingEnabled: false
-            opacity: blurCard.visibleState ? 1 : 0
         }
 
         layer.effect: OpacityMask {

@@ -82,6 +82,7 @@ Item {
             blurAmount: Theme.cardBlurStrength
             radius: mainCard.radius
             visibleState: !root.isActive
+            source: Qt.resolvedUrl("../assets/background")
             z: -1
         }
 

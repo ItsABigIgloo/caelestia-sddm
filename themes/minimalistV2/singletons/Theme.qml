@@ -50,12 +50,12 @@ QtObject {
     property bool cardBorder: toBool(getConfig("cardBorder"), false)
     property bool blurEnabled: toBool(getConfig("blurEnabled"), true)
     property real blurStrength: boundedNumber(getConfig("blurStrength"), 1, 0, 1)
-    property real outerCardOpacity: Math.max(boundedNumber(getConfig("outerCardOpacity"), 0.75, 0, 1), 0.5)
+    property real outerCardOpacity: boundedNumber(getConfig("outerCardOpacity"), 0.75, 0.5, 1)
     property real overlayOpacity: boundedNumber(getConfig("overlayOpacity"), 0.4, 0, 1)
     property bool cardBlurEnabled: toBool(getConfig("cardBlurEnabled"), true)
     property real cardBlurStrength: boundedNumber(getConfig("cardBlurStrength"), 0.6, 0, 1)
-    property real innerCardOpacity: Math.max(boundedNumber(getConfig("innerCardOpacity"), 0.45, 0, 1), 0.15)
-    property real elementOpacity: Math.max(boundedNumber(getConfig("elementOpacity"), 0.5, 0, 1), 0.1)
+    property real innerCardOpacity: boundedNumber(getConfig("innerCardOpacity"), 0.45, 0.15, 1)
+    property real elementOpacity: boundedNumber(getConfig("elementOpacity"), 0.5, 0.1, 1)
     property int shadowRadius: 16
     property int shadowSamples: 32
     // animations
