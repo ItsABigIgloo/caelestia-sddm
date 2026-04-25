@@ -1,6 +1,6 @@
 <div align="center">
 
-# Caelestia SDDM Theme
+# Caelestia SDDM Themes
 
 [![](https://img.shields.io/github/last-commit/ItsABigIgloo/caelestia-sddm?&style=for-the-badge&color=8ad7eb&logo=git&logoColor=D9E0EE&labelColor=1E202B)](https://github.com/ItsABigIgloo/caelestia-sddm/commit/main)
 [![](https://img.shields.io/badge/Caelestia-Shell-8ad7eb?style=for-the-badge&logo=github&logoColor=D9E0EE&labelColor=1E202B)](https://github.com/caelestia-dots/shell)
@@ -8,19 +8,19 @@
 
 </div>
 
-<p align="center">A dynamic, adaptive login interface for <strong>Caelestia Shell</strong>. Built with QML, this theme focuses on wallpaper-driven colors, synchronized visuals, and seamless integration with the Caelestia desktop ecosystem.</p>
+<p align="center">A dynamic, adaptive login interface for <strong>Caelestia Shell</strong>. Built with QML, these themes focuses on wallpaper-driven colors, synchronized visuals, and seamless integration with the Caelestia desktop ecosystem.</p>
 
 <div align="center">
-    <h2> Locklike </h2>
+    <h2> Locklike Theme </h2>
     <h3></h3>
 </div>
 
-<a href="https://github.com/user-attachments/assets/777e8b6d-90e4-41bd-a0ed-71f575bbe571">
-<img src="https://github.com/user-attachments/assets/777e8b6d-90e4-41bd-a0ed-71f575bbe571" alt="Locklike">
+<a href="https://github.com/user-attachments/assets/3a21a2d3-542a-42fe-b69c-40978eadd42b">
+<img src="https://github.com/user-attachments/assets/3a21a2d3-542a-42fe-b69c-40978eadd42b" alt="Locklike">
 </a>
 
 <div align="center">
-    <h2> MinimalistV2 </h2>
+    <h2> MinimalistV2 Theme </h2>
     <h3></h3>
 </div>
 
@@ -29,7 +29,7 @@
 </a>
 
 <div align="center">
-    <h2> Minimalist </h2>
+    <h2> Minimalist Theme </h2>
     <h3></h3>
 </div>
 
