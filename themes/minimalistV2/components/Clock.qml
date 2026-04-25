@@ -9,6 +9,7 @@ ColumnLayout {
 
     Text {
         id: clock
+
         renderType: Text.NativeRendering
         Layout.alignment: Qt.AlignHCenter
         textFormat: Text.RichText

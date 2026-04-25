@@ -27,7 +27,7 @@ ComboBox {
     }
 
     background: Rectangle {
-        color: Theme.withAlpha(Theme.mSurface, Theme.cardOpacity)
+        color: Theme.withAlpha(Theme.mSurface, Theme.elementOpacity)
         radius: Math.min(Theme.elementRadius, Math.min(root.width, root.height) / 2)
         border.color: (root.hovered || root.popup.visible) ? Theme.mHover : Theme.mOutline
         border.width: 2
@@ -117,7 +117,7 @@ ComboBox {
         }
 
         background: Rectangle {
-            color: Theme.withAlpha(Theme.mSurface, Theme.cardOpacity)
+            color: Theme.withAlpha(Theme.mSurface, Theme.elementOpacity)
             border.color: Theme.mOutline
             border.width: 2
             radius: Math.min(Theme.elementRadius, Math.min(root.width, popupList.implicitHeight) / 2)
