@@ -46,10 +46,10 @@ List of requirements:
 * **qt6-declarative**
 * **qt6-5compat**
 * **qt6-svg**
-* **qt6-virtualkeyboard**
-* **ffmpeg**
-* **Material Symbols** (required for icons)
-* **Rubik Font** (default text)
+* **Material Symbols**
+* **Rubik Font**
+* **Roboto Font**
+* **CaskaydiaCove NF Font**
 
 ## Installation
 

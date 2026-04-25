@@ -94,7 +94,7 @@ echo
 echo "--- Dependencies from install.sh ---"
 if command -v pacman >/dev/null 2>&1; then
     dep_fail=0
-    for pkg in sddm qt6-declarative qt6-5compat qt6-svg qt6-virtualkeyboard ffmpeg; do
+    for pkg in sddm qt6-declarative qt6-5compat qt6-svg; do
         if pacman -Q "$pkg" >/dev/null 2>&1; then
             ok "Package installed: $pkg"
         else
