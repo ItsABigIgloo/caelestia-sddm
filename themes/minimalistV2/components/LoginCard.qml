@@ -77,19 +77,17 @@ Item {
             anchors.centerIn: parent
             targetWidth: mainCard.width
             targetHeight: mainCard.height
-
             animDuration: Theme.animDurationNormal
-
             blurEnabled: Theme.cardBlurEnabled
             blurAmount: Theme.cardBlurStrength
             radius: mainCard.radius
-
             visibleState: !root.isActive
             z: -1
         }
 
         Rectangle {
             id: subCard
+
             anchors.fill: parent
             anchors.margins: 16
             radius: Theme.cardRadius - 16

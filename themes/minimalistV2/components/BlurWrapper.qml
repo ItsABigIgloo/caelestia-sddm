@@ -8,42 +8,37 @@ Item {
 
     property real targetWidth: 200
     property real targetHeight: 200
-
     property real startWidth: targetWidth / 10
     property real startHeight: targetHeight / 10
-
     property int animDuration: 600
-
     property real radius: 20
-
     property bool blurEnabled: true
     property real blurAmount: 0.6
-
     property bool visibleState: true
     property url source: Qt.resolvedUrl("../assets/background")
 
-        Rectangle {
-            id: rootRect
-            width: blurCard.startWidth
-            height: blurCard.startHeight
-            radius: blurCard.radius
-            color: "transparent"
-            opacity: blurCard.visibleState ? 1 : 0
+    function startAnimation() {
+        widthAnim.start();
+        heightAnim.start();
+    }
 
-            anchors.centerIn: parent
-            clip: true
+    Component.onCompleted: startAnimation()
 
-            layer.enabled: true
-            layer.effect: OpacityMask {
-                maskSource: Rectangle {
-                    width: rootRect.width
-                    height: rootRect.height
-                    radius: rootRect.radius
-                }
-            }
+    Rectangle {
+        id: rootRect
 
-            Image {
+        width: blurCard.startWidth
+        height: blurCard.startHeight
+        radius: blurCard.radius
+        color: "transparent"
+        opacity: blurCard.visibleState ? 1 : 0
+        anchors.centerIn: parent
+        clip: true
+        layer.enabled: true
+
+        Image {
             id: backgroundBlur
+
             anchors.centerIn: parent
             width: 1920
             height: 1080
@@ -52,30 +47,38 @@ Item {
             asynchronous: true
             smooth: true
             mipmap: true
-
             onStatusChanged: {
-                if (status === Image.Error) {
+                if (status === Image.Error)
                     console.log("BlurWrapper: Background missing, using fallback color");
-                }
+
             }
         }
 
         MultiEffect {
             anchors.fill: backgroundBlur
             source: backgroundBlur
-
             blurEnabled: blurCard.blurEnabled
             blur: blurCard.blurAmount
             blurMax: 64
-            blurMultiplier: 1
             autoPaddingEnabled: false
-
             opacity: blurCard.visibleState ? 1 : 0
         }
+
+        layer.effect: OpacityMask {
+
+            maskSource: Rectangle {
+                width: rootRect.width
+                height: rootRect.height
+                radius: rootRect.radius
+            }
+
+        }
+
     }
 
     PropertyAnimation {
         id: widthAnim
+
         target: rootRect
         property: "width"
         from: blurCard.startWidth
@@ -86,6 +89,7 @@ Item {
 
     PropertyAnimation {
         id: heightAnim
+
         target: rootRect
         property: "height"
         from: blurCard.startHeight
@@ -94,10 +98,4 @@ Item {
         easing.type: Easing.OutBack
     }
 
-    function startAnimation() {
-        widthAnim.start();
-        heightAnim.start();
-    }
-
-    Component.onCompleted: startAnimation()
 }
