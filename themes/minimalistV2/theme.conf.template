@@ -39,6 +39,9 @@ outerCardOpacity=0.85
 # Inner card opacity [0.15 to 1] (minimum 0.15 for visibility)
 innerCardOpacity=0.25
 
+# Element opacity — inputs, dropdowns [0.1 to 1] (minimum 0.1 for visibility)
+elementOpacity=0.50
+
 # Card drop shadows [true | false]
 dropShadows=true
 

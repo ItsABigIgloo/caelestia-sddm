@@ -13,7 +13,7 @@ Rectangle {
 
     implicitWidth: 380
     implicitHeight: 55
-    color: Theme.withAlpha(Theme.mSurface, Theme.outerCardOpacity)
+    color: Theme.withAlpha(Theme.mSurface, Theme.elementOpacity)
     radius: Math.min(Theme.elementRadius, Math.min(root.width, root.height) / 2)
     border.color: {
         if (isError)

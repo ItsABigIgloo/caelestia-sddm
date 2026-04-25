@@ -74,7 +74,7 @@ Item {
         color: Theme.withAlpha(Theme.mSurface, Theme.outerCardOpacity)
 
         BlurWrapper {
-            anchors.centerIn: parent
+            anchors.fill: parent
             targetWidth: mainCard.width
             targetHeight: mainCard.height
             animDuration: Theme.animDurationNormal
