@@ -161,8 +161,9 @@ Rectangle {
         }
         AnimatedImage {
             id: backgroundBlur
-            anchors.fill: background
             anchors.centerIn: parent
+            width: root.width
+            height: root.height
             source: "assets/background"
             fillMode: Image.PreserveAspectCrop
             opacity: root.firstInput ? 1 : 0
