@@ -31,13 +31,13 @@ cardBorder=false
 cardBlurEnabled=true
 
 # Card blur strength [0.0 to 1.0]
-cardBlurStrength=0.70
+cardBlurStrength=0.60
 
 # Outer card opacity [0.50 to 1] (minimum 0.50 for visibility)
-outerCardOpacity=0.80
+outerCardOpacity=0.85
 
 # Inner card opacity [0.15 to 1] (minimum 0.15 for visibility)
-innerCardOpacity=0.30
+innerCardOpacity=0.25
 
 # Card drop shadows [true | false]
 dropShadows=true
@@ -49,7 +49,7 @@ dropShadows=true
 blurEnabled=true
 
 # Background blur strength [0.0 to 1.0]
-blurStrength=0.5
+blurStrength=0.70
 
 # Background overlay opacity [0 to 1]
 overlayOpacity=0.4
