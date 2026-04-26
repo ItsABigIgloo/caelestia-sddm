@@ -32,9 +32,7 @@ Rectangle {
             ColorAnimation {
                 duration: 100
             }
-
         }
-
     }
 
     SequentialAnimation {
@@ -90,7 +88,6 @@ Rectangle {
             to: 0
             duration: 50
         }
-
     }
 
     SequentialAnimation {
@@ -112,7 +109,6 @@ Rectangle {
             to: config.subComponents
             duration: 350
         }
-
     }
 
     SequentialAnimation {
@@ -134,14 +130,13 @@ Rectangle {
             to: config.subComponents
             duration: 350
         }
-
     }
 
     Rectangle {
         id: inputBorders
 
         anchors.centerIn: parent
-        color: config.subComponents
+        color: "transparent"
         radius: 30
         width: 250
         height: 40
@@ -160,9 +155,7 @@ Rectangle {
                 NumberAnimation {
                     duration: 100
                 }
-
             }
-
         }
 
         RowLayout {
@@ -179,7 +172,6 @@ Rectangle {
                     height: 12
                     color: config.text
                 }
-
             }
 
             Rectangle {
@@ -204,13 +196,9 @@ Rectangle {
                     NumberAnimation {
                         duration: 200
                     }
-
                 }
-
             }
-
         }
-
     }
 
     Rectangle {
@@ -236,9 +224,7 @@ Rectangle {
                 ColorAnimation {
                     duration: 200
                 }
-
             }
-
         }
 
         MouseArea {
@@ -254,9 +240,7 @@ Rectangle {
             ColorAnimation {
                 duration: 200
             }
-
         }
-
     }
 
     Behavior on opacity {
@@ -264,7 +248,5 @@ Rectangle {
             duration: 300
             easing.type: Easing.OutBack
         }
-
     }
-
 }
