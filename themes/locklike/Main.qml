@@ -20,10 +20,10 @@ Rectangle {
     property bool welcomeBgBlur: config.welcomeBgBlur === "true"
     property real mainCardBlurAmount: parseFloat(config.mainCardBlurAmount) || 1.0
     property real mainCardComponentsOpacity: {
-        var value = parseFloat(config.mainCardComponentsOpacity)
+        var value = parseFloat(config.mainCardComponentsOpacity);
         if (isNaN(value) || value < 0.6)
-            return 1.0
-        return value
+            return 1.0;
+        return value;
     }
     property bool mainCardBgBlur: config.mainCardBgBlur === "true"
 
@@ -224,7 +224,7 @@ Rectangle {
         Text {
             id: welcomeText
             renderType: Text.QtRendering
-            text: "<span style='color:" + config.text + ";'>" + topLeftRect.welcomeString + " " + "</span>" + "<span style='color:" + config.primary + ";'>" + userPicker.displayText + "</span>"
+            text: "<span style='color:" + config.text + ";'>" + greeting.welcomeString + " " + "</span>" + "<span style='color:" + config.primary + ";'>" + userPicker.displayText + "</span>"
             textFormat: Text.RichText
             font.pointSize: 70
             font.family: "Roboto"
@@ -321,44 +321,10 @@ Rectangle {
                             easing.type: Easing.OutBack
                         }
                     }
-                    property string welcomeString
-
-                    function getPhase() {
-                        var now = new Date();
-                        var hour = now.getHours();
-
-                        if (hour >= 20 || hour < 4) {
-                            welcomeString = "Good night";
-                        } else if (hour >= 4 && hour < 10) {
-                            welcomeString = "Good morning";
-                        } else {
-                            welcomeString = "Good day";
-                        }
-                    }
-                    Text {
-                        renderType: Text.NativeRendering
-                        width: topLeftRect.width - 40
-
-                        text: "<span style='color:" + config.text + ";'>" + topLeftRect.welcomeString + " </span>" + "<span style='color:" + config.primary + ";'>" + userPicker.displayText + "</span>"
-
-                        textFormat: Text.RichText
-
+                    WelcomeText {
+                        id: greeting
                         anchors.centerIn: parent
-                        font.family: "Rubik"
-                        font.bold: false
-                        font.pixelSize: 40
-                        wrapMode: Text.WordWrap
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
                     }
-
-                    Timer {
-                        interval: 60000
-                        running: true
-                        onTriggered: topLeftRect.getPhase()
-                        repeat: true
-                    }
-                    Component.onCompleted: getPhase()
                 }
 
                 Rectangle {
@@ -375,128 +341,11 @@ Rectangle {
                         }
                     }
                     clip: true
-                    RowLayout {
-                        Rectangle {
-                            width: 30
-                            height: 40
-                            radius: 12
-                            anchors.left: parent.left
-                            anchors.top: parent.top
-                            anchors.leftMargin: 30
-                            anchors.topMargin: 20
-                            color: config.primary
-                            Text {
-                                renderType: Text.NativeRendering
-                                anchors.centerIn: parent
-                                color: "#111111"
-                                text: ">"
-                                font.family: "CaskaydiaCove NF"
-                                font.pointSize: 15
-                            }
-                        }
-                        Text {
-                            renderType: Text.NativeRendering
-                            color: config.text
-                            text: "caelestiafetch.sh"
-                            font.family: "CaskaydiaCove NF"
-                            font.pointSize: 13
-                            Layout.leftMargin: 35
-                            Layout.topMargin: 29
-                        }
-                    }
-                    ColumnLayout {
-                        Item {
-                            width: 30
-                            height: 60
-                        }
-                        RowLayout {
-                            Layout.fillWidth: true
-                            Layout.alignment: Qt.AlignHCenter
-                            Logo {
-                                skipIntroAnimation: root.firstInput
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-                                Layout.leftMargin: 25
-                                Layout.topMargin: 50
-                                Layout.preferredWidth: 130
-                                Layout.preferredHeight: 130
-                            }
-                            RowLayout {
-                                spacing: 10
-                                Text {
-                                    renderType: Text.NativeRendering
-                                    Layout.leftMargin: 12
-                                    Layout.topMargin: middleLeftRect.height / 10
-                                    text: "WM     :\nUSER   :\nUP     :\nBATTERY:"
-                                    color: config.text
-                                    font.pixelSize: 18
-                                    font.family: "CaskaydiaCove NF"
-                                    lineHeight: 30
-                                    lineHeightMode: Text.FixedHeight
-                                    Layout.preferredWidth: 80
-                                }
-                                Text {
-                                    renderType: Text.NativeRendering
-                                    property string displayText: sessionPicker.currentText.split(" ")[0] // idk if i want it like that, but i dont know DEs that have more than one word as a name, that avoids something like that "Plasma (Wayland)"
-                                    Layout.leftMargin: 0
-                                    Layout.topMargin: middleLeftRect.height / 10
-                                    text: displayText + "\n" + userPicker.currentText + "\n" + "WIP" + "\n" + "WIP"
-                                    color: config.text
-                                    font.pixelSize: 18
-                                    font.family: "CaskaydiaCove NF"
-                                    lineHeight: 30
-                                    lineHeightMode: Text.FixedHeight
-                                    Layout.preferredWidth: 100
-                                }
-                            }
-                        }
-                        RowLayout {
-                            spacing: 20
-                            Layout.alignment: Qt.AlignHCenter
-                            Layout.leftMargin: 30
-                            Layout.topMargin: 20
-                            Rectangle {
-                                width: 30
-                                height: 30
-                                color: config.background
-                                radius: 12
-                            }
-                            Rectangle {
-                                width: 30
-                                height: 30
-                                color: config.primary
-                                radius: 12
-                            }
-                            Rectangle {
-                                width: 30
-                                height: 30
-                                color: config.text
-                                radius: 12
-                            }
-                            Rectangle {
-                                width: 30
-                                height: 30
-                                color: config.textDark
-                                radius: 12
-                            }
-                            Rectangle {
-                                width: 30
-                                height: 30
-                                color: config.secondary
-                                radius: 12
-                            }
-                            Rectangle {
-                                width: 30
-                                height: 30
-                                color: config.onSuccess
-                                radius: 12
-                            }
-                            Rectangle {
-                                width: 30
-                                height: 30
-                                color: config.inverseOnSurface
-                                radius: 12
-                            }
-                        }
+                    CaelestiaFetch {
+                        firstInput: root.firstInput
+                        currentUser: userPicker.currentText
+                        currentSession: sessionPicker.currentText
+                        rectHeight: middleLeftRect.height
                     }
                 }
                 Rectangle {
@@ -513,72 +362,11 @@ Rectangle {
                             easing.type: Easing.OutBack
                         }
                     }
-                    Rectangle {
-                        id: powerBtn
-                        anchors.left: parent.left
-                        anchors.top: parent.top
-                        height: bottomLeftRect.height
-                        width: bottomLeftRect.height + 10
-                        radius: bottomLeftRect.radius
-                        bottomLeftRadius: mainCard.radius / 1.9
-                        color: config.subComponents
-                        clip: true
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: 200
-                            }
-                        }
-                        MaterialIcon {
-                            id: powerIcon
-                            property bool hovered: false
-                            anchors.left: parent.left
-                            anchors.top: parent.top
-                            anchors.leftMargin: 50
-                            anchors.topMargin: 30
-                            text: "\ue8ac"
-                            color: config.primary
-                            pointSize: 70
-                        }
-                        LayerState {
-                            anchors.fill: parent
-
-                            onClicked: {
-                                sddm.powerOff();
-                            }
-                        }
-                    }
-
-                    Rectangle {
-                        id: rebootBtn
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        height: bottomLeftRect.height
-                        width: bottomLeftRect.height + 10
-                        radius: bottomLeftRect.radius
-                        color: config.subComponents
-                        clip: true
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: 200
-                            }
-                        }
-                        MaterialIcon {
-                            id: restartIcon
-                            anchors.left: parent.left
-                            anchors.top: parent.top
-                            anchors.leftMargin: 47
-                            anchors.topMargin: 30
-                            text: "\ue863"
-                            color: config.secondary
-                            pointSize: 70
-                        }
-                        LayerState {
-                            anchors.fill: parent
-
-                            onClicked: {
-                                sddm.reboot();
-                            }
-                        }
+                    SystemButtons {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        rectHeight: bottomLeftRect.height
+                        rectRadius: bottomLeftRect.radius
+                        rectBigRadius: mainCard.radius / 1.9
                     }
                 }
             }
