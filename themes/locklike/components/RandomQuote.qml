@@ -2,14 +2,17 @@ import QtQuick
 
 Item {
     id: root
-    anchors.fill: parent
+
     property alias color: quote.color
     property alias maxWidth: quote.width
+
+    anchors.fill: parent
+
     Item {
         Component.onCompleted: {
             const xhr = new XMLHttpRequest();
             xhr.open("GET", Qt.resolvedUrl("../config/quotes.json"));
-            xhr.onreadystatechange = function () {
+            xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     const data = JSON.parse(xhr.responseText);
                     const index = Math.floor(Math.random() * data.length);
@@ -20,11 +23,14 @@ Item {
             xhr.send();
         }
     }
+
     Column {
         anchors.centerIn: parent
         spacing: 30
+
         Text {
             id: quote
+
             width: 100
             text: ""
             color: "white"
@@ -35,8 +41,10 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
+
         Text {
             id: author
+
             width: quote.width
             text: ""
             color: config.primary
@@ -47,5 +55,7 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
+
     }
+
 }

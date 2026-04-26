@@ -1,14 +1,16 @@
-import QtQuick
 import "../components"
+import QtQuick
 
 Item {
     property real rectHeight
     property real rectRadius
     property real rectBigRadius
+
     anchors.fill: parent
 
     Rectangle {
         id: powerBtn
+
         anchors.left: parent.left
         anchors.top: parent.top
         height: parent.rectHeight
@@ -17,14 +19,12 @@ Item {
         bottomLeftRadius: parent.rectBigRadius
         color: config.subComponents
         clip: true
-        Behavior on color {
-            ColorAnimation {
-                duration: 200
-            }
-        }
+
         MaterialIcon {
             id: powerIcon
+
             property bool hovered: false
+
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.leftMargin: 50
@@ -33,17 +33,26 @@ Item {
             color: config.primary
             pointSize: 70
         }
+
         LayerState {
             anchors.fill: parent
-
             onClicked: {
                 sddm.powerOff();
             }
         }
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 200
+            }
+
+        }
+
     }
 
     Rectangle {
         id: rebootBtn
+
         anchors.right: parent.right
         anchors.top: parent.top
         height: bottomLeftRect.height
@@ -51,13 +60,10 @@ Item {
         radius: bottomLeftRect.radius
         color: config.subComponents
         clip: true
-        Behavior on color {
-            ColorAnimation {
-                duration: 200
-            }
-        }
+
         MaterialIcon {
             id: restartIcon
+
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.leftMargin: 47
@@ -66,12 +72,21 @@ Item {
             color: config.secondary
             pointSize: 70
         }
+
         LayerState {
             anchors.fill: parent
-
             onClicked: {
                 sddm.reboot();
             }
         }
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 200
+            }
+
+        }
+
     }
+
 }
