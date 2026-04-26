@@ -1,5 +1,5 @@
-import QtQuick 2.15
 import Qt5Compat.GraphicalEffects
+import QtQuick 2.15
 
 Rectangle {
     id: root
@@ -14,12 +14,6 @@ Rectangle {
         property var avatarCandidates: ["../assets/avatar.face.icon", "../assets/avatar.face", "../assets/avatar.jpg", "../assets/avatar.png"]
         property int avatarCandidateIndex: 0
 
-        Timer {
-            id: retryTimer
-            interval: 0
-            onTriggered: avatarImage.loadNextAvatar()
-        }
-
         function loadNextAvatar() {
             if (avatarCandidateIndex < avatarCandidates.length) {
                 source = avatarCandidates[avatarCandidateIndex];
@@ -29,20 +23,28 @@ Rectangle {
 
         mipmap: true
         smooth: true
-
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
         layer.enabled: true
+        onStatusChanged: {
+            if (status === Image.Error)
+                retryTimer.start();
+
+        }
+        Component.onCompleted: loadNextAvatar()
+
+        Timer {
+            id: retryTimer
+
+            interval: 0
+            onTriggered: avatarImage.loadNextAvatar()
+        }
+
         layer.effect: OpacityMask {
             maskSource: parent
         }
 
-        onStatusChanged: {
-            if (status === Image.Error)
-                retryTimer.start();
-        }
-
-        Component.onCompleted: loadNextAvatar()
     }
+
 }
