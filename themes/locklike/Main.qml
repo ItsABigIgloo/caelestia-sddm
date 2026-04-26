@@ -380,32 +380,17 @@ Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     color: "transparent"
                     width: 300
-                    height: 45
+                    height: 30
                 }
 
                 ColumnLayout {
                     Layout.alignment: Qt.AlignHCenter
                     spacing: 10
-                    Text {
-                        id: clock
+                    MainClock {
                         Layout.alignment: Qt.AlignHCenter
-                        textFormat: Text.RichText
-                        text: {
-                            var time = ap ? Qt.formatTime(new Date(), "hh:mm AP") : Qt.formatTime(new Date(), "hh:mm");
-
-                            return time.replace(":", "<span style='color:" + config.primary + "'>:</span>");
-                        }
-                        font.pixelSize: 84
-                        font.family: "Rubik"
-                        font.bold: true
-                        color: config.secondary
-                        opacity: root.firstInput ? 0.0 : root.mainCardComponentsOpacity
-                        Behavior on opacity {
-                            NumberAnimation {
-                                duration: 300
-                                easing.type: Easing.OutBack
-                            }
-                        }
+                        firstInput: root.firstInput
+                        mainCardComponentsOpacity: root.mainCardComponentsOpacity
+                        ap: root.ap
                     }
                     Text {
                         renderType: Text.NativeRendering
@@ -446,214 +431,15 @@ Rectangle {
                     height: 40
                 }
 
-                Rectangle {
-                    id: inputRect
-                    Layout.alignment: Qt.AlignHCenter
-                    color: config.subComponents
-                    radius: 30
-                    width: 340
-                    height: 40
-                    opacity: root.firstInput ? 0.0 : root.mainCardComponentsOpacity
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.OutBack
-                        }
-                    }
-                    Text {
-                        renderType: Text.NativeRendering
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.leftMargin: 17
-                        font.family: "Material Symbols Rounded"
-                        font.pointSize: 15
-                        text: "\ue897"
-                        color: '#a8a8a8'
-                        Behavior on opacity {
-                            ColorAnimation {
-                                duration: 100
-                            }
-                        }
-                    }
-                    SequentialAnimation {
-                        id: shakeRotation
-                        running: false
-
-                        NumberAnimation {
-                            target: inputRect
-                            property: "rotation"
-                            to: -6
-                            duration: 50
-                        }
-                        NumberAnimation {
-                            target: inputRect
-                            property: "rotation"
-                            to: 6
-                            duration: 50
-                        }
-                        NumberAnimation {
-                            target: inputRect
-                            property: "rotation"
-                            to: -4
-                            duration: 50
-                        }
-                        NumberAnimation {
-                            target: inputRect
-                            property: "rotation"
-                            to: 4
-                            duration: 50
-                        }
-                        NumberAnimation {
-                            target: inputRect
-                            property: "rotation"
-                            to: -2
-                            duration: 50
-                        }
-                        NumberAnimation {
-                            target: inputRect
-                            property: "rotation"
-                            to: 2
-                            duration: 50
-                        }
-                        NumberAnimation {
-                            target: inputRect
-                            property: "rotation"
-                            to: 0
-                            duration: 50
-                        }
-                    }
-
-                    SequentialAnimation {
-                        id: pulseColorRect1
-                        loops: Animation.Infinite
-                        running: root.loading
-
-                        ColorAnimation {
-                            target: inputRect
-                            property: "color"
-                            to: config.inverseOnSurface
-                            duration: 350
-                        }
-                        ColorAnimation {
-                            target: inputRect
-                            property: "color"
-                            to: config.subComponents
-                            duration: 350
-                        }
-                    }
-
-                    SequentialAnimation {
-                        id: pulseColorRect2
-                        loops: Animation.Infinite
-                        running: root.loading
-
-                        ColorAnimation {
-                            target: inputBorders
-                            property: "color"
-                            to: config.inverseOnSurface
-                            duration: 350
-                        }
-                        ColorAnimation {
-                            target: inputBorders
-                            property: "color"
-                            to: config.subComponents
-                            duration: 350
-                        }
-                    }
-
-                    Rectangle {
-                        id: inputBorders
-                        anchors.centerIn: parent
-                        color: config.subComponents
-                        radius: 30
-                        width: 250
-                        height: 40
-                        clip: true
-                        Text {
-                            renderType: Text.NativeRendering
-                            anchors.centerIn: parent
-                            font.pointSize: 12
-                            text: "Enter your password"
-                            color: '#6e6e6e'
-                            font.family: "CaskaydiaCove NF"
-                            opacity: root.buffer === "" ? 1 : 0
-                            Behavior on opacity {
-                                NumberAnimation {
-                                    duration: 100
-                                }
-                            }
-                        }
-                        RowLayout {
-                            anchors.centerIn: parent
-                            Repeater {
-                                id: characters
-                                model: root.buffer.length
-                                delegate: Rectangle {
-                                    radius: 30
-                                    width: 12
-                                    height: 12
-                                    color: config.text
-                                }
-                            }
-                            Rectangle {
-                                id: textIndicator
-                                property bool invisible: true
-                                visible: root.buffer === "" ? false : true
-                                width: 1
-                                height: 21
-                                color: config.text
-                                opacity: invisible ? 0 : 1
-                                Behavior on opacity {
-                                    NumberAnimation {
-                                        duration: 200
-                                    }
-                                }
-                                Timer {
-                                    running: true
-                                    repeat: true
-                                    interval: 500
-                                    onTriggered: textIndicator.invisible = !textIndicator.invisible
-                                }
-                            }
-                        }
-                    }
-                    Rectangle {
-                        id: inputButton
-                        radius: 30
-                        width: 30
-                        height: 30
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.rightMargin: 8
-                        color: root.buffer === "" ? config.inverseOnSurface : config.primary
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: 200
-                            }
-                        }
-                        Text {
-                            renderType: Text.NativeRendering
-                            anchors.centerIn: parent
-                            font.family: "Material Symbols Rounded"
-                            font.pointSize: 17
-                            text: "\ue941"
-                            color: root.buffer === "" ? config.text : config.mainCard
-                            Behavior on color {
-                                ColorAnimation {
-                                    duration: 200
-                                }
-                            }
-                        }
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: root.buffer === "" ? Qt.ArrowCursor : Qt.PointingHandCursor
-                            onClicked: {
-                                sddm.login(userPicker.currentText, root.buffer, sessionPicker.currentIndex);
-                                root.loading = true;
-                            }
-                        }
-                    }
+                PasswordInput {
+                    mainCardComponentsOpacity: root.mainCardComponentsOpacity
+                    firstInput: root.firstInput
+                    isLoading: root.loading
+                    buffer: root.buffer
+                    currentUser: userPicker.currentText
+                    currentSession: sessionPicker.currentIndex
                 }
+
                 Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     color: "transparent"
