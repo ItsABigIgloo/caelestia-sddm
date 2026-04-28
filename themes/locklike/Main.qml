@@ -24,6 +24,7 @@ Rectangle {
 
         return value;
     }
+    property bool capsLockOn: false
     property bool mainCardBgBlur: config.mainCardBgBlur === "true"
 
     width: 1920
@@ -83,6 +84,10 @@ Rectangle {
             if (event.key === Qt.Key_Escape) {
                 root.firstInput = true;
                 root.buffer = "";
+                return;
+            }
+            if (event.key === Qt.Key_CapsLock) {
+                root.capsLockOn = !root.capsLockOn
                 return;
             }
             if (root.firstInput) {
@@ -321,7 +326,7 @@ Rectangle {
                 }
 
                 Item {
-                    height: 40
+                    height: 50
                 }
 
                 PasswordInput {
@@ -332,6 +337,22 @@ Rectangle {
                     buffer: root.buffer
                     currentUser: userPicker.currentText
                     currentSession: sessionPicker.currentIndex
+                }
+
+                Text {
+                    Layout.margins: 10
+                    Layout.alignment: Qt.AlignHCenter
+                    text: "Caps Lock is activated!"
+                    font.pointSize: 8
+                    font.family: "Roboto"
+                    color: config.text
+                    opacity: root.capsLockOn ? 1 : 0
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 300
+                            easing: Easing.InOutCubic
+                        }
+                    }
                 }
 
                 Rectangle {
