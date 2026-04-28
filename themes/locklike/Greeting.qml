@@ -96,7 +96,7 @@ Item {
             text: "<span style='color:" + config.text + ";'>" + root.greetingText + " " + "</span>" + "<span style='color:" + config.primary + ";'>" + root.username + "</span>"
             textFormat: Text.RichText
             font.pointSize: 70
-            font.family: "Roboto"
+            font.family: "Roboto Flex"
             color: config.text
             opacity: root.firstInput ? 1 : 0
             anchors.centerIn: parent

@@ -155,26 +155,6 @@ Rectangle {
         blurEnabled: root.welcomeBgBlur
     }
 
-    Text {
-        renderType: Text.NativeRendering
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 20
-        font.family: "Rubik"
-        font.pointSize: 15
-        font.italic: true
-        opacity: root.firstInput ? 1 : 0
-        color: config.text
-        text: "Press a key on your Keyboard to login"
-
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 300
-                easing.type: Easing.OutCubic
-            }
-        }
-    }
-
     Rectangle {
         id: mainCard
 
