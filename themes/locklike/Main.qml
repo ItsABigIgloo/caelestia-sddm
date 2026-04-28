@@ -31,7 +31,7 @@ Rectangle {
     color: "#131313"
     onBufferChanged: {
         // ill make animations for typing
-        return ;
+        return;
     }
 
     Connections {
@@ -59,7 +59,6 @@ Rectangle {
         onStatusChanged: {
             if (status === Image.Error)
                 console.log("Background missing, using fallback color");
-
         }
 
         Rectangle {
@@ -72,11 +71,8 @@ Rectangle {
                     duration: 300
                     easing: Easing.InOutCubic
                 }
-
             }
-
         }
-
     }
 
     Item {
@@ -85,50 +81,46 @@ Rectangle {
         focus: true
         Keys.onPressed: {
             if (event.key === Qt.Key_Escape) {
-                if (!root.firstInput) {
-                    blurWidthAnim.start();
-                    blurHeightAnim.start();
-                }
                 root.firstInput = true;
                 root.buffer = "";
-                return ;
+                return;
             }
             if (root.firstInput) {
                 root.firstInput = false;
-                return ;
+                return;
             }
             if (event.key === Qt.Key_Right) {
                 if (userPicker.currentIndex < userModel.count - 1)
                     userPicker.currentIndex += 1;
 
-                return ;
+                return;
             }
             if (event.key === Qt.Key_Left) {
                 if (userPicker.currentIndex > 0)
                     userPicker.currentIndex -= 1;
 
-                return ;
+                return;
             }
             if (event.key === Qt.Key_Up) {
                 if (sessionPicker.currentIndex < sessionPicker.count - 1)
                     sessionPicker.currentIndex += 1;
 
-                return ;
+                return;
             }
             if (event.key === Qt.Key_Down) {
                 if (sessionPicker.currentIndex > 0)
                     sessionPicker.currentIndex -= 1;
 
-                return ;
+                return;
             }
             if (event.key === Qt.Key_Backspace) {
                 root.buffer = root.buffer.slice(0, -1);
-                return ;
+                return;
             }
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
                 sddm.login(userPicker.currentText, root.buffer, sessionPicker.currentIndex);
                 root.loading = true;
-                return ;
+                return;
             }
             root.buffer += event.text;
         }
@@ -148,128 +140,19 @@ Rectangle {
                 duration: 400
                 easing: Easing.InOutCubic
             }
-
         }
-
     }
 
-    Rectangle {
-        id: welcomeTextRectBlur
-
-        width: welcomeTextRect.width
-        height: welcomeTextRect.height
-        color: "transparent"
+    Greeting {
         anchors.centerIn: parent
-        radius: mainCard.radius
-        clip: true
-        layer.enabled: true
-        Component.onCompleted: {
-            blurWidthAnim.start();
-            blurHeightAnim.start();
-        }
-
-        AnimatedImage {
-            id: backgroundBlur
-
-            anchors.centerIn: parent
-            width: root.width
-            height: root.height
-            source: "assets/background"
-            fillMode: Image.PreserveAspectCrop
-            opacity: root.firstInput ? 1 : 0
-        }
-
-        MultiEffect {
-            blurEnabled: welcomeBgBlur
-            source: backgroundBlur
-            blur: root.welcomeBgBlurAmount
-            autoPaddingEnabled: false
-            blurMultiplier: 1
-            blurMax: 64
-            anchors.fill: backgroundBlur
-            opacity: root.firstInput ? 1 : 0
-
-            Behavior on blur {
-                NumberAnimation {
-                    duration: 400
-                    easing: Easing.InOutCubic
-                }
-
-            }
-
-        }
-
-        Rectangle {
-            anchors.fill: backgroundBlur
-            color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, root.welcomeBgOpacity)
-            opacity: root.firstInput ? parseFloat(config.welcomeColorOpacity) : 0
-        }
-
-        PropertyAnimation {
-            id: blurWidthAnim
-
-            target: welcomeTextRectBlur
-            property: "width"
-            from: welcomeTextRect.width / 10
-            to: welcomeTextRect.width
-            duration: 600
-            easing.type: Easing.OutBack
-        }
-
-        PropertyAnimation {
-            id: blurHeightAnim
-
-            target: welcomeTextRectBlur
-            property: "height"
-            from: welcomeTextRect.height / 10
-            to: welcomeTextRect.height
-            duration: 600
-            easing.type: Easing.OutBack
-        }
-
-        layer.effect: OpacityMask {
-
-            maskSource: Rectangle {
-                width: welcomeTextRectBlur.width
-                height: welcomeTextRectBlur.height
-                radius: welcomeTextRectBlur.radius
-            }
-
-        }
-
-    }
-
-    Item {
-        id: welcomeTextRect
-
-        width: welcomeText.width + 50
-        height: welcomeText.height + 30
-        anchors.centerIn: parent
-        opacity: 1
-
-        Text {
-            id: welcomeText
-
-            renderType: Text.QtRendering
-            text: "<span style='color:" + config.text + ";'>" + greeting.welcomeString + " " + "</span>" + "<span style='color:" + config.primary + ";'>" + userPicker.displayText + "</span>"
-            textFormat: Text.RichText
-            font.pointSize: 70
-            font.family: "Roboto"
-            color: config.text
-            opacity: root.firstInput ? 1 : 0
-            anchors.centerIn: parent
-        }
-
-        PropertyAnimation {
-            target: welcomeTextRect
-            property: "scale"
-            from: 0.1
-            to: 1
-            duration: 600
-            easing.type: Easing.OutBack
-            running: root.firstInput ? true : false
-        }
-
+        firstInput: root.firstInput
+        mainCardRadius: mainCard.radius
+        rootHeight: root.height
+        rootWidth: root.width
+        greetingText: greeting.welcomeString
+        username: userPicker.currentText
+        blurAmount: root.welcomeBgBlurAmount
+        blurEnabled: root.welcomeBgBlur
     }
 
     Text {
@@ -289,9 +172,7 @@ Rectangle {
                 duration: 300
                 easing.type: Easing.OutCubic
             }
-
         }
-
     }
 
     Rectangle {
@@ -345,9 +226,7 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
-
                     }
-
                 }
 
                 Rectangle {
@@ -372,9 +251,7 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
-
                     }
-
                 }
 
                 Rectangle {
@@ -399,11 +276,8 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
-
                     }
-
                 }
-
             }
 
             ColumnLayout {
@@ -444,11 +318,8 @@ Rectangle {
                                 duration: 300
                                 easing.type: Easing.OutBack
                             }
-
                         }
-
                     }
-
                 }
 
                 Item {
@@ -466,9 +337,7 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
-
                     }
-
                 }
 
                 Item {
@@ -490,7 +359,6 @@ Rectangle {
                     width: 300
                     height: 60
                 }
-
             }
 
             ColumnLayout {
@@ -517,9 +385,7 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
-
                     }
-
                 }
 
                 Rectangle {
@@ -545,7 +411,6 @@ Rectangle {
                         layer.effect: ColorOverlay {
                             color: config.inverseOnSurface
                         }
-
                     }
 
                     Text {
@@ -564,13 +429,9 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
-
                     }
-
                 }
-
             }
-
         }
 
         Behavior on scale {
@@ -578,7 +439,6 @@ Rectangle {
                 duration: 300
                 easing.type: Easing.OutBack
             }
-
         }
 
         Behavior on opacity {
@@ -586,9 +446,7 @@ Rectangle {
                 duration: 300
                 easing.type: Easing.OutBack
             }
-
         }
-
     }
 
     ComboBox {
@@ -643,7 +501,6 @@ Rectangle {
                 context.fill();
             }
         }
-
     }
 
     ComboBox {
@@ -696,7 +553,5 @@ Rectangle {
                 context.fill();
             }
         }
-
     }
-
 }
