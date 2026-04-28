@@ -39,12 +39,12 @@ Rectangle {
             root.buffer = "";
             root.loading = false;
             inputRect.color = config.subComponents;
-            inputBorders.color = config.subComponents;
-            shakeRotation.start();
+            inputRect.shake();
         }
 
         function onLoginSucceeded() {
             root.loading = false;
+            inputRect.color = config.subComponents;
         }
 
         target: sddm
@@ -325,6 +325,7 @@ Rectangle {
                 }
 
                 PasswordInput {
+                    id: inputRect
                     mainCardComponentsOpacity: root.mainCardComponentsOpacity
                     firstInput: root.firstInput
                     isLoading: root.loading

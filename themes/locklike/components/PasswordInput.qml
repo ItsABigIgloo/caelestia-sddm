@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 
 Rectangle {
-    id: root
+    id: inputRect
 
     property real mainCardComponentsOpacity
     property bool firstInput
@@ -16,7 +16,12 @@ Rectangle {
     radius: 30
     width: 340
     height: 40
-    opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
+    opacity: inputRect.firstInput ? 0 : inputRect.mainCardComponentsOpacity
+
+
+    function shake() {
+        shakeRotation.start()
+    }
 
     Text {
         renderType: Text.NativeRendering
@@ -94,38 +99,17 @@ Rectangle {
         id: pulseColorRect1
 
         loops: Animation.Infinite
-        running: root.isLoading
+        running: inputRect.isLoading
 
         ColorAnimation {
-            target: root
+            target: inputRect
             property: "color"
             to: config.inverseOnSurface
             duration: 350
         }
 
         ColorAnimation {
-            target: root
-            property: "color"
-            to: config.subComponents
-            duration: 350
-        }
-    }
-
-    SequentialAnimation {
-        id: pulseColorRect2
-
-        loops: Animation.Infinite
-        running: root.isLoading
-
-        ColorAnimation {
-            target: inputBorders
-            property: "color"
-            to: config.inverseOnSurface
-            duration: 350
-        }
-
-        ColorAnimation {
-            target: inputBorders
+            target: inputRect
             property: "color"
             to: config.subComponents
             duration: 350
@@ -149,7 +133,7 @@ Rectangle {
             text: "Enter your password"
             color: '#6e6e6e'
             font.family: "CaskaydiaCove NF"
-            opacity: root.buffer === "" ? 1 : 0
+            opacity: inputRect.buffer === "" ? 1 : 0
 
             Behavior on opacity {
                 NumberAnimation {
@@ -164,7 +148,7 @@ Rectangle {
             Repeater {
                 id: characters
 
-                model: root.buffer.length
+                model: inputRect.buffer.length
 
                 delegate: Rectangle {
                     radius: 30
@@ -179,7 +163,7 @@ Rectangle {
 
                 property bool invisible: true
 
-                visible: root.buffer === "" ? false : true
+                visible: inputRect.buffer === "" ? false : true
                 width: 1
                 height: 21
                 color: config.text
@@ -210,7 +194,7 @@ Rectangle {
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.rightMargin: 8
-        color: root.buffer === "" ? config.inverseOnSurface : config.primary
+        color: inputRect.buffer === "" ? config.inverseOnSurface : config.primary
 
         Text {
             renderType: Text.NativeRendering
@@ -218,7 +202,7 @@ Rectangle {
             font.family: "Material Symbols Rounded"
             font.pointSize: 17
             text: "\ue941"
-            color: root.buffer === "" ? config.text : config.mainCard
+            color: inputRect.buffer === "" ? config.text : config.mainCard
 
             Behavior on color {
                 ColorAnimation {
@@ -229,10 +213,10 @@ Rectangle {
 
         MouseArea {
             anchors.fill: parent
-            cursorShape: root.buffer === "" ? Qt.ArrowCursor : Qt.PointingHandCursor
+            cursorShape: inputRect.buffer === "" ? Qt.ArrowCursor : Qt.PointingHandCursor
             onClicked: {
-                sddm.login(userPicker.currentText, root.buffer, sessionPicker.currentIndex);
-                root.isLoading = true;
+                sddm.login(userPicker.currentText, inputRect.buffer, sessionPicker.currentIndex);
+                inputRect.isLoading = true;
             }
         }
 
