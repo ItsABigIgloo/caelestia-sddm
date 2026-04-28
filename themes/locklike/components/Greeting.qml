@@ -42,7 +42,7 @@ Item {
             anchors.centerIn: parent
             width: root.rootWidth
             height: root.rootHeight
-            source: "assets/background"
+            source: "../assets/background"
             fillMode: Image.PreserveAspectCrop
             opacity: root.firstInput ? 1 : 0
         }
