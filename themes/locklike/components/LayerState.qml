@@ -1,4 +1,5 @@
 import QtQuick
+import Qt5Compat.GraphicalEffects
 
 Item {
     id: root
@@ -6,10 +7,14 @@ Item {
     property bool disabled: false
     property color rippleColor: config.inverseOnSurface
     property real radius: 8
+    property real parentWidth
+    property real parentHeight
+    property real parentRadius
 
-    signal clicked()
+    signal clicked
 
     anchors.fill: parent
+    layer.enabled: true
 
     MouseArea {
         id: mouse
@@ -18,7 +23,7 @@ Item {
         hoverEnabled: true
         enabled: !root.disabled
         cursorShape: Qt.PointingHandCursor
-        onPressed: (event) => {
+        onPressed: event => {
             ripple.x = event.x;
             ripple.y = event.y;
             const dist = (ox, oy) => {
@@ -51,7 +56,6 @@ Item {
             x: -ripple.width / 2
             y: -ripple.height / 2
         }
-
     }
 
     NumberAnimation {
@@ -72,5 +76,11 @@ Item {
         to: 0
         duration: 200
     }
-
+    layer.effect: OpacityMask {
+        maskSource: Rectangle {
+            width: parentWidth
+            height: parentHeight
+            radius: parentRadius
+        }
+    }
 }
