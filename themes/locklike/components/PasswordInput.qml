@@ -22,6 +22,13 @@ Rectangle {
         shakeRotation.start();
     }
 
+    LayerState {
+        anchors.fill: parent
+        parentWidth: inputRect.width
+        parentHeight: inputRect.height
+        parentRadius: inputRect.radius
+    }
+
     Text {
         renderType: Text.NativeRendering
         anchors.left: parent.left
