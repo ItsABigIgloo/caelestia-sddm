@@ -18,9 +18,8 @@ Rectangle {
     height: 40
     opacity: inputRect.firstInput ? 0 : inputRect.mainCardComponentsOpacity
 
-
     function shake() {
-        shakeRotation.start()
+        shakeRotation.start();
     }
 
     Text {
@@ -211,9 +210,11 @@ Rectangle {
             }
         }
 
-        MouseArea {
+        LayerState {
             anchors.fill: parent
-            cursorShape: inputRect.buffer === "" ? Qt.ArrowCursor : Qt.PointingHandCursor
+            parentWidth: inputButton.width
+            parentHeight: inputButton.height
+            parentRadius: inputButton.radius
             onClicked: {
                 sddm.login(userPicker.currentText, inputRect.buffer, sessionPicker.currentIndex);
                 inputRect.isLoading = true;
