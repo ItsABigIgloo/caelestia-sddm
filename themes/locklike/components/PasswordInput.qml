@@ -18,9 +18,15 @@ Rectangle {
     height: 40
     opacity: inputRect.firstInput ? 0 : inputRect.mainCardComponentsOpacity
 
-
     function shake() {
-        shakeRotation.start()
+        shakeRotation.start();
+    }
+
+    LayerState {
+        anchors.fill: parent
+        parentWidth: inputRect.width
+        parentHeight: inputRect.height
+        parentRadius: inputRect.radius
     }
 
     Text {
@@ -211,11 +217,13 @@ Rectangle {
             }
         }
 
-        MouseArea {
+        LayerState {
             anchors.fill: parent
-            cursorShape: inputRect.buffer === "" ? Qt.ArrowCursor : Qt.PointingHandCursor
+            parentWidth: inputButton.width
+            parentHeight: inputButton.height
+            parentRadius: inputButton.radius
             onClicked: {
-                sddm.login(userPicker.currentText, inputRect.buffer, sessionPicker.currentIndex);
+                sddm.login(inputRect.currentUser, inputRect.buffer, inputRect.currentSession);
                 inputRect.isLoading = true;
             }
         }

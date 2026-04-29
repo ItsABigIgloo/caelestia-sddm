@@ -36,6 +36,9 @@ Item {
 
         LayerState {
             anchors.fill: parent
+            parentWidth: powerBtn.width
+            parentHeight: powerBtn.height
+            parentRadius: powerBtn.radius
             onClicked: {
                 sddm.powerOff();
             }
@@ -45,9 +48,7 @@ Item {
             ColorAnimation {
                 duration: 200
             }
-
         }
-
     }
 
     Rectangle {
@@ -75,6 +76,9 @@ Item {
 
         LayerState {
             anchors.fill: parent
+            parentWidth: rebootBtn.width
+            parentHeight: rebootBtn.height
+            parentRadius: rebootBtn.radius
             onClicked: {
                 sddm.reboot();
             }
@@ -84,9 +88,6 @@ Item {
             ColorAnimation {
                 duration: 200
             }
-
         }
-
     }
-
 }
