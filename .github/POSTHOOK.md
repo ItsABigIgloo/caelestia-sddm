@@ -11,6 +11,12 @@ Edit `~/.config/caelestia/cli.json` and set:
     "postHook": "sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh --posthook"
 }
 ```
+also set:
+```json
+"theme": {
+    "postHook": "sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh --posthook"
+}
+```
 If you dont have `cli.json` file setup, get them from:
 
 * Under "Example Configuration" - [https://github.com/caelestia-dots/cli](https://github.com/caelestia-dots/cli#configuring)
