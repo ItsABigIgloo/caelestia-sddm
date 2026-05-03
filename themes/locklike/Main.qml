@@ -107,14 +107,14 @@ Rectangle {
                 return;
             }
             if (event.key === Qt.Key_Up) {
-                if (sessionPicker.currentIndex < sessionPicker.count - 1)
-                    sessionPicker.currentIndex += 1;
+                if (sessionPickerBtn.currentIndex < sessionPickerBtn.count - 1)
+                    sessionPickerBtn.currentIndex += 1;
 
                 return;
             }
             if (event.key === Qt.Key_Down) {
-                if (sessionPicker.currentIndex > 0)
-                    sessionPicker.currentIndex -= 1;
+                if (sessionPickerBtn.currentIndex > 0)
+                    sessionPickerBtn.currentIndex -= 1;
 
                 return;
             }
@@ -123,7 +123,7 @@ Rectangle {
                 return;
             }
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
-                sddm.login(userPicker.currentText, root.buffer, sessionPicker.currentIndex);
+                sddm.login(userPicker.currentText, root.buffer, sessionPickerBtn.currentIndex);
                 root.loading = true;
                 return;
             }
@@ -227,7 +227,7 @@ Rectangle {
                     CaelestiaFetch {
                         firstInput: root.firstInput
                         currentUser: userPicker.currentText
-                        currentSession: sessionPicker.currentText
+                        currentSession: sessionPickerBtn.currentText
                         rectHeight: middleLeftRect.height
                     }
 
@@ -336,7 +336,27 @@ Rectangle {
                     isLoading: root.loading
                     buffer: root.buffer
                     currentUser: userPicker.currentText
-                    currentSession: sessionPicker.currentIndex
+                    currentSession: sessionPickerBtn.currentIndex
+                }
+
+                SessionPicker {
+                    id: sessionPickerBtn
+
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.topMargin: 10
+                    currentIndex: {
+                        if (!sessionModel || sessionModel.count === 0) return 0;
+                        var last = sessionModel.lastIndex;
+                        return (last !== undefined && last >= 0) ? last : 0;
+                    }
+                    opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 300
+                            easing.type: Easing.OutBack
+                        }
+                    }
                 }
 
                 Text {
@@ -491,58 +511,6 @@ Rectangle {
             x: userPicker.width - 30
             y: (userPicker.height - 6) / 2
             width: 12
-            height: 6
-            onPaint: {
-                var context = getContext("2d");
-                context.reset();
-                context.moveTo(0, 0);
-                context.lineTo(width, 0);
-                context.lineTo(width / 2, height);
-                context.closePath();
-                context.fillStyle = "#4cdadb";
-                context.fill();
-            }
-        }
-    }
-
-    ComboBox {
-        // this is too, invisible right now
-        id: sessionPicker
-
-        width: 190
-        height: 50
-        model: sessionModel
-        currentIndex: sessionModel.lastIndex
-        textRole: "name"
-        font.family: "Rubik"
-        font.pixelSize: 18
-        visible: false
-
-        background: Rectangle {
-            color: "#BF131313"
-            radius: 20
-            border.color: "#353535"
-            border.width: 1
-        }
-
-        contentItem: Text {
-            renderType: Text.NativeRendering
-            text: sessionPicker.displayText
-            font: sessionPicker.font
-            color: "#e2e2e2"
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            leftPadding: 0
-            rightPadding: 0
-            anchors.fill: parent
-        }
-
-        indicator: Canvas {
-            id: canvas
-
-            x: sessionPicker.width - 24
-            y: (sessionPicker.height - 6) / 2
-            width: 10
             height: 6
             onPaint: {
                 var context = getContext("2d");

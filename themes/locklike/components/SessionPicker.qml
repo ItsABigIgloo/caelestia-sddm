@@ -1,0 +1,245 @@
+import QtQuick
+import QtQuick.Layouts
+
+Item {
+    id: root
+
+    property bool expanded: false
+    property int currentIndex: sessionModel && sessionModel.lastIndex !== undefined ? sessionModel.lastIndex : 0
+    property int count: sessionModel ? sessionModel.count : 0
+    property string currentText: {
+        if (!sessionModel || sessionModel.count === 0) return "No Session";
+        var item = sessionModel.get ? sessionModel.get(currentIndex) : sessionModel[currentIndex];
+        if (!item) return "Session " + currentIndex;
+        var name = item.name || item.type;
+        if (name && name.length > 1 && name !== "/usr/share/xsessions" && name !== "/usr/share/wayland-sessions") {
+            return name;
+        }
+        return item.type || item.file || ("Session " + currentIndex);
+    }
+
+    width: labelRect.width + expandBtn.width
+    height: 40
+    opacity: root.count > 0 ? 1 : 0
+    enabled: root.count > 0
+
+    Rectangle {
+        id: labelRect
+
+        radius: height / 2
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        topLeftRadius: height / 2
+        bottomLeftRadius: height / 2
+        topRightRadius: 5
+        bottomRightRadius: 5
+        color: config.subComponents
+
+        width: 160
+
+        Row {
+            id: labelRow
+
+            anchors.verticalCenter: labelRect.verticalCenter
+            anchors.left: labelRect.left
+            anchors.leftMargin: 10
+            spacing: 6
+
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                font.family: "Material Symbols Rounded"
+                font.pointSize: 16
+                text: "widgets"
+                color: config.primary
+            }
+
+            Text {
+                id: labelText
+
+                anchors.verticalCenter: parent.verticalCenter
+                text: root.currentText
+                color: config.text
+                font.pixelSize: 14
+                font.family: "Rubik"
+                elide: Text.ElideRight
+            }
+        }
+
+        LayerState {
+            anchors.fill: parent
+            parentWidth: labelRect.width
+            parentHeight: labelRect.height
+            parentRadius: labelRect.radius
+            disabled: true
+        }
+    }
+
+    Rectangle {
+        id: expandBtn
+
+        property real rad: root.expanded ? height / 2 : 5
+
+        radius: height / 2
+        anchors.left: labelRect.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        topLeftRadius: rad
+        bottomLeftRadius: rad
+        color: config.primary
+
+        width: height
+
+        Behavior on topLeftRadius {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.InOutCubic
+            }
+        }
+
+        Behavior on bottomLeftRadius {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.InOutCubic
+            }
+        }
+
+        Text {
+            id: expandIcon
+
+            anchors.centerIn: expandBtn
+            anchors.horizontalCenterOffset: root.expanded ? 0 : -2
+            font.family: "Material Symbols Rounded"
+            font.pointSize: 18
+            text: "expand_more"
+            color: config.onPrimary
+            rotation: root.expanded ? 180 : 0
+
+            Behavior on anchors.horizontalCenterOffset {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.InOutCubic
+                }
+            }
+
+            Behavior on rotation {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.InOutCubic
+                }
+            }
+        }
+
+        LayerState {
+            anchors.fill: parent
+            parentWidth: expandBtn.width
+            parentHeight: expandBtn.height
+            parentRadius: expandBtn.radius
+            onClicked: root.expanded = !root.expanded
+        }
+    }
+
+    Rectangle {
+        id: menuRect
+
+        visible: root.expanded
+        color: config.subComponents
+        radius: 8
+        border.color: config.outline
+        border.width: 1
+
+        anchors.top: labelRect.bottom
+        anchors.topMargin: 4
+anchors.left: labelRect.left
+        anchors.leftMargin: -10
+        width: 220
+        height: Math.min(200, root.count * 36)
+
+        clip: true
+
+        opacity: root.expanded ? 1 : 0
+        transform: Translate {
+            y: root.expanded ? 0 : -10
+        }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 150
+                easing.type: Easing.InOutCubic
+            }
+        }
+
+        Behavior on y {
+            NumberAnimation {
+                duration: 150
+                easing.type: Easing.InOutCubic
+            }
+        }
+
+        ListView {
+            id: sessionList
+
+            anchors.fill: parent
+            anchors.margins: 4
+            model: sessionModel
+            currentIndex: root.currentIndex
+            clip: true
+            boundsBehavior: ListView.StopAtBounds
+            contentHeight: root.count * 32
+            implicitHeight: contentHeight
+
+            delegate: Rectangle {
+                width: parent.width
+                height: 32
+                radius: 4
+                color: index === ListView.view.currentIndex ? config.primary : "transparent"
+                opacity: index === ListView.view.currentIndex ? 0.2 : 1
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: 100
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        root.currentIndex = index;
+                        root.expanded = false;
+                    }
+                }
+
+                Text {
+                    anchors.centerIn: parent
+                    text: (() => {
+                        var item = null;
+                        if (model && model.get) item = model.get(index);
+                        else if (model) item = model[index];
+                        if (item) {
+                            var name = item.name || item.type;
+                            if (name && name.length > 1 && !name.startsWith("/")) return name;
+                            if (item.type && item.type.length > 1 && !item.type.startsWith("/")) return item.type;
+                        }
+                        return "Session " + index;
+                    })()
+                    color: config.text
+                    font.pixelSize: 13
+                    font.family: "Rubik"
+                    elide: Text.ElideRight
+                    leftPadding: 4
+                    rightPadding: 4
+                }
+            }
+        }
+    }
+
+    MouseArea {
+        id: dismissArea
+
+        anchors.fill: root
+        z: -1
+        enabled: root.expanded
+        onClicked: root.expanded = false
+    }
+}
