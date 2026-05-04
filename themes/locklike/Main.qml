@@ -274,7 +274,7 @@ Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     color: "transparent"
                     width: 300
-                    height: 30
+                    height: 50
                 }
 
                 ColumnLayout {
@@ -326,7 +326,7 @@ Rectangle {
                 }
 
                 Item {
-                    height: 50
+                    height: 40
                 }
 
                 PasswordInput {
@@ -337,26 +337,6 @@ Rectangle {
                     buffer: root.buffer
                     currentUser: userPicker.currentText
                     currentSession: root.sessionIndex
-                }
-
-                SessionPicker {
-                    id: sessionPickerBtn
-
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.topMargin: 10
-                    currentText: sessionArray.sessions[0].name
-                    selectedIndex: 0
-                    opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
-                    onSelectedIndexChanged: {
-                        root.sessionIndex = sessionPickerBtn.selectedIndex;
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.OutBack
-                        }
-                    }
                 }
 
                 Text {
@@ -452,6 +432,27 @@ Rectangle {
                             easing.type: Easing.OutBack
                         }
                     }
+                }
+            }
+        }
+
+        SessionPicker {
+            id: sessionPickerBtn
+
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: mainCard.height / 1.19
+            currentText: sessionArray.sessions[0].name
+            selectedIndex: 0
+            opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
+            onSelectedIndexChanged: {
+                root.sessionIndex = sessionPickerBtn.selectedIndex;
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.OutBack
                 }
             }
         }
