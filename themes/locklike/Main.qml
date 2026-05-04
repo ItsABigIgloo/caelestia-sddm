@@ -11,6 +11,7 @@ Rectangle {
     id: root
 
     property bool ap: config.ap === "true" ? true : false
+    property bool sessionPickerEnabled: config.sessionPicker === "true" ? true : false
     property bool firstInput: true
     property bool loading: false
     property string buffer
@@ -108,14 +109,13 @@ Rectangle {
                 return;
             }
             if (event.key === Qt.Key_Up) {
-                if (sessionPickerBtn.currentIndex < sessionPickerBtn.count - 1)
-                    sessionPickerBtn.currentIndex += 1;
-
+                if (sessionPickerBtn.selectedIndex < sessionPickerBtn.count - 1)
+                    sessionPickerBtn.selectedIndex += 1;
                 return;
             }
             if (event.key === Qt.Key_Down) {
-                if (sessionPickerBtn.currentIndex > 0)
-                    sessionPickerBtn.currentIndex -= 1;
+                if (sessionPickerBtn.selectedIndex > 0)
+                    sessionPickerBtn.selectedIndex -= 1;
                 return;
             }
             if (event.key === Qt.Key_Backspace) {
@@ -445,6 +445,7 @@ Rectangle {
             currentText: sessionArray.sessions[0].name
             selectedIndex: 0
             opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
+            visible: root.sessionPickerEnabled
             onSelectedIndexChanged: {
                 root.sessionIndex = sessionPickerBtn.selectedIndex;
             }

@@ -17,6 +17,9 @@ Item {
         }
         root.items = arr;
     }
+    onSelectedIndexChanged: {
+        root.currentText = sessionArray.sessions[root.selectedIndex].name;
+    }
 
     width: labelRect.width + expandBtn.width
     height: 40
@@ -51,14 +54,14 @@ Item {
         bottomRightRadius: 5
         color: config.subComponents
 
-        width: 300
+        width: 210
 
         Row {
             id: labelRow
 
             anchors.verticalCenter: labelRect.verticalCenter
             anchors.left: labelRect.left
-            anchors.leftMargin: 10
+            anchors.leftMargin: 15
             spacing: 6
 
             Text {
@@ -169,7 +172,7 @@ Item {
         anchors.topMargin: 4
         anchors.left: labelRect.left
         anchors.leftMargin: -10
-        width: 370
+        width: 260
         height: Math.min(200, root.count * 36)
 
         clip: true
