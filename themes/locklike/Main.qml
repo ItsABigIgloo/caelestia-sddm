@@ -87,7 +87,7 @@ Rectangle {
                 return;
             }
             if (event.key === Qt.Key_CapsLock) {
-                root.capsLockOn = !root.capsLockOn
+                root.capsLockOn = !root.capsLockOn;
                 return;
             }
             if (root.firstInput) {
@@ -124,6 +124,7 @@ Rectangle {
             }
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
                 sddm.login(userPicker.currentText, root.buffer, sessionPickerBtn.currentIndex);
+                console.log(sessionArray.sessions[0].index);
                 root.loading = true;
                 return;
             }
@@ -344,11 +345,8 @@ Rectangle {
 
                     Layout.alignment: Qt.AlignHCenter
                     Layout.topMargin: 10
-                    currentIndex: {
-                        if (!sessionModel || sessionModel.count === 0) return 0;
-                        var last = sessionModel.lastIndex;
-                        return (last !== undefined && last >= 0) ? last : 0;
-                    }
+                    currentText: sessionArray.sessions[0].name
+                    selectedIndex: 0
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
                     Behavior on opacity {
@@ -521,6 +519,21 @@ Rectangle {
                 context.closePath();
                 context.fillStyle = "#4cdadb";
                 context.fill();
+            }
+        }
+    }
+
+    Instantiator {
+        id: sessionArray
+        model: sessionModel
+        property var sessions: []
+
+        delegate: Item {
+            Component.onCompleted: {
+                sessionArray.sessions.push({
+                    index: index,
+                    name: model.name
+                });
             }
         }
     }

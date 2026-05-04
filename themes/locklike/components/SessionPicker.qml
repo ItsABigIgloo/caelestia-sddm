@@ -5,23 +5,38 @@ Item {
     id: root
 
     property bool expanded: false
-    property int currentIndex: sessionModel && sessionModel.lastIndex !== undefined ? sessionModel.lastIndex : 0
     property int count: sessionModel ? sessionModel.count : 0
-    property string currentText: {
-        if (!sessionModel || sessionModel.count === 0) return "No Session";
-        var item = sessionModel.get ? sessionModel.get(currentIndex) : sessionModel[currentIndex];
-        if (!item) return "Session " + currentIndex;
-        var name = item.name || item.type;
-        if (name && name.length > 1 && name !== "/usr/share/xsessions" && name !== "/usr/share/wayland-sessions") {
-            return name;
+    property var items: []
+    property int selectedIndex: 0
+    property string currentText
+    Component.onCompleted: {
+        root.currentText = sessionArray.sessions[root.selectedIndex].name;
+        var arr = [];
+        for (var i = 0; i < sessionArray.sessions.length; i++) {
+            arr.push(sessionArray.sessions[i].name);
         }
-        return item.type || item.file || ("Session " + currentIndex);
+        root.items = arr;
     }
 
     width: labelRect.width + expandBtn.width
     height: 40
     opacity: root.count > 0 ? 1 : 0
     enabled: root.count > 0
+
+    Instantiator {
+        id: sessionArray
+        model: sessionModel
+        property var sessions: []
+
+        delegate: Item {
+            Component.onCompleted: {
+                sessionArray.sessions.push({
+                    index: index,
+                    name: model.name
+                });
+            }
+        }
+    }
 
     Rectangle {
         id: labelRect
@@ -150,7 +165,7 @@ Item {
 
         anchors.top: labelRect.bottom
         anchors.topMargin: 4
-anchors.left: labelRect.left
+        anchors.left: labelRect.left
         anchors.leftMargin: -10
         width: 220
         height: Math.min(200, root.count * 36)
@@ -181,8 +196,8 @@ anchors.left: labelRect.left
 
             anchors.fill: parent
             anchors.margins: 4
-            model: sessionModel
-            currentIndex: root.currentIndex
+            model: root.items
+            currentIndex: root.selectedIndex
             clip: true
             boundsBehavior: ListView.StopAtBounds
             contentHeight: root.count * 32
@@ -205,24 +220,14 @@ anchors.left: labelRect.left
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     onClicked: {
-                        root.currentIndex = index;
+                        root.selectedIndex = index;
                         root.expanded = false;
                     }
                 }
 
                 Text {
                     anchors.centerIn: parent
-                    text: (() => {
-                        var item = null;
-                        if (model && model.get) item = model.get(index);
-                        else if (model) item = model[index];
-                        if (item) {
-                            var name = item.name || item.type;
-                            if (name && name.length > 1 && !name.startsWith("/")) return name;
-                            if (item.type && item.type.length > 1 && !item.type.startsWith("/")) return item.type;
-                        }
-                        return "Session " + index;
-                    })()
+                    text: root.items[index]
                     color: config.text
                     font.pixelSize: 13
                     font.family: "Rubik"
