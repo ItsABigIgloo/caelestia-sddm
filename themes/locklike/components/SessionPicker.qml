@@ -87,6 +87,8 @@ Item {
             parentHeight: labelRect.height
             parentRadius: labelRect.radius
             disabled: true
+            topRightradius: labelRect.topRightRadius
+            bottomRightradius: labelRect.bottomRightRadius
         }
     }
 
