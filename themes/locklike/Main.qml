@@ -26,6 +26,7 @@ Rectangle {
     }
     property bool capsLockOn: false
     property bool mainCardBgBlur: config.mainCardBgBlur === "true"
+    property int sessionIndex
 
     width: 1920
     height: 1080
@@ -115,7 +116,6 @@ Rectangle {
             if (event.key === Qt.Key_Down) {
                 if (sessionPickerBtn.currentIndex > 0)
                     sessionPickerBtn.currentIndex -= 1;
-
                 return;
             }
             if (event.key === Qt.Key_Backspace) {
@@ -123,8 +123,7 @@ Rectangle {
                 return;
             }
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
-                sddm.login(userPicker.currentText, root.buffer, sessionPickerBtn.currentIndex);
-                console.log(sessionArray.sessions[0].index);
+                sddm.login(userPicker.currentText, root.buffer, root.sessionIndex);
                 root.loading = true;
                 return;
             }
@@ -337,7 +336,7 @@ Rectangle {
                     isLoading: root.loading
                     buffer: root.buffer
                     currentUser: userPicker.currentText
-                    currentSession: sessionPickerBtn.currentIndex
+                    currentSession: root.sessionIndex
                 }
 
                 SessionPicker {
@@ -348,6 +347,9 @@ Rectangle {
                     currentText: sessionArray.sessions[0].name
                     selectedIndex: 0
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
+                    onSelectedIndexChanged: {
+                        root.sessionIndex = sessionPickerBtn.selectedIndex;
+                    }
 
                     Behavior on opacity {
                         NumberAnimation {
@@ -519,21 +521,6 @@ Rectangle {
                 context.closePath();
                 context.fillStyle = "#4cdadb";
                 context.fill();
-            }
-        }
-    }
-
-    Instantiator {
-        id: sessionArray
-        model: sessionModel
-        property var sessions: []
-
-        delegate: Item {
-            Component.onCompleted: {
-                sessionArray.sessions.push({
-                    index: index,
-                    name: model.name
-                });
             }
         }
     }

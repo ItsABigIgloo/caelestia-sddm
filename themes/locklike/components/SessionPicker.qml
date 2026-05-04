@@ -51,7 +51,7 @@ Item {
         bottomRightRadius: 5
         color: config.subComponents
 
-        width: 160
+        width: 300
 
         Row {
             id: labelRow
@@ -167,7 +167,7 @@ Item {
         anchors.topMargin: 4
         anchors.left: labelRect.left
         anchors.leftMargin: -10
-        width: 220
+        width: 370
         height: Math.min(200, root.count * 36)
 
         clip: true
@@ -221,6 +221,7 @@ Item {
                     cursorShape: Qt.PointingHandCursor
                     onClicked: {
                         root.selectedIndex = index;
+                        root.currentText = root.items[index];
                         root.expanded = false;
                     }
                 }
