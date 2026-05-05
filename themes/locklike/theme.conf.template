@@ -19,6 +19,7 @@ mainCardComponentsOpacity=0.9
 # Welcome message background blur [true | false]
 welcomeBgBlur=true
 mainCardBgBlur=true
+sessionPicker=false
 
 # ============================================================================
 # COLOR SCHEME

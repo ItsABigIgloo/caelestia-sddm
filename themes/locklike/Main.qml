@@ -11,6 +11,7 @@ Rectangle {
     id: root
 
     property bool ap: config.ap === "true" ? true : false
+    property bool sessionPickerEnabled: config.sessionPicker === "true" ? true : false
     property bool firstInput: true
     property bool loading: false
     property string buffer
@@ -26,6 +27,7 @@ Rectangle {
     }
     property bool capsLockOn: false
     property bool mainCardBgBlur: config.mainCardBgBlur === "true"
+    property int sessionIndex
 
     width: 1920
     height: 1080
@@ -87,7 +89,7 @@ Rectangle {
                 return;
             }
             if (event.key === Qt.Key_CapsLock) {
-                root.capsLockOn = !root.capsLockOn
+                root.capsLockOn = !root.capsLockOn;
                 return;
             }
             if (root.firstInput) {
@@ -107,15 +109,13 @@ Rectangle {
                 return;
             }
             if (event.key === Qt.Key_Up) {
-                if (sessionPicker.currentIndex < sessionPicker.count - 1)
-                    sessionPicker.currentIndex += 1;
-
+                if (sessionPickerBtn.selectedIndex < sessionPickerBtn.count - 1)
+                    sessionPickerBtn.selectedIndex += 1;
                 return;
             }
             if (event.key === Qt.Key_Down) {
-                if (sessionPicker.currentIndex > 0)
-                    sessionPicker.currentIndex -= 1;
-
+                if (sessionPickerBtn.selectedIndex > 0)
+                    sessionPickerBtn.selectedIndex -= 1;
                 return;
             }
             if (event.key === Qt.Key_Backspace) {
@@ -123,7 +123,7 @@ Rectangle {
                 return;
             }
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
-                sddm.login(userPicker.currentText, root.buffer, sessionPicker.currentIndex);
+                sddm.login(userPicker.currentText, root.buffer, root.sessionIndex);
                 root.loading = true;
                 return;
             }
@@ -227,7 +227,7 @@ Rectangle {
                     CaelestiaFetch {
                         firstInput: root.firstInput
                         currentUser: userPicker.currentText
-                        currentSession: sessionPicker.currentText
+                        currentSession: sessionPickerBtn.currentText
                         rectHeight: middleLeftRect.height
                     }
 
@@ -274,7 +274,7 @@ Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     color: "transparent"
                     width: 300
-                    height: 30
+                    height: 50
                 }
 
                 ColumnLayout {
@@ -326,7 +326,7 @@ Rectangle {
                 }
 
                 Item {
-                    height: 50
+                    height: 40
                 }
 
                 PasswordInput {
@@ -336,7 +336,7 @@ Rectangle {
                     isLoading: root.loading
                     buffer: root.buffer
                     currentUser: userPicker.currentText
-                    currentSession: sessionPicker.currentIndex
+                    currentSession: root.sessionIndex
                 }
 
                 Text {
@@ -436,6 +436,28 @@ Rectangle {
             }
         }
 
+        SessionPicker {
+            id: sessionPickerBtn
+
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: mainCard.height / 1.19
+            currentText: sessionArray.sessions[0].name
+            selectedIndex: 0
+            opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
+            visible: root.sessionPickerEnabled
+            onSelectedIndexChanged: {
+                root.sessionIndex = sessionPickerBtn.selectedIndex;
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.OutBack
+                }
+            }
+        }
+
         Behavior on scale {
             NumberAnimation {
                 duration: 300
@@ -491,58 +513,6 @@ Rectangle {
             x: userPicker.width - 30
             y: (userPicker.height - 6) / 2
             width: 12
-            height: 6
-            onPaint: {
-                var context = getContext("2d");
-                context.reset();
-                context.moveTo(0, 0);
-                context.lineTo(width, 0);
-                context.lineTo(width / 2, height);
-                context.closePath();
-                context.fillStyle = "#4cdadb";
-                context.fill();
-            }
-        }
-    }
-
-    ComboBox {
-        // this is too, invisible right now
-        id: sessionPicker
-
-        width: 190
-        height: 50
-        model: sessionModel
-        currentIndex: sessionModel.lastIndex
-        textRole: "name"
-        font.family: "Rubik"
-        font.pixelSize: 18
-        visible: false
-
-        background: Rectangle {
-            color: "#BF131313"
-            radius: 20
-            border.color: "#353535"
-            border.width: 1
-        }
-
-        contentItem: Text {
-            renderType: Text.NativeRendering
-            text: sessionPicker.displayText
-            font: sessionPicker.font
-            color: "#e2e2e2"
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            leftPadding: 0
-            rightPadding: 0
-            anchors.fill: parent
-        }
-
-        indicator: Canvas {
-            id: canvas
-
-            x: sessionPicker.width - 24
-            y: (sessionPicker.height - 6) / 2
-            width: 10
             height: 6
             onPaint: {
                 var context = getContext("2d");
