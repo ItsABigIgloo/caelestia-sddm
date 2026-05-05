@@ -11,6 +11,7 @@ Rectangle {
     id: root
 
     property bool ap: config.ap === "true" ? true : false
+    property bool sessionPickerEnabled: config.sessionPicker === "true" ? true : false
     property bool firstInput: true
     property bool loading: false
     property string buffer
@@ -26,6 +27,7 @@ Rectangle {
     }
     property bool capsLockOn: false
     property bool mainCardBgBlur: config.mainCardBgBlur === "true"
+    property int sessionIndex
 
     width: 1920
     height: 1080
@@ -87,7 +89,7 @@ Rectangle {
                 return;
             }
             if (event.key === Qt.Key_CapsLock) {
-                root.capsLockOn = !root.capsLockOn
+                root.capsLockOn = !root.capsLockOn;
                 return;
             }
             if (root.firstInput) {
@@ -107,15 +109,13 @@ Rectangle {
                 return;
             }
             if (event.key === Qt.Key_Up) {
-                if (sessionPickerBtn.currentIndex < sessionPickerBtn.count - 1)
-                    sessionPickerBtn.currentIndex += 1;
-
+                if (sessionPickerBtn.selectedIndex < sessionPickerBtn.count - 1)
+                    sessionPickerBtn.selectedIndex += 1;
                 return;
             }
             if (event.key === Qt.Key_Down) {
-                if (sessionPickerBtn.currentIndex > 0)
-                    sessionPickerBtn.currentIndex -= 1;
-
+                if (sessionPickerBtn.selectedIndex > 0)
+                    sessionPickerBtn.selectedIndex -= 1;
                 return;
             }
             if (event.key === Qt.Key_Backspace) {
@@ -123,7 +123,7 @@ Rectangle {
                 return;
             }
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
-                sddm.login(userPicker.currentText, root.buffer, sessionPickerBtn.currentIndex);
+                sddm.login(userPicker.currentText, root.buffer, root.sessionIndex);
                 root.loading = true;
                 return;
             }
@@ -274,7 +274,7 @@ Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     color: "transparent"
                     width: 300
-                    height: 30
+                    height: 50
                 }
 
                 ColumnLayout {
@@ -326,7 +326,7 @@ Rectangle {
                 }
 
                 Item {
-                    height: 50
+                    height: 40
                 }
 
                 PasswordInput {
@@ -336,27 +336,7 @@ Rectangle {
                     isLoading: root.loading
                     buffer: root.buffer
                     currentUser: userPicker.currentText
-                    currentSession: sessionPickerBtn.currentIndex
-                }
-
-                SessionPicker {
-                    id: sessionPickerBtn
-
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.topMargin: 10
-                    currentIndex: {
-                        if (!sessionModel || sessionModel.count === 0) return 0;
-                        var last = sessionModel.lastIndex;
-                        return (last !== undefined && last >= 0) ? last : 0;
-                    }
-                    opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.OutBack
-                        }
-                    }
+                    currentSession: root.sessionIndex
                 }
 
                 Text {
@@ -452,6 +432,28 @@ Rectangle {
                             easing.type: Easing.OutBack
                         }
                     }
+                }
+            }
+        }
+
+        SessionPicker {
+            id: sessionPickerBtn
+
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: mainCard.height / 1.19
+            currentText: sessionArray.sessions[0].name
+            selectedIndex: 0
+            opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
+            visible: root.sessionPickerEnabled
+            onSelectedIndexChanged: {
+                root.sessionIndex = sessionPickerBtn.selectedIndex;
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.OutBack
                 }
             }
         }

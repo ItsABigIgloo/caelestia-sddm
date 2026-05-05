@@ -7,6 +7,10 @@ Item {
     property bool disabled: false
     property color rippleColor: config.inverseOnSurface
     property real radius: 8
+    property real topRightradius: root.parentRadius
+    property real topLeftradius: root.parentRadius
+    property real bottomRightradius: root.parentRadius
+    property real bottomLeftradius: root.parentRadius
     property real parentWidth
     property real parentHeight
     property real parentRadius
@@ -41,7 +45,10 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        radius: root.radius
+        topLeftRadius: root.topLeftradius
+        topRightRadius: root.topRightradius
+        bottomLeftRadius: root.bottomLeftradius
+        bottomRightRadius: root.bottomRightradius
         color: mouse.pressed ? Qt.rgba(root.rippleColor.r, root.rippleColor.g, root.rippleColor.b, 0.2) : mouse.containsMouse ? Qt.rgba(root.rippleColor.r, root.rippleColor.g, root.rippleColor.b, 0.15) : "transparent"
     }
 
@@ -80,7 +87,10 @@ Item {
         maskSource: Rectangle {
             width: parentWidth
             height: parentHeight
-            radius: parentRadius
+            topRightRadius: root.topRightradius
+            topLeftRadius: root.topLeftradius
+            bottomLeftRadius: root.bottomLeftradius
+            bottomRightRadius: root.bottomRightradius
         }
     }
 }
