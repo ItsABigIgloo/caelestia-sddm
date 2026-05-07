@@ -15,10 +15,9 @@ Item {
             width: 30
             height: 40
             radius: 12
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.leftMargin: 30
-            anchors.topMargin: 20
+            Layout.leftMargin: 30
+            Layout.topMargin: 20
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             color: config.primary
 
             Text {
@@ -29,7 +28,6 @@ Item {
                 font.family: "CaskaydiaCove NF"
                 font.pointSize: 15
             }
-
         }
 
         Text {
@@ -41,7 +39,6 @@ Item {
             Layout.leftMargin: 35
             Layout.topMargin: 29
         }
-
     }
 
     ColumnLayout {
@@ -93,9 +90,7 @@ Item {
                     lineHeightMode: Text.FixedHeight
                     Layout.preferredWidth: 100
                 }
-
             }
-
         }
 
         RowLayout {
@@ -152,9 +147,6 @@ Item {
                 color: config.inverseOnSurface
                 radius: 12
             }
-
         }
-
     }
-
 }
