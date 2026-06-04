@@ -44,8 +44,15 @@ QtObject {
     property color mShadow: getConfig("mShadow") || "#000000"
     property color mHover: getConfig("mHover") || mPrimary
     property color mOnHover: getConfig("mOnHover") || mOnPrimary
-    // effects
+    // welcome message
     property bool enableWelcomeMessage: toBool(getConfig("enableWelcomeMessage"), true)
+    property string welcomeMessage: {
+        var val = getConfig("welcomeMessage");
+        if (val === undefined)
+            return "Welcome $USER";
+        return val.toString().replace(/^"|"$/g, "");
+    }
+    // effects
     property bool dropShadows: toBool(getConfig("dropShadows"), true)
     property bool blurEnabled: toBool(getConfig("blurEnabled"), true)
     property real blurStrength: boundedNumber(getConfig("blurStrength"), 1, 0, 1)

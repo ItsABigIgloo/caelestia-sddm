@@ -22,11 +22,17 @@ elementRadius=25
 cardRadius=75
 
 # ============================================================================
-# VISUAL EFFECTS
+# WELCOME MESSAGE
 # ============================================================================
 # Enable welcome message [true | false]
 enableWelcomeMessage=true
 
+# Custom welcome text (use $USER for username, use empty "" for no text )
+welcomeMessage="Welcome $USER"
+
+# ============================================================================
+# VISUAL EFFECTS
+# ============================================================================
 # Card Drop shadows [true | false]
 dropShadows=true
 

@@ -10,7 +10,8 @@ Text {
 
     renderType: Text.NativeRendering
     anchors.centerIn: parent
-    text: userName ? "Welcome, " + userName : "Welcome"
+    text: Theme.welcomeMessage.replace("$USER", userName).trim()
+    visible: Theme.welcomeMessage !== ""
     font.family: Theme.fontFamily
     font.pixelSize: Math.round(Theme.baseFontSize * 8)
     font.weight: Font.DemiBold
