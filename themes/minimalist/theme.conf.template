@@ -1,4 +1,4 @@
-# ======================== CONFIG FOR MINIMALIST =============================
+#! ======================= CONFIG FOR MINIMALIST =============================
 [General]
 # ============================================================================
 # TYPOGRAPHY
@@ -13,15 +13,6 @@ FontSize=11
 AvatarSize=120
 
 # ============================================================================
-# BORDER RADIUS (roundness)
-# ============================================================================
-# UI Elements (inputs, combo boxes, toast)
-elementRadius=25
-
-# Login Card
-cardRadius=75
-
-# ============================================================================
 # WELCOME MESSAGE
 # ============================================================================
 # Enable welcome message [true | false]
@@ -31,19 +22,28 @@ enableWelcomeMessage=true
 welcomeMessage="Welcome $USER"
 
 # ============================================================================
-# VISUAL EFFECTS
+# CARD
 # ============================================================================
+# UI Elements Radius (inputs, combo boxes, toast)
+elementRadius=25
+
+# Login Card Radius
+cardRadius=75
+
 # Card Drop shadows [true | false]
 dropShadows=true
 
+# Card Opacity [0 to 1]
+cardOpacity=0.50
+
+# ============================================================================
+# BACKGROUND
+# ============================================================================
 # Background blur [true | false]
 blurEnabled=true
 
 # Background blur strength [0.0 to 1.0]
 blurStrength=0.60
-
-# Card Opacity [0 to 1]
-cardOpacity=0.50
 
 # Background overlay opacity [0 to 1]
 overlayOpacity=0.4
@@ -57,7 +57,7 @@ debugMode=false
 # ============================================================================
 # COLOR SCHEME
 # ============================================================================
-# Do not touch these! (auto-synced by Caelestia)
+#! Do not touch these! (auto-synced by Caelestia)
 mPrimary=#{{ primary.hex }}
 mOnPrimary=#{{ onPrimary.hex }}
 
