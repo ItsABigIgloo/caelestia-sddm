@@ -192,7 +192,7 @@ Item {
 
     Behavior on scale {
         NumberAnimation {
-            duration: Theme.animDurationNormal
+            duration: Theme.enableWelcomeMessage ? Theme.animDurationNormal : 0
             easing.type: Easing.OutBack
         }
 
@@ -200,7 +200,7 @@ Item {
 
     Behavior on opacity {
         NumberAnimation {
-            duration: Theme.animDurationNormal
+            duration: Theme.enableWelcomeMessage ? Theme.animDurationNormal : 0
             easing.type: Easing.OutBack
         }
 

@@ -7,7 +7,7 @@ import "singletons"
 Rectangle {
     id: root
 
-    property bool firstInput: true
+    property bool firstInput: Theme.enableWelcomeMessage
     property string buffer: ""
     property var userName: {
         if (userModel.count > 0 && userModel.lastIndex >= 0) {
@@ -48,7 +48,8 @@ Rectangle {
                 return ;
             }
             if (event.key === Qt.Key_Escape) {
-                root.firstInput = true;
+                if (Theme.enableWelcomeMessage)
+                    root.firstInput = true;
                 clearBuffer();
                 return ;
             }
@@ -121,7 +122,7 @@ Rectangle {
 
             Behavior on opacity {
                 NumberAnimation {
-                    duration: Theme.animDurationNormal
+                    duration: Theme.enableWelcomeMessage ? Theme.animDurationNormal : 0
                 }
 
             }
@@ -141,7 +142,7 @@ Rectangle {
 
         Behavior on blur {
             NumberAnimation {
-                duration: Theme.animDurationSlow
+                duration: Theme.enableWelcomeMessage ? Theme.animDurationSlow : 0
             }
 
         }

@@ -9,6 +9,9 @@ ap=false
 # ============================================================================
 # WELCOME MESSAGE
 # ============================================================================
+# Enable welcome message [true | false]
+enableWelcomeMessage=true
+
 # Welcome message background opacity [0.0 to 1.0]
 welcomeBgBlurAmount=0.7
 welcomeColorOpacity=0.7

@@ -91,6 +91,8 @@ To customize the theme config, modify it only through the Caelestia config:
     ```bash
     # ============= CONFIG FOR LOCKLIKE ==================
     [General]
+    # Enable welcome message [true | false]
+    enableWelcomeMessage=true
     # 12 hours or 24 Hours true=12 [true | false]
     ap=false
     # Welcome message background opacity [0.0 to 1.0]

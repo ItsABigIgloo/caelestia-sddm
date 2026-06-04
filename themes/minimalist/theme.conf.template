@@ -24,6 +24,9 @@ cardRadius=75
 # ============================================================================
 # VISUAL EFFECTS
 # ============================================================================
+# Enable welcome message [true | false]
+enableWelcomeMessage=true
+
 # Card Drop shadows [true | false]
 dropShadows=true
 

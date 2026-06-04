@@ -46,6 +46,7 @@ QtObject {
     property color mHover: getConfig("mHover") || mPrimary
     property color mOnHover: getConfig("mOnHover") || mOnPrimary
     // effects
+    property bool enableWelcomeMessage: toBool(getConfig("enableWelcomeMessage"), true)
     property bool dropShadows: toBool(getConfig("dropShadows"), true)
     property bool cardBorder: toBool(getConfig("cardBorder"), false)
     property bool blurEnabled: toBool(getConfig("blurEnabled"), true)

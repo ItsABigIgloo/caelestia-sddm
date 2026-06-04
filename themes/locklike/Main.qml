@@ -12,7 +12,8 @@ Rectangle {
 
     property bool ap: config.ap === "true" ? true : false
     property bool sessionPickerEnabled: config.sessionPicker === "true" ? true : false
-    property bool firstInput: true
+    property bool welcomeMessageEnabled: config.enableWelcomeMessage !== "false"
+    property bool firstInput: welcomeMessageEnabled
     property bool loading: false
     property string buffer
     property real welcomeBgBlurAmount: parseFloat(config.welcomeBgBlurAmount) || 1
@@ -84,7 +85,8 @@ Rectangle {
         focus: true
         Keys.onPressed: {
             if (event.key === Qt.Key_Escape) {
-                root.firstInput = true;
+                if (root.welcomeMessageEnabled)
+                    root.firstInput = true;
                 root.buffer = "";
                 return;
             }
