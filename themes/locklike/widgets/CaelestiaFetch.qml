@@ -36,8 +36,8 @@ Item {
             text: "caelestiafetch.sh"
             font.family: "CaskaydiaCove NF"
             font.pointSize: 13
-            Layout.leftMargin: 35
-            Layout.topMargin: 29
+            Layout.leftMargin: 15
+            Layout.topMargin: 16
         }
     }
 
@@ -67,7 +67,7 @@ Item {
                     renderType: Text.NativeRendering
                     Layout.leftMargin: 12
                     Layout.topMargin: root.rectHeight / 10
-                    text: "WM     :\nUSER   :\nUP     :\nBATTERY:"
+                    text: "WM     :\nUSER   :\nOS     :\nHOST   :"
                     color: config.text
                     font.pixelSize: 18
                     font.family: "CaskaydiaCove NF"
@@ -82,7 +82,7 @@ Item {
                     renderType: Text.NativeRendering
                     Layout.leftMargin: 0
                     Layout.topMargin: root.rectHeight / 10
-                    text: displayText + "\n" + root.currentUser + "\n" + "WIP" + "\n" + "WIP"
+                    text: displayText + "\n" + root.currentUser + "\n" + config.os + "\n" + config.host
                     color: config.text
                     font.pixelSize: 18
                     font.family: "CaskaydiaCove NF"
