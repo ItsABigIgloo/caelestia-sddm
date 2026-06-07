@@ -1,4 +1,4 @@
-# ======================== CONFIG FOR MINIMALISTV2 ===========================
+#! ======================= CONFIG FOR MINIMALISTV2 ===========================
 [General]
 # ============================================================================
 # TYPOGRAPHY
@@ -13,17 +13,23 @@ FontSize=11
 AvatarSize=120
 
 # ============================================================================
-# BORDER RADIUS (roundness)
+# WELCOME MESSAGE
 # ============================================================================
-# UI Elements (inputs, combo boxes, toast)
+# Enable welcome message [true | false]
+enableWelcomeMessage=true
+
+# Custom welcome text (use $USER for username, use empty "" for no text )
+welcomeMessage="Welcome $USER"
+
+# ============================================================================
+# CARD
+# ============================================================================
+# UI Elements Radius (inputs, combo boxes, toast)
 elementRadius=25
 
-# Login Card
+# Login Card Radius
 cardRadius=75
 
-# ============================================================================
-# VISUAL EFFECTS — CARD
-# ============================================================================
 # Card border [true | false]
 cardBorder=false
 
@@ -46,7 +52,7 @@ elementOpacity=0.50
 dropShadows=true
 
 # ============================================================================
-# VISUAL EFFECTS — BACKGROUND
+# BACKGROUND
 # ============================================================================
 # Background blur [true | false]
 blurEnabled=true
@@ -66,7 +72,7 @@ debugMode=false
 # ============================================================================
 # COLOR SCHEME
 # ============================================================================
-# Do not touch these! (auto-synced by Caelestia)
+#! Do not touch these! (auto-synced by Caelestia)
 mPrimary=#{{ primary.hex }}
 mOnPrimary=#{{ onPrimary.hex }}
 
