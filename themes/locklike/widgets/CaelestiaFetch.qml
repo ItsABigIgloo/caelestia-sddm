@@ -12,11 +12,11 @@ Item {
 
     RowLayout {
         Rectangle {
-            width: 30
-            height: 40
-            radius: 12
-            Layout.leftMargin: 30
-            Layout.topMargin: 20
+            width: 33
+            height: 35
+            radius: 13
+            Layout.leftMargin: 23
+            Layout.topMargin: 25
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             color: config.primary
 
@@ -36,15 +36,17 @@ Item {
             text: "caelestiafetch.sh"
             font.family: "CaskaydiaCove NF"
             font.pointSize: 13
-            Layout.leftMargin: 35
-            Layout.topMargin: 29
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.topMargin: 32
+            anchors.leftMargin: 65
         }
     }
 
     ColumnLayout {
         Item {
             width: 30
-            height: 60
+            height: 30
         }
 
         RowLayout {
@@ -97,7 +99,7 @@ Item {
             spacing: 20
             Layout.alignment: Qt.AlignHCenter
             Layout.leftMargin: 30
-            Layout.topMargin: 20
+            Layout.topMargin: 4
 
             Rectangle {
                 width: 30

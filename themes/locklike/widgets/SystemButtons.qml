@@ -3,6 +3,7 @@ import QtQuick
 
 Item {
     property real rectHeight
+    property real rectWidth
     property real rectRadius
     property real rectBigRadius
 
@@ -14,7 +15,7 @@ Item {
         anchors.left: parent.left
         anchors.top: parent.top
         height: parent.rectHeight
-        width: parent.rectHeight + 10
+        width: parent.rectWidth
         radius: parent.rectRadius
         bottomLeftRadius: parent.rectBigRadius
         color: config.subComponents
@@ -56,8 +57,8 @@ Item {
 
         anchors.right: parent.right
         anchors.top: parent.top
-        height: bottomLeftRect.height
-        width: bottomLeftRect.height + 10
+        height: rectHeight
+        width: rectWidth
         radius: bottomLeftRect.radius
         color: config.subComponents
         clip: true

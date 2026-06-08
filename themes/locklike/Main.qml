@@ -158,7 +158,7 @@ Rectangle {
     Greeting {
         anchors.centerIn: parent
         firstInput: root.firstInput
-        mainCardRadius: mainCard.radius
+        mainCardRadius: root.midRadius
         rootHeight: root.height
         rootWidth: root.width
         greetingText: greeting.welcomeString
@@ -259,6 +259,7 @@ Rectangle {
                     SystemButtons {
                         anchors.horizontalCenter: parent.horizontalCenter
                         rectHeight: bottomLeftRect.height
+                        rectWidth: bottomLeftRect.height - 1
                         rectRadius: bottomLeftRect.radius
                         rectBigRadius: mainCard.radius / 1.9
                     }
@@ -281,12 +282,16 @@ Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     color: "transparent"
                     width: 300
-                    height: 50
+                    height: 30
                 }
 
                 ColumnLayout {
                     Layout.alignment: Qt.AlignHCenter
                     spacing: 10
+
+                    Item {
+                        height: 50
+                    }
 
                     MainClock {
                         Layout.alignment: Qt.AlignHCenter
@@ -361,12 +366,8 @@ Rectangle {
                         }
                     }
                 }
-
-                Rectangle {
-                    Layout.alignment: Qt.AlignHCenter
-                    color: "transparent"
-                    width: 300
-                    height: 60
+                Item {
+                    height: 45
                 }
             }
 

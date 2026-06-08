@@ -14,7 +14,7 @@ Rectangle {
     Layout.alignment: Qt.AlignHCenter
     color: config.subComponents
     radius: 30
-    width: 340
+    width: 365
     height: 55
     opacity: inputRect.firstInput ? 0 : inputRect.mainCardComponentsOpacity
 
@@ -128,7 +128,7 @@ Rectangle {
         anchors.centerIn: parent
         color: "transparent"
         radius: 30
-        width: 230
+        width: 250
         height: 40
         clip: true
 
