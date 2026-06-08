@@ -29,7 +29,7 @@ Item {
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.leftMargin: 50
-            anchors.topMargin: 30
+            anchors.topMargin: 35
             text: "\ue8ac"
             color: config.primary
             pointSize: 70
@@ -69,7 +69,7 @@ Item {
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.leftMargin: 47
-            anchors.topMargin: 30
+            anchors.topMargin: 35
             text: "\ue863"
             color: config.secondary
             pointSize: 70
