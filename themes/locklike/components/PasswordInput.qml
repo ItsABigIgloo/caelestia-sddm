@@ -15,7 +15,7 @@ Rectangle {
     color: config.subComponents
     radius: 30
     width: 340
-    height: 40
+    height: 55
     opacity: inputRect.firstInput ? 0 : inputRect.mainCardComponentsOpacity
 
     function shake() {
@@ -128,7 +128,7 @@ Rectangle {
         anchors.centerIn: parent
         color: "transparent"
         radius: 30
-        width: 250
+        width: 230
         height: 40
         clip: true
 
@@ -158,8 +158,8 @@ Rectangle {
 
                 delegate: Rectangle {
                     radius: 30
-                    width: 12
-                    height: 12
+                    width: 15
+                    height: 15
                     color: config.text
                 }
             }
@@ -194,19 +194,19 @@ Rectangle {
     Rectangle {
         id: inputButton
 
-        radius: 30
-        width: 30
-        height: 30
+        radius: 48
+        width: 48
+        height: 48
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        anchors.rightMargin: 8
+        anchors.rightMargin: 4
         color: inputRect.buffer === "" ? config.inverseOnSurface : config.primary
 
         Text {
             renderType: Text.NativeRendering
             anchors.centerIn: parent
             font.family: "Material Symbols Rounded"
-            font.pointSize: 17
+            font.pointSize: 24
             text: "\ue941"
             color: inputRect.buffer === "" ? config.text : config.mainCard
 

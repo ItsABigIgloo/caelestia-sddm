@@ -30,6 +30,11 @@ Rectangle {
     property bool mainCardBgBlur: config.mainCardBgBlur === "true"
     property int sessionIndex
 
+    // rounding stuff
+    property real largeRadius: mainCard.radius
+    property real midRadius: mainCard.radius / 1.4
+    property real smallRadius: mainCard.radius / 2
+
     width: 1920
     height: 1080
     color: "#131313"
@@ -170,7 +175,7 @@ Rectangle {
         scale: firstInput ? 0.5 : 1
         opacity: firstInput ? 0 : 1
         anchors.centerIn: parent
-        radius: 40
+        radius: 70
         color: "transparent"
 
         BlurWrapper {
@@ -181,6 +186,7 @@ Rectangle {
             blurAmount: root.mainCardBlurAmount
             bgColor: config.mainCard
             visibleState: !root.firstInput
+            radius: 50
         }
 
         RowLayout {
@@ -189,17 +195,16 @@ Rectangle {
             spacing: 40
 
             ColumnLayout {
-                spacing: 10
+                spacing: 13
                 Layout.alignment: Qt.AlignLeft
 
                 Rectangle {
                     id: topLeftRect
 
                     width: 390
-                    height: 180
+                    height: 220
                     color: config.subComponents
-                    topLeftRadius: mainCard.radius / 1.9
-                    radius: mainCard.radius / 4
+                    radius: root.midRadius
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
                     WelcomeText {
@@ -245,10 +250,10 @@ Rectangle {
                     id: bottomLeftRect
 
                     width: 390
-                    height: 180
+                    height: 190
                     color: "transparent"
                     bottomLeftRadius: mainCard.radius / 1.9
-                    radius: mainCard.radius / 4
+                    radius: root.midRadius / 1.7
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
                     SystemButtons {
@@ -366,7 +371,7 @@ Rectangle {
             }
 
             ColumnLayout {
-                spacing: 10
+                spacing: 13
                 Layout.alignment: Qt.AlignRight
 
                 Rectangle {
@@ -375,8 +380,7 @@ Rectangle {
                     width: 390
                     height: 355
                     color: config.subComponents
-                    topRightRadius: mainCard.radius / 1.9
-                    radius: mainCard.radius / 4
+                    radius: root.smallRadius
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
                     RandomQuote {
