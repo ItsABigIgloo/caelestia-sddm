@@ -13,21 +13,21 @@ Item {
         else if (hour >= 4 && hour < 10)
             welcomeString = "Good morning";
         else
-            welcomeString = "Good day";
+            welcomeString = "Good afternoon";
     }
 
     Component.onCompleted: getPhase()
 
     Text {
         renderType: Text.NativeRendering
-        width: topLeftRect.width - 40
+        width: 370
         text: "<span style='color:" + config.text + ";'>" + topLeftRect.welcomeString + " </span>" + "<span style='color:" + config.primary + ";'>" + userPicker.displayText + "</span>"
         textFormat: Text.RichText
+        wrapMode: Text.WordWrap
         anchors.centerIn: parent
         font.family: "Rubik"
         font.bold: false
         font.pixelSize: 40
-        wrapMode: Text.WordWrap
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
     }
@@ -38,5 +38,4 @@ Item {
         onTriggered: topLeftRect.getPhase()
         repeat: true
     }
-
 }

@@ -206,6 +206,7 @@ Rectangle {
                     color: config.subComponents
                     radius: root.midRadius
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
+                    clip: true
 
                     WelcomeText {
                         id: greeting
