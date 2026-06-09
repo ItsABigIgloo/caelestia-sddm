@@ -18,7 +18,7 @@ Item {
             Layout.leftMargin: 23
             Layout.topMargin: 25
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            color: config.primary
+            color: config.secondary
 
             Text {
                 renderType: Text.NativeRendering

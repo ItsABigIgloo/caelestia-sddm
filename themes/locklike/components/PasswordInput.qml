@@ -4,6 +4,8 @@ import QtQuick.Layouts
 Rectangle {
     id: inputRect
 
+    anchors.horizontalCenter: parent.horizontalCenter
+
     property real mainCardComponentsOpacity
     property bool firstInput
     property bool isLoading
@@ -14,9 +16,16 @@ Rectangle {
     Layout.alignment: Qt.AlignHCenter
     color: config.subComponents
     radius: 30
-    width: 365
-    height: 55
+    width: inputRect.buffer === "" ? 300 : 365
+    height: 45
     opacity: inputRect.firstInput ? 0 : inputRect.mainCardComponentsOpacity
+
+    Behavior on width {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.OutBack
+        }
+    }
 
     function shake() {
         shakeRotation.start();
@@ -195,12 +204,12 @@ Rectangle {
         id: inputButton
 
         radius: 48
-        width: 48
-        height: 48
+        width: inputRect.height - 7
+        height: inputRect.height - 7
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.rightMargin: 4
-        color: inputRect.buffer === "" ? config.inverseOnSurface : config.primary
+        color: inputRect.buffer === "" ? config.inverseOnSurface : config.secondary
 
         Text {
             renderType: Text.NativeRendering

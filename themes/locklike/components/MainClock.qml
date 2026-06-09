@@ -23,7 +23,5 @@ Text {
             duration: 300
             easing.type: Easing.OutBack
         }
-
     }
-
 }

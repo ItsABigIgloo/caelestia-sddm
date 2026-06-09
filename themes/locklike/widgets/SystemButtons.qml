@@ -31,7 +31,7 @@ Item {
             anchors.leftMargin: 50
             anchors.topMargin: 35
             text: "\ue8ac"
-            color: config.primary
+            color: config.secondary
             pointSize: 70
         }
 

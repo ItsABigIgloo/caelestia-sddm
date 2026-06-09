@@ -424,7 +424,7 @@ Rectangle {
 
                     Text {
                         renderType: Text.NativeRendering
-                        text: "Login for notifications"
+                        text: "Unlock for notifications"
                         color: config.inverseOnSurface
                         font.family: "CaskaydiaCove NF"
                         font.pointSize: 12
