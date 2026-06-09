@@ -12,13 +12,13 @@ Item {
 
     RowLayout {
         Rectangle {
-            width: 30
-            height: 40
-            radius: 12
-            Layout.leftMargin: 30
-            Layout.topMargin: 20
+            width: 33
+            height: 35
+            radius: 13
+            Layout.leftMargin: 23
+            Layout.topMargin: 25
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            color: config.primary
+            color: config.secondary
 
             Text {
                 renderType: Text.NativeRendering
@@ -36,15 +36,17 @@ Item {
             text: "caelestiafetch.sh"
             font.family: "CaskaydiaCove NF"
             font.pointSize: 13
-            Layout.leftMargin: 35
-            Layout.topMargin: 29
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.topMargin: 32
+            anchors.leftMargin: 65
         }
     }
 
     ColumnLayout {
         Item {
             width: 30
-            height: 60
+            height: 30
         }
 
         RowLayout {
@@ -67,7 +69,7 @@ Item {
                     renderType: Text.NativeRendering
                     Layout.leftMargin: 12
                     Layout.topMargin: root.rectHeight / 10
-                    text: "WM     :\nUSER   :\nUP     :\nBATTERY:"
+                    text: "WM     :\nUSER   :\nOS     :\nHOST   :"
                     color: config.text
                     font.pixelSize: 18
                     font.family: "CaskaydiaCove NF"
@@ -82,7 +84,7 @@ Item {
                     renderType: Text.NativeRendering
                     Layout.leftMargin: 0
                     Layout.topMargin: root.rectHeight / 10
-                    text: displayText + "\n" + root.currentUser + "\n" + "WIP" + "\n" + "WIP"
+                    text: displayText + "\n" + root.currentUser + "\n" + config.os + "\n" + config.host
                     color: config.text
                     font.pixelSize: 18
                     font.family: "CaskaydiaCove NF"
@@ -97,7 +99,7 @@ Item {
             spacing: 20
             Layout.alignment: Qt.AlignHCenter
             Layout.leftMargin: 30
-            Layout.topMargin: 20
+            Layout.topMargin: 4
 
             Rectangle {
                 width: 30

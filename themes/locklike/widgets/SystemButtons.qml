@@ -3,6 +3,7 @@ import QtQuick
 
 Item {
     property real rectHeight
+    property real rectWidth
     property real rectRadius
     property real rectBigRadius
 
@@ -14,9 +15,8 @@ Item {
         anchors.left: parent.left
         anchors.top: parent.top
         height: parent.rectHeight
-        width: parent.rectHeight + 10
+        width: parent.rectWidth
         radius: parent.rectRadius
-        bottomLeftRadius: parent.rectBigRadius
         color: config.subComponents
         clip: true
 
@@ -28,9 +28,9 @@ Item {
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.leftMargin: 50
-            anchors.topMargin: 30
+            anchors.topMargin: 35
             text: "\ue8ac"
-            color: config.primary
+            color: config.secondary
             pointSize: 70
         }
 
@@ -56,8 +56,8 @@ Item {
 
         anchors.right: parent.right
         anchors.top: parent.top
-        height: bottomLeftRect.height
-        width: bottomLeftRect.height + 10
+        height: rectHeight
+        width: rectWidth
         radius: bottomLeftRect.radius
         color: config.subComponents
         clip: true
@@ -68,7 +68,7 @@ Item {
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.leftMargin: 47
-            anchors.topMargin: 30
+            anchors.topMargin: 35
             text: "\ue863"
             color: config.secondary
             pointSize: 70
