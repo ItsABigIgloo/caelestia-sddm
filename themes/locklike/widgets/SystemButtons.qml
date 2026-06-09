@@ -17,7 +17,6 @@ Item {
         height: parent.rectHeight
         width: parent.rectWidth
         radius: parent.rectRadius
-        bottomLeftRadius: parent.rectBigRadius
         color: config.subComponents
         clip: true
 

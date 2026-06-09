@@ -69,7 +69,7 @@ Item {
                     renderType: Text.NativeRendering
                     Layout.leftMargin: 12
                     Layout.topMargin: root.rectHeight / 10
-                    text: "WM     :\nUSER   :\nUP     :\nBATTERY:"
+                    text: "WM     :\nUSER   :\nOS     :\nHOST   :"
                     color: config.text
                     font.pixelSize: 18
                     font.family: "CaskaydiaCove NF"
@@ -84,7 +84,7 @@ Item {
                     renderType: Text.NativeRendering
                     Layout.leftMargin: 0
                     Layout.topMargin: root.rectHeight / 10
-                    text: displayText + "\n" + root.currentUser + "\n" + "WIP" + "\n" + "WIP"
+                    text: displayText + "\n" + root.currentUser + "\n" + config.os + "\n" + config.host
                     color: config.text
                     font.pixelSize: 18
                     font.family: "CaskaydiaCove NF"
