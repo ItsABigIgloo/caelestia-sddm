@@ -28,6 +28,7 @@ Item {
                 font.family: "CaskaydiaCove NF"
                 font.pointSize: 15
             }
+
         }
 
         Text {
@@ -41,6 +42,7 @@ Item {
             anchors.topMargin: 32
             anchors.leftMargin: 65
         }
+
     }
 
     ColumnLayout {
@@ -92,7 +94,9 @@ Item {
                     lineHeightMode: Text.FixedHeight
                     Layout.preferredWidth: 100
                 }
+
             }
+
         }
 
         RowLayout {
@@ -149,6 +153,9 @@ Item {
                 color: config.inverseOnSurface
                 radius: 12
             }
+
         }
+
     }
+
 }

@@ -56,6 +56,18 @@ fi
 # 3. Sync Colors
 if [ -f "$CAEL_STATE/theme/sddm-theme.conf" ]; then
     cp -f "$CAEL_STATE/theme/sddm-theme.conf" "$THEME_DIR/theme.conf"
+
+    # get system OS name and Hostname
+    sys_os="Linux"
+    if [ -f /etc/os-release ]; then
+        sys_os=$(grep -oP '^PRETTY_NAME="\K[^"]+' /etc/os-release || grep -oP '^PRETTY_NAME=\K.+' /etc/os-release || echo "Linux")
+    fi
+    sys_host=$(hostname 2>/dev/null || cat /etc/hostname 2>/dev/null || echo "localhost")
+
+    # update os= and host= in theme.conf if exist
+    sed -i "s/^os=.*/os=$sys_os/" "$THEME_DIR/theme.conf"
+    sed -i "s/^host=.*/host=$sys_host/" "$THEME_DIR/theme.conf"
+
     chmod 644 "$THEME_DIR/theme.conf"
 fi
 
