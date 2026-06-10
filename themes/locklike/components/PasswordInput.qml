@@ -76,6 +76,7 @@ Rectangle {
                 } else {
                     loadingShape.index = loadingShape.index + 1;
                 }
+                scaleAnim.running = true;
             }
             repeat: true
         }
@@ -84,6 +85,25 @@ Rectangle {
             NumberAnimation {
                 duration: 400
             }
+        }
+    }
+
+    SequentialAnimation {
+        id: scaleAnim
+
+        running: false
+
+        NumberAnimation {
+            target: loadingShape
+            property: "scale"
+            to: 1.2
+            duration: 100
+        }
+        NumberAnimation {
+            target: loadingShape
+            property: "scale"
+            to: 1
+            duration: 100
         }
     }
 
