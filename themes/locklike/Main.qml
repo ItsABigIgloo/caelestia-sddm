@@ -95,6 +95,9 @@ Rectangle {
                 root.capsLockOn = !root.capsLockOn;
                 return;
             }
+            if (event.key === Qt.Key_Tab) {
+                return;
+            }
             if (root.firstInput) {
                 root.firstInput = false;
                 return;
@@ -350,7 +353,7 @@ Rectangle {
                     font.pointSize: 8
                     font.family: "Roboto"
                     color: config.text
-                    opacity: root.capsLockOn ? 1 : 0
+                    opacity: 0 // Its buggy rnm fix later
                     Behavior on opacity {
                         NumberAnimation {
                             duration: 300
