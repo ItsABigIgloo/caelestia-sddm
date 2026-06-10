@@ -1,5 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
+import "shapes"
+import "shapes/material-shapes.js" as MaterialShapes
 
 Rectangle {
     id: inputRect
@@ -147,7 +149,7 @@ Rectangle {
             font.pointSize: 12
             text: "Enter your password"
             color: '#6e6e6e'
-            font.family: "CaskaydiaCove NF"
+            font.family: "Rubik"
             opacity: inputRect.buffer === "" ? 1 : 0
 
             Behavior on opacity {
@@ -201,7 +203,7 @@ Rectangle {
     }
 
     Rectangle {
-        id: inputButton
+        id: inputButtonShape
 
         radius: 48
         width: inputRect.height - 7
@@ -209,37 +211,64 @@ Rectangle {
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.rightMargin: 4
-        color: inputRect.buffer === "" ? config.inverseOnSurface : config.secondary
+        color: "transparent"
 
-        Text {
-            renderType: Text.NativeRendering
-            anchors.centerIn: parent
-            font.family: "Material Symbols Rounded"
-            font.pointSize: 24
-            text: "\ue941"
-            color: inputRect.buffer === "" ? config.text : config.mainCard
+        property var shapeGetters: [MaterialShapes.getCircle, MaterialShapes.getArrow]
+
+        ShapeCanvas {
+            id: shape
+            rotation: 90
+            scale: inputRect.buffer === "" ? 0.9 : 0.7
+            implicitWidth: inputButtonShape.height / 2 * 2.1
+            implicitHeight: inputButtonShape.height / 2 * 2.1
+            roundedPolygon: inputRect.buffer === "" ? inputButtonShape.shapeGetters[0]() : inputButtonShape.shapeGetters[1]()
+            color: inputRect.buffer === "" ? config.inverseOnSurface : config.secondary
+            y: -1
+
+            Text {
+                renderType: Text.NativeRendering
+                anchors.centerIn: parent
+                font.family: "Material Symbols Rounded"
+                font.pointSize: 24
+                rotation: -90
+                text: "\ue941"
+                color: config.text
+                opacity: inputRect.buffer === "" ? 1 : 0
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 200
+                        easing.type: Easing.OutCubic
+                    }
+                }
+            }
 
             Behavior on color {
                 ColorAnimation {
                     duration: 200
+                    easing.type: Easing.OutCubic
                 }
             }
-        }
 
-        LayerState {
-            anchors.fill: parent
-            parentWidth: inputButton.width
-            parentHeight: inputButton.height
-            parentRadius: inputButton.radius
-            onClicked: {
-                sddm.login(inputRect.currentUser, inputRect.buffer, inputRect.currentSession);
-                inputRect.isLoading = true;
+            Behavior on scale {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.OutCubic
+                }
             }
-        }
 
-        Behavior on color {
-            ColorAnimation {
-                duration: 200
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: inputRect.buffer === "" ? false : true
+                onEntered: {
+                    shape.scale = 0.8;
+                }
+                onExited: {
+                    shape.scale = 0.7;
+                }
+                onClicked: {
+                    sddm.login(inputRect.currentUser, inputRect.buffer, inputRect.currentSession);
+                    inputRect.isLoading = true;
+                }
             }
         }
     }

@@ -1,12 +1,23 @@
 import Qt5Compat.GraphicalEffects
 import QtQuick 2.15
+import "shapes"
+import "shapes/material-shapes.js" as MaterialShapes
 
-Rectangle {
+ShapeCanvas {
     id: root
 
-    radius: root.height / 2
-    color: "black"
+    anchors.left: parent.left
+    anchors.leftMargin: 35
+
+    z: 2
+    implicitWidth: root.height / 2 * 2.1
+    implicitHeight: root.height / 2 * 2.1
+    roundedPolygon: root.shapeGetters[0]()
+    color: "#000000"
+
     clip: true
+
+    property var shapeGetters: [MaterialShapes.getClamShell]
 
     Image {
         id: avatarImage
@@ -23,14 +34,13 @@ Rectangle {
 
         mipmap: true
         smooth: true
-        anchors.fill: parent
+        anchors.fill: root
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
         layer.enabled: true
         onStatusChanged: {
             if (status === Image.Error)
                 retryTimer.start();
-
         }
         Component.onCompleted: loadNextAvatar()
 
@@ -42,9 +52,7 @@ Rectangle {
         }
 
         layer.effect: OpacityMask {
-            maskSource: parent
+            maskSource: root
         }
-
     }
-
 }

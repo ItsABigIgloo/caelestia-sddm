@@ -38,10 +38,6 @@ Rectangle {
     width: 1920
     height: 1080
     color: "#131313"
-    onBufferChanged: {
-        // ill make animations for typing
-        return;
-    }
 
     Connections {
         function onLoginFailed() {
@@ -290,10 +286,6 @@ Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     spacing: 10
 
-                    Item {
-                        height: 50
-                    }
-
                     MainClock {
                         Layout.alignment: Qt.AlignHCenter
                         firstInput: root.firstInput
@@ -321,13 +313,13 @@ Rectangle {
                 }
 
                 Item {
-                    height: 80
+                    height: 45
                 }
 
                 Avatar {
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: 230
-                    Layout.preferredHeight: 230
+                    Layout.preferredWidth: 330
+                    Layout.preferredHeight: 300
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
                     Behavior on opacity {
@@ -336,10 +328,6 @@ Rectangle {
                             easing.type: Easing.OutBack
                         }
                     }
-                }
-
-                Item {
-                    height: 40
                 }
 
                 PasswordInput {
@@ -368,7 +356,7 @@ Rectangle {
                     }
                 }
                 Item {
-                    height: 45
+                    height: 20
                 }
             }
 
