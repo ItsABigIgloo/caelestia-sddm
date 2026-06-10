@@ -6,9 +6,6 @@ import "shapes/material-shapes.js" as MaterialShapes
 ShapeCanvas {
     id: root
 
-    anchors.left: parent.left
-    anchors.leftMargin: 35
-
     z: 2
     implicitWidth: root.height / 2 * 2.1
     implicitHeight: root.height / 2 * 2.1

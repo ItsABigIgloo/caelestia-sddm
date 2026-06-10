@@ -28,7 +28,6 @@ Item {
                 font.family: "CaskaydiaCove NF"
                 font.pointSize: 15
             }
-
         }
 
         Text {
@@ -37,12 +36,10 @@ Item {
             text: "caelestiafetch.sh"
             font.family: "CaskaydiaCove NF"
             font.pointSize: 13
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.topMargin: 32
-            anchors.leftMargin: 65
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+            Layout.topMargin: 32
+            Layout.leftMargin: 8
         }
-
     }
 
     ColumnLayout {
@@ -94,9 +91,7 @@ Item {
                     lineHeightMode: Text.FixedHeight
                     Layout.preferredWidth: 100
                 }
-
             }
-
         }
 
         RowLayout {
@@ -153,9 +148,6 @@ Item {
                 color: config.inverseOnSurface
                 radius: 12
             }
-
         }
-
     }
-
 }

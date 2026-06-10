@@ -321,6 +321,7 @@ Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     Layout.preferredWidth: 330
                     Layout.preferredHeight: 300
+                    Layout.leftMargin: 34
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
                     Behavior on opacity {
@@ -333,6 +334,7 @@ Rectangle {
 
                 PasswordInput {
                     id: inputRect
+                    Layout.alignment: Qt.AlignHCenter
                     mainCardComponentsOpacity: root.mainCardComponentsOpacity
                     firstInput: root.firstInput
                     isLoading: root.loading
