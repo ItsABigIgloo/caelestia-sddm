@@ -127,6 +127,7 @@ Rectangle {
             }
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
                 sddm.login(userPicker.currentText, root.buffer, root.sessionIndex);
+                inputRect.buffer = "";
                 root.loading = true;
                 return;
             }

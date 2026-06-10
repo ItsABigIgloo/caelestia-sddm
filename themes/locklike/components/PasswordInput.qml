@@ -15,6 +15,12 @@ Rectangle {
     property string currentUser
     property int currentSession
 
+    onIsLoadingChanged: {
+        if (!inputRect.isLoading) {
+            inputRect.width = 365;
+        }
+    }
+
     Layout.alignment: Qt.AlignHCenter
     color: config.subComponents
     radius: 30
@@ -41,6 +47,7 @@ Rectangle {
     }
 
     Text {
+        id: lockIcon
         renderType: Text.NativeRendering
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
@@ -49,10 +56,40 @@ Rectangle {
         font.pointSize: 15
         text: "\ue897"
         color: '#a8a8a8'
+        visible: !inputRect.isLoading
+    }
+
+    ShapeCanvas {
+        id: loadingShape
+        property int index: 0
+        property var shapeGetters: [MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getCookie6Sided, MaterialShapes.getVerySunny]
+        opacity: inputRect.isLoading ? 1 : 0
+        color: config.secondary
+
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.leftMargin: 17
+
+        implicitWidth: lockIcon.height / 2 * 2.1
+        implicitHeight: lockIcon.height / 2 * 2.1
+        roundedPolygon: loadingShape.shapeGetters[loadingShape.index]()
+
+        Timer {
+            running: inputRect.isLoading
+            interval: 500
+            onTriggered: {
+                if (loadingShape.index == 4) {
+                    loadingShape.index = 0;
+                } else {
+                    loadingShape.index = loadingShape.index + 1;
+                }
+            }
+            repeat: true
+        }
 
         Behavior on opacity {
-            ColorAnimation {
-                duration: 100
+            NumberAnimation {
+                duration: 400
             }
         }
     }
@@ -115,21 +152,14 @@ Rectangle {
     SequentialAnimation {
         id: pulseColorRect1
 
-        loops: Animation.Infinite
         running: inputRect.isLoading
 
-        ColorAnimation {
+        NumberAnimation {
             target: inputRect
-            property: "color"
-            to: config.inverseOnSurface
-            duration: 350
-        }
-
-        ColorAnimation {
-            target: inputRect
-            property: "color"
-            to: config.subComponents
-            duration: 350
+            property: "width"
+            to: 300
+            duration: 300
+            easing.type: Easing.OutBack
         }
     }
 
@@ -268,6 +298,7 @@ Rectangle {
                 onClicked: {
                     sddm.login(inputRect.currentUser, inputRect.buffer, inputRect.currentSession);
                     inputRect.isLoading = true;
+                    inputRect.buffer = "";
                 }
             }
         }
