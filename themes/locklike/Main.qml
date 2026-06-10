@@ -189,6 +189,46 @@ Rectangle {
             radius: 50
         }
 
+        MainClock {
+            anchors.horizontalCenter: mainCard.horizontalCenter
+            anchors.top: mainCard.top
+            anchors.topMargin: 170
+            firstInput: root.firstInput
+            mainCardComponentsOpacity: root.mainCardComponentsOpacity
+            ap: root.ap
+        }
+
+        property date currentTime: new Date()
+
+        property string day: Qt.formatDateTime(currentTime, "dddd").toUpperCase()
+        property string date: Qt.formatDateTime(currentTime, "d MMM").toUpperCase()
+
+        readonly property var fontAxesTitle: ({
+                "wght": 500,
+                "wdth": 30,
+                "ROND": 25,
+                "opsz": 224 * centerScale
+            })
+
+        FontLoader {
+            id: googleSansFlex
+
+            source: "assets/google-sans-flex/GoogleSansFlex.ttf"
+        }
+
+        Text {
+            anchors.horizontalCenter: mainCard.horizontalCenter
+            anchors.top: mainCard.top
+            anchors.topMargin: 267
+            anchors.bottom: parent.bottom
+            color: config.text
+            text: mainCard.day + " • " + mainCard.date
+            font.pixelSize: 22
+            font.family: googleSansFlex.name
+            font.bold: true
+            font.variableAxes: mainCard.fontAxesTitle
+        }
+
         RowLayout {
             anchors.fill: parent
             anchors.margins: 15
@@ -283,37 +323,7 @@ Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     color: "transparent"
                     width: 300
-                    height: 30
-                }
-
-                ColumnLayout {
-                    Layout.alignment: Qt.AlignHCenter
-                    spacing: 10
-
-                    MainClock {
-                        Layout.alignment: Qt.AlignHCenter
-                        firstInput: root.firstInput
-                        mainCardComponentsOpacity: root.mainCardComponentsOpacity
-                        ap: root.ap
-                    }
-
-                    Text {
-                        renderType: Text.NativeRendering
-                        Layout.alignment: Qt.AlignHCenter
-                        text: Qt.formatDate(new Date(), "dddd,   d  MMMM  yyyy")
-                        font.pixelSize: 28
-                        font.family: "Rubik"
-                        font.bold: false
-                        color: config.textDark
-                        opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
-
-                        Behavior on opacity {
-                            NumberAnimation {
-                                duration: 300
-                                easing.type: Easing.OutBack
-                            }
-                        }
-                    }
+                    height: 140
                 }
 
                 Item {
