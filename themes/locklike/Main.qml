@@ -38,10 +38,6 @@ Rectangle {
     width: 1920
     height: 1080
     color: "#131313"
-    onBufferChanged: {
-        // ill make animations for typing
-        return;
-    }
 
     Connections {
         function onLoginFailed() {
@@ -99,6 +95,9 @@ Rectangle {
                 root.capsLockOn = !root.capsLockOn;
                 return;
             }
+            if (event.key === Qt.Key_Tab) {
+                return;
+            }
             if (root.firstInput) {
                 root.firstInput = false;
                 return;
@@ -131,6 +130,7 @@ Rectangle {
             }
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
                 sddm.login(userPicker.currentText, root.buffer, root.sessionIndex);
+                root.buffer = "";
                 root.loading = true;
                 return;
             }
@@ -187,6 +187,46 @@ Rectangle {
             bgColor: config.mainCard
             visibleState: !root.firstInput
             radius: 50
+        }
+
+        MainClock {
+            anchors.horizontalCenter: mainCard.horizontalCenter
+            anchors.top: mainCard.top
+            anchors.topMargin: 170
+            firstInput: root.firstInput
+            mainCardComponentsOpacity: root.mainCardComponentsOpacity
+            ap: root.ap
+        }
+
+        property date currentTime: new Date()
+
+        property string day: Qt.formatDateTime(currentTime, "dddd").toUpperCase()
+        property string date: Qt.formatDateTime(currentTime, "d MMM").toUpperCase()
+
+        readonly property var fontAxesTitle: ({
+                "wght": 500,
+                "wdth": 30,
+                "ROND": 25,
+                "opsz": 224 * centerScale
+            })
+
+        FontLoader {
+            id: googleSansFlex
+
+            source: "assets/google-sans-flex/GoogleSansFlex.ttf"
+        }
+
+        Text {
+            anchors.horizontalCenter: mainCard.horizontalCenter
+            anchors.top: mainCard.top
+            anchors.topMargin: 267
+            anchors.bottom: parent.bottom
+            color: config.text
+            text: mainCard.day + " • " + mainCard.date
+            font.pixelSize: 22
+            font.family: googleSansFlex.name
+            font.bold: true
+            font.variableAxes: mainCard.fontAxesTitle
         }
 
         RowLayout {
@@ -283,51 +323,18 @@ Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     color: "transparent"
                     width: 300
-                    height: 30
-                }
-
-                ColumnLayout {
-                    Layout.alignment: Qt.AlignHCenter
-                    spacing: 10
-
-                    Item {
-                        height: 50
-                    }
-
-                    MainClock {
-                        Layout.alignment: Qt.AlignHCenter
-                        firstInput: root.firstInput
-                        mainCardComponentsOpacity: root.mainCardComponentsOpacity
-                        ap: root.ap
-                    }
-
-                    Text {
-                        renderType: Text.NativeRendering
-                        Layout.alignment: Qt.AlignHCenter
-                        text: Qt.formatDate(new Date(), "dddd,   d  MMMM  yyyy")
-                        font.pixelSize: 28
-                        font.family: "Rubik"
-                        font.bold: false
-                        color: config.textDark
-                        opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
-
-                        Behavior on opacity {
-                            NumberAnimation {
-                                duration: 300
-                                easing.type: Easing.OutBack
-                            }
-                        }
-                    }
+                    height: 140
                 }
 
                 Item {
-                    height: 80
+                    height: 45
                 }
 
                 Avatar {
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: 230
-                    Layout.preferredHeight: 230
+                    Layout.preferredWidth: 330
+                    Layout.preferredHeight: 300
+                    Layout.leftMargin: 34
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
                     Behavior on opacity {
@@ -338,12 +345,9 @@ Rectangle {
                     }
                 }
 
-                Item {
-                    height: 40
-                }
-
                 PasswordInput {
                     id: inputRect
+                    Layout.alignment: Qt.AlignHCenter
                     mainCardComponentsOpacity: root.mainCardComponentsOpacity
                     firstInput: root.firstInput
                     isLoading: root.loading
@@ -359,7 +363,7 @@ Rectangle {
                     font.pointSize: 8
                     font.family: "Roboto"
                     color: config.text
-                    opacity: root.capsLockOn ? 1 : 0
+                    opacity: 0 // Its buggy rnm fix later
                     Behavior on opacity {
                         NumberAnimation {
                             duration: 300
@@ -368,7 +372,7 @@ Rectangle {
                     }
                 }
                 Item {
-                    height: 45
+                    height: 20
                 }
             }
 
