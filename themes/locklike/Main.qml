@@ -453,7 +453,7 @@ Rectangle {
 
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: mainCard.height / 1.19
+            anchors.topMargin: mainCard.height - 100
             currentText: sessionArray.sessions[0].name
             selectedIndex: 0
             opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
