@@ -37,7 +37,7 @@ Item {
 
     enabled: !isActive
     implicitWidth: 550
-    implicitHeight: 830
+    implicitHeight: 900
     scale: isActive ? 0.5 : 1
     opacity: isActive ? 0 : 1
 
@@ -93,22 +93,31 @@ Item {
             radius: Theme.cardRadius - 16
             color: Theme.withAlpha(Theme.mOnSecondary, Theme.innerCardOpacity)
 
+            Clock {
+                id: clock
+
+                anchors.top: parent.top
+                anchors.topMargin: 40
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            Avatar {
+                id: avatar
+
+                anchors.top: clock.bottom
+                anchors.topMargin: 20
+                anchors.horizontalCenter: parent.horizontalCenter
+                userPicker: root.userPicker
+                userModel: root.usersModel
+            }
+
             ColumnLayout {
-                anchors.fill: parent
-                anchors.margins: 40
-                spacing: 30
+                id: inputsLayout
 
-                Clock {
-                    Layout.alignment: Qt.AlignHCenter
-                }
-
-                Avatar {
-                    id: avatar
-
-                    Layout.alignment: Qt.AlignHCenter
-                    userPicker: root.userPicker
-                    userModel: root.usersModel
-                }
+                anchors.top: avatar.bottom
+                anchors.topMargin: 25
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 15
 
                 StyledComboBox {
                     id: userPicker
@@ -141,40 +150,6 @@ Item {
                     onLogin: root.onLogin
                 }
 
-                Row {
-                    Layout.alignment: Qt.AlignHCenter
-                    spacing: 20
-
-                    PowerButton {
-                        id: shutBtn
-
-                        width: 70
-                        height: 70
-                        iconText: "\ue8ac"
-                        normalColor: Theme.mOnSurface
-                        hoverColor: Theme.mError
-                        onRestoreFocus: root.onRestoreFocus
-                        onClickedAction: function() {
-                            sddm.powerOff();
-                        }
-                    }
-
-                    PowerButton {
-                        id: rebBtn
-
-                        width: 70
-                        height: 70
-                        iconText: "\uf053"
-                        normalColor: Theme.mOnSurface
-                        hoverColor: Theme.mHover
-                        onRestoreFocus: root.onRestoreFocus
-                        onClickedAction: function() {
-                            sddm.reboot();
-                        }
-                    }
-
-                }
-
                 StyledComboBox {
                     id: sessionPicker
 
@@ -193,6 +168,44 @@ Item {
                     font.family: Theme.fontFamily
                     font.pixelSize: Math.round(Theme.baseFontSize * 1.5)
                     onRestoreFocus: root.onRestoreFocus
+                }
+
+            }
+
+            Row {
+                id: powerButtons
+
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 30
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 20
+
+                PowerButton {
+                    id: shutBtn
+
+                    width: 70
+                    height: 70
+                    iconText: "\ue8ac"
+                    normalColor: Theme.mOnSurface
+                    hoverColor: Theme.mError
+                    onRestoreFocus: root.onRestoreFocus
+                    onClickedAction: function() {
+                        sddm.powerOff();
+                    }
+                }
+
+                PowerButton {
+                    id: rebBtn
+
+                    width: 70
+                    height: 70
+                    iconText: "\uf053"
+                    normalColor: Theme.mOnSurface
+                    hoverColor: Theme.mHover
+                    onRestoreFocus: root.onRestoreFocus
+                    onClickedAction: function() {
+                        sddm.reboot();
+                    }
                 }
 
             }
