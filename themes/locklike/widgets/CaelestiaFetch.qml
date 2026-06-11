@@ -83,7 +83,7 @@ Item {
                     renderType: Text.NativeRendering
                     Layout.leftMargin: 0
                     Layout.topMargin: root.rectHeight / 10
-                    text: displayText + "\n" + root.currentUser + "\n" + config.os + "\n" + config.host
+                    text: displayText + "\n" + root.currentUser + "\n" + config.os.split(" ")[0] + "\n" + config.host
                     color: config.text
                     font.pixelSize: 18
                     font.family: "CaskaydiaCove NF"
