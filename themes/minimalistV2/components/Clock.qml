@@ -4,7 +4,7 @@ import QtQuick 2.15
 Column {
     id: root
 
-    property real centerScale: 0.92
+    property real centerScale: 0.90
     property bool useTwelveHourClock: false
     property date currentTime: new Date()
     readonly property var fontAxesHours: ({
