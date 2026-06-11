@@ -24,6 +24,9 @@ elementRadius=25
 # Login Card Radius
 cardRadius=75
 
+# Avatar shape [circle | clamshell]
+avatarShape=circle
+
 # Card border [true | false]
 cardBorder=false
 

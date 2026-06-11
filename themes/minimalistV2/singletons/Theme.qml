@@ -9,8 +9,15 @@ QtObject {
     property string fontFamily: "Google Sans Flex"
     // fonts and dimensions
     property real baseFontSize: boundedNumber(getConfig("FontSize"), 12, 10, 24)
-    property real avatarFrameSize: 280
+    property real avatarFrameSize: theme.avatarShape === "circle" ? 230 : 280
     property real avatarInset: 19
+    property string avatarShape: {
+        var val = getConfig("avatarShape");
+        if (val === undefined)
+            return "clamshell";
+
+        return val.toString().toLowerCase().trim().replace(/^"|"$/g, "");
+    }
     property real elementRadius: boundedNumber(getConfig("elementRadius"), 20, 0, 64)
     property real cardRadius: boundedNumber(getConfig("cardRadius"), 30, 0, 80)
     // colors

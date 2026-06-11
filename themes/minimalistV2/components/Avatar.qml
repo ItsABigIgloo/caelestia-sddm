@@ -9,14 +9,11 @@ Item {
 
     property var userPicker: null
     property var userModel: null
-    property var shapeGetters: [MaterialShapes.getClamShell]
     // Calculate actual visual dimensions based on the shape bounds
     readonly property var bounds: bgShape.bounds
-    readonly property real shapeHeightMultiplier: bounds ? (bounds[3] - bounds[1]) : 1
-    readonly property real shapeWidthMultiplier: bounds ? (bounds[2] - bounds[0]) : 1
 
-    implicitWidth: Theme.avatarFrameSize * shapeWidthMultiplier
-    implicitHeight: Theme.avatarFrameSize * shapeHeightMultiplier
+    implicitWidth: Theme.avatarFrameSize
+    implicitHeight: Theme.avatarShape === "circle" ? Theme.avatarFrameSize : 180
     clip: true
 
     Item {
@@ -24,14 +21,14 @@ Item {
 
         width: Theme.avatarFrameSize
         height: Theme.avatarFrameSize
-        x: root.bounds ? -root.bounds[0] * Theme.avatarFrameSize : 0
-        y: root.bounds ? -root.bounds[1] * Theme.avatarFrameSize : 0
+        x: root.bounds ? (root.implicitWidth / 2 - (root.bounds[0] + root.bounds[2]) / 2 * Theme.avatarFrameSize) : 0
+        y: root.bounds ? (root.implicitHeight / 2 - (root.bounds[1] + root.bounds[3]) / 2 * Theme.avatarFrameSize) : 0
 
         ShapeCanvas {
             id: bgShape
 
             anchors.fill: parent
-            roundedPolygon: root.shapeGetters[0]()
+            roundedPolygon: Theme.avatarShape === "circle" ? MaterialShapes.getCircle() : MaterialShapes.getClamShell()
             color: "#000000"
         }
 
