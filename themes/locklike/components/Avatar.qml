@@ -9,12 +9,30 @@ ShapeCanvas {
     z: 2
     implicitWidth: root.height / 2 * 2.1
     implicitHeight: root.height / 2 * 2.1
-    roundedPolygon: root.shapeGetters[0]()
+    roundedPolygon: root.shapeGetters[index]()
     color: "#000000"
+
+    property bool hovered: false
+    property int index: 0
+
+    MouseArea {
+        anchors.fill: avatarImage
+        hoverEnabled: true
+        onEntered: hovered = true
+        onExited: hovered = false
+    }
+
+    onHoveredChanged: {
+        if (hovered) {
+            root.index = 1;
+        } else {
+            root.index = 0;
+        }
+    }
 
     clip: true
 
-    property var shapeGetters: [MaterialShapes.getClamShell]
+    property var shapeGetters: [MaterialShapes.getClamShell, MaterialShapes.getCookie6Sided]
 
     Image {
         id: avatarImage
