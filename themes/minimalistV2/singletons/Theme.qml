@@ -6,20 +6,7 @@ QtObject {
 
     property bool configAvailable: false
     property string backgroundSource: "assets/background" // allow for different file extensions
-    property string fontFamily: {
-        var availableFonts = Qt.fontFamilies();
-        var family = "";
-        if (configAvailable && config.fontFamily)
-            family = config.fontFamily;
-
-        if (family && family !== "") {
-            family = family.toString().replace(/^"|"$/g, "");
-            if (availableFonts.indexOf(family) !== -1)
-                return family;
-
-        }
-        return firstAvailable(["Rubik", "Sans"]);
-    }
+    property string fontFamily: "Google Sans Flex"
     // fonts and dimensions
     property real baseFontSize: boundedNumber(getConfig("FontSize"), 12, 10, 24)
     property real avatarBaseSize: boundedNumber(getConfig("AvatarSize"), 128, 64, 320)
@@ -79,16 +66,6 @@ QtObject {
 
         var value = config[key];
         return value !== undefined ? value : undefined;
-    }
-
-    function firstAvailable(candidates) {
-        var availableFonts = Qt.fontFamilies();
-        for (var i = 0; i < candidates.length; i++) {
-            if (availableFonts.indexOf(candidates[i]) !== -1)
-                return candidates[i];
-
-        }
-        return "sans-serif";
     }
 
     function toNumber(value, fallbackValue) {

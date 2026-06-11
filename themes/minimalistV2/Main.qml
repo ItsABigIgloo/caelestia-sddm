@@ -31,6 +31,12 @@ Rectangle {
     height: 1080
     color: Theme.mSurface
 
+    FontLoader {
+        id: googleSansFlex
+
+        source: "assets/google-sans-flex/GoogleSansFlex.ttf"
+    }
+
     Item {
         id: keyHandler
 
