@@ -9,9 +9,8 @@ QtObject {
     property string fontFamily: "Google Sans Flex"
     // fonts and dimensions
     property real baseFontSize: boundedNumber(getConfig("FontSize"), 12, 10, 24)
-    property real avatarBaseSize: boundedNumber(getConfig("AvatarSize"), 128, 64, 320)
-    property real avatarFrameSize: Math.max(96, Math.round(avatarBaseSize * 1.72))
-    property real avatarInset: Math.max(8, Math.round(avatarFrameSize * 0.09))
+    property real avatarFrameSize: 206
+    property real avatarInset: 19
     property real elementRadius: boundedNumber(getConfig("elementRadius"), 20, 0, 64)
     property real cardRadius: boundedNumber(getConfig("cardRadius"), 30, 0, 80)
     // colors
@@ -38,6 +37,7 @@ QtObject {
         var val = getConfig("welcomeMessage");
         if (val === undefined)
             return "Welcome $USER";
+
         return val.toString().replace(/^"|"$/g, "");
     }
     // effects
