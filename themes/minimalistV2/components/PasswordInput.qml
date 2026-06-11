@@ -11,8 +11,8 @@ Rectangle {
     property bool isError: false
     property bool isAuthenticating: false
 
-    implicitWidth: 380
-    implicitHeight: 55
+    implicitWidth: 340
+    implicitHeight: 48
     color: Theme.withAlpha(Theme.mSurface, Theme.elementOpacity)
     radius: Math.min(Theme.elementRadius, Math.min(root.width, root.height) / 2)
     border.color: {
@@ -44,7 +44,7 @@ Rectangle {
         anchors.centerIn: parent
         color: "transparent"
         width: 250
-        height: 50
+        height: parent.height - 8
         clip: true
 
         Text {

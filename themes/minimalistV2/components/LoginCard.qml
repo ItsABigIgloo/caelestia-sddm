@@ -37,7 +37,7 @@ Item {
 
     enabled: !isActive
     implicitWidth: 550
-    implicitHeight: 900
+    implicitHeight: clock.implicitHeight + avatar.implicitHeight + inputsLayout.implicitHeight + powerButtons.implicitHeight + 172
     scale: isActive ? 0.5 : 1
     opacity: isActive ? 0 : 1
 
@@ -97,7 +97,7 @@ Item {
                 id: clock
 
                 anchors.top: parent.top
-                anchors.topMargin: 40
+                anchors.topMargin: 35
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
@@ -105,7 +105,7 @@ Item {
                 id: avatar
 
                 anchors.top: clock.bottom
-                anchors.topMargin: 20
+                anchors.topMargin: 15
                 anchors.horizontalCenter: parent.horizontalCenter
                 userPicker: root.userPicker
                 userModel: root.usersModel
@@ -115,7 +115,7 @@ Item {
                 id: inputsLayout
 
                 anchors.top: avatar.bottom
-                anchors.topMargin: 25
+                anchors.topMargin: 20
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 15
 
@@ -123,8 +123,8 @@ Item {
                     id: userPicker
 
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: 380
-                    Layout.preferredHeight: 55
+                    Layout.preferredWidth: 340
+                    Layout.preferredHeight: 48
                     model: root.usersModel
                     currentIndex: {
                         if (!root.usersModel || root.usersModel.count <= 0)
@@ -154,8 +154,8 @@ Item {
                     id: sessionPicker
 
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: 380
-                    Layout.preferredHeight: 55
+                    Layout.preferredWidth: 340
+                    Layout.preferredHeight: 48
                     model: root.sessionsModel
                     currentIndex: {
                         if (!root.sessionsModel || root.sessionsModel.count <= 0)
@@ -175,8 +175,8 @@ Item {
             Row {
                 id: powerButtons
 
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 30
+                anchors.top: inputsLayout.bottom
+                anchors.topMargin: 35
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 20
 
