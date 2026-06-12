@@ -9,6 +9,13 @@ Rectangle {
     property alias currentSession: inputRect.currentSession
     property alias currentUser: inputRect.currentUser
     property alias buffer: inputRect.buffer
+    property int lastLength: 0
+    onBufferChanged: {
+        if (buffer.length > lastLength) {
+            dots.currentIndex = buffer.length - 1;
+        }
+        lastLength = buffer.length;
+    }
     property alias isLoading: inputRect.isLoading
     property alias firstInput: inputRect.firstInput
     property alias mainCardComponentsOpacity: inputRect.mainCardComponentsOpacity
@@ -210,43 +217,48 @@ Rectangle {
                 }
             }
 
-            RowLayout {
+            Row {
+                id: dots
+                spacing: 3
+
+                property int currentIndex: -1
+
                 anchors.centerIn: parent
 
                 Repeater {
-                    id: characters
-
                     model: inputRect.buffer.length
 
                     delegate: Rectangle {
-                        radius: 30
-                        width: 15
-                        height: 15
-                        color: config.text
-                    }
-                }
+                        width: 17
+                        height: 17
+                        radius: 10
+                        color: "white"
+                        scale: 1.0
+                        opacity: 1.0
 
-                Rectangle {
-                    id: textIndicator
+                        property bool isNew: index === dots.currentIndex
 
-                    property bool invisible: true
+                        SequentialAnimation on scale {
+                            running: isNew
+                            NumberAnimation {
+                                from: 0.2
+                                to: 1.2
+                                duration: 140
+                                easing.type: Easing.OutCubic
+                            }
+                            NumberAnimation {
+                                to: 1.0
+                                duration: 120
+                            }
+                        }
 
-                    visible: inputRect.buffer === "" ? false : true
-                    width: 1
-                    height: 21
-                    color: config.text
-                    opacity: invisible ? 0 : 1
-
-                    Timer {
-                        running: true
-                        repeat: true
-                        interval: 500
-                        onTriggered: textIndicator.invisible = !textIndicator.invisible
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 200
+                        SequentialAnimation on opacity {
+                            running: isNew
+                            NumberAnimation {
+                                from: 0
+                                to: 1
+                                duration: 200
+                            }
                         }
                     }
                 }
