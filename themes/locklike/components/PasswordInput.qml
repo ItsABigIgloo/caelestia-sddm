@@ -222,15 +222,23 @@ Rectangle {
                 spacing: 3
 
                 property int currentIndex: -1
+                property real fullWidth: inputRect.buffer.length * 15 + (inputRect.buffer.length - 1) * 3
 
+                width: fullWidth
                 anchors.centerIn: parent
+
+                Behavior on width {
+                    NumberAnimation {
+                        duration: 150
+                    }
+                }
 
                 Repeater {
                     model: inputRect.buffer.length
 
                     delegate: Rectangle {
-                        width: 17
-                        height: 17
+                        width: 15
+                        height: 15
                         radius: 10
                         color: "white"
                         scale: 1.0
@@ -241,7 +249,7 @@ Rectangle {
                         SequentialAnimation on scale {
                             running: isNew
                             NumberAnimation {
-                                from: 0.2
+                                from: 0
                                 to: 1.2
                                 duration: 140
                                 easing.type: Easing.OutCubic
