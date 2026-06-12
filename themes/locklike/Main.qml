@@ -12,6 +12,10 @@ Rectangle {
 
     property bool ap: config.ap === "true" ? true : false
     property bool sessionPickerEnabled: config.sessionPicker === "true" ? true : false
+    property string avatarShape: {
+        var shape = config.AvatarShape || "hexagon";
+        return (shape !== "hexagon" && shape !== "circle") ? "hexagon" : shape;
+    }
     property bool welcomeMessageEnabled: config.enableWelcomeMessage !== "false"
     property bool firstInput: welcomeMessageEnabled
     property bool loading: false
@@ -331,6 +335,7 @@ Rectangle {
                 }
 
                 Avatar {
+                    avatarShape: root.avatarShape
                     Layout.alignment: Qt.AlignHCenter
                     Layout.preferredWidth: 330
                     Layout.preferredHeight: 300
