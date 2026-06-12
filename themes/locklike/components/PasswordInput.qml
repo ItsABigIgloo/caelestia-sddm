@@ -222,7 +222,7 @@ Rectangle {
                 spacing: 3
 
                 property int currentIndex: -1
-                property real fullWidth: inputRect.buffer.length * 15 + (inputRect.buffer.length - 1) * 3
+                property real fullWidth: inputRect.buffer.length * 15 + (inputRect.buffer.length - 1) * 3 + parent.height
 
                 width: fullWidth
                 anchors.centerIn: parent
@@ -230,6 +230,7 @@ Rectangle {
                 Behavior on width {
                     NumberAnimation {
                         duration: 150
+                        easing: Easing.OutCubic
                     }
                 }
 
