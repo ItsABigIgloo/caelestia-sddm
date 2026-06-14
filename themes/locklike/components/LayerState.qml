@@ -50,6 +50,11 @@ Item {
         bottomLeftRadius: root.bottomLeftradius
         bottomRightRadius: root.bottomRightradius
         color: mouse.pressed ? Qt.rgba(root.rippleColor.r, root.rippleColor.g, root.rippleColor.b, 0.2) : mouse.containsMouse ? Qt.rgba(root.rippleColor.r, root.rippleColor.g, root.rippleColor.b, 0.15) : "transparent"
+        Behavior on color {
+            ColorAnimation {
+                duration: 160
+            }
+        }
     }
 
     Rectangle {
