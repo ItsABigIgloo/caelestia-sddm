@@ -14,8 +14,8 @@
     <h2> Locklike Theme </h2>
 </div>
 
-<a href="https://github.com/user-attachments/assets/3a21a2d3-542a-42fe-b69c-40978eadd42b">
-<img src="https://github.com/user-attachments/assets/3a21a2d3-542a-42fe-b69c-40978eadd42b" alt="Locklike">
+<a href="https://github.com/user-attachments/assets/ef2c973d-c723-4a71-b535-04951a2c3130">
+<img src="https://github.com/user-attachments/assets/ef2c973d-c723-4a71-b535-04951a2c3130" alt="Locklike">
 </a>
 
 <div align="center">
