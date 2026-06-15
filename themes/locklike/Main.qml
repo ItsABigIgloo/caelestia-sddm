@@ -12,6 +12,10 @@ Rectangle {
 
     property bool ap: config.ap === "true" ? true : false
     property bool sessionPickerEnabled: config.sessionPicker === "true" ? true : false
+    property string avatarShape: {
+        var shape = config.AvatarShape || "hexagon";
+        return (shape !== "hexagon" && shape !== "circle") ? "hexagon" : shape;
+    }
     property bool welcomeMessageEnabled: config.enableWelcomeMessage !== "false"
     property bool firstInput: welcomeMessageEnabled
     property bool loading: false
@@ -331,10 +335,13 @@ Rectangle {
                 }
 
                 Avatar {
+                    avatarShape: root.avatarShape
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: 330
-                    Layout.preferredHeight: 300
-                    Layout.leftMargin: 34
+                    Layout.preferredWidth: root.avatarShape === "circle" ? 260 : 330
+                    Layout.preferredHeight: root.avatarShape === "circle" ? 260 : 300
+                    Layout.leftMargin: root.avatarShape === "circle" ? 0 : 34
+                    Layout.topMargin: root.avatarShape === "circle" ? 20 : 0
+                    Layout.bottomMargin: root.avatarShape === "circle" ? 20 : 0
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
                     Behavior on opacity {

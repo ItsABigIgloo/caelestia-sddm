@@ -29,6 +29,14 @@ mainCardBgBlur=true
 sessionPicker=false
 
 # ============================================================================
+# AVATAR
+# ============================================================================
+# Avatar shape [hexagon | circle]
+# hexagon: hexagonal Material Design blob shape (default)
+# circle: circular crop
+AvatarShape=hexagon
+
+# ============================================================================
 # COLOR SCHEME
 # ============================================================================
 #! Do not touch these! (auto-synced by Caelestia)
