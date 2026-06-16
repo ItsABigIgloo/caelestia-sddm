@@ -13,7 +13,7 @@ Text {
     text: Theme.welcomeMessage.replace("$USER", userName).trim()
     visible: Theme.welcomeMessage !== ""
     font.family: Theme.fontFamily
-    font.pixelSize: Math.round(Theme.baseFontSize * 8)
+    font.pixelSize: 88
     font.weight: Font.DemiBold
     color: Theme.mOnSurface
     opacity: isActive ? 1 : 0

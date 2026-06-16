@@ -49,7 +49,7 @@ Rectangle {
         Text {
             renderType: Text.NativeRendering
             font.family: "Material Symbols Outlined"
-            font.pixelSize: Math.round(Theme.baseFontSize * 1.55)
+            font.pixelSize: 17
             text: root.iconText
             color: root.textColor
         }
@@ -57,7 +57,7 @@ Rectangle {
         Text {
             renderType: Text.NativeRendering
             font.family: Theme.fontFamily
-            font.pixelSize: Math.round(Theme.baseFontSize * 1.45)
+            font.pixelSize: 16
             text: root.message
             color: root.textColor
         }

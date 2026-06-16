@@ -217,7 +217,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 30
         font.family: Theme.fontFamily
-        font.pixelSize: Math.round(Theme.baseFontSize * 1.8)
+        font.pixelSize: 20
         font.italic: true
         opacity: root.firstInput ? 1 : 0
         color: Theme.mOnSurfaceVariant

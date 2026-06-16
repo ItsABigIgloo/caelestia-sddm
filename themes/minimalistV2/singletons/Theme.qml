@@ -7,11 +7,10 @@ QtObject {
     property bool configAvailable: false
     property string backgroundSource: "assets/background" // allow for different file extensions
     property string fontFamily: "Google Sans Flex"
-    // fonts and dimensions
-    property real baseFontSize: boundedNumber(getConfig("FontSize"), 12, 10, 24)
     property real avatarFrameSize: {
         if (theme.avatarShape === "circle")
             return 260;
+
         if (theme.avatarShape === "cookie4sided" || theme.avatarShape === "cookie4")
             return 270;
 

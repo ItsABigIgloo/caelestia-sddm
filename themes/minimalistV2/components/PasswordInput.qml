@@ -61,7 +61,7 @@ Item {
                 verticalAlignment: Text.AlignVCenter
                 renderType: Text.NativeRendering
                 font.family: "Material Symbols Outlined"
-                font.pixelSize: Math.round(Theme.baseFontSize * 1.5)
+                font.pixelSize: 17
                 text: "lock"
                 color: capsLockCircle.opacity > 0.5 ? Theme.mOnPrimary : Theme.mOnSurfaceVariant
 
@@ -204,7 +204,7 @@ Item {
                 renderType: Text.NativeRendering
                 anchors.centerIn: parent
                 font.family: Theme.fontFamily
-                font.pixelSize: Math.round(Theme.baseFontSize * 1.5)
+                font.pixelSize: 17
                 text: "Enter your password"
                 color: Theme.mOnSurfaceVariant
                 opacity: root.buffer === "" ? 1 : 0
@@ -300,7 +300,7 @@ Item {
                     renderType: Text.NativeRendering
                     anchors.centerIn: parent
                     font.family: "Material Symbols Outlined"
-                    font.pixelSize: Math.round(Theme.baseFontSize * 1.6)
+                    font.pixelSize: 18
                     rotation: -90
                     text: "arrow_forward"
                     color: root.buffer === "" ? Theme.mOnSurface : Theme.mOnPrimary
