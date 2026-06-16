@@ -19,7 +19,7 @@ Item {
     }
 
     implicitWidth: Theme.avatarFrameSize
-    implicitHeight: Theme.avatarFrameSize
+    implicitHeight: Theme.avatarShape === "clamshell" ? 250 : Theme.avatarFrameSize
     clip: true
 
     Item {

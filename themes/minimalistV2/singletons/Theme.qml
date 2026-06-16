@@ -11,11 +11,11 @@ QtObject {
     property real baseFontSize: boundedNumber(getConfig("FontSize"), 12, 10, 24)
     property real avatarFrameSize: {
         if (theme.avatarShape === "circle")
-            return 275;
+            return 260;
         if (theme.avatarShape === "cookie4sided" || theme.avatarShape === "cookie4")
-            return 272;
+            return 270;
 
-        return 313;
+        return 310;
     }
     property real avatarInset: 19
     property string avatarShape: {
