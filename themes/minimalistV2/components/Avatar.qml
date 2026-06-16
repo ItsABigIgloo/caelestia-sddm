@@ -19,7 +19,7 @@ Item {
     }
 
     implicitWidth: Theme.avatarFrameSize
-    implicitHeight: Theme.avatarShape === "circle" ? Theme.avatarFrameSize : 180
+    implicitHeight: Theme.avatarFrameSize
     clip: true
 
     Item {

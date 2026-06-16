@@ -9,7 +9,14 @@ QtObject {
     property string fontFamily: "Google Sans Flex"
     // fonts and dimensions
     property real baseFontSize: boundedNumber(getConfig("FontSize"), 12, 10, 24)
-    property real avatarFrameSize: theme.avatarShape === "circle" ? 230 : 350
+    property real avatarFrameSize: {
+        if (theme.avatarShape === "circle")
+            return 275;
+        if (theme.avatarShape === "cookie4sided" || theme.avatarShape === "cookie4")
+            return 272;
+
+        return 313;
+    }
     property real avatarInset: 19
     property string avatarShape: {
         var val = getConfig("avatarShape");
