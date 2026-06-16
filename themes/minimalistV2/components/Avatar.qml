@@ -7,10 +7,16 @@ import "shapes/material-shapes.js" as MaterialShapes
 Item {
     id: root
 
-    property var userPicker: null
+    property int currentUserIndex: 0
     property var userModel: null
     // Calculate actual visual dimensions based on the shape bounds
     readonly property var bounds: bgShape.bounds
+
+    onCurrentUserIndexChanged: {
+        if (avatarImage.status !== Image.Null) {
+            avatarImage.rebuildAvatarCandidates();
+        }
+    }
 
     implicitWidth: Theme.avatarFrameSize
     implicitHeight: Theme.avatarShape === "circle" ? Theme.avatarFrameSize : 180
@@ -28,7 +34,13 @@ Item {
             id: bgShape
 
             anchors.fill: parent
-            roundedPolygon: Theme.avatarShape === "circle" ? MaterialShapes.getCircle() : MaterialShapes.getClamShell()
+            roundedPolygon: {
+                if (Theme.avatarShape === "circle")
+                    return MaterialShapes.getCircle();
+                if (Theme.avatarShape === "cookie4sided" || Theme.avatarShape === "cookie4")
+                    return MaterialShapes.getCookie4Sided();
+                return MaterialShapes.getClamShell();
+            }
             color: "#000000"
         }
 
@@ -65,9 +77,9 @@ Item {
                 var list = [];
                 appendCandidate(list, "../assets/avatar.face.icon");
                 appendCandidate(list, "../assets/avatar.face");
-                if (root.userPicker && root.userModel) {
-                    if (root.userPicker.currentIndex >= 0 && root.userPicker.currentIndex < root.userModel.count) {
-                        var modelIndex = root.userModel.index(root.userPicker.currentIndex, 0);
+                if (root.userModel) {
+                    if (root.currentUserIndex >= 0 && root.currentUserIndex < root.userModel.count) {
+                        var modelIndex = root.userModel.index(root.currentUserIndex, 0);
                         var icon = root.userModel.data(modelIndex, roleIcon);
                         var homeDir = root.userModel.data(modelIndex, roleHomeDir);
                         appendCandidate(list, icon);
@@ -95,14 +107,6 @@ Item {
 
             }
             Component.onCompleted: rebuildAvatarCandidates()
-
-            Connections {
-                function onCurrentIndexChanged() {
-                    avatarImage.rebuildAvatarCandidates();
-                }
-
-                target: root.userPicker
-            }
 
             layer.effect: OpacityMask {
                 maskSource: bgShape
