@@ -4,8 +4,9 @@ import QtQuick 2.15
 Column {
     id: root
 
+    spacing: -12
+
     property real centerScale: 0.90
-    property bool useTwelveHourClock: false
     property date currentTime: new Date()
     readonly property var fontAxesHours: ({
         "wght": 500,
@@ -17,13 +18,13 @@ Column {
         "wght": 500,
         "wdth": 30,
         "ROND": 25,
-        "opsz": (useTwelveHourClock ? 121.6 : 224) * centerScale
+        "opsz": 224 * centerScale
     })
-    readonly property var fontAxesAmPm: ({
+    readonly property var fontAxesDate: ({
         "wght": 500,
         "wdth": 30,
         "ROND": 25,
-        "opsz": 48 * centerScale
+        "opsz": 7
     })
 
     Timer {
@@ -48,21 +49,13 @@ Column {
             font.family: Theme.fontFamily
             font.variableAxes: root.fontAxesHours
             font.pixelSize: Math.round(224 * root.centerScale)
-            color: Theme.mSecondary
+            color: Qt.lighter(Theme.mPrimary, 1.6)
             text: Qt.formatTime(root.currentTime, "hh")
         }
 
-        Text {
-            id: separatorText
-
-            height: parent.height
-            verticalAlignment: Text.AlignVCenter
-            renderType: Text.NativeRendering
-            font.family: Theme.fontFamily
-            font.variableAxes: root.fontAxesHours
-            font.pixelSize: Math.round(224 * root.centerScale)
-            color: Theme.mPrimary
-            text: ":"
+        Item {
+            width: 5
+            height: 1
         }
 
         Text {
@@ -81,11 +74,11 @@ Column {
     }
 
     Text {
-        renderType: Text.NativeRendering
         anchors.horizontalCenter: parent.horizontalCenter
-        text: Qt.formatDate(root.currentTime, "dddd, d MMMM yyyy")
-        font.pixelSize: Math.round(Theme.baseFontSize * 1.83)
+        text: (Qt.formatDateTime(root.currentTime, "dddd").toUpperCase() + " • " + Qt.formatDateTime(root.currentTime, "d MMM").toUpperCase())
+        font.pixelSize: 24
         font.family: Theme.fontFamily
+        font.variableAxes: root.fontAxesDate
         color: Theme.mPrimary
     }
 
