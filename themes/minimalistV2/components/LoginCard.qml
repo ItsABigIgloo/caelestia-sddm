@@ -148,7 +148,7 @@ Item {
 
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -55
+                anchors.verticalCenterOffset: -65
                 spacing: 15
 
                 Clock {
@@ -254,40 +254,77 @@ Item {
 
             }
 
-            Row {
-                id: powerButtons
+            Column {
+                id: footerArea
 
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: 45
+                anchors.bottomMargin: 30
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 20
 
-                PowerButton {
-                    id: shutBtn
+                Row {
+                    id: powerButtons
 
-                    width: 70
-                    height: 70
-                    iconText: "\ue8ac"
-                    normalColor: Theme.mOnSurface
-                    hoverColor: Theme.mError
-                    onRestoreFocus: root.onRestoreFocus
-                    onClickedAction: function() {
-                        sddm.powerOff();
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: 20
+
+                    PowerButton {
+                        id: shutBtn
+
+                        width: 70
+                        height: 70
+                        iconText: "\ue8ac"
+                        normalColor: Theme.mOnSurface
+                        hoverColor: Theme.mError
+                        onRestoreFocus: root.onRestoreFocus
+                        onClickedAction: function() {
+                            sddm.powerOff();
+                        }
                     }
+
+                    PowerButton {
+                        id: rebBtn
+
+                        width: 70
+                        height: 70
+                        iconText: "\uf053"
+                        normalColor: Theme.mOnSurface
+                        hoverColor: Theme.mHover
+                        onRestoreFocus: root.onRestoreFocus
+                        onClickedAction: function() {
+                            sddm.reboot();
+                        }
+                    }
+
                 }
 
-                PowerButton {
-                    id: rebBtn
+                Row {
+                    id: controlHints
 
-                    width: 70
-                    height: 70
-                    iconText: "\uf053"
-                    normalColor: Theme.mOnSurface
-                    hoverColor: Theme.mHover
-                    onRestoreFocus: root.onRestoreFocus
-                    onClickedAction: function() {
-                        sddm.reboot();
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: 13
+
+                    Row {
+                        spacing: 4
+
+                        Text {
+                            font.family: "Material Symbols Outlined"
+                            font.pixelSize: 13
+                            color: Theme.mOnSurfaceVariant
+                            text: "touch_app"
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                        Text {
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 13
+                            color: Theme.mOnSurfaceVariant
+                            text: "Click to switch User and Session"
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
                     }
+
                 }
 
             }
