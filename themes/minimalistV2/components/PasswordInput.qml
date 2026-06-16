@@ -12,6 +12,7 @@ Item {
     property var onRestoreFocus: null
     property bool isError: false
     property bool isAuthenticating: false
+    property bool capsLockOn: false
 
     implicitWidth: 365
     implicitHeight: 48
@@ -25,18 +26,54 @@ Item {
         color: Theme.withAlpha(Theme.mSurface, Theme.elementOpacity)
         radius: Math.min(Theme.elementRadius, height / 2)
 
-        Text {
-            id: lockIcon
+        Item {
+            id: lockIconContainer
 
-            renderType: Text.NativeRendering
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: 17
-            font.family: "Material Symbols Outlined"
-            font.pixelSize: Math.round(Theme.baseFontSize * 1.5)
-            text: "\ue897"
-            color: Theme.mOnSurfaceVariant
+            anchors.leftMargin: 17 - (width - lockIcon.font.pixelSize) / 2
+            width: lockIcon.font.pixelSize * 1.6
+            height: lockIcon.font.pixelSize * 1.6
             visible: !root.isAuthenticating
+
+            Rectangle {
+                id: capsLockCircle
+
+                anchors.fill: parent
+                radius: width / 2
+                color: Theme.mPrimary
+                opacity: root.capsLockOn ? 1 : 0
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: Theme.animDurationFast
+                    }
+
+                }
+
+            }
+
+            Text {
+                id: lockIcon
+
+                anchors.fill: parent
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                renderType: Text.NativeRendering
+                font.family: "Material Symbols Outlined"
+                font.pixelSize: Math.round(Theme.baseFontSize * 1.5)
+                text: "lock"
+                color: capsLockCircle.opacity > 0.5 ? Theme.mOnPrimary : Theme.mOnSurfaceVariant
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Theme.animDurationFast
+                    }
+
+                }
+
+            }
+
         }
 
         ShapeCanvas {
@@ -265,7 +302,7 @@ Item {
                     font.family: "Material Symbols Outlined"
                     font.pixelSize: Math.round(Theme.baseFontSize * 1.6)
                     rotation: -90
-                    text: "\ue5c8"
+                    text: "arrow_forward"
                     color: root.buffer === "" ? Theme.mOnSurface : Theme.mOnPrimary
                     opacity: root.buffer === "" ? 1 : 0
 

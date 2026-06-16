@@ -7,10 +7,22 @@ Rectangle {
 
     property string message: ""
     property bool isOpen: false
+    property color backgroundColor: Theme.withAlpha(Theme.mError, 0.95)
+    property color textColor: Theme.mOnError
+    property string iconText: "error"
 
     signal dismissed()
 
-    function show(msg) {
+    function show(msg, type) {
+        if (type === "warning" || type === "info") {
+            root.backgroundColor = Theme.withAlpha(Theme.mPrimary, 0.95);
+            root.textColor = Theme.mOnPrimary;
+            root.iconText = "info";
+        } else {
+            root.backgroundColor = Theme.withAlpha(Theme.mError, 0.95);
+            root.textColor = Theme.mOnError;
+            root.iconText = "error";
+        }
         root.message = msg;
         root.isOpen = true;
         dismissTimer.restart();
@@ -22,7 +34,7 @@ Rectangle {
 
     implicitWidth: toastContent.implicitWidth + 48
     implicitHeight: toastContent.implicitHeight + 24
-    color: Theme.withAlpha(Theme.mError, 0.95)
+    color: backgroundColor
     radius: Math.min(Theme.elementRadius, Math.min(root.width, root.height) / 2)
     opacity: isOpen ? 1 : 0
     scale: isOpen ? 1 : 0.6
@@ -38,8 +50,8 @@ Rectangle {
             renderType: Text.NativeRendering
             font.family: "Material Symbols Outlined"
             font.pixelSize: Math.round(Theme.baseFontSize * 1.55)
-            text: "\ue000"
-            color: Theme.mOnError
+            text: root.iconText
+            color: root.textColor
         }
 
         Text {
@@ -47,7 +59,7 @@ Rectangle {
             font.family: Theme.fontFamily
             font.pixelSize: Math.round(Theme.baseFontSize * 1.45)
             text: root.message
-            color: Theme.mOnError
+            color: root.textColor
         }
 
     }

@@ -13,7 +13,7 @@ Item {
     property var onLogin: null
     property bool isError: false
     property bool isAuthenticating: false
-
+    property bool capsLockOn: false
     property int currentUserIndex: 0
     property int currentSessionIndex: 0
     property var sessionNames: []
@@ -21,6 +21,7 @@ Item {
     function getUserName(idx) {
         if (!usersModel || usersModel.count <= 0 || idx < 0 || idx >= usersModel.count)
             return "";
+
         var modelIndex = usersModel.index(idx, 0);
         return usersModel.data(modelIndex, Qt.UserRole + 1);
     }
@@ -28,6 +29,7 @@ Item {
     function getSessionName(idx) {
         if (!sessionNames || idx < 0 || idx >= sessionNames.length)
             return "";
+
         return sessionNames[idx];
     }
 
@@ -54,21 +56,32 @@ Item {
     height: 850
     scale: isActive ? 0.5 : 1
     opacity: isActive ? 0 : 1
-
     onUsersModelChanged: {
         if (usersModel && usersModel.count > 0) {
             var uIdx = usersModel.lastIndex;
             currentUserIndex = (uIdx >= 0 && uIdx < usersModel.count) ? uIdx : 0;
         }
     }
-
     onSessionsModelChanged: {
         if (sessionsModel && sessionsModel.count > 0) {
             var sIdx = sessionsModel.lastIndex;
             currentSessionIndex = (sIdx >= 0 && sIdx < sessionsModel.count) ? sIdx : 0;
         }
     }
+    onCapsLockOnChanged: {
+        if (capsLockOn && !isAuthenticating) {
+            toast.show("Caps Lock is on", "warning");
+        } else if (!capsLockOn) {
+            if (toast.isOpen && toast.message === "Caps Lock is on")
+                toast.dismiss();
 
+        }
+    }
+    onIsActiveChanged: {
+        if (isActive)
+            toast.dismiss();
+
+    }
     Component.onCompleted: {
         if (usersModel && usersModel.count > 0) {
             var uIdx = usersModel.lastIndex;
@@ -82,6 +95,7 @@ Item {
 
     Instantiator {
         model: root.sessionsModel
+
         delegate: Item {
             Component.onCompleted: {
                 var arr = root.sessionNames.slice();
@@ -89,6 +103,7 @@ Item {
                 root.sessionNames = arr;
             }
         }
+
     }
 
     Rectangle {
@@ -168,14 +183,14 @@ Item {
                 Row {
                     id: userSessionRow
 
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    spacing: 8
-                    bottomPadding: 10
-
                     readonly property var textAxes: ({
                         "wght": 550,
                         "opsz": 22
                     })
+
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: 8
+                    bottomPadding: 10
 
                     Text {
                         id: userText
@@ -198,9 +213,11 @@ Item {
                                     root.currentUserIndex = (root.currentUserIndex + 1) % root.usersModel.count;
                                     if (root.onRestoreFocus)
                                         root.onRestoreFocus();
+
                                 }
                             }
                         }
+
                     }
 
                     Text {
@@ -235,10 +252,13 @@ Item {
                                     root.currentSessionIndex = (root.currentSessionIndex + 1) % root.sessionsModel.count;
                                     if (root.onRestoreFocus)
                                         root.onRestoreFocus();
+
                                 }
                             }
                         }
+
                     }
+
                 }
 
                 PasswordInput {
@@ -248,6 +268,7 @@ Item {
                     buffer: root.buffer
                     isError: root.isError
                     isAuthenticating: root.isAuthenticating
+                    capsLockOn: root.capsLockOn
                     onRestoreFocus: root.onRestoreFocus
                     onLogin: root.onLogin
                 }
@@ -273,7 +294,7 @@ Item {
 
                         width: 70
                         height: 70
-                        iconText: "\ue8ac"
+                        iconText: "power_settings_new"
                         normalColor: Theme.mOnSurface
                         hoverColor: Theme.mError
                         onRestoreFocus: root.onRestoreFocus
@@ -287,7 +308,7 @@ Item {
 
                         width: 70
                         height: 70
-                        iconText: "\uf053"
+                        iconText: "restart_alt"
                         normalColor: Theme.mOnSurface
                         hoverColor: Theme.mHover
                         onRestoreFocus: root.onRestoreFocus

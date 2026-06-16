@@ -9,6 +9,7 @@ Rectangle {
 
     property bool firstInput: Theme.enableWelcomeMessage
     property string buffer: ""
+    property bool capsLockOn: (typeof keyboard !== 'undefined') ? keyboard.capsLock : false
     property var userName: {
         if (userModel.count > 0 && userModel.lastIndex >= 0) {
             var idx = userModel.index(userModel.lastIndex, 0);
@@ -45,6 +46,18 @@ Rectangle {
             keyHandler.forceActiveFocus();
         }
         Keys.onPressed: function(event) {
+            if (event.key === Qt.Key_CapsLock) {
+                root.capsLockOn = !root.capsLockOn;
+                return ;
+            }
+            if (event.text && event.text.length === 1) {
+                var charStr = event.text.charAt(0);
+                if ((charStr >= "a" && charStr <= "z") || (charStr >= "A" && charStr <= "Z")) {
+                    var isUpper = (charStr === charStr.toUpperCase());
+                    var shiftPressed = (event.modifiers & Qt.ShiftModifier) ? true : false;
+                    root.capsLockOn = (isUpper && !shiftPressed) || (!isUpper && shiftPressed);
+                }
+            }
             if (root.firstInput) {
                 loginCard.clearError();
                 if (event.text && event.text !== "" && event.text.length === 1)
@@ -169,6 +182,7 @@ Rectangle {
         usersModel: userModel
         sessionsModel: sessionModel
         buffer: root.buffer
+        capsLockOn: root.capsLockOn
         onRestoreFocus: restoreFocus
         onCurrentUserIndexChanged: {
             clearBuffer();
