@@ -1,7 +1,6 @@
 import "../singletons"
 import Qt5Compat.GraphicalEffects
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
 Item {
     id: root
@@ -12,10 +11,25 @@ Item {
     property string buffer: ""
     property var onRestoreFocus: null
     property var onLogin: null
-    property alias userPicker: userPicker
-    property alias sessionPicker: sessionPicker
     property bool isError: false
     property bool isAuthenticating: false
+
+    property int currentUserIndex: 0
+    property int currentSessionIndex: 0
+    property var sessionNames: []
+
+    function getUserName(idx) {
+        if (!usersModel || usersModel.count <= 0 || idx < 0 || idx >= usersModel.count)
+            return "";
+        var modelIndex = usersModel.index(idx, 0);
+        return usersModel.data(modelIndex, Qt.UserRole + 1);
+    }
+
+    function getSessionName(idx) {
+        if (!sessionNames || idx < 0 || idx >= sessionNames.length)
+            return "";
+        return sessionNames[idx];
+    }
 
     function showError(msg) {
         root.isError = true;
@@ -36,10 +50,46 @@ Item {
     }
 
     enabled: !isActive
-    implicitWidth: 550
-    implicitHeight: clock.implicitHeight + avatar.implicitHeight + inputsLayout.implicitHeight + powerButtons.implicitHeight + 172
+    width: 550
+    height: 850
     scale: isActive ? 0.5 : 1
     opacity: isActive ? 0 : 1
+
+    onUsersModelChanged: {
+        if (usersModel && usersModel.count > 0) {
+            var uIdx = usersModel.lastIndex;
+            currentUserIndex = (uIdx >= 0 && uIdx < usersModel.count) ? uIdx : 0;
+        }
+    }
+
+    onSessionsModelChanged: {
+        if (sessionsModel && sessionsModel.count > 0) {
+            var sIdx = sessionsModel.lastIndex;
+            currentSessionIndex = (sIdx >= 0 && sIdx < sessionsModel.count) ? sIdx : 0;
+        }
+    }
+
+    Component.onCompleted: {
+        if (usersModel && usersModel.count > 0) {
+            var uIdx = usersModel.lastIndex;
+            currentUserIndex = (uIdx >= 0 && uIdx < usersModel.count) ? uIdx : 0;
+        }
+        if (sessionsModel && sessionsModel.count > 0) {
+            var sIdx = sessionsModel.lastIndex;
+            currentSessionIndex = (sIdx >= 0 && sIdx < sessionsModel.count) ? sIdx : 0;
+        }
+    }
+
+    Instantiator {
+        model: root.sessionsModel
+        delegate: Item {
+            Component.onCompleted: {
+                var arr = root.sessionNames.slice();
+                arr[index] = model.name;
+                root.sessionNames = arr;
+            }
+        }
+    }
 
     Rectangle {
         id: cardBorder
@@ -93,56 +143,48 @@ Item {
             radius: Theme.cardRadius - 16
             color: Theme.withAlpha(Theme.mOnSecondary, Theme.innerCardOpacity)
 
-            Clock {
-                id: clock
+            Column {
+                id: mainContent
 
-                anchors.top: parent.top
-                anchors.topMargin: 35
                 anchors.horizontalCenter: parent.horizontalCenter
-            }
-
-            Avatar {
-                id: avatar
-
-                anchors.top: clock.bottom
-                anchors.topMargin: 15
-                anchors.horizontalCenter: parent.horizontalCenter
-                userPicker: root.userPicker
-                userModel: root.usersModel
-            }
-
-            ColumnLayout {
-                id: inputsLayout
-
-                anchors.top: avatar.bottom
-                anchors.topMargin: 20
-                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -55
                 spacing: 15
 
-                StyledComboBox {
-                    id: userPicker
+                Clock {
+                    id: clock
 
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: 340
-                    Layout.preferredHeight: 48
-                    model: root.usersModel
-                    currentIndex: {
-                        if (!root.usersModel || root.usersModel.count <= 0)
-                            return -1;
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
 
-                        var idx = root.usersModel.lastIndex;
-                        return idx >= 0 && idx < root.usersModel.count ? idx : 0;
-                    }
-                    textRole: "name"
+                Avatar {
+                    id: avatar
+
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    currentUserIndex: root.currentUserIndex
+                    userModel: root.usersModel
+                }
+
+                Text {
+                    id: userSessionText
+
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    renderType: Text.NativeRendering
                     font.family: Theme.fontFamily
-                    font.pixelSize: Math.round(Theme.baseFontSize * 1.67)
-                    onRestoreFocus: root.onRestoreFocus
+                    font.pixelSize: 22
+                    font.variableAxes: ({
+                        "wght": 550,
+                        "opsz": 22
+                    })
+                    bottomPadding: 15
+                    color: Theme.mOnSurface
+                    text: root.getUserName(root.currentUserIndex) + " | " + root.getSessionName(root.currentSessionIndex)
                 }
 
                 PasswordInput {
                     id: passwordInput
 
-                    Layout.alignment: Qt.AlignHCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
                     buffer: root.buffer
                     isError: root.isError
                     isAuthenticating: root.isAuthenticating
@@ -150,33 +192,13 @@ Item {
                     onLogin: root.onLogin
                 }
 
-                StyledComboBox {
-                    id: sessionPicker
-
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: 340
-                    Layout.preferredHeight: 48
-                    model: root.sessionsModel
-                    currentIndex: {
-                        if (!root.sessionsModel || root.sessionsModel.count <= 0)
-                            return -1;
-
-                        var idx = root.sessionsModel.lastIndex;
-                        return idx >= 0 && idx < root.sessionsModel.count ? idx : 0;
-                    }
-                    textRole: "name"
-                    font.family: Theme.fontFamily
-                    font.pixelSize: Math.round(Theme.baseFontSize * 1.5)
-                    onRestoreFocus: root.onRestoreFocus
-                }
-
             }
 
             Row {
                 id: powerButtons
 
-                anchors.top: inputsLayout.bottom
-                anchors.topMargin: 35
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 45
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 20
 

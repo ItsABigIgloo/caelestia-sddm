@@ -61,28 +61,28 @@ Rectangle {
                 return ;
             }
             if (event.key === Qt.Key_Right) {
-                if (userModel.count > 0 && loginCard.userPicker.currentIndex < userModel.count - 1) {
-                    loginCard.userPicker.currentIndex += 1;
+                if (userModel.count > 0 && loginCard.currentUserIndex < userModel.count - 1) {
+                    loginCard.currentUserIndex += 1;
                     clearBuffer();
                 }
                 return ;
             }
             if (event.key === Qt.Key_Left) {
-                if (userModel.count > 0 && loginCard.userPicker.currentIndex > 0) {
-                    loginCard.userPicker.currentIndex -= 1;
+                if (userModel.count > 0 && loginCard.currentUserIndex > 0) {
+                    loginCard.currentUserIndex -= 1;
                     clearBuffer();
                 }
                 return ;
             }
             if (event.key === Qt.Key_Up) {
-                if (sessionModel.count > 0 && loginCard.sessionPicker.currentIndex > 0)
-                    loginCard.sessionPicker.currentIndex -= 1;
+                if (sessionModel.count > 0 && loginCard.currentSessionIndex > 0)
+                    loginCard.currentSessionIndex -= 1;
 
                 return ;
             }
             if (event.key === Qt.Key_Down) {
-                if (sessionModel.count > 0 && loginCard.sessionPicker.currentIndex < sessionModel.count - 1)
-                    loginCard.sessionPicker.currentIndex += 1;
+                if (sessionModel.count > 0 && loginCard.currentSessionIndex < sessionModel.count - 1)
+                    loginCard.currentSessionIndex += 1;
 
                 return ;
             }
@@ -93,7 +93,7 @@ Rectangle {
             }
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
                 loginCard.showAuthenticating();
-                sddm.login(loginCard.userPicker.currentText, root.buffer, loginCard.sessionPicker.currentIndex);
+                sddm.login(loginCard.getUserName(loginCard.currentUserIndex), root.buffer, loginCard.currentSessionIndex);
                 clearBuffer();
                 return ;
             }
@@ -172,7 +172,7 @@ Rectangle {
         onRestoreFocus: restoreFocus
         onLogin: function() {
             loginCard.showAuthenticating();
-            sddm.login(loginCard.userPicker.currentText, root.buffer, loginCard.sessionPicker.currentIndex);
+            sddm.login(loginCard.getUserName(loginCard.currentUserIndex), root.buffer, loginCard.currentSessionIndex);
             clearBuffer();
             restoreFocus();
         }
