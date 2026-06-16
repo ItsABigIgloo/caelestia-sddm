@@ -1,8 +1,10 @@
 import "../singletons"
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+import "shapes"
+import "shapes/material-shapes.js" as MaterialShapes
 
-Rectangle {
+Item {
     id: root
 
     property string buffer: ""
@@ -11,50 +13,59 @@ Rectangle {
     property bool isError: false
     property bool isAuthenticating: false
 
-    implicitWidth: 340
+    implicitWidth: 365
     implicitHeight: 48
-    color: Theme.withAlpha(Theme.mSurface, Theme.elementOpacity)
-    radius: Math.min(Theme.elementRadius, Math.min(root.width, root.height) / 2)
-    border.color: {
-        if (isError)
-            return Theme.mError;
-
-        if (isAuthenticating)
-            return Theme.mPrimary;
-
-        if (buffer !== "")
-            return Theme.mPrimary;
-
-        return Theme.mOutline;
-    }
-    border.width: 2
-
-    Text {
-        renderType: Text.NativeRendering
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin: 17
-        font.family: "Material Symbols Outlined"
-        font.pixelSize: Math.round(Theme.baseFontSize * 1.5)
-        text: "\ue897"
-        color: Theme.mOnSurfaceVariant
-    }
 
     Rectangle {
+        id: inputRect
+
         anchors.centerIn: parent
-        color: "transparent"
-        width: 250
-        height: parent.height - 8
-        clip: true
+        width: root.isAuthenticating ? 300 : (root.buffer === "" ? 300 : 365)
+        height: 48
+        color: Theme.withAlpha(Theme.mSurface, Theme.elementOpacity)
+        radius: Math.min(Theme.elementRadius, height / 2)
 
         Text {
+            id: lockIcon
+
             renderType: Text.NativeRendering
-            anchors.centerIn: parent
-            font.family: Theme.fontFamily
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: 17
+            font.family: "Material Symbols Outlined"
             font.pixelSize: Math.round(Theme.baseFontSize * 1.5)
-            text: "Enter your password"
+            text: "\ue897"
             color: Theme.mOnSurfaceVariant
-            opacity: root.buffer === "" ? 1 : 0
+            visible: !root.isAuthenticating
+        }
+
+        ShapeCanvas {
+            id: loadingShape
+
+            property int index: 0
+            property var shapeGetters: [MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getCookie6Sided, MaterialShapes.getVerySunny]
+
+            opacity: root.isAuthenticating ? 1 : 0
+            color: Theme.mPrimary
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: 17
+            implicitWidth: lockIcon.font.pixelSize * 1.2
+            implicitHeight: lockIcon.font.pixelSize * 1.2
+            roundedPolygon: loadingShape.shapeGetters[loadingShape.index]()
+
+            Timer {
+                running: root.isAuthenticating
+                interval: 500
+                onTriggered: {
+                    if (loadingShape.index === 4)
+                        loadingShape.index = 0;
+                    else
+                        loadingShape.index = loadingShape.index + 1;
+                    scaleAnim.running = true;
+                }
+                repeat: true
+            }
 
             Behavior on opacity {
                 NumberAnimation {
@@ -65,41 +76,101 @@ Rectangle {
 
         }
 
-        RowLayout {
-            anchors.centerIn: parent
-            spacing: 8
+        SequentialAnimation {
+            id: scaleAnim
 
-            Repeater {
-                id: passwordDots
+            running: false
 
-                model: root.buffer.length
-
-                Rectangle {
-                    radius: Math.min(Theme.elementRadius, width / 2)
-                    width: 12
-                    height: 12
-                    color: Theme.mOnSurface
-                }
-
+            NumberAnimation {
+                target: loadingShape
+                property: "scale"
+                to: 1.2
+                duration: 100
             }
 
-            Rectangle {
-                id: cursorIndicator
+            NumberAnimation {
+                target: loadingShape
+                property: "scale"
+                to: 1
+                duration: 100
+            }
 
-                property bool blink: true
+        }
 
-                visible: root.buffer !== ""
-                width: 2
-                height: 25
-                color: Theme.mOnSurface
-                opacity: blink ? 1 : 0
+        SequentialAnimation {
+            id: shakeRotation
 
-                Timer {
-                    running: cursorIndicator.visible
-                    repeat: true
-                    interval: 530
-                    onTriggered: cursorIndicator.blink = !cursorIndicator.blink
-                }
+            running: false
+
+            NumberAnimation {
+                target: inputRect
+                property: "rotation"
+                to: -6
+                duration: 50
+            }
+
+            NumberAnimation {
+                target: inputRect
+                property: "rotation"
+                to: 6
+                duration: 50
+            }
+
+            NumberAnimation {
+                target: inputRect
+                property: "rotation"
+                to: -4
+                duration: 50
+            }
+
+            NumberAnimation {
+                target: inputRect
+                property: "rotation"
+                to: 4
+                duration: 50
+            }
+
+            NumberAnimation {
+                target: inputRect
+                property: "rotation"
+                to: -2
+                duration: 50
+            }
+
+            NumberAnimation {
+                target: inputRect
+                property: "rotation"
+                to: 2
+                duration: 50
+            }
+
+            NumberAnimation {
+                target: inputRect
+                property: "rotation"
+                to: 0
+                duration: 50
+            }
+
+        }
+
+        Rectangle {
+            id: inputBorders
+
+            anchors.centerIn: parent
+            color: "transparent"
+            radius: Math.min(Theme.elementRadius, height / 2)
+            width: 250
+            height: parent.height - 8
+            clip: true
+
+            Text {
+                renderType: Text.NativeRendering
+                anchors.centerIn: parent
+                font.family: Theme.fontFamily
+                font.pixelSize: Math.round(Theme.baseFontSize * 1.5)
+                text: "Enter your password"
+                color: Theme.mOnSurfaceVariant
+                opacity: root.buffer === "" ? 1 : 0
 
                 Behavior on opacity {
                     NumberAnimation {
@@ -110,53 +181,146 @@ Rectangle {
 
             }
 
-        }
+            RowLayout {
+                anchors.centerIn: parent
+                spacing: 8
 
-    }
+                Repeater {
+                    id: passwordDots
 
-    Rectangle {
-        id: loginButton
+                    model: root.buffer.length
 
-        radius: Math.min(Theme.elementRadius, Math.min(width, height) / 2)
-        width: 35
-        height: 35
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.rightMargin: 8
-        color: root.buffer === "" ? Theme.mSurfaceVariant : Theme.mPrimary
+                    Rectangle {
+                        radius: width / 2
+                        width: 12
+                        height: 12
+                        color: Theme.mOnSurface
+                    }
 
-        Text {
-            anchors.centerIn: parent
-            font.family: "Material Symbols Outlined"
-            font.pixelSize: Math.round(Theme.baseFontSize * 1.67)
-            text: "\ue5c8"
-            color: root.buffer === "" ? Theme.mOnSurface : Theme.mOnPrimary
+                }
 
-            Behavior on color {
-                ColorAnimation {
-                    duration: Theme.animDurationFast
+                Rectangle {
+                    id: cursorIndicator
+
+                    property bool blink: true
+
+                    visible: root.buffer !== ""
+                    width: 2
+                    height: 25
+                    color: Theme.mOnSurface
+                    opacity: blink ? 1 : 0
+
+                    Timer {
+                        running: cursorIndicator.visible
+                        repeat: true
+                        interval: 530
+                        onTriggered: cursorIndicator.blink = !cursorIndicator.blink
+                    }
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: Theme.animDurationFast
+                        }
+
+                    }
+
                 }
 
             }
 
         }
 
-        MouseArea {
-            anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
-            onClicked: {
-                if (root.onLogin)
-                    root.onLogin();
+        Rectangle {
+            id: inputButtonShape
 
-                if (root.onRestoreFocus)
-                    root.onRestoreFocus();
+            property var shapeGetters: [MaterialShapes.getCircle, MaterialShapes.getArrow]
+
+            radius: width / 2
+            width: parent.height - 8
+            height: parent.height - 8
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.rightMargin: 4
+            color: "transparent"
+
+            ShapeCanvas {
+                id: buttonShape
+
+                rotation: 90
+                scale: {
+                    if (root.buffer === "")
+                        return 0.9;
+
+                    return buttonShapeMouseArea.containsMouse ? 0.8 : 0.7;
+                }
+                implicitWidth: inputButtonShape.height * 1.05
+                implicitHeight: inputButtonShape.height * 1.05
+                roundedPolygon: root.buffer === "" ? inputButtonShape.shapeGetters[0]() : inputButtonShape.shapeGetters[1]()
+                color: root.buffer === "" ? Theme.mSurfaceVariant : Theme.mPrimary
+                y: -1
+
+                Text {
+                    renderType: Text.NativeRendering
+                    anchors.centerIn: parent
+                    font.family: "Material Symbols Outlined"
+                    font.pixelSize: Math.round(Theme.baseFontSize * 1.6)
+                    rotation: -90
+                    text: "\ue5c8"
+                    color: root.buffer === "" ? Theme.mOnSurface : Theme.mOnPrimary
+                    opacity: root.buffer === "" ? 1 : 0
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: Theme.animDurationFast
+                            easing.type: Easing.OutCubic
+                        }
+
+                    }
+
+                }
+
+                MouseArea {
+                    id: buttonShapeMouseArea
+
+                    anchors.fill: parent
+                    hoverEnabled: root.buffer !== ""
+                    cursorShape: root.buffer !== "" ? Qt.PointingHandCursor : Qt.ArrowCursor
+                    onClicked: {
+                        if (root.buffer !== "") {
+                            if (root.onLogin)
+                                root.onLogin();
+
+                            if (root.onRestoreFocus)
+                                root.onRestoreFocus();
+
+                        }
+                    }
+                }
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Theme.animDurationFast
+                        easing.type: Easing.OutCubic
+                    }
+
+                }
+
+                Behavior on scale {
+                    NumberAnimation {
+                        duration: Theme.animDurationFast
+                        easing.type: Easing.OutCubic
+                    }
+
+                }
 
             }
+
         }
 
-        Behavior on color {
-            ColorAnimation {
-                duration: Theme.animDurationFast
+        Behavior on width {
+            NumberAnimation {
+                duration: Theme.animDurationNormal
+                easing.type: Easing.OutBack
             }
 
         }
@@ -165,102 +329,12 @@ Rectangle {
 
     Connections {
         function onIsErrorChanged() {
-            if (isError)
-                authPulseAnim.stop();
+            if (root.isError)
+                shakeRotation.start();
 
         }
 
         target: root
-    }
-
-    SequentialAnimation {
-        id: shakeAnim
-
-        running: isError
-        loops: 1
-
-        NumberAnimation {
-            target: shakeTransform
-            property: "x"
-            to: -8
-            duration: 50
-        }
-
-        NumberAnimation {
-            target: shakeTransform
-            property: "x"
-            to: 8
-            duration: 50
-        }
-
-        NumberAnimation {
-            target: shakeTransform
-            property: "x"
-            to: -6
-            duration: 50
-        }
-
-        NumberAnimation {
-            target: shakeTransform
-            property: "x"
-            to: 6
-            duration: 50
-        }
-
-        NumberAnimation {
-            target: shakeTransform
-            property: "x"
-            to: 0
-            duration: 50
-        }
-
-    }
-
-    transform: Translate {
-        id: shakeTransform
-
-        x: 0
-    }
-
-    Behavior on border.color {
-        ColorAnimation {
-            duration: Theme.animDurationFast
-        }
-
-    }
-
-    SequentialAnimation on border.color {
-        id: authPulseAnim
-
-        running: isAuthenticating && !isError
-        loops: Animation.Infinite
-
-        // Pulses between lighter darker and base
-        // Base
-        ColorAnimation {
-            to: Theme.mPrimary
-            duration: 250
-            easing.type: Easing.InSine
-        }
-
-        // Base → Lighter
-        ColorAnimation {
-            to: Qt.lighter(Theme.mPrimary, 1.3)
-            duration: 400
-            easing.type: Easing.InOutSine
-        }
-
-        // Lighter → Darker
-        ColorAnimation {
-            to: Qt.darker(Theme.mPrimary, 1.4)
-            duration: 500
-            easing.type: Easing.InOutSine
-        }
-
-        PauseAnimation {
-            duration: 500
-        }
-
     }
 
 }
