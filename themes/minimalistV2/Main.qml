@@ -170,6 +170,9 @@ Rectangle {
         sessionsModel: sessionModel
         buffer: root.buffer
         onRestoreFocus: restoreFocus
+        onCurrentUserIndexChanged: {
+            clearBuffer();
+        }
         onLogin: function() {
             loginCard.showAuthenticating();
             sddm.login(loginCard.getUserName(loginCard.currentUserIndex), root.buffer, loginCard.currentSessionIndex);

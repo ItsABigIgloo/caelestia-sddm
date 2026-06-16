@@ -165,20 +165,80 @@ Item {
                     userModel: root.usersModel
                 }
 
-                Text {
-                    id: userSessionText
+                Row {
+                    id: userSessionRow
 
                     anchors.horizontalCenter: parent.horizontalCenter
-                    renderType: Text.NativeRendering
-                    font.family: Theme.fontFamily
-                    font.pixelSize: 22
-                    font.variableAxes: ({
+                    spacing: 8
+                    bottomPadding: 10
+
+                    readonly property var textAxes: ({
                         "wght": 550,
                         "opsz": 22
                     })
-                    bottomPadding: 15
-                    color: Theme.mOnSurface
-                    text: root.getUserName(root.currentUserIndex) + " | " + root.getSessionName(root.currentSessionIndex)
+
+                    Text {
+                        id: userText
+
+                        renderType: Text.NativeRendering
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 22
+                        font.variableAxes: userSessionRow.textAxes
+                        color: userMouseArea.containsMouse ? Theme.mHover : Theme.mOnSurface
+                        text: root.getUserName(root.currentUserIndex)
+
+                        MouseArea {
+                            id: userMouseArea
+
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                if (root.usersModel && root.usersModel.count > 0) {
+                                    root.currentUserIndex = (root.currentUserIndex + 1) % root.usersModel.count;
+                                    if (root.onRestoreFocus)
+                                        root.onRestoreFocus();
+                                }
+                            }
+                        }
+                    }
+
+                    Text {
+                        id: separatorText
+
+                        renderType: Text.NativeRendering
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 22
+                        font.variableAxes: userSessionRow.textAxes
+                        color: Theme.mOnSurfaceVariant
+                        text: "|"
+                    }
+
+                    Text {
+                        id: sessionText
+
+                        renderType: Text.NativeRendering
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 22
+                        font.variableAxes: userSessionRow.textAxes
+                        color: sessionMouseArea.containsMouse ? Theme.mHover : Theme.mOnSurface
+                        text: root.getSessionName(root.currentSessionIndex)
+
+                        MouseArea {
+                            id: sessionMouseArea
+
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                if (root.sessionsModel && root.sessionsModel.count > 0) {
+                                    root.currentSessionIndex = (root.currentSessionIndex + 1) % root.sessionsModel.count;
+                                    if (root.onRestoreFocus)
+                                        root.onRestoreFocus();
+                                }
+                            }
+                        }
+                    }
                 }
 
                 PasswordInput {
