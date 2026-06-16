@@ -85,16 +85,16 @@ Rectangle {
 
     Behavior on opacity {
         NumberAnimation {
-            duration: Theme.animDurationNormal
-            easing.type: isOpen ? Easing.OutCubic : Easing.InCubic
+            duration: Theme.animDurationFast
+            easing.type: Easing.OutCubic
         }
 
     }
 
     Behavior on scale {
         NumberAnimation {
-            duration: Theme.animDurationNormal
-            easing.type: isOpen ? Easing.OutCubic : Easing.InBack
+            duration: Theme.animDurationFast
+            easing.type: Easing.OutBack
         }
 
     }
