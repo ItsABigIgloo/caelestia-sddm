@@ -11,7 +11,7 @@ QtObject {
         if (theme.avatarShape === "circle")
             return 260;
 
-        if (theme.avatarShape === "cookie4sided" || theme.avatarShape === "cookie4")
+        if (theme.avatarShape === "cookie" || theme.avatarShape === "cookie4sided" || theme.avatarShape === "cookie4")
             return 270;
 
         return 310;
@@ -20,7 +20,7 @@ QtObject {
     property string avatarShape: {
         var val = getConfig("avatarShape");
         if (val === undefined)
-            return "cookie4sided";
+            return "cookie";
 
         return val.toString().toLowerCase().trim().replace(/^"|"$/g, "");
     }

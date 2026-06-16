@@ -13,11 +13,10 @@ Item {
     readonly property var bounds: bgShape.bounds
 
     onCurrentUserIndexChanged: {
-        if (avatarImage.status !== Image.Null) {
+        if (avatarImage.status !== Image.Null)
             avatarImage.rebuildAvatarCandidates();
-        }
-    }
 
+    }
     implicitWidth: Theme.avatarFrameSize
     implicitHeight: Theme.avatarShape === "clamshell" ? 250 : Theme.avatarFrameSize
     clip: true
@@ -37,8 +36,10 @@ Item {
             roundedPolygon: {
                 if (Theme.avatarShape === "circle")
                     return MaterialShapes.getCircle();
-                if (Theme.avatarShape === "cookie4sided" || Theme.avatarShape === "cookie4")
+
+                if (Theme.avatarShape === "cookie" || Theme.avatarShape === "cookie4sided" || Theme.avatarShape === "cookie4")
                     return MaterialShapes.getCookie4Sided();
+
                 return MaterialShapes.getClamShell();
             }
             color: "#000000"
