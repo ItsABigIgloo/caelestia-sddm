@@ -10,6 +10,11 @@ Item {
     required property string currentUser
     required property int rectHeight
 
+
+    property string os: (config.os || "Arch").split(" ")[0]
+    property string host: config.host || "localhost"
+    property string session: (root.currentSession || "Hyprland").split(" ")[0]
+
     RowLayout {
         Rectangle {
             width: 33
@@ -78,12 +83,10 @@ Item {
                 }
 
                 Text {
-                    property string displayText: (root.currentSession || "").split(" ")[0] // idk if i want it like that, but i dont know DEs that have more than one word as a name, that avoids something like that "Plasma (Wayland)"
-
                     renderType: Text.NativeRendering
                     Layout.leftMargin: 0
                     Layout.topMargin: root.rectHeight / 10
-                    text: displayText + "\n" + root.currentUser + "\n" + (config.os || "").split(" ")[0] + "\n" + config.host
+                    text: root.session + "\n" + root.currentUser + "\n" + root.os + "\n" + root.host
                     color: config.text
                     font.pixelSize: 18
                     font.family: "CaskaydiaCove NF"
