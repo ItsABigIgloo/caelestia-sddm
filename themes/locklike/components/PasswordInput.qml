@@ -237,27 +237,30 @@ Rectangle {
                 Repeater {
                     model: inputRect.buffer.length
 
-                    delegate: Rectangle {
-                        width: 15
-                        height: 15
-                        radius: 10
+                    delegate: ShapeCanvas {
+                        implicitWidth: 15
+                        implicitHeight: 15
                         color: "white"
                         scale: 1.0
                         opacity: 1.0
 
+                        property int shapeIndex: isNew ? Math.floor(Math.random() * (4 - 1 + 1)) + 1 : 0
                         property bool isNew: index === dots.currentIndex
+                        property var shapeGetters: [MaterialShapes.getCircle, MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getCookie6Sided, MaterialShapes.getVerySunny]
+                        roundedPolygon: shapeGetters[shapeIndex]()
+
 
                         SequentialAnimation on scale {
                             running: isNew
                             NumberAnimation {
                                 from: 0
-                                to: 1.2
-                                duration: 140
+                                to: 1.3
+                                duration: 200
                                 easing.type: Easing.OutCubic
                             }
                             NumberAnimation {
                                 to: 1.0
-                                duration: 120
+                                duration: 150
                             }
                         }
 
@@ -267,6 +270,18 @@ Rectangle {
                                 from: 0
                                 to: 1
                                 duration: 200
+                            }
+                        }
+                        Component.onCompleted: {
+                            timerShape.running = true
+                        }
+                        Timer {
+                            id: timerShape
+                            interval: 300
+                            repeat: false
+                            running: false
+                            onTriggered: {
+                                shapeIndex = 0;
                             }
                         }
                     }
