@@ -254,8 +254,8 @@ Rectangle {
                             running: isNew
                             NumberAnimation {
                                 from: 0
-                                to: 1.3
-                                duration: 200
+                                to: 1.4
+                                duration: 180
                                 easing.type: Easing.OutCubic
                             }
                             NumberAnimation {
