@@ -178,6 +178,15 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     currentUserIndex: root.currentUserIndex
                     userModel: root.usersModel
+                    onSwitchUser: function() {
+                        if (root.usersModel && root.usersModel.count > 0) {
+                            root.currentUserIndex = (root.currentUserIndex + 1) % root.usersModel.count;
+                            if (root.onRestoreFocus)
+                                root.onRestoreFocus();
+
+                        }
+
+                    }
                 }
 
                 Row {

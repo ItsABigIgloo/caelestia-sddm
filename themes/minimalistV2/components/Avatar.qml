@@ -9,6 +9,7 @@ Item {
 
     property int currentUserIndex: 0
     property var userModel: null
+    property var onSwitchUser: null
     // Calculate actual visual dimensions based on the shape bounds
     readonly property var bounds: bgShape.bounds
 
@@ -20,6 +21,15 @@ Item {
     implicitWidth: Theme.avatarFrameSize
     implicitHeight: Theme.avatarShape === "clamshell" ? 220 : Theme.avatarFrameSize
     clip: true
+    scale: avatarHover.containsMouse ? 1.05 : 1.0
+
+    Behavior on scale {
+        NumberAnimation {
+            duration: Theme.animDurationFast
+            easing.type: Easing.OutCubic
+        }
+
+    }
 
     Item {
         id: shapeContainer
@@ -112,6 +122,20 @@ Item {
             layer.effect: OpacityMask {
                 maskSource: bgShape
             }
+
+        }
+
+    }
+
+    MouseArea {
+        id: avatarHover
+
+        anchors.fill: parent
+        hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
+        onClicked: {
+            if (root.onSwitchUser)
+                root.onSwitchUser();
 
         }
 
