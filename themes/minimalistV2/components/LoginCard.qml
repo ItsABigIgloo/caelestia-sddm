@@ -206,12 +206,17 @@ Item {
                     Text {
                         id: userText
 
-                        renderType: Text.NativeRendering
+                        renderType: Text.QtRendering
                         font.family: Theme.fontFamily
                         font.pixelSize: 22
                         font.variableAxes: userSessionRow.textAxes
                         color: userMouseArea.containsMouse ? Theme.mOnSurface : Theme.mPrimary
                         text: root.getUserName(root.currentUserIndex)
+                        scale: 1.0 + userBounce.bounce
+
+                        TapBounce {
+                            id: userBounce
+                        }
 
                         MouseArea {
                             id: userMouseArea
@@ -220,6 +225,7 @@ Item {
                             hoverEnabled: true
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
+                                userBounce.trigger();
                                 if (root.usersModel && root.usersModel.count > 0) {
                                     root.currentUserIndex = (root.currentUserIndex + 1) % root.usersModel.count;
                                     if (root.onRestoreFocus)
@@ -247,12 +253,17 @@ Item {
                     Text {
                         id: sessionText
 
-                        renderType: Text.NativeRendering
+                        renderType: Text.QtRendering
                         font.family: Theme.fontFamily
                         font.pixelSize: 22
                         font.variableAxes: userSessionRow.textAxes
                         color: sessionMouseArea.containsMouse ? Theme.mOnSurface : Theme.mPrimary
                         text: root.getSessionName(root.currentSessionIndex)
+                        scale: 1.0 + sessionBounce.bounce
+
+                        TapBounce {
+                            id: sessionBounce
+                        }
 
                         MouseArea {
                             id: sessionMouseArea
@@ -261,6 +272,7 @@ Item {
                             hoverEnabled: true
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
+                                sessionBounce.trigger();
                                 if (root.sessionsModel && root.sessionsModel.count > 0) {
                                     root.currentSessionIndex = (root.currentSessionIndex + 1) % root.sessionsModel.count;
                                     if (root.onRestoreFocus)

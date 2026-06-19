@@ -15,13 +15,19 @@ Button {
     implicitHeight: 64
     hoverEnabled: true
     focusPolicy: Qt.ClickFocus
+    scale: 1.0 + buttonBounce.bounce
     onClicked: {
+        buttonBounce.trigger();
         if (onClickedAction)
             onClickedAction();
 
         if (root.onRestoreFocus)
             root.onRestoreFocus();
 
+    }
+
+    TapBounce {
+        id: buttonBounce
     }
 
     background: ShapeCanvas {

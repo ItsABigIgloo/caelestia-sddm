@@ -21,14 +21,20 @@ Item {
     implicitWidth: Theme.avatarFrameSize
     implicitHeight: Theme.avatarShape === "clamshell" ? 220 : Theme.avatarFrameSize
     clip: true
-    scale: avatarHover.containsMouse ? 1.05 : 1.0
 
-    Behavior on scale {
+    property real hoverBoost: avatarHover.containsMouse ? 0.05 : 0
+    scale: 1.0 + root.hoverBoost + avatarBounce.bounce
+
+    Behavior on hoverBoost {
         NumberAnimation {
             duration: Theme.animDurationFast
             easing.type: Easing.OutCubic
         }
 
+    }
+
+    TapBounce {
+        id: avatarBounce
     }
 
     Item {
@@ -134,6 +140,7 @@ Item {
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
         onClicked: {
+            avatarBounce.trigger();
             if (root.onSwitchUser)
                 root.onSwitchUser();
 
