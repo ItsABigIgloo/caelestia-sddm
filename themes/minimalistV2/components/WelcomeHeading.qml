@@ -15,8 +15,8 @@ Text {
     font.family: Theme.fontFamily
     font.pixelSize: 90
     font.variableAxes: ({
-        "wght": 550,
-        "wdth": 80,
+        "wght": 600,
+        "wdth": 90,
         "ROND": 25,
         "opsz": 90
     })

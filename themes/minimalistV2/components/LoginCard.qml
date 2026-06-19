@@ -193,8 +193,8 @@ Item {
                     id: userSessionRow
 
                     readonly property var textAxes: ({
-                        "wght": 600,
-                        "wdth": 45,
+                        "wght": 550,
+                        "wdth": 40,
                         "ROND": 25,
                         "opsz": 7
                     })
