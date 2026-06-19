@@ -8,13 +8,13 @@ QtObject {
     property string backgroundSource: "assets/background" // allow for different file extensions
     property string fontFamily: "Google Sans Flex"
     property real avatarFrameSize: {
+        if (theme.avatarShape === "clamshell")
+            return 300;
+        
         if (theme.avatarShape === "circle")
-            return 260;
+            return 240;
 
-        if (theme.avatarShape === "cookie" || theme.avatarShape === "cookie4sided" || theme.avatarShape === "cookie4")
-            return 270;
-
-        return 310;
+        return 250;
     }
     property real avatarInset: 19
     property string _randomAvatarShape: {
