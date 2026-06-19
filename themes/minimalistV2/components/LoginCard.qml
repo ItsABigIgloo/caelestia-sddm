@@ -1,7 +1,6 @@
 import "../singletons"
 import Qt5Compat.GraphicalEffects
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
 Item {
     id: root
@@ -12,10 +11,27 @@ Item {
     property string buffer: ""
     property var onRestoreFocus: null
     property var onLogin: null
-    property alias userPicker: userPicker
-    property alias sessionPicker: sessionPicker
     property bool isError: false
     property bool isAuthenticating: false
+    property bool capsLockOn: false
+    property int currentUserIndex: 0
+    property int currentSessionIndex: 0
+    property var sessionNames: []
+
+    function getUserName(idx) {
+        if (!usersModel || usersModel.count <= 0 || idx < 0 || idx >= usersModel.count)
+            return "";
+
+        var modelIndex = usersModel.index(idx, 0);
+        return usersModel.data(modelIndex, Qt.UserRole + 1);
+    }
+
+    function getSessionName(idx) {
+        if (!sessionNames || idx < 0 || idx >= sessionNames.length)
+            return "";
+
+        return sessionNames[idx];
+    }
 
     function showError(msg) {
         root.isError = true;
@@ -36,10 +52,59 @@ Item {
     }
 
     enabled: !isActive
-    implicitWidth: 550
-    implicitHeight: 830
+    width: 550
+    height: 850
     scale: isActive ? 0.5 : 1
     opacity: isActive ? 0 : 1
+    onUsersModelChanged: {
+        if (usersModel && usersModel.count > 0) {
+            var uIdx = usersModel.lastIndex;
+            currentUserIndex = (uIdx >= 0 && uIdx < usersModel.count) ? uIdx : 0;
+        }
+    }
+    onSessionsModelChanged: {
+        if (sessionsModel && sessionsModel.count > 0) {
+            var sIdx = sessionsModel.lastIndex;
+            currentSessionIndex = (sIdx >= 0 && sIdx < sessionsModel.count) ? sIdx : 0;
+        }
+    }
+    onCapsLockOnChanged: {
+        if (capsLockOn && !isAuthenticating) {
+            toast.show("Caps Lock is on", "warning");
+        } else if (!capsLockOn) {
+            if (toast.isOpen && toast.message === "Caps Lock is on")
+                toast.dismiss();
+
+        }
+    }
+    onIsActiveChanged: {
+        if (isActive)
+            toast.dismiss();
+
+    }
+    Component.onCompleted: {
+        if (usersModel && usersModel.count > 0) {
+            var uIdx = usersModel.lastIndex;
+            currentUserIndex = (uIdx >= 0 && uIdx < usersModel.count) ? uIdx : 0;
+        }
+        if (sessionsModel && sessionsModel.count > 0) {
+            var sIdx = sessionsModel.lastIndex;
+            currentSessionIndex = (sIdx >= 0 && sIdx < sessionsModel.count) ? sIdx : 0;
+        }
+    }
+
+    Instantiator {
+        model: root.sessionsModel
+
+        delegate: Item {
+            Component.onCompleted: {
+                var arr = root.sessionNames.slice();
+                arr[index] = model.name;
+                root.sessionNames = arr;
+            }
+        }
+
+    }
 
     Rectangle {
         id: cardBorder
@@ -93,66 +158,159 @@ Item {
             radius: Theme.cardRadius - 16
             color: Theme.withAlpha(Theme.mOnSecondary, Theme.innerCardOpacity)
 
-            ColumnLayout {
-                anchors.fill: parent
-                anchors.margins: 40
-                spacing: 30
+            Column {
+                id: mainContent
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -30
+                spacing: 20
 
                 Clock {
-                    Layout.alignment: Qt.AlignHCenter
+                    id: clock
+
+                    anchors.horizontalCenter: parent.horizontalCenter
                 }
 
                 Avatar {
                     id: avatar
 
-                    Layout.alignment: Qt.AlignHCenter
-                    userPicker: root.userPicker
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    currentUserIndex: root.currentUserIndex
                     userModel: root.usersModel
+                    onSwitchUser: function() {
+                        if (root.usersModel && root.usersModel.count > 0) {
+                            root.currentUserIndex = (root.currentUserIndex + 1) % root.usersModel.count;
+                            if (root.onRestoreFocus)
+                                root.onRestoreFocus();
+
+                        }
+
+                    }
                 }
 
-                StyledComboBox {
-                    id: userPicker
+                Row {
+                    id: userSessionRow
 
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: 380
-                    Layout.preferredHeight: 55
-                    model: root.usersModel
-                    currentIndex: {
-                        if (!root.usersModel || root.usersModel.count <= 0)
-                            return -1;
+                    readonly property var textAxes: ({
+                        "wght": 600,
+                        "wdth": 45,
+                        "ROND": 25,
+                        "opsz": 7
+                    })
 
-                        var idx = root.usersModel.lastIndex;
-                        return idx >= 0 && idx < root.usersModel.count ? idx : 0;
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: 8
+                    bottomPadding: 10
+
+                    Text {
+                        id: userText
+
+                        renderType: Text.QtRendering
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 22
+                        font.variableAxes: userSessionRow.textAxes
+                        color: userMouseArea.containsMouse ? Theme.mOnSurface : Theme.mPrimary
+                        text: root.getUserName(root.currentUserIndex)
+                        scale: 1.0 + userBounce.bounce
+
+                        TapBounce {
+                            id: userBounce
+                        }
+
+                        MouseArea {
+                            id: userMouseArea
+
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                userBounce.trigger();
+                                if (root.usersModel && root.usersModel.count > 0) {
+                                    root.currentUserIndex = (root.currentUserIndex + 1) % root.usersModel.count;
+                                    if (root.onRestoreFocus)
+                                        root.onRestoreFocus();
+
+                                }
+                            }
+                        }
+
                     }
-                    textRole: "name"
-                    font.family: Theme.fontFamily
-                    font.pixelSize: Math.round(Theme.baseFontSize * 1.67)
-                    onRestoreFocus: root.onRestoreFocus
+
+                    Text {
+                        id: separatorText
+
+                        renderType: Text.NativeRendering
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 22
+                        height: userText.height
+                        verticalAlignment: Text.AlignVCenter
+                        font.bold: true
+                        color: Theme.mSecondary
+                        text: "|"
+                    }
+
+                    Text {
+                        id: sessionText
+
+                        renderType: Text.QtRendering
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 22
+                        font.variableAxes: userSessionRow.textAxes
+                        color: sessionMouseArea.containsMouse ? Theme.mOnSurface : Theme.mPrimary
+                        text: root.getSessionName(root.currentSessionIndex)
+                        scale: 1.0 + sessionBounce.bounce
+
+                        TapBounce {
+                            id: sessionBounce
+                        }
+
+                        MouseArea {
+                            id: sessionMouseArea
+
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                sessionBounce.trigger();
+                                if (root.sessionsModel && root.sessionsModel.count > 0) {
+                                    root.currentSessionIndex = (root.currentSessionIndex + 1) % root.sessionsModel.count;
+                                    if (root.onRestoreFocus)
+                                        root.onRestoreFocus();
+
+                                }
+                            }
+                        }
+
+                    }
+
                 }
 
                 PasswordInput {
                     id: passwordInput
 
-                    Layout.alignment: Qt.AlignHCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
                     buffer: root.buffer
                     isError: root.isError
                     isAuthenticating: root.isAuthenticating
+                    capsLockOn: root.capsLockOn
                     onRestoreFocus: root.onRestoreFocus
                     onLogin: root.onLogin
                 }
 
                 Row {
-                    Layout.alignment: Qt.AlignHCenter
+                    id: powerButtons
+
+                    anchors.horizontalCenter: parent.horizontalCenter
                     spacing: 20
+                    topPadding: 10
 
                     PowerButton {
                         id: shutBtn
 
                         width: 70
                         height: 70
-                        iconText: "\ue8ac"
-                        normalColor: Theme.mOnSurface
-                        hoverColor: Theme.mError
+                        iconText: "power_settings_new"
                         onRestoreFocus: root.onRestoreFocus
                         onClickedAction: function() {
                             sddm.powerOff();
@@ -164,9 +322,7 @@ Item {
 
                         width: 70
                         height: 70
-                        iconText: "\uf053"
-                        normalColor: Theme.mOnSurface
-                        hoverColor: Theme.mHover
+                        iconText: "restart_alt"
                         onRestoreFocus: root.onRestoreFocus
                         onClickedAction: function() {
                             sddm.reboot();
@@ -175,24 +331,35 @@ Item {
 
                 }
 
-                StyledComboBox {
-                    id: sessionPicker
+            }
 
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: 380
-                    Layout.preferredHeight: 55
-                    model: root.sessionsModel
-                    currentIndex: {
-                        if (!root.sessionsModel || root.sessionsModel.count <= 0)
-                            return -1;
+            Row {
+                id: controlHints
 
-                        var idx = root.sessionsModel.lastIndex;
-                        return idx >= 0 && idx < root.sessionsModel.count ? idx : 0;
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 30
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 13
+
+                Row {
+                    spacing: 4
+
+                    Text {
+                        font.family: "Material Symbols Outlined"
+                        font.pixelSize: 13
+                        color: Theme.mOnSurfaceVariant
+                        text: "touch_app"
+                        verticalAlignment: Text.AlignVCenter
                     }
-                    textRole: "name"
-                    font.family: Theme.fontFamily
-                    font.pixelSize: Math.round(Theme.baseFontSize * 1.5)
-                    onRestoreFocus: root.onRestoreFocus
+
+                    Text {
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 13
+                        color: Theme.mOnSurfaceVariant
+                        text: "Click to switch User and Session"
+                        verticalAlignment: Text.AlignVCenter
+                    }
+
                 }
 
             }

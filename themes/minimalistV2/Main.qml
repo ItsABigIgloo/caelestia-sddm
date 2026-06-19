@@ -9,6 +9,7 @@ Rectangle {
 
     property bool firstInput: Theme.enableWelcomeMessage
     property string buffer: ""
+    property bool capsLockOn: (typeof keyboard !== 'undefined') ? keyboard.capsLock : false
     property var userName: {
         if (userModel.count > 0 && userModel.lastIndex >= 0) {
             var idx = userModel.index(userModel.lastIndex, 0);
@@ -31,6 +32,12 @@ Rectangle {
     height: 1080
     color: Theme.mSurface
 
+    FontLoader {
+        id: googleSansFlex
+
+        source: "assets/google-sans-flex/GoogleSansFlex.ttf"
+    }
+
     Item {
         id: keyHandler
 
@@ -39,6 +46,18 @@ Rectangle {
             keyHandler.forceActiveFocus();
         }
         Keys.onPressed: function(event) {
+            if (event.key === Qt.Key_CapsLock) {
+                root.capsLockOn = !root.capsLockOn;
+                return ;
+            }
+            if (event.text && event.text.length === 1) {
+                var charStr = event.text.charAt(0);
+                if ((charStr >= "a" && charStr <= "z") || (charStr >= "A" && charStr <= "Z")) {
+                    var isUpper = (charStr === charStr.toUpperCase());
+                    var shiftPressed = (event.modifiers & Qt.ShiftModifier) ? true : false;
+                    root.capsLockOn = (isUpper && !shiftPressed) || (!isUpper && shiftPressed);
+                }
+            }
             if (root.firstInput) {
                 loginCard.clearError();
                 if (event.text && event.text !== "" && event.text.length === 1)
@@ -50,32 +69,33 @@ Rectangle {
             if (event.key === Qt.Key_Escape) {
                 if (Theme.enableWelcomeMessage)
                     root.firstInput = true;
+
                 clearBuffer();
                 return ;
             }
             if (event.key === Qt.Key_Right) {
-                if (userModel.count > 0 && loginCard.userPicker.currentIndex < userModel.count - 1) {
-                    loginCard.userPicker.currentIndex += 1;
+                if (userModel.count > 0 && loginCard.currentUserIndex < userModel.count - 1) {
+                    loginCard.currentUserIndex += 1;
                     clearBuffer();
                 }
                 return ;
             }
             if (event.key === Qt.Key_Left) {
-                if (userModel.count > 0 && loginCard.userPicker.currentIndex > 0) {
-                    loginCard.userPicker.currentIndex -= 1;
+                if (userModel.count > 0 && loginCard.currentUserIndex > 0) {
+                    loginCard.currentUserIndex -= 1;
                     clearBuffer();
                 }
                 return ;
             }
             if (event.key === Qt.Key_Up) {
-                if (sessionModel.count > 0 && loginCard.sessionPicker.currentIndex > 0)
-                    loginCard.sessionPicker.currentIndex -= 1;
+                if (sessionModel.count > 0 && loginCard.currentSessionIndex > 0)
+                    loginCard.currentSessionIndex -= 1;
 
                 return ;
             }
             if (event.key === Qt.Key_Down) {
-                if (sessionModel.count > 0 && loginCard.sessionPicker.currentIndex < sessionModel.count - 1)
-                    loginCard.sessionPicker.currentIndex += 1;
+                if (sessionModel.count > 0 && loginCard.currentSessionIndex < sessionModel.count - 1)
+                    loginCard.currentSessionIndex += 1;
 
                 return ;
             }
@@ -86,7 +106,7 @@ Rectangle {
             }
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
                 loginCard.showAuthenticating();
-                sddm.login(loginCard.userPicker.currentText, root.buffer, loginCard.sessionPicker.currentIndex);
+                sddm.login(loginCard.getUserName(loginCard.currentUserIndex), root.buffer, loginCard.currentSessionIndex);
                 clearBuffer();
                 return ;
             }
@@ -162,10 +182,14 @@ Rectangle {
         usersModel: userModel
         sessionsModel: sessionModel
         buffer: root.buffer
+        capsLockOn: root.capsLockOn
         onRestoreFocus: restoreFocus
+        onCurrentUserIndexChanged: {
+            clearBuffer();
+        }
         onLogin: function() {
             loginCard.showAuthenticating();
-            sddm.login(loginCard.userPicker.currentText, root.buffer, loginCard.sessionPicker.currentIndex);
+            sddm.login(loginCard.getUserName(loginCard.currentUserIndex), root.buffer, loginCard.currentSessionIndex);
             clearBuffer();
             restoreFocus();
         }
@@ -193,7 +217,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 30
         font.family: Theme.fontFamily
-        font.pixelSize: Math.round(Theme.baseFontSize * 1.8)
+        font.pixelSize: 20
         font.italic: true
         opacity: root.firstInput ? 1 : 0
         color: Theme.mOnSurfaceVariant

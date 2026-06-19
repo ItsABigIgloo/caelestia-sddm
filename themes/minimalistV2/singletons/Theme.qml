@@ -6,25 +6,33 @@ QtObject {
 
     property bool configAvailable: false
     property string backgroundSource: "assets/background" // allow for different file extensions
-    property string fontFamily: {
-        var availableFonts = Qt.fontFamilies();
-        var family = "";
-        if (configAvailable && config.fontFamily)
-            family = config.fontFamily;
+    property string fontFamily: "Google Sans Flex"
+    property real avatarFrameSize: {
+        if (theme.avatarShape === "clamshell")
+            return 300;
+        
+        if (theme.avatarShape === "circle")
+            return 240;
 
-        if (family && family !== "") {
-            family = family.toString().replace(/^"|"$/g, "");
-            if (availableFonts.indexOf(family) !== -1)
-                return family;
-
-        }
-        return firstAvailable(["Rubik", "Sans"]);
+        return 250;
     }
-    // fonts and dimensions
-    property real baseFontSize: boundedNumber(getConfig("FontSize"), 12, 10, 24)
-    property real avatarBaseSize: boundedNumber(getConfig("AvatarSize"), 128, 64, 320)
-    property real avatarFrameSize: Math.max(96, Math.round(avatarBaseSize * 1.72))
-    property real avatarInset: Math.max(8, Math.round(avatarFrameSize * 0.09))
+    property real avatarInset: 19
+    property string _randomAvatarShape: {
+        var shapes = ["circle", "clamshell", "cookie"];
+
+        return shapes[Math.floor(Math.random() * shapes.length)];
+    }
+    property string avatarShape: {
+        var val = getConfig("avatarShape");
+        if (val === undefined)
+            return "random";
+
+        val = val.toString().toLowerCase().trim().replace(/^"|"$/g, "");
+        if (val === "random")
+            return theme._randomAvatarShape;
+
+        return val;
+    }
     property real elementRadius: boundedNumber(getConfig("elementRadius"), 20, 0, 64)
     property real cardRadius: boundedNumber(getConfig("cardRadius"), 30, 0, 80)
     // colors
@@ -51,6 +59,7 @@ QtObject {
         var val = getConfig("welcomeMessage");
         if (val === undefined)
             return "Welcome $USER";
+
         return val.toString().replace(/^"|"$/g, "");
     }
     // effects
@@ -79,16 +88,6 @@ QtObject {
 
         var value = config[key];
         return value !== undefined ? value : undefined;
-    }
-
-    function firstAvailable(candidates) {
-        var availableFonts = Qt.fontFamilies();
-        for (var i = 0; i < candidates.length; i++) {
-            if (availableFonts.indexOf(candidates[i]) !== -1)
-                return candidates[i];
-
-        }
-        return "sans-serif";
     }
 
     function toNumber(value, fallbackValue) {
