@@ -25,7 +25,7 @@ QtObject {
     property string avatarShape: {
         var val = getConfig("avatarShape");
         if (val === undefined)
-            return "cookie";
+            return "random";
 
         val = val.toString().toLowerCase().trim().replace(/^"|"$/g, "");
         if (val === "random")
