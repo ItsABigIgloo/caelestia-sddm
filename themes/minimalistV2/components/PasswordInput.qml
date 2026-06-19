@@ -13,6 +13,14 @@ Item {
     property bool isError: false
     property bool isAuthenticating: false
     property bool capsLockOn: false
+    property int lastLength: 0
+
+    onBufferChanged: {
+        if (buffer.length > lastLength)
+            dots.currentIndex = buffer.length - 1;
+
+        lastLength = buffer.length;
+    }
 
     implicitWidth: 365
     implicitHeight: 48
@@ -219,19 +227,62 @@ Item {
             }
 
             RowLayout {
+                id: dots
+
+                property int currentIndex: -1
+
                 anchors.centerIn: parent
                 spacing: 8
 
                 Repeater {
-                    id: passwordDots
-
                     model: root.buffer.length
 
-                    Rectangle {
-                        radius: width / 2
-                        width: 12
-                        height: 12
+                    delegate: ShapeCanvas {
+                        implicitWidth: 15
+                        implicitHeight: 15
                         color: Theme.mOnSurface
+                        opacity: 1.0
+
+                        property bool isNew: index === dots.currentIndex
+                        property int shapeIndex: isNew ? Math.floor(Math.random() * 4) + 1 : 0
+                        property var shapeGetters: [MaterialShapes.getCircle, MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getCookie6Sided, MaterialShapes.getVerySunny]
+                        roundedPolygon: shapeGetters[shapeIndex]()
+
+                        SequentialAnimation on scale {
+                            running: isNew
+                            NumberAnimation {
+                                from: 0
+                                to: 1.4
+                                duration: 180
+                                easing.type: Easing.OutCubic
+                            }
+
+                            NumberAnimation {
+                                to: 1.0
+                                duration: 150
+                            }
+
+                        }
+
+                        SequentialAnimation on opacity {
+                            running: isNew
+                            NumberAnimation {
+                                from: 0
+                                to: 1
+                                duration: 200
+                            }
+
+                        }
+
+                        Timer {
+                            id: timerShape
+
+                            interval: 300
+                            repeat: false
+                            running: isNew
+                            onTriggered: shapeIndex = 0
+                        }
+
                     }
 
                 }
