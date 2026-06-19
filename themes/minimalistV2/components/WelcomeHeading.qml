@@ -13,8 +13,13 @@ Text {
     text: Theme.welcomeMessage.replace("$USER", userName).trim()
     visible: Theme.welcomeMessage !== ""
     font.family: Theme.fontFamily
-    font.pixelSize: 88
-    font.weight: Font.DemiBold
+    font.pixelSize: 90
+    font.variableAxes: ({
+        "wght": 550,
+        "wdth": 80,
+        "ROND": 25,
+        "opsz": 90
+    })
     color: Theme.mOnSurface
     opacity: isActive ? 1 : 0
     scale: isActive ? 1 : 0.8
