@@ -282,6 +282,7 @@ Item {
 
                     anchors.horizontalCenter: parent.horizontalCenter
                     spacing: 20
+                    topPadding: 10
 
                     PowerButton {
                         id: shutBtn
@@ -289,8 +290,6 @@ Item {
                         width: 70
                         height: 70
                         iconText: "power_settings_new"
-                        normalColor: Theme.mOnSurface
-                        hoverColor: Theme.mError
                         onRestoreFocus: root.onRestoreFocus
                         onClickedAction: function() {
                             sddm.powerOff();
@@ -303,8 +302,6 @@ Item {
                         width: 70
                         height: 70
                         iconText: "restart_alt"
-                        normalColor: Theme.mOnSurface
-                        hoverColor: Theme.mHover
                         onRestoreFocus: root.onRestoreFocus
                         onClickedAction: function() {
                             sddm.reboot();
