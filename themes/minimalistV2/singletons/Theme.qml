@@ -17,12 +17,21 @@ QtObject {
         return 310;
     }
     property real avatarInset: 19
+    property string _randomAvatarShape: {
+        var shapes = ["circle", "clamshell", "cookie"];
+
+        return shapes[Math.floor(Math.random() * shapes.length)];
+    }
     property string avatarShape: {
         var val = getConfig("avatarShape");
         if (val === undefined)
             return "cookie";
 
-        return val.toString().toLowerCase().trim().replace(/^"|"$/g, "");
+        val = val.toString().toLowerCase().trim().replace(/^"|"$/g, "");
+        if (val === "random")
+            return theme._randomAvatarShape;
+
+        return val;
     }
     property real elementRadius: boundedNumber(getConfig("elementRadius"), 20, 0, 64)
     property real cardRadius: boundedNumber(getConfig("cardRadius"), 30, 0, 80)
