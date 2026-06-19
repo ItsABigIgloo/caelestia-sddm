@@ -163,8 +163,8 @@ Item {
 
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -65
-                spacing: 15
+                anchors.verticalCenterOffset: -30
+                spacing: 20
 
                 Clock {
                     id: clock
@@ -273,16 +273,6 @@ Item {
                     onLogin: root.onLogin
                 }
 
-            }
-
-            Column {
-                id: footerArea
-
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 30
-                anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 20
-
                 Row {
                     id: powerButtons
 
@@ -319,31 +309,33 @@ Item {
 
                 }
 
+            }
+
+            Row {
+                id: controlHints
+
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 30
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 13
+
                 Row {
-                    id: controlHints
+                    spacing: 4
 
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    spacing: 13
+                    Text {
+                        font.family: "Material Symbols Outlined"
+                        font.pixelSize: 13
+                        color: Theme.mOnSurfaceVariant
+                        text: "touch_app"
+                        verticalAlignment: Text.AlignVCenter
+                    }
 
-                    Row {
-                        spacing: 4
-
-                        Text {
-                            font.family: "Material Symbols Outlined"
-                            font.pixelSize: 13
-                            color: Theme.mOnSurfaceVariant
-                            text: "touch_app"
-                            verticalAlignment: Text.AlignVCenter
-                        }
-
-                        Text {
-                            font.family: Theme.fontFamily
-                            font.pixelSize: 13
-                            color: Theme.mOnSurfaceVariant
-                            text: "Click to switch User and Session"
-                            verticalAlignment: Text.AlignVCenter
-                        }
-
+                    Text {
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 13
+                        color: Theme.mOnSurfaceVariant
+                        text: "Click to switch User and Session"
+                        verticalAlignment: Text.AlignVCenter
                     }
 
                 }
