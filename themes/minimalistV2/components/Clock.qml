@@ -75,6 +75,7 @@ Column {
 
     Text {
         anchors.horizontalCenter: parent.horizontalCenter
+        renderType: Text.NativeRendering
         text: (Qt.formatDateTime(root.currentTime, "dddd").toUpperCase() + " • " + Qt.formatDateTime(root.currentTime, "d MMM").toUpperCase())
         font.pixelSize: 24
         font.family: Theme.fontFamily

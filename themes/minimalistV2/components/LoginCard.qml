@@ -184,8 +184,10 @@ Item {
                     id: userSessionRow
 
                     readonly property var textAxes: ({
-                        "wght": 550,
-                        "opsz": 22
+                        "wght": 600,
+                        "wdth": 45,
+                        "ROND": 25,
+                        "opsz": 7
                     })
 
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -199,7 +201,7 @@ Item {
                         font.family: Theme.fontFamily
                         font.pixelSize: 22
                         font.variableAxes: userSessionRow.textAxes
-                        color: userMouseArea.containsMouse ? Theme.mHover : Theme.mOnSurface
+                        color: userMouseArea.containsMouse ? Theme.mOnSurface : Theme.mPrimary
                         text: root.getUserName(root.currentUserIndex)
 
                         MouseArea {
@@ -226,8 +228,10 @@ Item {
                         renderType: Text.NativeRendering
                         font.family: Theme.fontFamily
                         font.pixelSize: 22
-                        font.variableAxes: userSessionRow.textAxes
-                        color: Theme.mOnSurfaceVariant
+                        height: userText.height
+                        verticalAlignment: Text.AlignVCenter
+                        font.bold: true
+                        color: Theme.mSecondary
                         text: "|"
                     }
 
@@ -238,7 +242,7 @@ Item {
                         font.family: Theme.fontFamily
                         font.pixelSize: 22
                         font.variableAxes: userSessionRow.textAxes
-                        color: sessionMouseArea.containsMouse ? Theme.mHover : Theme.mOnSurface
+                        color: sessionMouseArea.containsMouse ? Theme.mOnSurface : Theme.mPrimary
                         text: root.getSessionName(root.currentSessionIndex)
 
                         MouseArea {
