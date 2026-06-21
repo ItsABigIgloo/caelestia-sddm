@@ -12,7 +12,19 @@ Item {
 
 
     property string os: (config.os || "Arch").split(" ")[0]
-    property string host: config.host || "localhost"
+    property string host: "."
+
+    Component.onCompleted: {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "file:///proc/sys/kernel/hostname");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                var h = xhr.responseText.trim();
+                root.host = h.length > 0 ? h : (config.host || "localhost");
+            }
+        };
+        xhr.send();
+    }
     property string session: (root.currentSession || "Hyprland").split(" ")[0]
 
     RowLayout {

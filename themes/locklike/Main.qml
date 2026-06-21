@@ -39,26 +39,60 @@ Rectangle {
     property real smallRadius: mainCard.radius / 2
 
     property string currentUser: userPicker.currentText
-    property var uc: UserColors.colors[currentUser] || {}
+
+    property int animDuration: 300
+    property int syncDelay: 150
+    property bool transitionBusy: false
+    property int _activeLayer: 0
 
     onCurrentUserChanged: {
-        var c = UserColors.colors[currentUser] || {};
-        if (c.background) config.background = c.background;
-        if (c.mainCard) config.mainCard = c.mainCard;
-        if (c.subComponents) config.subComponents = c.subComponents;
-        if (c.text) config.text = c.text;
-        if (c.inverseOnSurface) config.inverseOnSurface = c.inverseOnSurface;
-        if (c.primary) config.primary = c.primary;
-        if (c.secondary) config.secondary = c.secondary;
-        if (c.textDark) config.textDark = c.textDark;
-        if (c.onPrimary) config.onPrimary = c.onPrimary;
-        if (c.onSuccess) config.onSuccess = c.onSuccess;
-        if (c.outline) config.outline = c.outline;
+        if (transitionBusy) return;
+        transitionBusy = true;
+        transitionTimer.restart();
+
+        // prepare wallpaper (hidden layer starts loading)
+        var source = "assets/background-" + currentUser;
+        var hidden = _activeLayer === 0 ? wallpaperB : wallpaperA;
+        hidden.source = source;
+
+        syncTimer.restart();
+    }
+
+    Timer {
+        id: syncTimer
+        interval: syncDelay
+        onTriggered: {
+            // wallpaper crossfade
+            _activeLayer = _activeLayer === 0 ? 1 : 0;
+
+            // color transitions (all start simultaneously)
+            var c = UserColors.colors[currentUser] || {};
+            if (c.background) config.background = c.background;
+            if (c.mainCard) config.mainCard = c.mainCard;
+            if (c.subComponents) config.subComponents = c.subComponents;
+            if (c.text) config.text = c.text;
+            if (c.inverseOnSurface) config.inverseOnSurface = c.inverseOnSurface;
+            if (c.primary) config.primary = c.primary;
+            if (c.secondary) config.secondary = c.secondary;
+            if (c.textDark) config.textDark = c.textDark;
+            if (c.onPrimary) config.onPrimary = c.onPrimary;
+            if (c.onSuccess) config.onSuccess = c.onSuccess;
+            if (c.outline) config.outline = c.outline;
+
+            // avatar crossfade
+            userAvatar.crossfade();
+        }
+    }
+
+    Timer {
+        id: transitionTimer
+        interval: syncDelay + animDuration + 100
+        onTriggered: transitionBusy = false
     }
 
     width: 1920
     height: 1080
-    color: uc.background || config.background || "#131313"
+    color: config.background || "#131313"
 
     Behavior on color {
         ColorAnimation { duration: 300; easing: Easing.InOutCubic }
@@ -80,14 +114,39 @@ Rectangle {
         target: sddm
     }
 
-    AnimatedImage {
-        id: background
+    Item {
+        id: wallpaperContainer
         anchors.fill: parent
-        source: "assets/background-" + root.currentUser
-        fillMode: Image.PreserveAspectCrop
-        onStatusChanged: {
-            if (status === Image.Error)
-                source = "assets/background"
+
+        AnimatedImage {
+            id: wallpaperA
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectCrop
+            opacity: _activeLayer === 0 ? 1 : 0
+            Behavior on opacity {
+                NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
+            }
+            onStatusChanged: {
+                if (status === Image.Error)
+                    source = "assets/background"
+            }
+            Component.onCompleted: {
+                source = "assets/background-" + root.currentUser;
+            }
+        }
+
+        AnimatedImage {
+            id: wallpaperB
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectCrop
+            opacity: _activeLayer === 1 ? 1 : 0
+            Behavior on opacity {
+NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
+        }
+            onStatusChanged: {
+                if (status === Image.Error)
+                    source = "assets/background"
+            }
         }
     }
 
@@ -103,12 +162,12 @@ Rectangle {
 
     MultiEffect {
         blurEnabled: true
-        source: background
+        source: wallpaperContainer
         blur: root.firstInput ? 0 : 1
         autoPaddingEnabled: false
         blurMultiplier: 1
         blurMax: 64
-        anchors.fill: background
+        anchors.fill: wallpaperContainer
 
         Behavior on blur {
             NumberAnimation { duration: 400; easing: Easing.InOutCubic }
@@ -135,12 +194,12 @@ Rectangle {
                 return;
             }
             if (event.key === Qt.Key_Right) {
-                if (userPicker.currentIndex < userModel.count - 1)
+                if (!root.transitionBusy && userPicker.currentIndex < userModel.count - 1)
                     userPicker.currentIndex += 1;
                 return;
             }
             if (event.key === Qt.Key_Left) {
-                if (userPicker.currentIndex > 0)
+                if (!root.transitionBusy && userPicker.currentIndex > 0)
                     userPicker.currentIndex -= 1;
                 return;
             }
@@ -196,7 +255,7 @@ Rectangle {
             targetHeight: mainCard.height
             animDuration: 0
             blurAmount: root.mainCardBlurAmount
-            bgColor: uc.mainCard || config.mainCard
+            bgColor: config.mainCard
             visibleState: !root.firstInput
             radius: 50
         }
@@ -231,7 +290,7 @@ Rectangle {
             anchors.top: mainCard.top
             anchors.topMargin: 267
             anchors.bottom: parent.bottom
-            color: uc.text || config.text
+            color: config.text
             text: mainCard.day + " • " + mainCard.date
             font.pixelSize: 22
             font.family: googleSansFlex.name
@@ -256,7 +315,7 @@ Rectangle {
                     id: topLeftRect
                     width: 390
                     height: 220
-                    color: uc.subComponents || config.subComponents
+                    color: config.subComponents
                     radius: root.midRadius
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
                     clip: true
@@ -279,7 +338,7 @@ Rectangle {
                     id: middleLeftRect
                     width: 390
                     Layout.fillHeight: true
-                    color: uc.subComponents || config.subComponents
+                    color: config.subComponents
                     radius: mainCard.radius / 4
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
                     clip: true
@@ -373,7 +432,7 @@ Rectangle {
                     text: "Caps Lock is activated!"
                     font.pointSize: 8
                     font.family: "Roboto"
-                    color: uc.text || config.text
+                    color: config.text
                     opacity: 0
 
                     Behavior on color {
@@ -397,7 +456,7 @@ Rectangle {
                     id: topRightRect
                     width: 390
                     height: 355
-                    color: uc.subComponents || config.subComponents
+                    color: config.subComponents
                     radius: root.smallRadius
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
@@ -407,7 +466,7 @@ Rectangle {
 
                     RandomQuote {
                         maxWidth: topRightRect.width - 40
-                        color: uc.text || config.text
+                        color: config.text
                     }
 
                     Behavior on opacity {
@@ -419,7 +478,7 @@ Rectangle {
                     id: bottomRightRect
                     width: 390
                     height: 355
-                    color: uc.subComponents || config.subComponents
+                    color: config.subComponents
                     bottomRightRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
@@ -437,7 +496,7 @@ Rectangle {
                         fillMode: Image.PreserveAspectCrop
                         layer.enabled: true
                         layer.effect: ColorOverlay {
-                            color: uc.inverseOnSurface || config.inverseOnSurface
+                            color: config.inverseOnSurface
 
                             Behavior on color {
                                 ColorAnimation { duration: 200 }
@@ -448,7 +507,7 @@ Rectangle {
                     Text {
                         renderType: Text.NativeRendering
                         text: "Unlock for notifications"
-                        color: uc.inverseOnSurface || config.inverseOnSurface
+                        color: config.inverseOnSurface
                         font.family: "CaskaydiaCove NF"
                         font.pointSize: 12
                         anchors.horizontalCenter: parent.horizontalCenter
