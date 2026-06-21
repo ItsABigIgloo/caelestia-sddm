@@ -6,6 +6,7 @@ import QtQuick.Layouts
 import QtQuick.Window
 import "components"
 import "widgets"
+import "assets/userColors/userColors.js" as UserColors
 
 Rectangle {
     id: root
@@ -27,21 +28,41 @@ Rectangle {
         var value = parseFloat(config.mainCardComponentsOpacity);
         if (isNaN(value) || value < 0.6)
             return 1;
-
         return value;
     }
     property bool capsLockOn: false
     property bool mainCardBgBlur: config.mainCardBgBlur === "true"
     property int sessionIndex
 
-    // rounding stuff
     property real largeRadius: mainCard.radius
     property real midRadius: mainCard.radius / 1.4
     property real smallRadius: mainCard.radius / 2
 
+    property string currentUser: userPicker.currentText
+    property var uc: UserColors.colors[currentUser] || {}
+
+    onCurrentUserChanged: {
+        var c = UserColors.colors[currentUser] || {};
+        if (c.background) config.background = c.background;
+        if (c.mainCard) config.mainCard = c.mainCard;
+        if (c.subComponents) config.subComponents = c.subComponents;
+        if (c.text) config.text = c.text;
+        if (c.inverseOnSurface) config.inverseOnSurface = c.inverseOnSurface;
+        if (c.primary) config.primary = c.primary;
+        if (c.secondary) config.secondary = c.secondary;
+        if (c.textDark) config.textDark = c.textDark;
+        if (c.onPrimary) config.onPrimary = c.onPrimary;
+        if (c.onSuccess) config.onSuccess = c.onSuccess;
+        if (c.outline) config.outline = c.outline;
+    }
+
     width: 1920
     height: 1080
-    color: "#131313"
+    color: uc.background || config.background || "#131313"
+
+    Behavior on color {
+        ColorAnimation { duration: 300; easing: Easing.InOutCubic }
+    }
 
     Connections {
         function onLoginFailed() {
@@ -61,32 +82,41 @@ Rectangle {
 
     AnimatedImage {
         id: background
-
         anchors.fill: parent
-        source: "assets/background"
+        source: "assets/background-" + root.currentUser
         fillMode: Image.PreserveAspectCrop
         onStatusChanged: {
             if (status === Image.Error)
-                console.log("Background missing, using fallback color");
+                source = "assets/background"
         }
+    }
 
-        Rectangle {
-            anchors.fill: parent
-            color: "#000000"
-            opacity: firstInput ? 0 : 0.4
+    Rectangle {
+        id: bgOverlay
+        anchors.fill: parent
+        color: "#000000"
+        opacity: firstInput ? 0 : 0.4
+        Behavior on opacity {
+            NumberAnimation { duration: 150; easing: Easing.InOutCubic }
+        }
+    }
 
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 300
-                    easing: Easing.InOutCubic
-                }
-            }
+    MultiEffect {
+        blurEnabled: true
+        source: background
+        blur: root.firstInput ? 0 : 1
+        autoPaddingEnabled: false
+        blurMultiplier: 1
+        blurMax: 64
+        anchors.fill: background
+
+        Behavior on blur {
+            NumberAnimation { duration: 400; easing: Easing.InOutCubic }
         }
     }
 
     Item {
         id: keylogger
-
         focus: true
         Keys.onPressed: {
             if (event.key === Qt.Key_Escape) {
@@ -99,9 +129,7 @@ Rectangle {
                 root.capsLockOn = !root.capsLockOn;
                 return;
             }
-            if (event.key === Qt.Key_Tab) {
-                return;
-            }
+            if (event.key === Qt.Key_Tab) return;
             if (root.firstInput) {
                 root.firstInput = false;
                 return;
@@ -109,13 +137,11 @@ Rectangle {
             if (event.key === Qt.Key_Right) {
                 if (userPicker.currentIndex < userModel.count - 1)
                     userPicker.currentIndex += 1;
-
                 return;
             }
             if (event.key === Qt.Key_Left) {
                 if (userPicker.currentIndex > 0)
                     userPicker.currentIndex -= 1;
-
                 return;
             }
             if (event.key === Qt.Key_Up) {
@@ -142,23 +168,6 @@ Rectangle {
         }
     }
 
-    MultiEffect {
-        blurEnabled: true
-        source: background
-        blur: root.firstInput ? 0 : 1
-        autoPaddingEnabled: false
-        blurMultiplier: 1
-        blurMax: 64
-        anchors.fill: background
-
-        Behavior on blur {
-            NumberAnimation {
-                duration: 400
-                easing: Easing.InOutCubic
-            }
-        }
-    }
-
     Greeting {
         anchors.centerIn: parent
         firstInput: root.firstInput
@@ -173,7 +182,6 @@ Rectangle {
 
     Rectangle {
         id: mainCard
-
         width: 1350
         height: 750
         scale: firstInput ? 0.5 : 1
@@ -188,7 +196,7 @@ Rectangle {
             targetHeight: mainCard.height
             animDuration: 0
             blurAmount: root.mainCardBlurAmount
-            bgColor: config.mainCard
+            bgColor: uc.mainCard || config.mainCard
             visibleState: !root.firstInput
             radius: 50
         }
@@ -203,7 +211,6 @@ Rectangle {
         }
 
         property date currentTime: new Date()
-
         property string day: Qt.formatDateTime(currentTime, "dddd").toUpperCase()
         property string date: Qt.formatDateTime(currentTime, "d MMM").toUpperCase()
 
@@ -216,7 +223,6 @@ Rectangle {
 
         FontLoader {
             id: googleSansFlex
-
             source: "assets/google-sans-flex/GoogleSansFlex.ttf"
         }
 
@@ -225,12 +231,16 @@ Rectangle {
             anchors.top: mainCard.top
             anchors.topMargin: 267
             anchors.bottom: parent.bottom
-            color: config.text
+            color: uc.text || config.text
             text: mainCard.day + " • " + mainCard.date
             font.pixelSize: 22
             font.family: googleSansFlex.name
             font.bold: true
             font.variableAxes: mainCard.fontAxesTitle
+
+            Behavior on color {
+                ColorAnimation { duration: 200 }
+            }
         }
 
         RowLayout {
@@ -244,37 +254,39 @@ Rectangle {
 
                 Rectangle {
                     id: topLeftRect
-
                     width: 390
                     height: 220
-                    color: config.subComponents
+                    color: uc.subComponents || config.subComponents
                     radius: root.midRadius
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
                     clip: true
 
+                    Behavior on color {
+                        ColorAnimation { duration: 200 }
+                    }
+
                     WelcomeText {
                         id: greeting
-
                         anchors.centerIn: parent
                     }
 
                     Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.OutBack
-                        }
+                        NumberAnimation { duration: 300; easing.type: Easing.OutBack }
                     }
                 }
 
                 Rectangle {
                     id: middleLeftRect
-
                     width: 390
                     Layout.fillHeight: true
-                    color: config.subComponents
+                    color: uc.subComponents || config.subComponents
                     radius: mainCard.radius / 4
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
                     clip: true
+
+                    Behavior on color {
+                        ColorAnimation { duration: 200 }
+                    }
 
                     CaelestiaFetch {
                         firstInput: root.firstInput
@@ -284,16 +296,12 @@ Rectangle {
                     }
 
                     Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.OutBack
-                        }
+                        NumberAnimation { duration: 300; easing.type: Easing.OutBack }
                     }
                 }
 
                 Rectangle {
                     id: bottomLeftRect
-
                     width: 390
                     height: 190
                     color: "transparent"
@@ -310,10 +318,7 @@ Rectangle {
                     }
 
                     Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.OutBack
-                        }
+                        NumberAnimation { duration: 300; easing.type: Easing.OutBack }
                     }
                 }
             }
@@ -335,7 +340,9 @@ Rectangle {
                 }
 
                 Avatar {
+                    id: userAvatar
                     avatarShape: root.avatarShape
+                    currentUser: root.currentUser
                     Layout.alignment: Qt.AlignHCenter
                     Layout.preferredWidth: root.avatarShape === "circle" ? 260 : 330
                     Layout.preferredHeight: root.avatarShape === "circle" ? 260 : 300
@@ -345,10 +352,7 @@ Rectangle {
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
                     Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.OutBack
-                        }
+                        NumberAnimation { duration: 300; easing.type: Easing.OutBack }
                     }
                 }
 
@@ -369,13 +373,15 @@ Rectangle {
                     text: "Caps Lock is activated!"
                     font.pointSize: 8
                     font.family: "Roboto"
-                    color: config.text
-                    opacity: 0 // Its buggy rnm fix later
+                    color: uc.text || config.text
+                    opacity: 0
+
+                    Behavior on color {
+                        ColorAnimation { duration: 200 }
+                    }
+
                     Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing: Easing.InOutCubic
-                        }
+                        NumberAnimation { duration: 300; easing: Easing.InOutCubic }
                     }
                 }
                 Item {
@@ -389,67 +395,73 @@ Rectangle {
 
                 Rectangle {
                     id: topRightRect
-
                     width: 390
                     height: 355
-                    color: config.subComponents
+                    color: uc.subComponents || config.subComponents
                     radius: root.smallRadius
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
+                    Behavior on color {
+                        ColorAnimation { duration: 200 }
+                    }
+
                     RandomQuote {
                         maxWidth: topRightRect.width - 40
-                        color: config.text
+                        color: uc.text || config.text
                     }
 
                     Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.OutBack
-                        }
+                        NumberAnimation { duration: 300; easing.type: Easing.OutBack }
                     }
                 }
 
                 Rectangle {
                     id: bottomRightRect
-
                     width: 390
                     height: 355
-                    color: config.subComponents
+                    color: uc.subComponents || config.subComponents
                     bottomRightRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
+                    Behavior on color {
+                        ColorAnimation { duration: 200 }
+                    }
+
                     Image {
                         id: dino
-
                         width: 300
                         height: 150
                         source: "assets/dino.png"
                         anchors.centerIn: parent
                         fillMode: Image.PreserveAspectCrop
                         layer.enabled: true
-
                         layer.effect: ColorOverlay {
-                            color: config.inverseOnSurface
+                            color: uc.inverseOnSurface || config.inverseOnSurface
+
+                            Behavior on color {
+                                ColorAnimation { duration: 200 }
+                            }
                         }
                     }
 
                     Text {
                         renderType: Text.NativeRendering
                         text: "Unlock for notifications"
-                        color: config.inverseOnSurface
+                        color: uc.inverseOnSurface || config.inverseOnSurface
                         font.family: "CaskaydiaCove NF"
                         font.pointSize: 12
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: 50
+
+                        Behavior on color {
+                            ColorAnimation { duration: 200 }
+                        }
                     }
 
                     Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.OutBack
-                        }
+                        NumberAnimation { duration: 300; easing.type: Easing.OutBack }
                     }
                 }
             }
@@ -457,7 +469,6 @@ Rectangle {
 
         SessionPicker {
             id: sessionPickerBtn
-
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.topMargin: mainCard.height - 100
@@ -470,32 +481,21 @@ Rectangle {
             }
 
             Behavior on opacity {
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.OutBack
-                }
+                NumberAnimation { duration: 300; easing.type: Easing.OutBack }
             }
         }
 
         Behavior on scale {
-            NumberAnimation {
-                duration: 300
-                easing.type: Easing.OutBack
-            }
+            NumberAnimation { duration: 300; easing.type: Easing.OutBack }
         }
 
         Behavior on opacity {
-            NumberAnimation {
-                duration: 300
-                easing.type: Easing.OutBack
-            }
+            NumberAnimation { duration: 300; easing.type: Easing.OutBack }
         }
     }
 
     ComboBox {
-        // invisible just for now
         id: userPicker
-
         width: 190
         height: 50
         anchors.right: parent.right

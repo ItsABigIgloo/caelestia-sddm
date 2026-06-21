@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Get the real user and home directory
 if [ -n "$SUDO_USER" ]; then
     REAL_USER="$SUDO_USER"
 else
@@ -11,78 +10,76 @@ fi
 REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
 CAEL_STATE="$REAL_HOME/.local/state/caelestia"
 THEME_DIR="/usr/share/sddm/themes/caelestia"
+USER_COLORS_DIR="$THEME_DIR/assets/userColors"
 
-# Clear SDDM greeter QML cache
 rm -rf /var/lib/sddm/.cache/sddm-greeter-qt6
+mkdir -p "$USER_COLORS_DIR"
 
-# 1. Generate FRESH colors from the current Caelestia scheme settings FIRST
+# Generate colors via caelestia
 if [ "${1:-}" = "--posthook" ]; then
-    : # Skip color generation when run as posthook (--posthook)
     echo "✓ Running as posthook, skipping color generation"
 elif command -v caelestia &>/dev/null; then
-    # IMPORTANT: must use sudo -u here
     mapfile -t SCHEME < <(sudo -H -u "$REAL_USER" caelestia scheme get --name --mode --variant 2>/dev/null)
     NAME="${SCHEME[0]}"
     MODE="${SCHEME[1]}"
     VARIANT="${SCHEME[2]}"
     if [ -n "$NAME" ] && [ -n "$MODE" ] && [ -n "$VARIANT" ]; then
-        # and here
         sudo -H -u "$REAL_USER" caelestia scheme set --name "$NAME" --mode "$MODE" --variant "$VARIANT" 2>/dev/null
         echo "✓ Generated colors for scheme: $NAME/$MODE/$VARIANT"
-    else
-        echo "Could not read Caelestia scheme, skipping color generation"
     fi
-else
-    echo "Caelestia CLI not found, skipping color generation"
 fi
 
-# 2. Sync avatar files into theme assets so sddm can safely access them without permission issues.
-if [ -f "$REAL_HOME/.face.icon" ]; then
-    cp -f "$REAL_HOME/.face.icon" "$THEME_DIR/assets/avatar.face.icon"
-    chmod 644 "$THEME_DIR/assets/avatar.face.icon"
-    echo "✓ Synced avatar.face.icon"
-else
-    rm -f "$THEME_DIR/assets/avatar.face.icon"
-fi
-
+# Per-user avatar
 if [ -f "$REAL_HOME/.face" ]; then
-    cp -f "$REAL_HOME/.face" "$THEME_DIR/assets/avatar.face"
-    chmod 644 "$THEME_DIR/assets/avatar.face"
-    echo "✓ Synced avatar.face"
-else
-    rm -f "$THEME_DIR/assets/avatar.face"
+    cp -f "$REAL_HOME/.face" "$THEME_DIR/assets/avatar-$REAL_USER.face"
+    chmod 644 "$THEME_DIR/assets/avatar-$REAL_USER.face"
+    echo "✓ Synced avatar-$REAL_USER.face"
 fi
 
-# 3. Sync Colors
+# Per-user wallpaper
+if [ -f "$CAEL_STATE/wallpaper/current" ]; then
+    rm -f "$THEME_DIR/assets/background-$REAL_USER" 2>/dev/null || true
+    cp -f "$CAEL_STATE/wallpaper/current" "$THEME_DIR/assets/background-$REAL_USER"
+    chmod 644 "$THEME_DIR/assets/background-$REAL_USER"
+    echo "✓ Synced background-$REAL_USER"
+fi
+
+# Per-user colors: write theme.conf (for main UI) + generate QML file (for per-user picker)
 if [ -f "$CAEL_STATE/theme/sddm-theme.conf" ]; then
+    cp -f "$CAEL_STATE/theme/sddm-theme.conf" "$THEME_DIR/theme-$REAL_USER.conf"
     cp -f "$CAEL_STATE/theme/sddm-theme.conf" "$THEME_DIR/theme.conf"
 
-    # get system OS name and Hostname
     sys_os="Linux"
     if [ -f /etc/os-release ]; then
-        sys_os=$(grep -oP '^PRETTY_NAME="\K[^"]+' /etc/os-release || grep -oP '^PRETTY_NAME=\K.+' /etc/os-release || echo "Linux")
+        sys_os=$(grep -oP '^PRETTY_NAME="\K[^"]+' /etc/os-release || echo "Linux")
     fi
-    sys_host=$(hostname 2>/dev/null || cat /etc/hostname 2>/dev/null || echo "localhost")
-
-    # update os= and host= in theme.conf if exist
+    sys_host=$(hostname 2>/dev/null || echo "localhost")
     sed -i "s/^os=.*/os=$sys_os/" "$THEME_DIR/theme.conf"
     sed -i "s/^host=.*/host=$sys_host/" "$THEME_DIR/theme.conf"
-
-    chmod 644 "$THEME_DIR/theme.conf"
+    sed -i "s/^os=.*/os=$sys_os/" "$THEME_DIR/theme-$REAL_USER.conf"
+    sed -i "s/^host=.*/host=$sys_host/" "$THEME_DIR/theme-$REAL_USER.conf"
+    chmod 644 "$THEME_DIR/theme.conf" "$THEME_DIR/theme-$REAL_USER.conf"
+    echo "✓ Synced theme-$REAL_USER.conf and theme.conf"
 fi
 
-# 4. Sync Wallpaper LAST
-if [[ -f "$CAEL_STATE/wallpaper/current" ]]; then
-    # Detect extension and handle symlinks
-    FILENAME=$(basename "$(readlink -f "$CAEL_STATE/wallpaper/current")")
-    EXT="${FILENAME##*.}"
-    TARGET="background.$EXT"
-
-    # Clean out old backgrounds to prevent collisions
-    rm -f "$THEME_DIR/assets/background."*
-
-    # Copy and set permissions
-    cp -f "$CAEL_STATE/wallpaper/current" "$THEME_DIR/assets/$TARGET"
-    chmod 644 "$THEME_DIR/assets/$TARGET"
-    echo "✓ Synced $TARGET"
+# Generate QML userColors file (loaded eagerly, no XHR needed)
+if [ -f "$CAEL_STATE/theme/sddm-theme.conf" ]; then
+    USER_QML="$USER_COLORS_DIR/$REAL_USER.qml"
+    cat > "$USER_QML" << 'QMLHEADER'
+import QtQuick
+QtObject {
+QMLHEADER
+    while IFS='=' read -r key value; do
+        key=$(echo "$key" | xargs)
+        value=$(echo "$value" | xargs)
+        [ -z "$key" ] && continue
+        case "$key" in
+            background|mainCard|subComponents|text|inverseOnSurface)
+                echo "    property color $key: \"$value\""
+                ;;
+        esac
+    done < "$CAEL_STATE/theme/sddm-theme.conf" >> "$USER_QML"
+    echo "}" >> "$USER_QML"
+    chmod 644 "$USER_QML"
+    echo "✓ Generated userColors QML for $REAL_USER"
 fi
