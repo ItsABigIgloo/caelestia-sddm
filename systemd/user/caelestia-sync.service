@@ -1,6 +1,0 @@
-[Unit]
-Description=Caelestia SDDM sync for %u
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh --user %u

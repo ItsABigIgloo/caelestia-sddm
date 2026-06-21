@@ -12,7 +12,7 @@ Options:
   --user USERNAME    Sync specific user (with D-Bus if available)
   --all              Sync all UID>=1000 users (with D-Bus if available)
   --boot             Sync all users, copy assets only (no D-Bus, no systemd)
-  --install          Like --boot, then install per-user path units + sudoers
+  --install          Like --boot, then create sudoers drop-in
   --cleanup          Remove all installed systemd units and sudoers
   --help             Show this help
 
@@ -97,43 +97,6 @@ sync_user() {
     fi
 }
 
-install_user_units() {
-    local users=("$@")
-    for user in "${users[@]}"; do
-        local home; home=$(getent passwd "$user" | cut -d: -f6)
-        local dir="$home/.config/systemd/user"
-        mkdir -p "$dir"
-
-        cat > "$dir/caelestia-sync.path" <<PATHU
-[Unit]
-Description=Caelestia auto sync for $user
-
-[Path]
-PathChanged=%h/.local/state/caelestia/wallpaper/current
-PathChanged=%h/.local/state/caelestia/theme/sddm-theme.conf
-
-[Install]
-WantedBy=default.target
-PATHU
-
-        cat > "$dir/caelestia-sync.service" <<SVCU
-[Unit]
-Description=Caelestia SDDM sync for $user
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh --user $user
-SVCU
-
-        chown -R "$user:$user" "$home/.config/systemd"
-        chmod 644 "$dir/caelestia-sync.path" "$dir/caelestia-sync.service"
-        loginctl enable-linger "$user" 2>/dev/null || true
-        sudo -u "$user" systemctl --user daemon-reload 2>/dev/null || true
-        sudo -u "$user" systemctl --user enable caelestia-sync.path 2>/dev/null || true
-        echo "  ✓ [$user] path unit enabled"
-    done
-}
-
 install_sudoers() {
     if [ ! -f /etc/sudoers.d/caelestia-sddm-sync ]; then
         echo "ALL ALL=(root) NOPASSWD: $THEME_DIR/scripts/sync.sh" > /etc/sudoers.d/caelestia-sddm-sync
@@ -144,13 +107,6 @@ install_sudoers() {
 
 cleanup() {
     echo "=== Cleanup ==="
-    for user in $(get_all_users); do
-        local home; home=$(getent passwd "$user" | cut -d: -f6)
-        local dir="$home/.config/systemd/user"
-        sudo -u "$user" systemctl --user disable caelestia-sync.path 2>/dev/null || true
-        rm -f "$dir/caelestia-sync.path" "$dir/caelestia-sync.service"
-        echo "  ✓ [$user] units removed"
-    done
     rm -f /etc/sudoers.d/caelestia-sddm-sync
     echo "✓ sudoers removed"
     rm -rf /var/lib/sddm/.cache/sddm-greeter-qt6
@@ -167,7 +123,7 @@ if [ "$_SYNC_ALL" = true ] || [ "$_BOOT" = true ]; then
     [ ${#users[@]} -eq 0 ] && { echo "No users."; exit 0; }
     echo "Syncing ${#users[@]} user(s)..."
     for u in "${users[@]}"; do sync_user "$u" "$_BOOT"; done
-    if [ "$_INSTALL" = true ]; then install_sudoers; install_user_units "${users[@]}"; fi
+    if [ "$_INSTALL" = true ]; then install_sudoers; fi
     exit 0
 fi
 

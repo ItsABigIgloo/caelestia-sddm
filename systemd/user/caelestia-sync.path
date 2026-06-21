@@ -1,9 +1,0 @@
-[Unit]
-Description=Caelestia auto sync on wallpaper/theme change
-
-[Path]
-PathChanged=%h/.local/state/caelestia/wallpaper/current
-PathChanged=%h/.local/state/caelestia/theme/sddm-theme.conf
-
-[Install]
-WantedBy=default.target
