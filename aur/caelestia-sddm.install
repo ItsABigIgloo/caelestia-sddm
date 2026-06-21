@@ -27,8 +27,9 @@ post_install() {
   "$theme_dir/scripts/sync.sh" --install
 
   echo "==> Theme setup complete."
-  echo "==> To auto-sync on wallpaper/theme change, add to ~/.config/caelestia/cli.json:"
-  echo "==>   \"postHook\": \"sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh --posthook\""
+  echo "==> To preserve custom greeter settings (greeting, blur, etc.):"
+  echo "==>   Create ~/.config/caelestia/sddm-base.conf with your [General] overrides"
+  echo "==>   Then run: sudo /usr/share/sddm/themes/caelestia/scripts/sync.sh --all"
 }
 
 post_upgrade() {
