@@ -12,8 +12,9 @@ Options:
   --user USERNAME    Sync specific user (with D-Bus if available)
   --all              Sync all UID>=1000 users (with D-Bus if available)
   --boot             Sync all users, copy assets only (no D-Bus, no systemd)
+  --posthook         Alias for --boot (used by Caelestia CLI postHook)
   --install          Like --boot, then create sudoers drop-in
-  --cleanup          Remove all installed systemd units and sudoers
+  --cleanup          Remove sudoers drop-in
   --help             Show this help
 
 Without options: sync current user (SUDO_USER or whoami), with D-Bus.
@@ -27,7 +28,7 @@ while [[ $# -gt 0 ]]; do
         --help) usage ;;
         --user) shift; _TARGET_USER="$1" ;;
         --all) _SYNC_ALL=true ;;
-        --boot) _BOOT=true ;;
+        --boot|--posthook) _BOOT=true ;;
         --install) _INSTALL=true ;;
         --cleanup) _CLEANUP=true ;;
         *) echo "Unknown: $1"; usage ;;
