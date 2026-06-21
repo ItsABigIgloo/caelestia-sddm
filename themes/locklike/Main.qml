@@ -81,6 +81,10 @@ Rectangle {
 
             // avatar crossfade
             userAvatar.crossfade();
+
+            // text crossfades
+            greeting.crossfadeText();
+            fetchPanel.crossfadeUserName();
         }
     }
 
@@ -326,6 +330,7 @@ NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
 
                     WelcomeText {
                         id: greeting
+                        animDuration: root.animDuration
                         anchors.centerIn: parent
                     }
 
@@ -348,10 +353,12 @@ NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
                     }
 
                     CaelestiaFetch {
+                        id: fetchPanel
                         firstInput: root.firstInput
                         currentUser: userPicker.currentText
                         currentSession: sessionPickerBtn.currentText
                         rectHeight: middleLeftRect.height
+                        animDuration: root.animDuration
                     }
 
                     Behavior on opacity {
