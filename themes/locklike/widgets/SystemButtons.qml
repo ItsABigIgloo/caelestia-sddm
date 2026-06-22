@@ -43,7 +43,7 @@ Item {
             parentWidth: powerBtn.width
             parentHeight: powerBtn.height
             parentRadius: powerBtn.radius
-            onClicked: root.powerClicked()
+            onClicked: powerClicked()
         }
 
         Behavior on color {
@@ -81,7 +81,7 @@ Item {
             parentWidth: rebootBtn.width
             parentHeight: rebootBtn.height
             parentRadius: rebootBtn.radius
-            onClicked: root.rebootClicked()
+            onClicked: rebootClicked()
         }
 
         Behavior on color {
