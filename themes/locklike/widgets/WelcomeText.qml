@@ -36,6 +36,7 @@ Item {
             renderType: Text.NativeRendering
             text: topLeftRect.welcomeString
             color: config.text
+            Behavior on color { ColorAnimation { duration: topLeftRect.animDuration } }
             font.family: "Rubik"; font.bold: false; font.pixelSize: parseInt(config.welcomeFontSize) || 40
             horizontalAlignment: Text.AlignHCenter
             anchors.horizontalCenter: parent.horizontalCenter
@@ -51,6 +52,7 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     renderType: Text.NativeRendering
                     color: config.primary
+                    Behavior on color { ColorAnimation { duration: topLeftRect.animDuration } }
                     font.family: "Rubik"; font.bold: false; font.pixelSize: parseInt(config.welcomeFontSize) || 40
                     opacity: _activeGreeting === 0 ? 1 : 0
                     Behavior on opacity {
@@ -63,6 +65,7 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     renderType: Text.NativeRendering
                     color: config.primary
+                    Behavior on color { ColorAnimation { duration: topLeftRect.animDuration } }
                     font.family: "Rubik"; font.bold: false; font.pixelSize: parseInt(config.welcomeFontSize) || 40
                     opacity: _activeGreeting === 0 ? 0 : 1
                     Behavior on opacity {

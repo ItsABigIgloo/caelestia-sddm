@@ -76,8 +76,10 @@ Item {
                 Text {
                     renderType: Text.NativeRendering
                     Layout.leftMargin: 12; Layout.topMargin: root.rectHeight / 10
-                    text: "WM     :\nUSER   :\nOS     :\nHOST   :"
-                    color: config.text; font.pixelSize: parseInt(config.fetchFontSize) || 18
+                    text: (config.fetchLabels || "").replace(/\\n/g, "\n")
+                    color: config.text
+                    Behavior on color { ColorAnimation { duration: root.animDuration } }
+                    font.pixelSize: parseInt(config.fetchFontSize) || 18
                     font.family: "CaskaydiaCove NF"
                     lineHeight: 30; lineHeightMode: Text.FixedHeight
                     Layout.preferredWidth: 80
