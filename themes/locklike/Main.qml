@@ -426,7 +426,8 @@ Rectangle {
                 }
 
                 Text {
-                    Layout.margins: 10
+                    Layout.leftMargin: 10
+                    Layout.rightMargin: 10
                     Layout.alignment: Qt.AlignHCenter
                     text: "Caps Lock is activated!"
                     font.pointSize: 8
