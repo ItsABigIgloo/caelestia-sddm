@@ -77,7 +77,7 @@ Item {
                     renderType: Text.NativeRendering
                     Layout.leftMargin: 12; Layout.topMargin: root.rectHeight / 10
                     text: "WM     :\nUSER   :\nOS     :\nHOST   :"
-                    color: config.text; font.pixelSize: 18
+                    color: config.text; font.pixelSize: parseInt(config.fetchFontSize) || 18
                     font.family: "CaskaydiaCove NF"
                     lineHeight: 30; lineHeightMode: Text.FixedHeight
                     Layout.preferredWidth: 80

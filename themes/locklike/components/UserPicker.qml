@@ -9,7 +9,7 @@ ComboBox {
     model: userModel
     currentIndex: userModel.lastIndex
     textRole: "name"
-    font.family: "Rubik"; font.pixelSize: 20
+    font.family: "Rubik"; font.pixelSize: parseInt(config.userPickerSize) || 20
     visible: false
 
     background: Rectangle {
