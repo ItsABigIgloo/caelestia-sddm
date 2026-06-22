@@ -317,7 +317,7 @@ if [ -n "$_TARGET_USER" ]; then
         echo "ERROR: --user is incompatible with --all/--boot/--install" >&2
         exit 1
     fi
-    sync_user "$_TARGET_USER"
+    sync_user "$_TARGET_USER" true
     generate_colors_js "$_TARGET_USER"
     exit 0
 fi
