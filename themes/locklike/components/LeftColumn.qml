@@ -13,7 +13,11 @@ ColumnLayout {
     property real mainCardRadius: 70
     property string currentUser: ""
     property string currentSession: ""
+    property bool powerConfirmEnabled: false
     readonly property alias welcomeString: greeting.welcomeString
+
+    signal powerRequested()
+    signal rebootRequested()
 
     function crossfadeGreeting() {
         greeting.crossfadeText();
@@ -112,11 +116,25 @@ ColumnLayout {
         opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
         SystemButtons {
+            id: sysBtns
             anchors.horizontalCenter: parent.horizontalCenter
             rectHeight: bottomLeftRect.height
             rectWidth: bottomLeftRect.height - 1
             rectRadius: bottomLeftRect.radius
             rectBigRadius: root.mainCardRadius / 1.9
+            powerConfirmEnabled: root.powerConfirmEnabled
+            onPowerClicked: {
+                if (root.powerConfirmEnabled)
+                    root.powerRequested();
+                else
+                    sddm.powerOff();
+            }
+            onRebootClicked: {
+                if (root.powerConfirmEnabled)
+                    root.rebootRequested();
+                else
+                    sddm.reboot();
+            }
         }
 
         Behavior on opacity {

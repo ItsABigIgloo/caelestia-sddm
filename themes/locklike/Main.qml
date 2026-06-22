@@ -78,9 +78,6 @@ Rectangle {
     width: 1920
     height: 1080
     color: config.background || "#131313"
-    onPowerConfirmEnabledChanged: {
-        leftColumn.systemButtons.powerConfirmEnabled = root.powerConfirmEnabled;
-    }
     onSOpenChanged: {
         if (!root.sOpen)
             keylogger.forceActiveFocus();
