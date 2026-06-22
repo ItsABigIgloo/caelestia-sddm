@@ -413,7 +413,8 @@ Rectangle {
                 }
 
                 Text {
-                    Layout.margins: 10
+                    Layout.leftMargin: 10
+                    Layout.rightMargin: 10
                     Layout.alignment: Qt.AlignHCenter
                     text: config.capsLockWarning
                     font.pointSize: 8
