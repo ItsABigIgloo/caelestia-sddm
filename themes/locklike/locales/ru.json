@@ -5,7 +5,7 @@
   "passwordPlaceholder": "Введите пароль",
   "loadingText": "Загрузка...",
   "fetchTitle": "caelestiafetch.sh",
-  "fetchLabels": "WM     :\nПОЛЬЗ  :\nОС     :\nУЗЕЛ   :",
+  "fetchLabels": "WM     :\nUSER  :\nОС     :\nХОСТ   :",
   "capsLockWarning": "Caps Lock включён!",
   "unlockForNotifications": "Разблокируйте для уведомлений",
   "settingsTitle": "Настройки",

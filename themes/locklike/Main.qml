@@ -376,6 +376,7 @@ Rectangle {
                 animDuration: root.animDuration
                 smallRadius: root.smallRadius
                 mainCardRadius: mainCard.radius
+                locale: localeManager.currentLocale
             }
         }
 
