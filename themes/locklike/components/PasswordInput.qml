@@ -15,6 +15,8 @@ Rectangle {
     property alias mainCardComponentsOpacity: inputRect.mainCardComponentsOpacity
     property int animDuration: 300
 
+    signal focusRequested
+
     readonly property list<var> shapeGetters: [MaterialShapes.getCircle, MaterialShapes.getSlanted, MaterialShapes.getArch, MaterialShapes.getFan, MaterialShapes.getArrow, MaterialShapes.getSemiCircle, MaterialShapes.getTriangle, MaterialShapes.getDiamond, MaterialShapes.getClamShell, MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getCookie6Sided, MaterialShapes.getGhostish, MaterialShapes.getSoftBurst]
 
     readonly property list<var> shapeQueue: {
@@ -64,6 +66,11 @@ Rectangle {
         width: inputRect.buffer === "" ? 300 : 365
         height: 45
         opacity: inputRect.firstInput ? 0 : inputRect.mainCardComponentsOpacity
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: root.focusRequested()
+        }
 
         Behavior on width {
             NumberAnimation {
