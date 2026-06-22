@@ -12,7 +12,6 @@ ColumnLayout {
     property int animDuration: 300
     property real smallRadius: 35
     property real mainCardRadius: 70
-    property string locale: "en"
 
     spacing: 13
     Layout.alignment: Qt.AlignRight
@@ -31,7 +30,6 @@ ColumnLayout {
         RandomQuote {
             maxWidth: parent.width - 40
             color: config.text
-            locale: root.locale
         }
 
         Behavior on opacity {

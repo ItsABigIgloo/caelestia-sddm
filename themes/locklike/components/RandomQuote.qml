@@ -56,6 +56,7 @@ Item {
             width: quote.width
             text: ""
             color: config.primary
+            Behavior on color { ColorAnimation { duration: config.animDuration !== undefined ? config.animDuration : 300 } }
             font.pointSize: 15
             font.family: "CaskaydiaCove NF"
             font.bold: true

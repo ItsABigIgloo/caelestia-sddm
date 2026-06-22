@@ -41,6 +41,7 @@ Item {
             font.variableAxes: root.fontAxesHours
             font.pixelSize: Math.round(224 * root.centerScale)
             color: Qt.lighter(config.primary, 1.6)
+            Behavior on color { ColorAnimation { duration: config.animDuration !== undefined ? config.animDuration : 300 } }
             text: Qt.formatTime(root.currentTime, "hh")
         }
 
@@ -57,6 +58,7 @@ Item {
             font.variableAxes: root.fontAxesMinutes
             font.pixelSize: Math.round(224 * root.centerScale)
             color: config.secondary
+            Behavior on color { ColorAnimation { duration: config.animDuration !== undefined ? config.animDuration : 300 } }
             text: Qt.formatTime(root.currentTime, "mm")
         }
     }
