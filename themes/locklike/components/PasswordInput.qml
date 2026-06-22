@@ -13,6 +13,20 @@ Rectangle {
     property alias isLoading: inputRect.isLoading
     property alias firstInput: inputRect.firstInput
     property alias mainCardComponentsOpacity: inputRect.mainCardComponentsOpacity
+    property int animDuration: 300
+
+    signal focusRequested
+
+    readonly property list<var> shapeGetters: [MaterialShapes.getCircle, MaterialShapes.getSlanted, MaterialShapes.getArch, MaterialShapes.getFan, MaterialShapes.getArrow, MaterialShapes.getSemiCircle, MaterialShapes.getTriangle, MaterialShapes.getDiamond, MaterialShapes.getClamShell, MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getCookie6Sided, MaterialShapes.getGhostish, MaterialShapes.getSoftBurst]
+
+    readonly property list<var> shapeQueue: {
+        var arr = [MaterialShapes.getSlanted, MaterialShapes.getArch, MaterialShapes.getFan, MaterialShapes.getArrow, MaterialShapes.getSemiCircle, MaterialShapes.getTriangle, MaterialShapes.getDiamond, MaterialShapes.getClamShell, MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getCookie6Sided, MaterialShapes.getGhostish, MaterialShapes.getSoftBurst];
+        for (var i = arr.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+        }
+        return arr;
+    }
 
     readonly property list<var> shapeGetters: [MaterialShapes.getCircle, MaterialShapes.getSlanted, MaterialShapes.getArch, MaterialShapes.getFan, MaterialShapes.getArrow, MaterialShapes.getSemiCircle, MaterialShapes.getTriangle, MaterialShapes.getDiamond, MaterialShapes.getClamShell, MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getCookie6Sided, MaterialShapes.getGhostish, MaterialShapes.getSoftBurst]
 
@@ -62,6 +76,11 @@ Rectangle {
         width: inputRect.buffer === "" ? 300 : 365
         height: 45
         opacity: inputRect.firstInput ? 0 : inputRect.mainCardComponentsOpacity
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: root.focusRequested()
+        }
 
         Behavior on width {
             NumberAnimation {

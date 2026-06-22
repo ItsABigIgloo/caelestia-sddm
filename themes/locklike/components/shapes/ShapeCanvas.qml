@@ -21,12 +21,10 @@ Canvas {
     property var prevRoundedPolygon: null
     property double progress: 1
     property var morph: new Morph.Morph(roundedPolygon, roundedPolygon)
-    property Animation animation: NumberAnimation {
-        duration: 350
-        easing.type: Easing.BezierSpline
-        easing.bezierCurve: [0.42, 1.67, 0.21, 0.90, 1, 1] // Material 3 Expressive fast spatial (https://m3.material.io/styles/motion/overview/specs)
-    }
+    property Animation animation
 
+    implicitWidth: bounds[2] - bounds[0]
+    implicitHeight: bounds[3] - bounds[1]
     onRoundedPolygonChanged: {
         delete root.morph;
         root.morph = new Morph.Morph(root.prevRoundedPolygon ?? root.roundedPolygon, root.roundedPolygon);
@@ -108,4 +106,17 @@ Canvas {
 
         ctx.restore();
     }
+
+    animation: NumberAnimation {
+        duration: 350
+        easing.type: Easing.BezierSpline
+        easing.bezierCurve: [0.42, 1.67, 0.21, 0.9, 1, 1] // Material 3 Expressive fast spatial (https://m3.material.io/styles/motion/overview/specs)
+    }
+
+    Behavior on progress {
+        id: morphBehavior
+
+        animation: root.animation
+    }
+
 }
