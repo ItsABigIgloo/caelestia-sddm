@@ -1,9 +1,7 @@
-import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
 import QtQuick.Layouts
-import QtQuick.Window
 import "components"
 import "widgets"
 
@@ -45,6 +43,10 @@ Rectangle {
     property int syncDelay: parseInt(config.syncDelay) || 150
     property real bgBlur: parseFloat(config.bgBlur) || 0.5
     property bool transitionBusy: false
+    property bool powerConfirmEnabled: config.powerConfirmEnabled !== "false"
+    property real powerOverlayOpacity: parseFloat(config.powerOverlayOpacity) || 0.8
+    property real powerBlur: parseFloat(config.powerBlur) || 1.0
+
 
     Component.onCompleted: {
         config.animDuration = parseInt(config.animDuration) || 300;
@@ -58,6 +60,12 @@ Rectangle {
         var bb = settingsStore.get("bgBlur", config.bgBlur);
         root.bgBlur = parseFloat(bb);
         config.bgBlur = parseFloat(bb);
+        var po = settingsStore.get("powerOverlay", Math.round(root.powerOverlayOpacity * 100));
+        root.powerOverlayOpacity = parseInt(po) / 100;
+        config.powerOverlayOpacity = root.powerOverlayOpacity;
+        var pb = settingsStore.get("powerBlur", Math.round(root.powerBlur * 100));
+        root.powerBlur = parseInt(pb) / 100;
+        config.powerBlur = root.powerBlur;
     }
 
     onCurrentUserChanged: {
@@ -104,6 +112,9 @@ Rectangle {
         interval: syncDelay + animDuration + 100
         onTriggered: transitionBusy = false
     }
+
+    readonly property int _settingsMargin: 16
+    readonly property int _gap: 10
 
     width: 1920
     height: 1080
@@ -159,61 +170,55 @@ Rectangle {
         }
     }
 
-    Item {
+    KeyboardHandler {
         id: keylogger
+        welcomeEnabled: root.welcomeMessageEnabled
+        powerDialogVisible: powerDialog.visible
+        settingsOpen: root.sOpen
+        firstInputActive: root.firstInput
 
-        focus: true
-        Keys.onPressed: {
-            if (event.key === Qt.Key_Escape) {
-                if (root.welcomeMessageEnabled)
-                    root.firstInput = true;
-                root.buffer = "";
-                return;
-            }
-            if (event.key === Qt.Key_CapsLock) {
-                root.capsLockOn = !root.capsLockOn;
-                return;
-            }
-            if (event.key === Qt.Key_Tab) {
-                return;
-            }
-            if (root.firstInput) {
-                root.firstInput = false;
-                return;
-            }
-            if (event.key === Qt.Key_Right) {
-                if (userPicker.currentIndex < userModel.count - 1)
-                    userPicker.currentIndex += 1;
-
-                return;
-            }
-            if (event.key === Qt.Key_Left) {
-                if (userPicker.currentIndex > 0)
-                    userPicker.currentIndex -= 1;
-
-                return;
-            }
-            if (event.key === Qt.Key_Up) {
-                if (sessionPickerBtn.selectedIndex < sessionPickerBtn.count - 1)
-                    sessionPickerBtn.selectedIndex += 1;
-                return;
-            }
-            if (event.key === Qt.Key_Down) {
-                if (sessionPickerBtn.selectedIndex > 0)
-                    sessionPickerBtn.selectedIndex -= 1;
-                return;
-            }
-            if (event.key === Qt.Key_Backspace) {
-                root.buffer = root.buffer.slice(0, -1);
-                return;
-            }
-            if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
-                sddm.login(userPicker.currentText, root.buffer, root.sessionIndex);
-                root.buffer = "";
-                root.loading = true;
-                return;
-            }
-            root.buffer += event.text;
+        onEscapePressed: {
+            root.buffer = "";
+        }
+        onSettingsCloseRequested: {
+            settingsPanel.close();
+        }
+        onWelcomeResetRequested: {
+            root.firstInput = true;
+        }
+        onFirstInputDismissed: {
+            root.firstInput = false;
+        }
+        onCapsLockToggled: {
+            root.capsLockOn = !root.capsLockOn;
+        }
+        onRightPressed: {
+            if (!root.transitionBusy && userPicker.currentIndex < userModel.count - 1)
+                userPicker.currentIndex += 1;
+        }
+        onLeftPressed: {
+            if (!root.transitionBusy && userPicker.currentIndex > 0)
+                userPicker.currentIndex -= 1;
+        }
+        onUpPressed: {
+            if (sessionPickerBtn.selectedIndex < sessionPickerBtn.count - 1)
+                sessionPickerBtn.selectedIndex += 1;
+        }
+        onDownPressed: {
+            if (sessionPickerBtn.selectedIndex > 0)
+                sessionPickerBtn.selectedIndex -= 1;
+        }
+        onBackspacePressed: {
+            root.buffer = root.buffer.slice(0, -1);
+        }
+        onEnterPressed: {
+            if (powerDialog.visible) return;
+            sddm.login(userPicker.currentText, root.buffer, root.sessionIndex);
+            root.buffer = "";
+            root.loading = true;
+        }
+        onCharEntered: function(ch) {
+            root.buffer += ch;
         }
     }
 
@@ -254,7 +259,7 @@ Rectangle {
         scale: firstInput ? 0.5 : 1
         opacity: firstInput ? 0 : 1
         anchors.centerIn: parent
-        radius: 70
+        radius: parseInt(config.mainCardRadius) || 70
         color: "transparent"
 
         BlurWrapper {
@@ -314,8 +319,8 @@ Rectangle {
 
         RowLayout {
             anchors.fill: parent
-            anchors.margins: 15
-            spacing: 40
+            anchors.margins: parseInt(config.mainCardMargin) || 15
+            spacing: parseInt(config.layoutSpacing) || 40
 
             LeftColumn {
                 id: leftColumn
@@ -326,6 +331,9 @@ Rectangle {
                 mainCardRadius: mainCard.radius
                 currentUser: userPicker.currentText
                 currentSession: sessionPickerBtn.currentText
+                powerConfirmEnabled: root.powerConfirmEnabled
+                onPowerRequested: powerDialog.show(0)
+                onRebootRequested: powerDialog.show(1)
             }
 
             ColumnLayout {
@@ -349,8 +357,8 @@ Rectangle {
                     currentUser: root.currentUser
                     animDuration: root.animDuration
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: root.avatarShape === "circle" ? 260 : 330
-                    Layout.preferredHeight: root.avatarShape === "circle" ? 260 : 300
+                    Layout.preferredWidth: root.avatarShape === "circle" ? (parseInt(config.avatarCircleSize) || 260) : (parseInt(config.avatarHexagonWidth) || 330)
+                    Layout.preferredHeight: root.avatarShape === "circle" ? (parseInt(config.avatarCircleSize) || 260) : (parseInt(config.avatarHexagonHeight) || 300)
                     Layout.leftMargin: root.avatarShape === "circle" ? 0 : 34
                     Layout.topMargin: root.avatarShape === "circle" ? 20 : 0
                     Layout.bottomMargin: root.avatarShape === "circle" ? 20 : 0
@@ -371,13 +379,14 @@ Rectangle {
                     buffer: root.buffer
                     currentUser: userPicker.currentText
                     currentSession: root.sessionIndex
+                    onFocusRequested: keylogger.forceActiveFocus()
                 }
 
                 Text {
-                    Layout.margins: 10
-                    Layout.alignment: Qt.AlignHCenter
-                    text: config.capsLockWarning
-                    font.pointSize: 8
+                Layout.margins: 10
+                Layout.alignment: Qt.AlignHCenter
+                text: config.capsLockWarning
+                font.pointSize: 8
                     font.family: "Roboto"
                     color: config.text
                     opacity: 0
@@ -391,7 +400,7 @@ Rectangle {
                     }
                 }
                 Item {
-                    height: 20
+                    height: 2 * _gap
                 }
             }
 
@@ -442,19 +451,47 @@ Rectangle {
 
     property bool sOpen: false
 
+    MouseArea {
+        anchors.fill: parent
+        visible: root.sOpen && !powerDialog.visible
+        z: 50
+        onClicked: {
+            settingsPanel.close();
+            keylogger.forceActiveFocus();
+        }
+    }
+
     SettingsPanel {
         id: settingsPanel
         z: 100
-        anchors.right: parent.right; anchors.rightMargin: 16
-        y: 16
-        sOpen: root.sOpen
+        anchors.right: parent.right; anchors.rightMargin: _settingsMargin
+        y: _settingsMargin
         animDuration: root.animDuration
         syncDelay: root.syncDelay
         bgBlur: root.bgBlur
+        powerOverlay: Math.round(root.powerOverlayOpacity * 100)
+        powerBlur: Math.round(root.powerBlur * 100)
         localeManager: localeManager
+        welcomeEnabled: root.welcomeMessageEnabled
+        mainCardBlur: root.mainCardBlurAmount
+        mainCardOpacity: root.mainCardComponentsOpacity
+        mainCardBgBlurEnabled: root.mainCardBgBlur
+        sessionPickerEnabled: root.sessionPickerEnabled
+        powerConfirmEnabled: root.powerConfirmEnabled
+        avatarShape: root.avatarShape
+        onOpenChanged: root.sOpen = open
         onAnimDurationChanged: if (animDuration !== root.animDuration) { root.animDuration = animDuration; config.animDuration = animDuration; settingsStore.set("animDuration", animDuration); }
         onSyncDelayChanged: if (syncDelay !== root.syncDelay) { root.syncDelay = syncDelay; config.syncDelay = syncDelay; settingsStore.set("syncDelay", syncDelay); }
         onBgBlurChanged: if (bgBlur !== root.bgBlur) { root.bgBlur = bgBlur; config.bgBlur = bgBlur; settingsStore.set("bgBlur", bgBlur); }
+        onPowerOverlayChanged: if (powerOverlay !== Math.round(root.powerOverlayOpacity * 100)) { root.powerOverlayOpacity = powerOverlay / 100; config.powerOverlayOpacity = powerOverlay / 100; settingsStore.set("powerOverlay", powerOverlay); }
+        onPowerBlurChanged: if (powerBlur !== Math.round(root.powerBlur * 100)) { root.powerBlur = powerBlur / 100; config.powerBlur = powerBlur / 100; settingsStore.set("powerBlur", powerBlur); }
+        onWelcomeEnabledChanged: { root.welcomeMessageEnabled = welcomeEnabled; config.enableWelcomeMessage = welcomeEnabled.toString(); }
+        onMainCardBlurChanged: { root.mainCardBlurAmount = mainCardBlur; config.mainCardBlurAmount = mainCardBlur.toString(); }
+        onMainCardOpacityChanged: { root.mainCardComponentsOpacity = mainCardOpacity; config.mainCardComponentsOpacity = mainCardOpacity.toString(); }
+        onMainCardBgBlurEnabledChanged: { root.mainCardBgBlur = mainCardBgBlurEnabled; config.mainCardBgBlur = mainCardBgBlurEnabled.toString(); }
+        onSessionPickerEnabledChanged: { root.sessionPickerEnabled = sessionPickerEnabled; config.sessionPicker = sessionPickerEnabled.toString(); }
+        onPowerConfirmEnabledChanged: { root.powerConfirmEnabled = powerConfirmEnabled; config.powerConfirmEnabled = powerConfirmEnabled.toString(); }
+        onAvatarShapeChanged: { config.AvatarShape = avatarShape; root.avatarShape = avatarShape; }
     }
 
     SettingsStore {
@@ -464,4 +501,33 @@ Rectangle {
     UserPicker {
         id: userPicker
     }
+
+    PowerDialog {
+        id: powerDialog
+        z: 200
+        anchors.fill: parent
+        animDuration: root.animDuration
+        overlayOpacity: root.powerOverlayOpacity
+        powerBlur: root.powerBlur
+        powerConfirmEnabled: root.powerConfirmEnabled
+        onConfirmed: function(cmd) {
+            if (cmd === "poweroff") sddm.powerOff();
+            else if (cmd === "reboot") sddm.reboot();
+        }
+    }
+
+        onPowerConfirmEnabledChanged: {
+            leftColumn.systemButtons.powerConfirmEnabled = root.powerConfirmEnabled;
+        }
+
+        onSOpenChanged: {
+            if (!root.sOpen) keylogger.forceActiveFocus();
+        }
+
+        Connections {
+            target: powerDialog
+            function onVisibleChanged() {
+                if (!powerDialog.visible) keylogger.forceActiveFocus();
+            }
+        }
 }
