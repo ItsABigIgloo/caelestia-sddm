@@ -157,6 +157,15 @@ Item {
         if (data.circleLabel !== undefined)
             config.circleLabel = data.circleLabel;
 
+        if (data.fontSizeLabel !== undefined)
+            config.fontSizeLabel = data.fontSizeLabel;
+
+        if (data.settingsFontSizeLabel !== undefined)
+            config.settingsFontSizeLabel = data.settingsFontSizeLabel;
+
+        if (data.settingsTitleSizeLabel !== undefined)
+            config.settingsTitleSizeLabel = data.settingsTitleSizeLabel;
+
     }
 
     function loadLocale(code) {

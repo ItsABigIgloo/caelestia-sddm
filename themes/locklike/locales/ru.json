@@ -34,5 +34,8 @@
   "cardBlurToggleLabel": "Размытие фона карточки",
   "avatarShapeLabel": "Форма аватара",
   "hexagonLabel": "Шестиугольник",
-  "circleLabel": "Круг"
+  "circleLabel": "Круг",
+  "fontSizeLabel": "Размер шрифта",
+  "settingsFontSizeLabel": "Шрифт настроек",
+  "settingsTitleSizeLabel": "Шрифт заголовка"
 }

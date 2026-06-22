@@ -34,5 +34,8 @@
   "cardBlurToggleLabel": "Card bg blur",
   "avatarShapeLabel": "Avatar shape",
   "hexagonLabel": "Hexagon",
-  "circleLabel": "Circle"
+  "circleLabel": "Circle",
+  "fontSizeLabel": "Font settings",
+  "settingsFontSizeLabel": "Settings font size",
+  "settingsTitleSizeLabel": "Title font size"
 }
