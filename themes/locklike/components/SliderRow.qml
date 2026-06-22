@@ -10,11 +10,10 @@ Item {
     property int animDuration: 300
     property bool showWhen: true
     property bool rowEnabled: true
+    property int fontSize: parseInt(config.settingsFontSize) || 18
     readonly property int _spacing: 16
     readonly property int _rowSpacing: 12
-    readonly property int _sliderW: 60
     readonly property int _valueH: 32
-    readonly property int _fontS: 13
 
     signal valueModified(real value)
 
@@ -32,7 +31,7 @@ Item {
             text: labelText
             color: config.textDark
             font.family: "Rubik"
-            font.pixelSize: _fontS
+            font.pixelSize: fontSize
             opacity: rowEnabled ? 1 : 0.3
         }
 
@@ -43,7 +42,7 @@ Item {
             enabled: rowEnabled
 
             SliderStyle {
-                width: parent.width - _sliderW
+                width: parent.width - valueLabel.implicitWidth - parent.spacing
                 value: sliderValue
                 maxValue: row.maxValue
                 stepSize: row.stepSize
@@ -55,10 +54,11 @@ Item {
             }
 
             Text {
-                text: valueText
+                id: valueLabel
+                text: row.valueText
                 color: config.primary
                 font.family: "Rubik"
-                font.pixelSize: _fontS
+                font.pixelSize: fontSize
                 verticalAlignment: Text.AlignVCenter
                 height: _valueH
 
