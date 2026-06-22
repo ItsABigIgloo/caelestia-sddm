@@ -15,13 +15,20 @@ Item {
         model: root.localeManager.availableLocales.map(function(l) { return l.nativeName; })
         iconChar: "language"
 
-        Component.onCompleted: {
+        function syncIndex() {
             for (var i = 0; i < root.localeManager.availableLocales.length; i++) {
                 if (root.localeManager.availableLocales[i].code === root.localeManager.currentLocale) {
                     currentIndex = i;
-                    break;
+                    return;
                 }
             }
+        }
+
+        Component.onCompleted: syncIndex()
+
+        Connections {
+            target: root.localeManager
+            function onLanguageChanged() { dropdown.syncIndex(); }
         }
 
         displayText: {

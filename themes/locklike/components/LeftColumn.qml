@@ -15,6 +15,7 @@ ColumnLayout {
     property string currentSession: ""
     property bool powerConfirmEnabled: false
     readonly property alias welcomeString: greeting.welcomeString
+    readonly property alias systemButtons: sysBtns
 
     signal powerRequested()
     signal rebootRequested()
@@ -37,8 +38,8 @@ ColumnLayout {
     Rectangle {
         id: topLeftRect
 
-        width: 390
-        height: 220
+        Layout.preferredWidth: 390
+        Layout.preferredHeight: 220
         color: config.subComponents
         radius: root.midRadius
         opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
@@ -71,7 +72,7 @@ ColumnLayout {
     Rectangle {
         id: middleLeftRect
 
-        width: 390
+        Layout.preferredWidth: 390
         Layout.fillHeight: true
         color: config.subComponents
         radius: root.mainCardRadius / 4
@@ -108,8 +109,8 @@ ColumnLayout {
     Rectangle {
         id: bottomLeftRect
 
-        width: 390
-        height: 190
+        Layout.preferredWidth: 390
+        Layout.preferredHeight: 190
         color: "transparent"
         bottomLeftRadius: root.mainCardRadius / 1.9
         radius: root.midRadius / 1.7

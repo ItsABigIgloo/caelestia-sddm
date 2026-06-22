@@ -10,6 +10,7 @@ ColumnLayout {
     property bool firstInput: false
     property real mainCardComponentsOpacity: 1
     property int animDuration: 300
+    property string locale: "en"
     property real smallRadius: 35
     property real mainCardRadius: 70
 
@@ -28,6 +29,7 @@ ColumnLayout {
         }
 
         RandomQuote {
+            locale: root.locale
             maxWidth: parent.width - 40
             color: config.text
         }
