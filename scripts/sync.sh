@@ -312,6 +312,16 @@ cleanup() {
 if [ "$_CLEANUP" = true ]; then cleanup; exit 0; fi
 if [ "$_INSTALL" = true ]; then _BOOT=true; fi
 
+if [ -n "$_TARGET_USER" ]; then
+    if [ "$_SYNC_ALL" = true ] || [ "$_BOOT" = true ]; then
+        echo "ERROR: --user is incompatible with --all/--boot/--install" >&2
+        exit 1
+    fi
+    sync_user "$_TARGET_USER"
+    generate_colors_js "$_TARGET_USER"
+    exit 0
+fi
+
 if [ "$_SYNC_ALL" = true ] || [ "$_BOOT" = true ]; then
     mapfile -t users < <(get_all_users)
     [ ${#users[@]} -eq 0 ] && { echo "No users."; exit 0; }
@@ -319,12 +329,6 @@ if [ "$_SYNC_ALL" = true ] || [ "$_BOOT" = true ]; then
     for u in "${users[@]}"; do sync_user "$u" true; done
     generate_colors_js "${users[@]}"
     if [ "$_INSTALL" = true ]; then install_sudoers; install_posthook "${users[@]}"; fi
-    exit 0
-fi
-
-if [ -n "$_TARGET_USER" ]; then
-    sync_user "$_TARGET_USER"
-    generate_colors_js "$_TARGET_USER"
     exit 0
 fi
 
