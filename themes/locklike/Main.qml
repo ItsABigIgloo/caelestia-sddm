@@ -40,20 +40,31 @@ Rectangle {
 
     property string currentUser: userPicker.currentText
 
-    property int animDuration: 300
-    property int syncDelay: 150
+    property int animDuration: parseInt(config.animDuration) || 300
+    property int syncDelay: parseInt(config.syncDelay) || 150
+    property real bgBlur: parseFloat(config.bgBlur) || 0.5
     property bool transitionBusy: false
-    property int _activeLayer: 0
+
+    Component.onCompleted: {
+        config.animDuration = parseInt(config.animDuration) || 300;
+        config.syncDelay = parseInt(config.syncDelay) || 150;
+        var ad = settingsStore.get("animDuration", config.animDuration);
+        root.animDuration = parseInt(ad);
+        config.animDuration = parseInt(ad);
+        var sd = settingsStore.get("syncDelay", config.syncDelay);
+        root.syncDelay = parseInt(sd);
+        config.syncDelay = parseInt(sd);
+        var bb = settingsStore.get("bgBlur", config.bgBlur);
+        root.bgBlur = parseFloat(bb);
+        config.bgBlur = parseFloat(bb);
+    }
 
     onCurrentUserChanged: {
         if (transitionBusy) return;
         transitionBusy = true;
         transitionTimer.restart();
 
-        // prepare wallpaper (hidden layer starts loading)
-        var source = "assets/background-" + currentUser;
-        var hidden = _activeLayer === 0 ? wallpaperB : wallpaperA;
-        hidden.source = source;
+        wallpaperComponent.prepareForUser(currentUser);
 
         syncTimer.restart();
     }
@@ -62,8 +73,7 @@ Rectangle {
         id: syncTimer
         interval: syncDelay
         onTriggered: {
-            // wallpaper crossfade
-            _activeLayer = _activeLayer === 0 ? 1 : 0;
+            wallpaperComponent.switchLayer();
 
             // color transitions (all start simultaneously)
             var c = UserColors.colors[currentUser] || {};
@@ -83,8 +93,8 @@ Rectangle {
             userAvatar.crossfade();
 
             // text crossfades
-            greeting.crossfadeText();
-            fetchPanel.crossfadeUserName();
+            leftColumn.crossfadeGreeting();
+            leftColumn.crossfadeFetchPanel();
         }
     }
 
@@ -99,7 +109,7 @@ Rectangle {
     color: config.background || "#131313"
 
     Behavior on color {
-        ColorAnimation { duration: 300; easing: Easing.InOutCubic }
+        ColorAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
     }
 
     Connections {
@@ -118,40 +128,10 @@ Rectangle {
         target: sddm
     }
 
-    Item {
-        id: wallpaperContainer
-        anchors.fill: parent
-
-        AnimatedImage {
-            id: wallpaperA
-            anchors.fill: parent
-            fillMode: Image.PreserveAspectCrop
-            opacity: _activeLayer === 0 ? 1 : 0
-            Behavior on opacity {
-                NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
-            }
-            onStatusChanged: {
-                if (status === Image.Error)
-                    source = "assets/background"
-            }
-            Component.onCompleted: {
-                source = "assets/background-" + root.currentUser;
-            }
-        }
-
-        AnimatedImage {
-            id: wallpaperB
-            anchors.fill: parent
-            fillMode: Image.PreserveAspectCrop
-            opacity: _activeLayer === 1 ? 1 : 0
-            Behavior on opacity {
-NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
-        }
-            onStatusChanged: {
-                if (status === Image.Error)
-                    source = "assets/background"
-            }
-        }
+    Wallpaper {
+        id: wallpaperComponent
+        animDuration: root.animDuration
+        currentUser: userPicker.currentText
     }
 
     Rectangle {
@@ -160,21 +140,21 @@ NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
         color: "#000000"
         opacity: firstInput ? 0 : 0.4
         Behavior on opacity {
-            NumberAnimation { duration: 150; easing: Easing.InOutCubic }
+            NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
         }
     }
 
     MultiEffect {
         blurEnabled: true
-        source: wallpaperContainer
-        blur: root.firstInput ? 0 : 1
+        source: wallpaperComponent
+        blur: root.bgBlur
         autoPaddingEnabled: false
         blurMultiplier: 1
         blurMax: 64
-        anchors.fill: wallpaperContainer
+        anchors.fill: wallpaperComponent
 
         Behavior on blur {
-            NumberAnimation { duration: 400; easing: Easing.InOutCubic }
+            NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
         }
     }
 
@@ -237,7 +217,7 @@ NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
         mainCardRadius: root.midRadius
         rootHeight: root.height
         rootWidth: root.width
-        greetingText: greeting.welcomeString
+        greetingText: leftColumn.welcomeString
         username: userPicker.currentText
         blurAmount: root.welcomeBgBlurAmount
         blurEnabled: root.welcomeBgBlur
@@ -302,7 +282,7 @@ NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
             font.variableAxes: mainCard.fontAxesTitle
 
             Behavior on color {
-                ColorAnimation { duration: 200 }
+                ColorAnimation { duration: root.animDuration }
             }
         }
 
@@ -311,82 +291,15 @@ NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
             anchors.margins: 15
             spacing: 40
 
-            ColumnLayout {
-                spacing: 13
-                Layout.alignment: Qt.AlignLeft
-
-                Rectangle {
-                    id: topLeftRect
-                    width: 390
-                    height: 220
-                    color: config.subComponents
-                    radius: root.midRadius
-                    opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
-                    clip: true
-
-                    Behavior on color {
-                        ColorAnimation { duration: 200 }
-                    }
-
-                    WelcomeText {
-                        id: greeting
-                        animDuration: root.animDuration
-                        anchors.centerIn: parent
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation { duration: 300; easing.type: Easing.OutBack }
-                    }
-                }
-
-                Rectangle {
-                    id: middleLeftRect
-                    width: 390
-                    Layout.fillHeight: true
-                    color: config.subComponents
-                    radius: mainCard.radius / 4
-                    opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
-                    clip: true
-
-                    Behavior on color {
-                        ColorAnimation { duration: 200 }
-                    }
-
-                    CaelestiaFetch {
-                        id: fetchPanel
-                        firstInput: root.firstInput
-                        currentUser: userPicker.currentText
-                        currentSession: sessionPickerBtn.currentText
-                        rectHeight: middleLeftRect.height
-                        animDuration: root.animDuration
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation { duration: 300; easing.type: Easing.OutBack }
-                    }
-                }
-
-                Rectangle {
-                    id: bottomLeftRect
-                    width: 390
-                    height: 190
-                    color: "transparent"
-                    bottomLeftRadius: mainCard.radius / 1.9
-                    radius: root.midRadius / 1.7
-                    opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
-
-                    SystemButtons {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        rectHeight: bottomLeftRect.height
-                        rectWidth: bottomLeftRect.height - 1
-                        rectRadius: bottomLeftRect.radius
-                        rectBigRadius: mainCard.radius / 1.9
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation { duration: 300; easing.type: Easing.OutBack }
-                    }
-                }
+            LeftColumn {
+                id: leftColumn
+                firstInput: root.firstInput
+                mainCardComponentsOpacity: root.mainCardComponentsOpacity
+                animDuration: root.animDuration
+                midRadius: root.midRadius
+                mainCardRadius: mainCard.radius
+                currentUser: userPicker.currentText
+                currentSession: sessionPickerBtn.currentText
             }
 
             ColumnLayout {
@@ -409,6 +322,7 @@ NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
                     id: userAvatar
                     avatarShape: root.avatarShape
                     currentUser: root.currentUser
+                    animDuration: root.animDuration
                     Layout.alignment: Qt.AlignHCenter
                     Layout.preferredWidth: root.avatarShape === "circle" ? 260 : 330
                     Layout.preferredHeight: root.avatarShape === "circle" ? 260 : 300
@@ -418,13 +332,14 @@ NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
                     Behavior on opacity {
-                        NumberAnimation { duration: 300; easing.type: Easing.OutBack }
+                        NumberAnimation { duration: root.animDuration; easing.type: Easing.OutBack }
                     }
                 }
 
                 PasswordInput {
                     id: inputRect
                     Layout.alignment: Qt.AlignHCenter
+                    animDuration: root.animDuration
                     mainCardComponentsOpacity: root.mainCardComponentsOpacity
                     firstInput: root.firstInput
                     isLoading: root.loading
@@ -436,18 +351,18 @@ NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
                 Text {
                     Layout.margins: 10
                     Layout.alignment: Qt.AlignHCenter
-                    text: "Caps Lock is activated!"
+                    text: config.capsLockWarning
                     font.pointSize: 8
                     font.family: "Roboto"
                     color: config.text
                     opacity: 0
 
                     Behavior on color {
-                        ColorAnimation { duration: 200 }
+                        ColorAnimation { duration: root.animDuration }
                     }
 
                     Behavior on opacity {
-                        NumberAnimation { duration: 300; easing: Easing.InOutCubic }
+                        NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
                     }
                 }
                 Item {
@@ -455,81 +370,12 @@ NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
                 }
             }
 
-            ColumnLayout {
-                spacing: 13
-                Layout.alignment: Qt.AlignRight
-
-                Rectangle {
-                    id: topRightRect
-                    width: 390
-                    height: 355
-                    color: config.subComponents
-                    radius: root.smallRadius
-                    opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
-
-                    Behavior on color {
-                        ColorAnimation { duration: 200 }
-                    }
-
-                    RandomQuote {
-                        maxWidth: topRightRect.width - 40
-                        color: config.text
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation { duration: 300; easing.type: Easing.OutBack }
-                    }
-                }
-
-                Rectangle {
-                    id: bottomRightRect
-                    width: 390
-                    height: 355
-                    color: config.subComponents
-                    bottomRightRadius: mainCard.radius / 1.9
-                    radius: mainCard.radius / 4
-                    opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
-
-                    Behavior on color {
-                        ColorAnimation { duration: 200 }
-                    }
-
-                    Image {
-                        id: dino
-                        width: 300
-                        height: 150
-                        source: "assets/dino.png"
-                        anchors.centerIn: parent
-                        fillMode: Image.PreserveAspectCrop
-                        layer.enabled: true
-                        layer.effect: ColorOverlay {
-                            color: config.inverseOnSurface
-
-                            Behavior on color {
-                                ColorAnimation { duration: 200 }
-                            }
-                        }
-                    }
-
-                    Text {
-                        renderType: Text.NativeRendering
-                        text: "Unlock for notifications"
-                        color: config.inverseOnSurface
-                        font.family: "CaskaydiaCove NF"
-                        font.pointSize: 12
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 50
-
-                        Behavior on color {
-                            ColorAnimation { duration: 200 }
-                        }
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation { duration: 300; easing.type: Easing.OutBack }
-                    }
-                }
+            RightColumn {
+                firstInput: root.firstInput
+                mainCardComponentsOpacity: root.mainCardComponentsOpacity
+                animDuration: root.animDuration
+                smallRadius: root.smallRadius
+                mainCardRadius: mainCard.radius
             }
         }
 
@@ -547,68 +393,49 @@ NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
             }
 
             Behavior on opacity {
-                NumberAnimation { duration: 300; easing.type: Easing.OutBack }
+                NumberAnimation { duration: root.animDuration; easing.type: Easing.OutBack }
             }
         }
 
         Behavior on scale {
-            NumberAnimation { duration: 300; easing.type: Easing.OutBack }
+            NumberAnimation { duration: root.animDuration; easing.type: Easing.OutBack }
         }
 
         Behavior on opacity {
-            NumberAnimation { duration: 300; easing.type: Easing.OutBack }
+            NumberAnimation { duration: root.animDuration; easing.type: Easing.OutBack }
         }
     }
 
-    ComboBox {
+    LocaleManager {
+        id: localeManager
+
+        onLanguageChanged: {
+            leftColumn.refreshGreeting();
+        }
+    }
+
+    property bool sOpen: false
+
+    SettingsPanel {
+        id: settingsPanel
+        z: 100
+        anchors.right: parent.right; anchors.rightMargin: 16
+        y: 16
+        sOpen: root.sOpen
+        animDuration: root.animDuration
+        syncDelay: root.syncDelay
+        bgBlur: root.bgBlur
+        localeManager: localeManager
+        onAnimDurationChanged: if (animDuration !== root.animDuration) { root.animDuration = animDuration; config.animDuration = animDuration; settingsStore.set("animDuration", animDuration); }
+        onSyncDelayChanged: if (syncDelay !== root.syncDelay) { root.syncDelay = syncDelay; config.syncDelay = syncDelay; settingsStore.set("syncDelay", syncDelay); }
+        onBgBlurChanged: if (bgBlur !== root.bgBlur) { root.bgBlur = bgBlur; config.bgBlur = bgBlur; settingsStore.set("bgBlur", bgBlur); }
+    }
+
+    SettingsStore {
+        id: settingsStore
+    }
+
+    UserPicker {
         id: userPicker
-        width: 190
-        height: 50
-        anchors.right: parent.right
-        anchors.top: parent.top
-        model: userModel
-        currentIndex: userModel.lastIndex
-        textRole: "name"
-        font.family: "Rubik"
-        font.pixelSize: 20
-        visible: false
-
-        background: Rectangle {
-            color: "#BF131313"
-            radius: 30
-            border.color: "#353535"
-            border.width: 1
-        }
-
-        contentItem: Text {
-            renderType: Text.NativeRendering
-            text: userPicker.displayText
-            font: userPicker.font
-            color: "#e2e2e2"
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            leftPadding: 0
-            rightPadding: 0
-            topPadding: 0
-            bottomPadding: 0
-            anchors.fill: parent
-        }
-
-        indicator: Canvas {
-            x: userPicker.width - 30
-            y: (userPicker.height - 6) / 2
-            width: 12
-            height: 6
-            onPaint: {
-                var context = getContext("2d");
-                context.reset();
-                context.moveTo(0, 0);
-                context.lineTo(width, 0);
-                context.lineTo(width / 2, height);
-                context.closePath();
-                context.fillStyle = "#4cdadb";
-                context.fill();
-            }
-        }
     }
 }

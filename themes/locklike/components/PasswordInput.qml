@@ -13,6 +13,7 @@ Rectangle {
     property alias isLoading: inputRect.isLoading
     property alias firstInput: inputRect.firstInput
     property alias mainCardComponentsOpacity: inputRect.mainCardComponentsOpacity
+    property int animDuration: 300
 
     readonly property list<var> shapeGetters: [MaterialShapes.getCircle, MaterialShapes.getSlanted, MaterialShapes.getArch, MaterialShapes.getFan, MaterialShapes.getArrow, MaterialShapes.getSemiCircle, MaterialShapes.getTriangle, MaterialShapes.getDiamond, MaterialShapes.getClamShell, MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getCookie6Sided, MaterialShapes.getGhostish, MaterialShapes.getSoftBurst]
 
@@ -58,6 +59,7 @@ Rectangle {
         }
 
         color: config.subComponents
+        Behavior on color { ColorAnimation { duration: root.animDuration } }
         radius: 30
         width: inputRect.buffer === "" ? 300 : 365
         height: 45
@@ -93,6 +95,7 @@ Rectangle {
             property var shapeGetters: [MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getCookie6Sided, MaterialShapes.getVerySunny]
             opacity: inputRect.isLoading ? 1 : 0
             color: config.secondary
+            Behavior on color { ColorAnimation { duration: root.animDuration } }
 
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
@@ -215,7 +218,7 @@ Rectangle {
                 renderType: Text.NativeRendering
                 anchors.centerIn: parent
                 font.pointSize: 12
-                text: inputRect.isLoading ? "Loading..." : "Enter your password"
+                text: inputRect.isLoading ? config.loadingText : config.passwordPlaceholder
                 color: '#6e6e6e'
                 font.family: "Rubik"
                 opacity: inputRect.buffer === "" ? 1 : 0
@@ -350,6 +353,7 @@ Rectangle {
                     rotation: -90
                     text: "\ue941"
                     color: config.text
+                    Behavior on color { ColorAnimation { duration: root.animDuration } }
                     opacity: inputRect.buffer === "" ? 1 : 0
                     Behavior on opacity {
                         NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
@@ -357,10 +361,10 @@ Rectangle {
                 }
 
                 Behavior on color {
-                    ColorAnimation { duration: 200; easing.type: Easing.OutCubic }
+                    ColorAnimation { duration: root.animDuration; easing.type: Easing.OutCubic }
                 }
                 Behavior on scale {
-                    NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+                    NumberAnimation { duration: root.animDuration; easing.type: Easing.OutCubic }
                 }
 
                 MouseArea {

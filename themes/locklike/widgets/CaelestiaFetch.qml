@@ -42,6 +42,7 @@ Item {
             Layout.leftMargin: 23; Layout.topMargin: 25
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             color: config.secondary
+            Behavior on color { ColorAnimation { duration: root.animDuration } }
             Text {
                 renderType: Text.NativeRendering
                 anchors.centerIn: parent; color: "#111111"
@@ -50,7 +51,9 @@ Item {
         }
         Text {
             renderType: Text.NativeRendering
-            color: config.text; text: "caelestiafetch.sh"
+            color: config.text
+            Behavior on color { ColorAnimation { duration: root.animDuration } }
+            text: config.fetchTitle
             font.family: "CaskaydiaCove NF"; font.pointSize: 13
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Layout.topMargin: 32; Layout.leftMargin: 8
@@ -76,8 +79,10 @@ Item {
                 Text {
                     renderType: Text.NativeRendering
                     Layout.leftMargin: 12; Layout.topMargin: root.rectHeight / 10
-                    text: "WM     :\nUSER   :\nOS     :\nHOST   :"
-                    color: config.text; font.pixelSize: 18
+                    text: (config.fetchLabels || "").replace(/\\n/g, "\n")
+                    color: config.text
+                    Behavior on color { ColorAnimation { duration: root.animDuration } }
+                    font.pixelSize: 18
                     font.family: "CaskaydiaCove NF"
                     lineHeight: 30; lineHeightMode: Text.FixedHeight
                     Layout.preferredWidth: 80
@@ -91,7 +96,9 @@ Item {
                     Text {
                         id: sessionText
                         text: root.session
-                        color: config.text; font.pixelSize: 18
+                        color: config.text
+                        Behavior on color { ColorAnimation { duration: root.animDuration } }
+                        font.pixelSize: 18
                         font.family: "CaskaydiaCove NF"
                         lineHeight: 30; lineHeightMode: Text.FixedHeight
                     }
@@ -101,7 +108,9 @@ Item {
                         width: 100; height: userNameA.height
                         Text {
                             id: userNameA
-                            color: config.text; font.pixelSize: 18
+                            color: config.text
+                            Behavior on color { ColorAnimation { duration: root.animDuration } }
+                            font.pixelSize: 18
                             font.family: "CaskaydiaCove NF"
                             lineHeight: 30; lineHeightMode: Text.FixedHeight
                             opacity: _activeUserName === 0 ? 1 : 0
@@ -111,7 +120,9 @@ Item {
                         }
                         Text {
                             id: userNameB
-                            color: config.text; font.pixelSize: 18
+                            color: config.text
+                            Behavior on color { ColorAnimation { duration: root.animDuration } }
+                            font.pixelSize: 18
                             font.family: "CaskaydiaCove NF"
                             lineHeight: 30; lineHeightMode: Text.FixedHeight
                             opacity: _activeUserName === 0 ? 0 : 1
@@ -124,7 +135,9 @@ Item {
                     Text {
                         y: 60
                         text: root.os
-                        color: config.text; font.pixelSize: 18
+                        color: config.text
+                        Behavior on color { ColorAnimation { duration: root.animDuration } }
+                        font.pixelSize: 18
                         font.family: "CaskaydiaCove NF"
                         lineHeight: 30; lineHeightMode: Text.FixedHeight
                     }
@@ -132,7 +145,9 @@ Item {
                     Text {
                         y: 90
                         text: root.host
-                        color: config.text; font.pixelSize: 18
+                        color: config.text
+                        Behavior on color { ColorAnimation { duration: root.animDuration } }
+                        font.pixelSize: 18
                         font.family: "CaskaydiaCove NF"
                         lineHeight: 30; lineHeightMode: Text.FixedHeight
                     }
@@ -144,13 +159,13 @@ Item {
             spacing: 20; Layout.alignment: Qt.AlignHCenter
             Layout.leftMargin: 30; Layout.topMargin: 4
 
-            Rectangle { width: 30; height: 30; color: config.background; radius: 12 }
-            Rectangle { width: 30; height: 30; color: config.primary; radius: 12 }
-            Rectangle { width: 30; height: 30; color: config.text; radius: 12 }
-            Rectangle { width: 30; height: 30; color: config.textDark; radius: 12 }
-            Rectangle { width: 30; height: 30; color: config.secondary; radius: 12 }
-            Rectangle { width: 30; height: 30; color: config.onSuccess; radius: 12 }
-            Rectangle { width: 30; height: 30; color: config.inverseOnSurface; radius: 12 }
+            Rectangle { width: 30; height: 30; color: config.background; radius: 12; Behavior on color { ColorAnimation { duration: root.animDuration } } }
+            Rectangle { width: 30; height: 30; color: config.primary; radius: 12; Behavior on color { ColorAnimation { duration: root.animDuration } } }
+            Rectangle { width: 30; height: 30; color: config.text; radius: 12; Behavior on color { ColorAnimation { duration: root.animDuration } } }
+            Rectangle { width: 30; height: 30; color: config.textDark; radius: 12; Behavior on color { ColorAnimation { duration: root.animDuration } } }
+            Rectangle { width: 30; height: 30; color: config.secondary; radius: 12; Behavior on color { ColorAnimation { duration: root.animDuration } } }
+            Rectangle { width: 30; height: 30; color: config.onSuccess; radius: 12; Behavior on color { ColorAnimation { duration: root.animDuration } } }
+            Rectangle { width: 30; height: 30; color: config.inverseOnSurface; radius: 12; Behavior on color { ColorAnimation { duration: root.animDuration } } }
         }
     }
 }
