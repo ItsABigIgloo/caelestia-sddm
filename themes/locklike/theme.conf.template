@@ -11,6 +11,34 @@ host=localhost
 ap=false
 
 # ============================================================================
+# ANIMATIONS
+# ============================================================================
+# Crossfade duration in ms (default 300)
+animDuration=300
+# Delay before crossfade starts in ms (default 150)
+syncDelay=150
+bgBlur=0.5
+
+# ============================================================================
+# LOCALE STRINGS (auto-set by LocaleManager from locales/*.json)
+# ============================================================================
+greetingMorning=
+greetingAfternoon=
+greetingNight=
+passwordPlaceholder=
+loadingText=
+fetchTitle=
+fetchLabels=
+capsLockWarning=
+unlockForNotifications=
+settingsTitle=
+animationSpeed=
+syncDelay=
+backgroundBlur=
+language=
+close=
+
+# ============================================================================
 # WELCOME MESSAGE
 # ============================================================================
 # Enable welcome message [true | false]

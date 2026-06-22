@@ -1,0 +1,17 @@
+{
+  "greetingMorning": "Good morning",
+  "greetingAfternoon": "Good afternoon",
+  "greetingNight": "Good night",
+  "passwordPlaceholder": "Enter your password",
+  "loadingText": "Loading...",
+  "fetchTitle": "caelestiafetch.sh",
+  "fetchLabels": "WM     :\nUSER   :\nOS     :\nHOST   :",
+  "capsLockWarning": "Caps Lock is activated!",
+  "unlockForNotifications": "Unlock for notifications",
+  "settingsTitle": "Settings",
+  "animationSpeed": "Animation speed",
+  "syncDelay": "Sync delay",
+  "backgroundBlur": "Background blur",
+  "language": "Language",
+  "close": "Close"
+}

@@ -1,0 +1,17 @@
+{
+  "greetingMorning": "Доброе утро",
+  "greetingAfternoon": "Добрый день",
+  "greetingNight": "Доброй ночи",
+  "passwordPlaceholder": "Введите пароль",
+  "loadingText": "Загрузка...",
+  "fetchTitle": "caelestiafetch.sh",
+  "fetchLabels": "WM     :\nПОЛЬЗ  :\nОС     :\nУЗЕЛ   :",
+  "capsLockWarning": "Caps Lock включён!",
+  "unlockForNotifications": "Разблокируйте для уведомлений",
+  "settingsTitle": "Настройки",
+  "animationSpeed": "Скорость анимации",
+  "syncDelay": "Задержка синхронизации",
+  "backgroundBlur": "Размытие фона",
+  "language": "Язык",
+  "close": "Закрыть"
+}

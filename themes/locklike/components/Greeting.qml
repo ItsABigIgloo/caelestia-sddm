@@ -68,6 +68,7 @@ Item {
         Rectangle {
             anchors.fill: backgroundBlur
             color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, root.welcomeBgOpacity)
+            Behavior on color { ColorAnimation { duration: config.animDuration !== undefined ? config.animDuration : 300 } }
             opacity: root.firstInput ? parseFloat(config.welcomeColorOpacity) : 0
         }
 

@@ -9,11 +9,11 @@ Item {
         var now = new Date();
         var hour = now.getHours();
         if (hour >= 20 || hour < 4)
-            welcomeString = "Good night";
+            welcomeString = config.greetingNight;
         else if (hour >= 4 && hour < 10)
-            welcomeString = "Good morning";
+            welcomeString = config.greetingMorning;
         else
-            welcomeString = "Good afternoon";
+            welcomeString = config.greetingAfternoon;
     }
 
     Component.onCompleted: getPhase()
@@ -25,11 +25,48 @@ Item {
         textFormat: Text.RichText
         wrapMode: Text.WordWrap
         anchors.centerIn: parent
-        font.family: "Rubik"
-        font.bold: false
-        font.pixelSize: 40
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
+
+        Text {
+            renderType: Text.NativeRendering
+            text: topLeftRect.welcomeString
+            color: config.text
+            Behavior on color { ColorAnimation { duration: topLeftRect.animDuration } }
+            font.family: "Rubik"; font.bold: false; font.pixelSize: 40
+            horizontalAlignment: Text.AlignHCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        Item {
+                width: 200
+                height: userNameA.height
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text {
+                    id: userNameA
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    renderType: Text.NativeRendering
+                    color: config.primary
+                    Behavior on color { ColorAnimation { duration: topLeftRect.animDuration } }
+                    font.family: "Rubik"; font.bold: false; font.pixelSize: 40
+                    opacity: _activeGreeting === 0 ? 1 : 0
+                    Behavior on opacity {
+                        NumberAnimation { duration: topLeftRect.animDuration; easing: Easing.InOutCubic }
+                    }
+                }
+
+                Text {
+                    id: userNameB
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    renderType: Text.NativeRendering
+                    color: config.primary
+                    Behavior on color { ColorAnimation { duration: topLeftRect.animDuration } }
+                    font.family: "Rubik"; font.bold: false; font.pixelSize: 40
+                    opacity: _activeGreeting === 0 ? 0 : 1
+                    Behavior on opacity {
+                        NumberAnimation { duration: topLeftRect.animDuration; easing: Easing.InOutCubic }
+                    }
+                }
+            }
     }
 
     Timer {
