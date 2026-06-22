@@ -70,17 +70,34 @@ sync_user() {
         echo "  ✓ [$user] wallpaper"
     fi
 
-    local admin_home; admin_home=$(getent passwd "${SUDO_USER:-$(whoami)}" | cut -d: -f6 2>/dev/null || echo "")
-    local base_conf="$admin_home/.config/caelestia/sddm-base.conf"
-    [ ! -f "$base_conf" ] && base_conf="$THEME_DIR/theme-base.conf"
-    [ ! -f "$base_conf" ] && base_conf="$THEME_DIR/theme.conf"
-    [ ! -f "$base_conf" ] && base_conf=""
+    # --- Merge: theme.conf (defaults) + user.conf (overrides) + colors ---
+    local merged="$THEME_DIR/theme.conf"
+    local user_conf="$THEME_DIR/user.conf"
 
-    local gen_conf="$THEME_DIR/theme-$user.conf"
-    if [ -n "$base_conf" ]; then
-        cp -f "$base_conf" "$gen_conf"
-    else
-        echo '[General]' > "$gen_conf"
+    if [ -f "$user_conf" ]; then
+        python3 -c "
+with open('$merged') as f: base = f.readlines()
+with open('$user_conf') as f: overrides = f.readlines()
+override_map = {}
+for line in overrides:
+    s = line.strip()
+    if '=' in s and not s.startswith('#'):
+        k, v = s.split('=', 1)
+        override_map[k.strip()] = v.strip()
+written = set()
+with open('$merged', 'w') as f:
+    for line in base:
+        s = line.strip()
+        key = s.split('=')[0].strip() if '=' in s else ''
+        if key in override_map:
+            f.write(f'{key}={override_map[key]}\n')
+            written.add(key)
+        else:
+            f.write(line)
+    for k, v in override_map.items():
+        if k not in written:
+            f.write(f'{k}={v}\n')
+" 2>/dev/null || true
     fi
 
     if [ -f "$cael_state/theme/sddm-theme.conf" ]; then
@@ -97,7 +114,7 @@ for line in lines:
         if k in ('background','mainCard','subComponents','text','textDark',
                  'primary','onPrimary','secondary','onSuccess','inverseOnSurface','outline'):
             m[k] = v
-cf = '$gen_conf'
+cf = '$merged'
 with open(cf) as f: existing = f.readlines()
 written = set()
 with open(cf, 'w') as f:
@@ -131,7 +148,7 @@ m = {
     'inverseOnSurface': c.get('inverseOnSurface'),
     'outline': c.get('outline'),
 }
-cf = '$gen_conf'
+cf = '$merged'
 with open(cf) as f: lines = f.readlines()
 written = set()
 with open(cf, 'w') as f:
@@ -149,14 +166,32 @@ with open(cf, 'w') as f:
 " 2>/dev/null || true
     fi
 
-    if [ -f "$THEME_DIR/theme-$user.conf" ]; then
-        local os="Linux"; [ -f /etc/os-release ] && os=$(grep -oP '^PRETTY_NAME="\K[^"]+' /etc/os-release || echo "Linux")
-        local hst; hst=$(hostname 2>/dev/null || echo "localhost")
-        sed -i "s/^os=.*/os=$os/; s/^host=.*/host=$hst/" "$THEME_DIR/theme-$user.conf" 2>/dev/null || true
-        cp -f "$THEME_DIR/theme-$user.conf" "$THEME_DIR/theme.conf"
-        chmod 644 "$THEME_DIR/theme.conf" "$THEME_DIR/theme-$user.conf"
-        echo "  ✓ [$user] theme.conf"
+    local os="Linux"; [ -f /etc/os-release ] && os=$(grep -oP '^PRETTY_NAME="\K[^"]+' /etc/os-release || echo "Linux")
+    local hst; hst=$(hostname 2>/dev/null || echo "localhost")
+    sed -i "s/^os=.*/os=$os/; s/^host=.*/host=$hst/" "$merged" 2>/dev/null || true
+    chmod 644 "$merged"
+    echo "  ✓ [$user] theme.conf"
+
+    # Generate theme-$user.conf with colors only (for userColors.js)
+    local user_colors="$THEME_DIR/theme-$user.conf"
+    echo '[General]' > "$user_colors"
+    if [ -f "$cael_state/theme/sddm-theme.conf" ]; then
+        sed -n '/^background=\|^mainCard=\|^subComponents=\|^text=\|^textDark=\|^primary=\|^onPrimary=\|^secondary=\|^onSuccess=\|^inverseOnSurface=\|^outline=/p' "$merged" >> "$user_colors" 2>/dev/null || true
+    elif [ -f "$cael_state/scheme.json" ]; then
+        python3 -c "
+import json
+with open('$cael_state/scheme.json') as f: s = json.load(f)
+c = s.get('colours', {})
+keys = ['background','mainCard','subComponents','text','textDark','primary','onPrimary','secondary','onSuccess','inverseOnSurface','outline']
+with open('$user_colors', 'a') as f:
+    f.write('host=$hst\nos=$os\n')
+    for k in keys:
+        v = c.get(k)
+        if v:
+            f.write(f'{k}=#{v}\n')
+" 2>/dev/null || true
     fi
+    chmod 644 "$user_colors"
 }
 
 generate_colors_js() {
