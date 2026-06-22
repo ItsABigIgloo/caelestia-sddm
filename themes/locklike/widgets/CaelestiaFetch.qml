@@ -50,7 +50,7 @@ Item {
         }
         Text {
             renderType: Text.NativeRendering
-            color: config.text;                     text: config.fetchTitle || "caelestiafetch.sh"
+            color: config.text;                     text: config.fetchTitle
             font.family: "CaskaydiaCove NF"; font.pointSize: 13
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Layout.topMargin: 32; Layout.leftMargin: 8

@@ -141,6 +141,7 @@ Item {
             anchors.fill: parent; anchors.margins: _marg
             model: root.model
             currentIndex: root.currentIndex
+            onModelChanged: currentIndex = Qt.binding(function() { return root.currentIndex; })
             clip: true; boundsBehavior: ListView.StopAtBounds
 
             delegate: Rectangle {

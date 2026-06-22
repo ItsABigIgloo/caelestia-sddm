@@ -223,7 +223,7 @@ Rectangle {
                 renderType: Text.NativeRendering
                 anchors.centerIn: parent
                 font.pointSize: 12
-                text: inputRect.isLoading ? (config.loadingText || "Loading...") : (config.passwordPlaceholder || "Enter your password")
+                text: inputRect.isLoading ? config.loadingText : config.passwordPlaceholder
                 color: '#6e6e6e'
                 font.family: "Rubik"
                 opacity: inputRect.buffer === "" ? 1 : 0
