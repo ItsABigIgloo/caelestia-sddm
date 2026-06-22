@@ -6,6 +6,10 @@ Item {
     property real rectWidth
     property real rectRadius
     property real rectBigRadius
+    property bool powerConfirmEnabled: false
+
+    signal powerClicked()
+    signal rebootClicked()
 
     anchors.fill: parent
 
@@ -39,9 +43,7 @@ Item {
             parentWidth: powerBtn.width
             parentHeight: powerBtn.height
             parentRadius: powerBtn.radius
-            onClicked: {
-                sddm.powerOff();
-            }
+            onClicked: root.powerClicked()
         }
 
         Behavior on color {
@@ -79,9 +81,7 @@ Item {
             parentWidth: rebootBtn.width
             parentHeight: rebootBtn.height
             parentRadius: rebootBtn.radius
-            onClicked: {
-                sddm.reboot();
-            }
+            onClicked: root.rebootClicked()
         }
 
         Behavior on color {

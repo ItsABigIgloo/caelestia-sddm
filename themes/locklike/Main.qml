@@ -41,7 +41,69 @@ Rectangle {
 
     width: 1920
     height: 1080
-    color: "#131313"
+    color: config.background || "#131313"
+    onSOpenChanged: {
+        if (!root.sOpen)
+            keylogger.forceActiveFocus();
+
+    }
+
+    Timer {
+        id: syncTimer
+
+        interval: syncDelay
+        onTriggered: {
+            wallpaperComponent.switchLayer();
+            // color transitions (all start simultaneously)
+            var c = UserColors.colors[currentUser] || {
+            };
+            if (c.background)
+                config.background = c.background;
+
+            if (c.mainCard)
+                config.mainCard = c.mainCard;
+
+            if (c.subComponents)
+                config.subComponents = c.subComponents;
+
+            if (c.text)
+                config.text = c.text;
+
+            if (c.inverseOnSurface)
+                config.inverseOnSurface = c.inverseOnSurface;
+
+            if (c.primary)
+                config.primary = c.primary;
+
+            if (c.secondary)
+                config.secondary = c.secondary;
+
+            if (c.textDark)
+                config.textDark = c.textDark;
+
+            if (c.onPrimary)
+                config.onPrimary = c.onPrimary;
+
+            if (c.onSuccess)
+                config.onSuccess = c.onSuccess;
+
+            if (c.outline)
+                config.outline = c.outline;
+
+            // avatar crossfade
+            userAvatar.crossfade();
+            // text crossfades
+            leftColumn.crossfadeGreeting();
+            leftColumn.crossfadeFetchPanel();
+        }
+    }
+
+    Timer {
+        id: transitionTimer
+
+        interval: syncDelay + animDuration + 100
+        onTriggered: transitionBusy = false
+    }
 
     Connections {
         function onLoginFailed() {
