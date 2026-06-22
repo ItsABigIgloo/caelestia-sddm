@@ -11,11 +11,11 @@ Item {
         var now = new Date();
         var hour = now.getHours();
         if (hour >= 20 || hour < 4)
-            welcomeString = "Good night";
+            welcomeString = config.greetingNight;
         else if (hour >= 4 && hour < 10)
-            welcomeString = "Good morning";
+            welcomeString = config.greetingMorning;
         else
-            welcomeString = "Good afternoon";
+            welcomeString = config.greetingAfternoon;
     }
 
     function crossfadeText() {
