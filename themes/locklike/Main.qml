@@ -383,75 +383,13 @@ Rectangle {
                 }
             }
 
-            ColumnLayout {
-                spacing: 13
-                Layout.alignment: Qt.AlignRight
-
-                Rectangle {
-                    id: topRightRect
-
-                    width: 390
-                    height: 355
-                    color: config.subComponents
-                    radius: root.smallRadius
-                    opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
-
-                    RandomQuote {
-                        maxWidth: topRightRect.width - 40
-                        color: config.text
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.OutBack
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: bottomRightRect
-
-                    width: 390
-                    height: 355
-                    color: config.subComponents
-                    bottomRightRadius: mainCard.radius / 1.9
-                    radius: mainCard.radius / 4
-                    opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
-
-                    Image {
-                        id: dino
-
-                        width: 300
-                        height: 150
-                        source: "assets/dino.png"
-                        anchors.centerIn: parent
-                        fillMode: Image.PreserveAspectCrop
-                        layer.enabled: true
-
-                        layer.effect: ColorOverlay {
-                            color: config.inverseOnSurface
-                        }
-                    }
-
-                    Text {
-                        renderType: Text.NativeRendering
-                        text: "Unlock for notifications"
-                        color: config.inverseOnSurface
-                        font.family: "CaskaydiaCove NF"
-                        font.pointSize: 12
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 50
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.OutBack
-                        }
-                    }
-                }
+            RightColumn {
+                firstInput: root.firstInput
+                mainCardComponentsOpacity: root.mainCardComponentsOpacity
+                animDuration: root.animDuration
+                smallRadius: root.smallRadius
+                mainCardRadius: mainCard.radius
+                locale: localeManager.currentLocale
             }
         }
 
