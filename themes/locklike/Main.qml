@@ -9,8 +9,8 @@ import "widgets"
 Rectangle {
     id: root
 
-    property bool ap: config.ap === "true" ? true : false
-    property bool sessionPickerEnabled: config.sessionPicker === "true" ? true : false
+    property bool ap: config.ap === "true"
+    property bool sessionPickerEnabled: config.sessionPicker === "true"
     property string avatarShape: {
         var shape = config.AvatarShape || "hexagon";
         return (shape !== "hexagon" && shape !== "circle") ? "hexagon" : shape;
@@ -422,7 +422,7 @@ Rectangle {
                     font.pointSize: 8
                     font.family: "Roboto"
                     color: config.text
-                    opacity: 0
+                    opacity: root.capsLockOn ? 1 : 0
 
                     Behavior on color {
                         ColorAnimation {
