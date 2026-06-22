@@ -38,7 +38,7 @@ Item {
         Text {
             renderType: Text.NativeRendering
             color: config.text
-            text: "caelestiafetch.sh"
+            text: config.fetchTitle
             font.family: "CaskaydiaCove NF"
             font.pointSize: 13
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
