@@ -47,9 +47,9 @@ Item {
                 maxValue: maxValue
                 stepSize: stepSize
                 onValueChanged: {
-                    if (value !== sliderValue) {
+                    if (value !== sliderValue)
                         valueModified(value);
-                    }
+
                 }
             }
 
