@@ -144,6 +144,16 @@ avatarShapeLabel=
 hexagonLabel=
 circleLabel=
 
+# --- Settings Group Titles ---
+groupAnimations=
+groupFonts=
+groupMainCard=
+groupWelcome=
+groupPower=
+groupSystem=
+groupAvatar=
+groupLanguage=
+
 # =============================================================================
 # COLOR SCHEME (auto-synced by Caelestia sync.sh — DO NOT TOUCH)
 # =============================================================================

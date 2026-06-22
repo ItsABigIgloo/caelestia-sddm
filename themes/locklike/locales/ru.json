@@ -37,5 +37,13 @@
   "circleLabel": "Круг",
   "fontSizeLabel": "Размер шрифта",
   "settingsFontSizeLabel": "Шрифт настроек",
-  "settingsTitleSizeLabel": "Шрифт заголовка"
+  "settingsTitleSizeLabel": "Шрифт заголовка",
+  "groupAnimations": "Анимации",
+  "groupFonts": "Шрифты",
+  "groupMainCard": "Карточка",
+  "groupWelcome": "Приветствие",
+  "groupPower": "Питание",
+  "groupSystem": "Система",
+  "groupAvatar": "Аватар",
+  "groupLanguage": "Язык"
 }

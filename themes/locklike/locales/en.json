@@ -37,5 +37,13 @@
   "circleLabel": "Circle",
   "fontSizeLabel": "Font settings",
   "settingsFontSizeLabel": "Settings font size",
-  "settingsTitleSizeLabel": "Title font size"
+  "settingsTitleSizeLabel": "Title font size",
+  "groupAnimations": "Animations",
+  "groupFonts": "Fonts",
+  "groupMainCard": "Main Card",
+  "groupWelcome": "Welcome",
+  "groupPower": "Power",
+  "groupSystem": "System",
+  "groupAvatar": "Avatar",
+  "groupLanguage": "Language"
 }

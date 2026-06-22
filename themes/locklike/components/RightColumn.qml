@@ -17,7 +17,7 @@ ColumnLayout {
     property bool sessionPickerEnabled: false
     property bool powerConfirmEnabled: true
     property bool apEnabled: false
-    property string avatarShape: "hexagon"
+    property string avatarShape: config.AvatarShape || "hexagon"
     property var localeManager: null
     property bool settingsOpen: false
     property int syncDelay: 150
@@ -186,7 +186,7 @@ ColumnLayout {
                 spacing: 8
 
                 SettingsGroup {
-                    groupTitle: "Animations"
+                    groupTitle: config.groupAnimations
                     groupVisible: config.showAnimationSettingsGroup !== "false"
                     fontSize: root.settingsFontSize
                     animDuration: root.animDuration
@@ -216,7 +216,7 @@ ColumnLayout {
                 }
 
                 SettingsGroup {
-                    groupTitle: "Fonts"
+                    groupTitle: config.groupFonts
                     groupVisible: config.showFontSettingsGroup !== "false"
                     fontSize: root.settingsFontSize
                     animDuration: root.animDuration
@@ -245,7 +245,7 @@ ColumnLayout {
                 }
 
                 SettingsGroup {
-                    groupTitle: "Main Card"
+                    groupTitle: config.groupMainCard
                     groupVisible: config.showMainCardSettingsGroup !== "false"
                     fontSize: root.settingsFontSize
                     animDuration: root.animDuration
@@ -296,7 +296,7 @@ ColumnLayout {
                 }
 
                 SettingsGroup {
-                    groupTitle: "Welcome"
+                    groupTitle: config.groupWelcome
                     groupVisible: config.showWelcomeSettingsGroup !== "false"
                     fontSize: root.settingsFontSize
                     animDuration: root.animDuration
@@ -343,7 +343,7 @@ ColumnLayout {
                 }
 
                 SettingsGroup {
-                    groupTitle: "Power"
+                    groupTitle: config.groupPower
                     groupVisible: config.showPowerSettingsGroup !== "false"
                     fontSize: root.settingsFontSize
                     animDuration: root.animDuration
@@ -382,7 +382,7 @@ ColumnLayout {
                 }
 
                 SettingsGroup {
-                    groupTitle: "System"
+                    groupTitle: config.groupSystem
                     groupVisible: config.showSystemSettingsGroup !== "false"
                     fontSize: root.settingsFontSize
                     animDuration: root.animDuration
@@ -417,7 +417,7 @@ ColumnLayout {
                 }
 
                 SettingsGroup {
-                    groupTitle: "Avatar"
+                    groupTitle: config.groupAvatar
                     groupVisible: config.showAvatarSettingsGroup !== "false"
                     fontSize: root.settingsFontSize
                     animDuration: root.animDuration
@@ -458,7 +458,7 @@ ColumnLayout {
                 }
 
                 SettingsGroup {
-                    groupTitle: "Language"
+                    groupTitle: config.groupLanguage
                     groupVisible: config.showLanguageSettingsGroup !== "false"
                     fontSize: root.settingsFontSize
                     animDuration: root.animDuration
