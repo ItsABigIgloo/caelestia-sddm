@@ -41,8 +41,7 @@ Rectangle {
 
     property int animDuration: parseInt(config.animDuration) || 300
     property int syncDelay: parseInt(config.syncDelay) || 150
-    property real bgBlur: parseFloat(config.bgBlur) || 0.5
-    property bool transitionBusy: false
+    property real bgBlur: parseFloat(config.bgBlur) || 0
     property bool powerConfirmEnabled: config.powerConfirmEnabled !== "false"
     property real powerOverlayOpacity: parseFloat(config.powerOverlayOpacity) || 0.8
     property real powerBlur: parseFloat(config.powerBlur) || 1.0
@@ -69,12 +68,7 @@ Rectangle {
     }
 
     onCurrentUserChanged: {
-        if (transitionBusy) return;
-        transitionBusy = true;
-        transitionTimer.restart();
-
         wallpaperComponent.prepareForUser(currentUser);
-
         syncTimer.restart();
     }
 
@@ -84,7 +78,6 @@ Rectangle {
         onTriggered: {
             wallpaperComponent.switchLayer();
 
-            // color transitions (all start simultaneously)
             var c = UserColors.colors[currentUser] || {};
             if (c.background) config.background = c.background;
             if (c.mainCard) config.mainCard = c.mainCard;
@@ -98,19 +91,10 @@ Rectangle {
             if (c.onSuccess) config.onSuccess = c.onSuccess;
             if (c.outline) config.outline = c.outline;
 
-            // avatar crossfade
             userAvatar.crossfade();
-
-            // text crossfades
             leftColumn.crossfadeGreeting();
             leftColumn.crossfadeFetchPanel();
         }
-    }
-
-    Timer {
-        id: transitionTimer
-        interval: syncDelay + animDuration + 100
-        onTriggered: transitionBusy = false
     }
 
     readonly property int _settingsMargin: 16
@@ -174,14 +158,14 @@ Rectangle {
         id: keylogger
         welcomeEnabled: root.welcomeMessageEnabled
         powerDialogVisible: powerDialog.visible
-        settingsOpen: root.sOpen
+        settingsOpen: rightColumn.settingsOpen
         firstInputActive: root.firstInput
 
         onEscapePressed: {
             root.buffer = "";
         }
         onSettingsCloseRequested: {
-            settingsPanel.close();
+            rightColumn.closeSettings();
         }
         onWelcomeResetRequested: {
             root.firstInput = true;
@@ -193,11 +177,11 @@ Rectangle {
             root.capsLockOn = !root.capsLockOn;
         }
         onRightPressed: {
-            if (!root.transitionBusy && userPicker.currentIndex < userModel.count - 1)
+            if (userPicker.currentIndex < userModel.count - 1)
                 userPicker.currentIndex += 1;
         }
         onLeftPressed: {
-            if (!root.transitionBusy && userPicker.currentIndex > 0)
+            if (userPicker.currentIndex > 0)
                 userPicker.currentIndex -= 1;
         }
         onUpPressed: {
@@ -253,6 +237,7 @@ Rectangle {
 
     Rectangle {
         id: mainCard
+        z: 60
 
         width: 1350
         height: 750
@@ -405,11 +390,25 @@ Rectangle {
             }
 
             RightColumn {
+                id: rightColumn
                 firstInput: root.firstInput
                 mainCardComponentsOpacity: root.mainCardComponentsOpacity
                 animDuration: root.animDuration
                 smallRadius: root.smallRadius
                 mainCardRadius: mainCard.radius
+                welcomeEnabled: root.welcomeMessageEnabled
+                sessionPickerEnabled: root.sessionPickerEnabled
+                powerConfirmEnabled: root.powerConfirmEnabled
+                apEnabled: root.ap
+                avatarShape: root.avatarShape
+                localeManager: localeManager
+                onAnimDurationChanged: { var v = rightColumn.animDuration; if (v !== root.animDuration) { root.animDuration = v; config.animDuration = v; settingsStore.set("animDuration", v); } }
+                onWelcomeEnabledChanged: { var v = rightColumn.welcomeEnabled; root.welcomeMessageEnabled = v; config.enableWelcomeMessage = v.toString(); }
+                onSessionPickerEnabledChanged: { var v = rightColumn.sessionPickerEnabled; root.sessionPickerEnabled = v; config.sessionPicker = v.toString(); }
+                onPowerConfirmEnabledChanged: { var v = rightColumn.powerConfirmEnabled; root.powerConfirmEnabled = v; config.powerConfirmEnabled = v.toString(); leftColumn.systemButtons.powerConfirmEnabled = v; }
+                onApEnabledChanged: { var v = rightColumn.apEnabled; root.ap = v; config.ap = v.toString(); }
+                onAvatarShapeChanged: { var v = rightColumn.avatarShape; root.avatarShape = v; config.AvatarShape = v; }
+                onSettingsOpenChanged: { if (!rightColumn.settingsOpen) keylogger.forceActiveFocus(); }
             }
         }
 
@@ -449,57 +448,22 @@ Rectangle {
         }
     }
 
-    property bool sOpen: false
-
-    MouseArea {
-        anchors.fill: parent
-        visible: root.sOpen && !powerDialog.visible
-        z: 50
-        onClicked: {
-            settingsPanel.close();
-            keylogger.forceActiveFocus();
-        }
-    }
-
-    SettingsPanel {
-        id: settingsPanel
-        z: 100
-        anchors.right: parent.right; anchors.rightMargin: _settingsMargin
-        y: _settingsMargin
-        animDuration: root.animDuration
-        syncDelay: root.syncDelay
-        bgBlur: root.bgBlur
-        powerOverlay: Math.round(root.powerOverlayOpacity * 100)
-        powerBlur: Math.round(root.powerBlur * 100)
-        localeManager: localeManager
-        welcomeEnabled: root.welcomeMessageEnabled
-        mainCardBlur: root.mainCardBlurAmount
-        mainCardOpacity: root.mainCardComponentsOpacity
-        mainCardBgBlurEnabled: root.mainCardBgBlur
-        sessionPickerEnabled: root.sessionPickerEnabled
-        powerConfirmEnabled: root.powerConfirmEnabled
-        avatarShape: root.avatarShape
-        onOpenChanged: root.sOpen = open
-        onAnimDurationChanged: if (animDuration !== root.animDuration) { root.animDuration = animDuration; config.animDuration = animDuration; settingsStore.set("animDuration", animDuration); }
-        onSyncDelayChanged: if (syncDelay !== root.syncDelay) { root.syncDelay = syncDelay; config.syncDelay = syncDelay; settingsStore.set("syncDelay", syncDelay); }
-        onBgBlurChanged: if (bgBlur !== root.bgBlur) { root.bgBlur = bgBlur; config.bgBlur = bgBlur; settingsStore.set("bgBlur", bgBlur); }
-        onPowerOverlayChanged: if (powerOverlay !== Math.round(root.powerOverlayOpacity * 100)) { root.powerOverlayOpacity = powerOverlay / 100; config.powerOverlayOpacity = powerOverlay / 100; settingsStore.set("powerOverlay", powerOverlay); }
-        onPowerBlurChanged: if (powerBlur !== Math.round(root.powerBlur * 100)) { root.powerBlur = powerBlur / 100; config.powerBlur = powerBlur / 100; settingsStore.set("powerBlur", powerBlur); }
-        onWelcomeEnabledChanged: { root.welcomeMessageEnabled = welcomeEnabled; config.enableWelcomeMessage = welcomeEnabled.toString(); }
-        onMainCardBlurChanged: { root.mainCardBlurAmount = mainCardBlur; config.mainCardBlurAmount = mainCardBlur.toString(); }
-        onMainCardOpacityChanged: { root.mainCardComponentsOpacity = mainCardOpacity; config.mainCardComponentsOpacity = mainCardOpacity.toString(); }
-        onMainCardBgBlurEnabledChanged: { root.mainCardBgBlur = mainCardBgBlurEnabled; config.mainCardBgBlur = mainCardBgBlurEnabled.toString(); }
-        onSessionPickerEnabledChanged: { root.sessionPickerEnabled = sessionPickerEnabled; config.sessionPicker = sessionPickerEnabled.toString(); }
-        onPowerConfirmEnabledChanged: { root.powerConfirmEnabled = powerConfirmEnabled; config.powerConfirmEnabled = powerConfirmEnabled.toString(); }
-        onAvatarShapeChanged: { config.AvatarShape = avatarShape; root.avatarShape = avatarShape; }
-    }
-
     SettingsStore {
         id: settingsStore
     }
 
     UserPicker {
         id: userPicker
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        visible: rightColumn.settingsOpen && !powerDialog.visible
+        z: 50
+        onClicked: {
+            rightColumn.closeSettings();
+            keylogger.forceActiveFocus();
+        }
     }
 
     PowerDialog {
@@ -516,18 +480,10 @@ Rectangle {
         }
     }
 
-        onPowerConfirmEnabledChanged: {
-            leftColumn.systemButtons.powerConfirmEnabled = root.powerConfirmEnabled;
+    Connections {
+        target: powerDialog
+        function onVisibleChanged() {
+            if (!powerDialog.visible) keylogger.forceActiveFocus();
         }
-
-        onSOpenChanged: {
-            if (!root.sOpen) keylogger.forceActiveFocus();
-        }
-
-        Connections {
-            target: powerDialog
-            function onVisibleChanged() {
-                if (!powerDialog.visible) keylogger.forceActiveFocus();
-            }
-        }
+    }
 }

@@ -118,7 +118,7 @@ Item {
                 text: config.confirmTitle
                 color: config.text
                 font.family: "Rubik"
-                font.pixelSize: 20
+                font.pixelSize: parseInt(config.dialogTitleSize) || 20
                 font.bold: true
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillWidth: true
@@ -131,7 +131,7 @@ Item {
                     : config.confirmReboot
                 color: config.textDark
                 font.family: "Rubik"
-                font.pixelSize: 14
+                font.pixelSize: parseInt(config.dialogBodySize) || 14
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillWidth: true
                 Behavior on color { ColorAnimation { duration: root.animDuration } }

@@ -75,7 +75,7 @@ Item {
                     text: (config.fetchLabels || "").replace(/\\n/g, "\n")
                     color: config.text
                     Behavior on color { ColorAnimation { duration: root.animDuration } }
-                    font.pixelSize: 18
+                    font.pixelSize: parseInt(config.fetchFontSize) || 18
                     font.family: "CaskaydiaCove NF"
                     lineHeight: 30
                     lineHeightMode: Text.FixedHeight
