@@ -10,7 +10,25 @@ Item {
     property int animDuration: 200
     signal activated(int index)
 
-    width: 260; height: 40
+    readonly property int _ddW: 260
+    readonly property int _ddH: 40
+    readonly property int _iconS: 16
+    readonly property int _iconL: 18
+    readonly property int _radius: 8
+    readonly property int _labelW: 210
+    readonly property int _itemH: 32
+    readonly property int _menuMax: 160
+    readonly property int _gap: 10
+    readonly property int _marg: 4
+    readonly property int _fontS: 13
+    readonly property int _fontM: 14
+    readonly property int _radiusS: 5
+    readonly property int _rowPad: 15
+    readonly property int _rowSpacing: 6
+    readonly property int _offset: -2
+    readonly property int _itemPad: 4
+
+    width: _ddW; height: _ddH
 
     property bool _open: false
 
@@ -20,19 +38,19 @@ Item {
         radius: height / 2
         anchors.left: parent.left; anchors.top: parent.top; anchors.bottom: parent.bottom
         topLeftRadius: height / 2; bottomLeftRadius: height / 2
-        topRightRadius: 5; bottomRightRadius: 5
+        topRightRadius: _radiusS; bottomRightRadius: _radiusS
         color: config.subComponents
         Behavior on color { ColorAnimation { duration: root.animDuration } }
 
-        width: 210
+        width: _labelW
 
         Row {
             anchors.verticalCenter: labelRect.verticalCenter
-            anchors.left: labelRect.left; anchors.leftMargin: 15; spacing: 6
+            anchors.left: labelRect.left; anchors.leftMargin: _rowPad; spacing: _rowSpacing
 
             Text {
                 anchors.verticalCenter: parent.verticalCenter
-                font.family: "Material Symbols Rounded"; font.pointSize: 16
+                font.family: "Material Symbols Rounded"; font.pointSize: _iconS
                 text: root.iconChar; color: config.primary
                 Behavior on color { ColorAnimation { duration: root.animDuration } }
             }
@@ -42,7 +60,7 @@ Item {
 
                 anchors.verticalCenter: parent.verticalCenter
                 text: root.displayText || (root.model[root.currentIndex] || "")
-                color: config.text; font.pixelSize: root.model.length > 0 ? 14 : 13
+                color: config.text; font.pixelSize: root.model.length > 0 ? _fontM : _fontS
                 Behavior on color { ColorAnimation { duration: root.animDuration } }
                 font.family: "Rubik"
                 elide: Text.ElideRight
@@ -53,7 +71,7 @@ Item {
     Rectangle {
         id: expandBtn
 
-        property real rad: root._open ? height / 2 : 5
+        property real rad: root._open ? height / 2 : _radiusS
 
         radius: height / 2
         anchors.left: labelRect.right; anchors.top: parent.top; anchors.bottom: parent.bottom
@@ -73,8 +91,8 @@ Item {
 
         Text {
             anchors.centerIn: expandBtn
-            anchors.horizontalCenterOffset: root._open ? 0 : -2
-            font.family: "Material Symbols Rounded"; font.pointSize: 18
+            anchors.horizontalCenterOffset: root._open ? 0 : _offset
+            font.family: "Material Symbols Rounded"; font.pointSize: _iconL
             text: "expand_more"; color: config.onPrimary
             Behavior on color { ColorAnimation { duration: root.animDuration } }
             rotation: root._open ? 180 : 0
@@ -100,18 +118,18 @@ Item {
         visible: root._open
         color: config.subComponents
         Behavior on color { ColorAnimation { duration: root.animDuration } }
-        radius: 8
+        radius: _radius
         border.color: config.outline; border.width: 1
         Behavior on border.color { ColorAnimation { duration: root.animDuration } }
 
-        anchors.top: labelRect.bottom; anchors.topMargin: 4
-        anchors.left: labelRect.left; anchors.leftMargin: -10
-        width: 260; height: Math.min(160, root.model.length * 36)
+        anchors.top: labelRect.bottom; anchors.topMargin: _marg
+        anchors.left: labelRect.left; anchors.leftMargin: -_gap
+        width: _ddW; height: Math.min(_menuMax, root.model.length * (_itemH + _marg))
 
         clip: true; z: 999
 
         opacity: root._open ? 1 : 0
-        transform: Translate { y: root._open ? 0 : -10 }
+        transform: Translate { y: root._open ? 0 : -_gap }
 
         Behavior on opacity {
             NumberAnimation { duration: 150; easing.type: Easing.InOutCubic }
@@ -120,13 +138,13 @@ Item {
         ListView {
             id: listView
 
-            anchors.fill: parent; anchors.margins: 4
+            anchors.fill: parent; anchors.margins: _marg
             model: root.model
             currentIndex: root.currentIndex
             clip: true; boundsBehavior: ListView.StopAtBounds
 
             delegate: Rectangle {
-                width: parent.width; height: 32; radius: 4
+                width: parent.width; height: _itemH; radius: _marg
                 color: index === listView.currentIndex ? config.primary : "transparent"
                 opacity: index === listView.currentIndex ? 0.2 : 1
 
@@ -146,9 +164,9 @@ Item {
                     text: root.model[index]
                     color: config.text
                     Behavior on color { ColorAnimation { duration: root.animDuration } }
-                    font.pixelSize: 13; font.family: "Rubik"
+                    font.pixelSize: _fontS; font.family: "Rubik"
                     elide: Text.ElideRight
-                    leftPadding: 4; rightPadding: 4
+                    leftPadding: _itemPad; rightPadding: _itemPad
                 }
             }
         }
