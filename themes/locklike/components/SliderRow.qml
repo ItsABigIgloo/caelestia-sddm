@@ -1,6 +1,7 @@
 import QtQuick
 
 Item {
+    id: row
     property string labelText: ""
     property real sliderValue: 0
     property real maxValue: 100
@@ -44,8 +45,8 @@ Item {
             SliderStyle {
                 width: parent.width - _sliderW
                 value: sliderValue
-                maxValue: maxValue
-                stepSize: stepSize
+                maxValue: row.maxValue
+                stepSize: row.stepSize
                 onValueChanged: {
                     if (value !== sliderValue)
                         valueModified(value);
