@@ -36,43 +36,84 @@ Item {
             renderType: Text.NativeRendering
             text: topLeftRect.welcomeString
             color: config.text
-            Behavior on color { ColorAnimation { duration: topLeftRect.animDuration } }
-            font.family: "Rubik"; font.bold: false; font.pixelSize: 40
+            font.family: "Rubik"
+            font.bold: false
+            font.pixelSize: 40
             horizontalAlignment: Text.AlignHCenter
             anchors.horizontalCenter: parent.horizontalCenter
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: topLeftRect.animDuration
+                }
+
+            }
+
         }
 
         Item {
-                width: 200
-                height: userNameA.height
+            width: 200
+            height: userNameA.height
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                id: userNameA
+
                 anchors.horizontalCenter: parent.horizontalCenter
+                renderType: Text.NativeRendering
+                color: config.primary
+                font.family: "Rubik"
+                font.bold: false
+                font.pixelSize: 40
+                opacity: _activeGreeting === 0 ? 1 : 0
 
-                Text {
-                    id: userNameA
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    renderType: Text.NativeRendering
-                    color: config.primary
-                    Behavior on color { ColorAnimation { duration: topLeftRect.animDuration } }
-                    font.family: "Rubik"; font.bold: false; font.pixelSize: 40
-                    opacity: _activeGreeting === 0 ? 1 : 0
-                    Behavior on opacity {
-                        NumberAnimation { duration: topLeftRect.animDuration; easing: Easing.InOutCubic }
+                Behavior on color {
+                    ColorAnimation {
+                        duration: topLeftRect.animDuration
                     }
+
                 }
 
-                Text {
-                    id: userNameB
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    renderType: Text.NativeRendering
-                    color: config.primary
-                    Behavior on color { ColorAnimation { duration: topLeftRect.animDuration } }
-                    font.family: "Rubik"; font.bold: false; font.pixelSize: 40
-                    opacity: _activeGreeting === 0 ? 0 : 1
-                    Behavior on opacity {
-                        NumberAnimation { duration: topLeftRect.animDuration; easing: Easing.InOutCubic }
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: topLeftRect.animDuration
+                        easing: Easing.InOutCubic
                     }
+
                 }
+
             }
+
+            Text {
+                id: userNameB
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                renderType: Text.NativeRendering
+                color: config.primary
+                font.family: "Rubik"
+                font.bold: false
+                font.pixelSize: 40
+                opacity: _activeGreeting === 0 ? 0 : 1
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: topLeftRect.animDuration
+                    }
+
+                }
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: topLeftRect.animDuration
+                        easing: Easing.InOutCubic
+                    }
+
+                }
+
+            }
+
+        }
+
     }
 
     Timer {
@@ -81,4 +122,5 @@ Item {
         onTriggered: topLeftRect.getPhase()
         repeat: true
     }
+
 }

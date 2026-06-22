@@ -6,8 +6,6 @@ import "shapes/material-shapes.js" as MaterialShapes
 Item {
     id: root
 
-    z: 2
-
     property string avatarShape: "hexagon"
     property string currentUser: ""
     property bool hovered: false
@@ -15,16 +13,41 @@ Item {
     property int animDuration: 300
     property int _activeAvatar: 0
     property var shapeGetters: [MaterialShapes.getClamShell, MaterialShapes.getCookie6Sided]
-    property var fallbackCandidates: [
-        "../assets/avatar.face.icon",
-        "../assets/avatar.face",
-        "../assets/avatar.jpg",
-        "../assets/avatar.png"
-    ]
+    property var fallbackCandidates: ["../assets/avatar.face.icon", "../assets/avatar.face", "../assets/avatar.jpg", "../assets/avatar.png"]
     property int fallbackIndex: -1
+
+    function prepareNext() {
+        if (currentUser === "")
+            return ;
+
+        fallbackIndex = -1;
+        var next = currentUser !== "" ? "../assets/avatar-" + currentUser + ".face" : "";
+        var hidden = _activeAvatar === 0 ? avatarB : avatarA;
+        hidden.source = next;
+    }
+
+    function crossfade() {
+        if (currentUser === "")
+            return ;
+
+        _activeAvatar = _activeAvatar === 0 ? 1 : 0;
+    }
+
+    z: 2
+    onHoveredChanged: {
+        if (root.avatarShape !== "hexagon")
+            return ;
+
+        if (hovered)
+            root.hexIndex = 1;
+        else
+            root.hexIndex = 0;
+    }
+    onCurrentUserChanged: prepareNext()
 
     ShapeCanvas {
         id: hexMask
+
         anchors.fill: parent
         visible: root.avatarShape === "hexagon"
         roundedPolygon: root.shapeGetters[root.hexIndex]()
@@ -34,6 +57,7 @@ Item {
 
     Rectangle {
         id: circleMask
+
         anchors.fill: parent
         visible: root.avatarShape === "circle"
         radius: Math.min(width, height) / 2
@@ -42,6 +66,7 @@ Item {
 
     Image {
         id: avatarA
+
         mipmap: true
         smooth: true
         anchors.fill: parent
@@ -49,31 +74,35 @@ Item {
         asynchronous: true
         layer.enabled: true
         opacity: _activeAvatar === 0 ? 1 : 0
+        onStatusChanged: {
+            if (status === Image.Error) {
+                fallbackIndex++;
+                if (fallbackIndex < fallbackCandidates.length)
+                    source = fallbackCandidates[fallbackIndex];
+
+            }
+        }
+        Component.onCompleted: {
+            source = currentUser !== "" ? "../assets/avatar-" + currentUser + ".face" : "";
+        }
 
         Behavior on opacity {
-            NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
+            NumberAnimation {
+                duration: root.animDuration
+                easing: Easing.InOutCubic
+            }
+
         }
 
         layer.effect: OpacityMask {
             maskSource: root.avatarShape === "circle" ? circleMask : hexMask
         }
 
-        onStatusChanged: {
-            if (status === Image.Error) {
-                fallbackIndex++;
-                if (fallbackIndex < fallbackCandidates.length)
-                    source = fallbackCandidates[fallbackIndex];
-            }
-        }
-        Component.onCompleted: {
-            source = currentUser !== ""
-                ? "../assets/avatar-" + currentUser + ".face"
-                : "";
-        }
     }
 
     Image {
         id: avatarB
+
         mipmap: true
         smooth: true
         anchors.fill: parent
@@ -81,22 +110,27 @@ Item {
         asynchronous: true
         layer.enabled: true
         opacity: _activeAvatar === 0 ? 0 : 1
+        onStatusChanged: {
+            if (status === Image.Error) {
+                fallbackIndex++;
+                if (fallbackIndex < fallbackCandidates.length)
+                    source = fallbackCandidates[fallbackIndex];
+
+            }
+        }
 
         Behavior on opacity {
-            NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
+            NumberAnimation {
+                duration: root.animDuration
+                easing: Easing.InOutCubic
+            }
+
         }
 
         layer.effect: OpacityMask {
             maskSource: root.avatarShape === "circle" ? circleMask : hexMask
         }
 
-        onStatusChanged: {
-            if (status === Image.Error) {
-                fallbackIndex++;
-                if (fallbackIndex < fallbackCandidates.length)
-                    source = fallbackCandidates[fallbackIndex];
-            }
-        }
     }
 
     MouseArea {
@@ -106,30 +140,4 @@ Item {
         onExited: hovered = false
     }
 
-    onHoveredChanged: {
-        if (root.avatarShape !== "hexagon")
-            return;
-        if (hovered) {
-            root.hexIndex = 1;
-        } else {
-            root.hexIndex = 0;
-        }
-    }
-
-    function prepareNext() {
-        if (currentUser === "") return;
-        fallbackIndex = -1;
-        var next = currentUser !== ""
-            ? "../assets/avatar-" + currentUser + ".face"
-            : "";
-        var hidden = _activeAvatar === 0 ? avatarB : avatarA;
-        hidden.source = next;
-    }
-
-    function crossfade() {
-        if (currentUser === "") return;
-        _activeAvatar = _activeAvatar === 0 ? 1 : 0;
-    }
-
-    onCurrentUserChanged: prepareNext()
 }

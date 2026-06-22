@@ -2,7 +2,6 @@ import QtQuick
 
 Rectangle {
     id: settingsPanel
-    z: 100
 
     readonly property int _gap: 10
     readonly property int _margin: 2 * _gap
@@ -23,7 +22,6 @@ Rectangle {
     readonly property int _animContent: 180
     readonly property int _iconS: 16
     readonly property int _iconL: 20
-
     property bool sOpen: false
     property int animDuration: 300
     property int syncDelay: 150
@@ -32,14 +30,14 @@ Rectangle {
     property int powerBlur: 100
     property var localeManager: null
     property bool welcomeEnabled: true
-    property real mainCardBlur: parseFloat(config.mainCardBlurAmount) || 1.0
-    property real mainCardOpacity: parseFloat(config.mainCardComponentsOpacity) || 1.0
+    property real mainCardBlur: parseFloat(config.mainCardBlurAmount) || 1
+    property real mainCardOpacity: parseFloat(config.mainCardComponentsOpacity) || 1
     property bool mainCardBgBlurEnabled: config.mainCardBgBlur === "true"
     property bool sessionPickerEnabled: config.sessionPicker !== "false"
     property bool powerConfirmEnabled: config.powerConfirmEnabled !== "false"
     property bool apEnabled: config.ap === "true"
     property string avatarShape: config.AvatarShape || "hexagon"
-    property real welcomeBgBlurAmountVal: parseFloat(config.welcomeBgBlurAmount) || 1.0
+    property real welcomeBgBlurAmountVal: parseFloat(config.welcomeBgBlurAmount) || 1
     property bool welcomeBgBlurVal: config.welcomeBgBlur === "true"
     property real welcomeColorOpacityVal: parseFloat(config.welcomeColorOpacity) || 0.7
     property real mainCardColorOpacityVal: parseFloat(config.mainCardColorOpacity) || 0.9
@@ -53,14 +51,17 @@ Rectangle {
         closeTimer.restart();
     }
 
+    z: 100
     width: sOpen ? _panelW : _btnS
     height: sOpen ? _panelH : _btnS
     radius: sOpen ? _radiusOpen : _radiusClosed
-    Behavior on width { NumberAnimation { duration: _animOpen; easing.type: Easing.OutQuint } }
-    Behavior on height { NumberAnimation { duration: _animOpen; easing.type: Easing.OutQuint } }
-    Behavior on radius { NumberAnimation { duration: _animRadius; easing.type: Easing.OutQuint } }
-    Behavior on color { ColorAnimation { duration: settingsPanel.animDuration } }
     color: sOpen ? "transparent" : Qt.rgba(0, 0, 0, 0.35)
+    onSOpenChanged: {
+        settingsPanel.openChanged(settingsPanel.sOpen);
+        if (!sOpen)
+            settingsPanel._contentReady = false;
+
+    }
 
     BackgroundCardStyle {
         anchors.fill: parent
@@ -70,33 +71,46 @@ Rectangle {
 
     Timer {
         id: contentTimer
+
         onTriggered: settingsPanel._contentReady = true
     }
 
-    onSOpenChanged: {
-        settingsPanel.openChanged(settingsPanel.sOpen);
-        if (!sOpen) settingsPanel._contentReady = false;
-    }
-
     Item {
-        anchors.left: parent.left; anchors.right: parent.right
-        anchors.top: parent.top; anchors.topMargin: _spaceS
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.topMargin: _spaceS
         height: _titleH
         visible: sOpen
 
         Text {
-            anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
             anchors.leftMargin: _margin
-            text: config.settingsTitle; color: config.text
-            Behavior on color { ColorAnimation { duration: settingsPanel.animDuration } }
-            font.family: "Rubik"; font.pixelSize: 18; font.bold: true
+            text: config.settingsTitle
+            color: config.text
+            font.family: "Rubik"
+            font.pixelSize: 18
+            font.bold: true
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: settingsPanel.animDuration
+                }
+
+            }
+
         }
 
         Rectangle {
-            anchors.right: parent.right; anchors.rightMargin: _closeM
+            anchors.right: parent.right
+            anchors.rightMargin: _closeM
             anchors.verticalCenter: parent.verticalCenter
-            width: _titleH; height: _titleH; radius: _titleH / 2
+            width: _titleH
+            height: _titleH
+            radius: _titleH / 2
             color: closeMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(1, 1, 1, 0.06)
+
             Text {
                 anchors.centerIn: parent
                 text: "\ue5cd"
@@ -104,30 +118,43 @@ Rectangle {
                 font.pointSize: _iconS
                 color: config.text
             }
+
             MouseArea {
                 id: closeMouse
-                anchors.fill: parent; hoverEnabled: true
+
+                anchors.fill: parent
+                hoverEnabled: true
                 onClicked: {
                     contentTimer.stop();
                     settingsPanel._contentReady = false;
                     closeTimer.restart();
+                }
             }
+
         }
+
     }
-}
+
     Timer {
         id: closeTimer
+
         interval: _animContent
         onTriggered: settingsPanel.sOpen = false
     }
 
     Rectangle {
         id: gearBtn
-        anchors.right: parent.right; anchors.top: parent.top
-        anchors.rightMargin: 0; anchors.topMargin: 0
-        width: _btnS; height: _btnS; radius: _btnS / 2
+
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.rightMargin: 0
+        anchors.topMargin: 0
+        width: _btnS
+        height: _btnS
+        radius: _btnS / 2
         visible: !sOpen
         color: gearMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(1, 1, 1, 0.06)
+
         Text {
             anchors.centerIn: parent
             text: "\ue8b8"
@@ -135,9 +162,12 @@ Rectangle {
             font.pointSize: _iconL
             color: config.text
         }
+
         MouseArea {
             id: gearMouse
-            anchors.fill: parent; hoverEnabled: true
+
+            anchors.fill: parent
+            hoverEnabled: true
             onClicked: {
                 closeTimer.stop();
                 settingsPanel.sOpen = true;
@@ -145,19 +175,23 @@ Rectangle {
                 contentTimer.restart();
             }
         }
+
     }
 
     Item {
         id: panelContent
+
         visible: opacity > 0
         anchors.fill: parent
-        anchors.leftMargin: _margin; anchors.rightMargin: _margin
-        anchors.topMargin: _btnS; anchors.bottomMargin: _margin
+        anchors.leftMargin: _margin
+        anchors.rightMargin: _margin
+        anchors.topMargin: _btnS
+        anchors.bottomMargin: _margin
         opacity: _contentReady ? 1 : 0
-        Behavior on opacity { NumberAnimation { duration: _animContent } }
 
         Flickable {
             id: settingsFlickable
+
             anchors.fill: parent
             clip: true
             contentHeight: settingsColumn.height
@@ -165,13 +199,16 @@ Rectangle {
 
             Column {
                 id: settingsColumn
+
                 width: parent.width
                 spacing: _spacing
 
                 Rectangle {
                     height: 1
-                    anchors.left: parent.left; anchors.right: parent.right
-                    anchors.leftMargin: -_margin; anchors.rightMargin: -_margin
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.leftMargin: -_margin
+                    anchors.rightMargin: -_margin
                     color: config.surfaceVariant || Qt.rgba(1, 1, 1, 0.06)
                 }
 
@@ -284,7 +321,10 @@ Rectangle {
                     onValueModified: settingsPanel.mainCardOpacity = value / 100
                 }
 
-                Item { height: _spaceS; width: 1 }
+                Item {
+                    height: _spaceS
+                    width: 1
+                }
 
                 ToggleRow {
                     labelText: config.welcomeMessageLabel
@@ -328,16 +368,22 @@ Rectangle {
                     onToggled: settingsPanel.mainCardBgBlurEnabled = value
                 }
 
-                Item { height: _spaceS; width: 1 }
+                Item {
+                    height: _spaceS
+                    width: 1
+                }
 
                 Text {
                     visible: config.showAvatarShape !== "false"
                     text: config.avatarShapeLabel
                     color: config.textDark
-                    font.family: "Rubik"; font.pixelSize: 13
+                    font.family: "Rubik"
+                    font.pixelSize: 13
                 }
+
                 DropdownStyle {
                     id: avatarShapeDD
+
                     visible: config.showAvatarShape !== "false"
                     model: [config.hexagonLabel, config.circleLabel]
                     iconChar: "hexagon"
@@ -361,16 +407,22 @@ Rectangle {
                     }
                 }
 
-                Item { height: avatarShapeDD._open ? _spacerExp : _spaceMin; width: 1 }
+                Item {
+                    height: avatarShapeDD._open ? _spacerExp : _spaceMin
+                    width: 1
+                }
 
                 Text {
                     visible: config.showLanguage !== "false"
                     text: config.language
                     color: config.textDark
-                    font.family: "Rubik"; font.pixelSize: 13
+                    font.family: "Rubik"
+                    font.pixelSize: 13
                 }
+
                 LanguagePicker {
                     id: langPicker
+
                     visible: config.showLanguage !== "false"
                     localeManager: settingsPanel.localeManager
                     animDuration: settingsPanel.animDuration
@@ -384,8 +436,53 @@ Rectangle {
                     }
                 }
 
-                Item { height: langPicker.expanded ? _spacerExp : 0; width: 1 }
+                Item {
+                    height: langPicker.expanded ? _spacerExp : 0
+                    width: 1
+                }
+
             }
+
         }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: _animContent
+            }
+
+        }
+
     }
+
+    Behavior on width {
+        NumberAnimation {
+            duration: _animOpen
+            easing.type: Easing.OutQuint
+        }
+
+    }
+
+    Behavior on height {
+        NumberAnimation {
+            duration: _animOpen
+            easing.type: Easing.OutQuint
+        }
+
+    }
+
+    Behavior on radius {
+        NumberAnimation {
+            duration: _animRadius
+            easing.type: Easing.OutQuint
+        }
+
+    }
+
+    Behavior on color {
+        ColorAnimation {
+            duration: settingsPanel.animDuration
+        }
+
+    }
+
 }

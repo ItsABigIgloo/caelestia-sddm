@@ -7,8 +7,6 @@ Item {
     property alias maxWidth: quote.width
     property string locale: "en"
 
-    anchors.fill: parent
-
     function reload() {
         const xhr = new XMLHttpRequest();
         xhr.open("GET", Qt.resolvedUrl("../locales/quotes-" + root.locale + ".json"));
@@ -22,7 +20,7 @@ Item {
                 } catch (e) {
                     if (root.locale !== "en") {
                         root.locale = "en";
-                        return;
+                        return ;
                     }
                 }
             }
@@ -30,8 +28,8 @@ Item {
         xhr.send();
     }
 
+    anchors.fill: parent
     onLocaleChanged: reload()
-
     Component.onCompleted: reload()
 
     Column {
@@ -40,6 +38,7 @@ Item {
 
         Text {
             id: quote
+
             width: 100
             text: ""
             color: "white"
@@ -53,16 +52,26 @@ Item {
 
         Text {
             id: author
+
             width: quote.width
             text: ""
             color: config.primary
-            Behavior on color { ColorAnimation { duration: config.animDuration !== undefined ? config.animDuration : 300 } }
             font.pointSize: 15
             font.family: "CaskaydiaCove NF"
             font.bold: true
             wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: config.animDuration !== undefined ? config.animDuration : 300
+                }
+
+            }
+
         }
+
     }
+
 }

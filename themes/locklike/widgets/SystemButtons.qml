@@ -31,8 +31,15 @@ Item {
             anchors.topMargin: 35
             text: "\ue8ac"
             color: config.secondary
-            Behavior on color { ColorAnimation { duration: config.animDuration !== undefined ? config.animDuration : 300 } }
             pointSize: 70
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: config.animDuration !== undefined ? config.animDuration : 300
+                }
+
+            }
+
         }
 
         LayerState {
@@ -49,7 +56,9 @@ Item {
             ColorAnimation {
                 duration: config.animDuration !== undefined ? config.animDuration : 300
             }
+
         }
+
     }
 
     Rectangle {
@@ -72,8 +81,15 @@ Item {
             anchors.topMargin: 35
             text: "\ue863"
             color: config.secondary
-            Behavior on color { ColorAnimation { duration: config.animDuration !== undefined ? config.animDuration : 300 } }
             pointSize: 70
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: config.animDuration !== undefined ? config.animDuration : 300
+                }
+
+            }
+
         }
 
         LayerState {
@@ -90,6 +106,9 @@ Item {
             ColorAnimation {
                 duration: config.animDuration !== undefined ? config.animDuration : 300
             }
+
         }
+
     }
+
 }

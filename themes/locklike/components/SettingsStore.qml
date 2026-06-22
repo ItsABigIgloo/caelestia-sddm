@@ -17,9 +17,12 @@ QtObject {
                 var rs = tx.executeSql('SELECT value FROM settings WHERE key=?', [key]);
                 if (rs.rows.length > 0)
                     result = rs.rows.item(0).value;
+
             });
             return result;
-        } catch(e) { return fallback; }
+        } catch (e) {
+            return fallback;
+        }
     }
 
     function set(key, value) {
@@ -29,6 +32,8 @@ QtObject {
                 tx.executeSql('CREATE TABLE IF NOT EXISTS settings (key TEXT UNIQUE, value TEXT)');
                 tx.executeSql('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)', [key, String(value)]);
             });
-        } catch(e) {}
+        } catch (e) {
+        }
     }
+
 }

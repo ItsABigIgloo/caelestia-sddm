@@ -1,7 +1,7 @@
+import "../widgets"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "../widgets"
 
 ColumnLayout {
     id: root
@@ -13,18 +13,26 @@ ColumnLayout {
     property real mainCardRadius: 70
     property string currentUser: ""
     property string currentSession: ""
-
     readonly property alias welcomeString: greeting.welcomeString
 
-    function crossfadeGreeting() { greeting.crossfadeText(); }
-    function crossfadeFetchPanel() { fetchPanel.crossfadeUserName(); }
-    function refreshGreeting() { greeting.getPhase(); }
+    function crossfadeGreeting() {
+        greeting.crossfadeText();
+    }
+
+    function crossfadeFetchPanel() {
+        fetchPanel.crossfadeUserName();
+    }
+
+    function refreshGreeting() {
+        greeting.getPhase();
+    }
 
     spacing: 13
     Layout.alignment: Qt.AlignLeft
 
     Rectangle {
         id: topLeftRect
+
         width: 390
         height: 220
         color: config.subComponents
@@ -32,23 +40,33 @@ ColumnLayout {
         opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
         clip: true
 
-        Behavior on color {
-            ColorAnimation { duration: root.animDuration }
-        }
-
         WelcomeText {
             id: greeting
+
             animDuration: root.animDuration
             anchors.centerIn: parent
         }
 
-        Behavior on opacity {
-            NumberAnimation { duration: root.animDuration; easing.type: Easing.OutBack }
+        Behavior on color {
+            ColorAnimation {
+                duration: root.animDuration
+            }
+
         }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: root.animDuration
+                easing.type: Easing.OutBack
+            }
+
+        }
+
     }
 
     Rectangle {
         id: middleLeftRect
+
         width: 390
         Layout.fillHeight: true
         color: config.subComponents
@@ -56,12 +74,9 @@ ColumnLayout {
         opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
         clip: true
 
-        Behavior on color {
-            ColorAnimation { duration: root.animDuration }
-        }
-
         CaelestiaFetch {
             id: fetchPanel
+
             firstInput: root.firstInput
             currentUser: root.currentUser
             currentSession: root.currentSession
@@ -69,13 +84,26 @@ ColumnLayout {
             animDuration: root.animDuration
         }
 
-        Behavior on opacity {
-            NumberAnimation { duration: root.animDuration; easing.type: Easing.OutBack }
+        Behavior on color {
+            ColorAnimation {
+                duration: root.animDuration
+            }
+
         }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: root.animDuration
+                easing.type: Easing.OutBack
+            }
+
+        }
+
     }
 
     Rectangle {
         id: bottomLeftRect
+
         width: 390
         height: 190
         color: "transparent"
@@ -92,7 +120,13 @@ ColumnLayout {
         }
 
         Behavior on opacity {
-            NumberAnimation { duration: root.animDuration; easing.type: Easing.OutBack }
+            NumberAnimation {
+                duration: root.animDuration
+                easing.type: Easing.OutBack
+            }
+
         }
+
     }
+
 }

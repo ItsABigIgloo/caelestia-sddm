@@ -1,5 +1,5 @@
-import QtQuick
 import Qt5Compat.GraphicalEffects
+import QtQuick
 
 Item {
     id: root
@@ -15,7 +15,7 @@ Item {
     property real parentHeight
     property real parentRadius
 
-    signal clicked
+    signal clicked()
 
     anchors.fill: parent
     layer.enabled: true
@@ -27,7 +27,7 @@ Item {
         hoverEnabled: true
         enabled: !root.disabled
         cursorShape: Qt.PointingHandCursor
-        onPressed: event => {
+        onPressed: (event) => {
             ripple.x = event.x;
             ripple.y = event.y;
             const dist = (ox, oy) => {
@@ -50,11 +50,14 @@ Item {
         bottomLeftRadius: root.bottomLeftradius
         bottomRightRadius: root.bottomRightradius
         color: mouse.pressed ? Qt.rgba(root.rippleColor.r, root.rippleColor.g, root.rippleColor.b, 0.2) : mouse.containsMouse ? Qt.rgba(root.rippleColor.r, root.rippleColor.g, root.rippleColor.b, 0.15) : "transparent"
+
         Behavior on color {
             ColorAnimation {
                 duration: 160
             }
+
         }
+
     }
 
     Rectangle {
@@ -68,6 +71,7 @@ Item {
             x: -ripple.width / 2
             y: -ripple.height / 2
         }
+
     }
 
     NumberAnimation {
@@ -88,7 +92,9 @@ Item {
         to: 0
         duration: 200
     }
+
     layer.effect: OpacityMask {
+
         maskSource: Rectangle {
             width: parentWidth
             height: parentHeight
@@ -97,5 +103,7 @@ Item {
             bottomLeftRadius: root.bottomLeftradius
             bottomRightRadius: root.bottomRightradius
         }
+
     }
+
 }

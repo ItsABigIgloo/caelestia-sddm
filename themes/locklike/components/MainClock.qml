@@ -6,22 +6,20 @@ Item {
     property bool firstInput
     property real mainCardComponentsOpacity
     property bool ap
-
     property real centerScale: 1
     property date currentTime: new Date()
-
     readonly property var fontAxesHours: ({
-            "wght": 500,
-            "wdth": 30,
-            "ROND": 25,
-            "opsz": 224 * centerScale
-        })
+        "wght": 500,
+        "wdth": 30,
+        "ROND": 25,
+        "opsz": 224 * centerScale
+    })
     readonly property var fontAxesMinutes: ({
-            "wght": 500,
-            "wdth": 30,
-            "ROND": 25,
-            "opsz": 224 * centerScale
-        })
+        "wght": 500,
+        "wdth": 30,
+        "ROND": 25,
+        "opsz": 224 * centerScale
+    })
 
     FontLoader {
         id: googleSansFlex
@@ -31,6 +29,7 @@ Item {
 
     Row {
         id: clock
+
         anchors.centerIn: parent
 
         Text {
@@ -41,8 +40,15 @@ Item {
             font.variableAxes: root.fontAxesHours
             font.pixelSize: Math.round(224 * root.centerScale)
             color: Qt.lighter(config.primary, 1.6)
-            Behavior on color { ColorAnimation { duration: config.animDuration !== undefined ? config.animDuration : 300 } }
             text: Qt.formatTime(root.currentTime, "hh")
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: config.animDuration !== undefined ? config.animDuration : 300
+                }
+
+            }
+
         }
 
         Item {
@@ -58,9 +64,17 @@ Item {
             font.variableAxes: root.fontAxesMinutes
             font.pixelSize: Math.round(224 * root.centerScale)
             color: config.secondary
-            Behavior on color { ColorAnimation { duration: config.animDuration !== undefined ? config.animDuration : 300 } }
             text: Qt.formatTime(root.currentTime, "mm")
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: config.animDuration !== undefined ? config.animDuration : 300
+                }
+
+            }
+
         }
+
     }
 
     Behavior on opacity {
@@ -68,5 +82,7 @@ Item {
             duration: 300
             easing.type: Easing.OutBack
         }
+
     }
+
 }

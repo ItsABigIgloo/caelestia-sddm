@@ -1,8 +1,8 @@
+import "../widgets"
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "../widgets"
 
 ColumnLayout {
     id: root
@@ -24,19 +24,27 @@ ColumnLayout {
         radius: root.smallRadius
         opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
-        Behavior on color {
-            ColorAnimation { duration: root.animDuration }
-        }
-
         RandomQuote {
             maxWidth: parent.width - 40
             color: config.text
             locale: root.locale
         }
 
-        Behavior on opacity {
-            NumberAnimation { duration: root.animDuration; easing.type: Easing.OutBack }
+        Behavior on color {
+            ColorAnimation {
+                duration: root.animDuration
+            }
+
         }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: root.animDuration
+                easing.type: Easing.OutBack
+            }
+
+        }
+
     }
 
     Rectangle {
@@ -47,25 +55,28 @@ ColumnLayout {
         radius: root.mainCardRadius / 4
         opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
-        Behavior on color {
-            ColorAnimation { duration: root.animDuration }
-        }
-
         Image {
             id: dino
+
             width: 300
             height: 150
             source: "../assets/dino.png"
             anchors.centerIn: parent
             fillMode: Image.PreserveAspectCrop
             layer.enabled: true
+
             layer.effect: ColorOverlay {
                 color: config.inverseOnSurface
 
                 Behavior on color {
-                    ColorAnimation { duration: root.animDuration }
+                    ColorAnimation {
+                        duration: root.animDuration
+                    }
+
                 }
+
             }
+
         }
 
         Text {
@@ -79,12 +90,29 @@ ColumnLayout {
             anchors.bottomMargin: 50
 
             Behavior on color {
-                ColorAnimation { duration: root.animDuration }
+                ColorAnimation {
+                    duration: root.animDuration
+                }
+
             }
+
+        }
+
+        Behavior on color {
+            ColorAnimation {
+                duration: root.animDuration
+            }
+
         }
 
         Behavior on opacity {
-            NumberAnimation { duration: root.animDuration; easing.type: Easing.OutBack }
+            NumberAnimation {
+                duration: root.animDuration
+                easing.type: Easing.OutBack
+            }
+
         }
+
     }
+
 }

@@ -13,10 +13,15 @@ Item {
     Rectangle {
         anchors.fill: parent
         radius: height / 2
-        color: root.checked
-            ? (mouse.containsMouse ? Qt.lighter(config.primary, 1.1) : config.primary)
-            : config.subComponents
-        Behavior on color { ColorAnimation { duration: 120 } }
+        color: root.checked ? (mouse.containsMouse ? Qt.lighter(config.primary, 1.1) : config.primary) : config.subComponents
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 120
+            }
+
+        }
+
     }
 
     Rectangle {
@@ -26,18 +31,41 @@ Item {
         height: parent.height - 4
         radius: height / 2
         color: root.checked ? config.onPrimary : config.outline
-        Behavior on x { NumberAnimation { duration: 120; easing.type: Easing.OutQuint } }
-        Behavior on width { NumberAnimation { duration: 120; easing.type: Easing.OutQuint } }
-        Behavior on color { ColorAnimation { duration: 120 } }
+
+        Behavior on x {
+            NumberAnimation {
+                duration: 120
+                easing.type: Easing.OutQuint
+            }
+
+        }
+
+        Behavior on width {
+            NumberAnimation {
+                duration: 120
+                easing.type: Easing.OutQuint
+            }
+
+        }
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 120
+            }
+
+        }
+
     }
 
     MouseArea {
         id: mouse
+
         anchors.fill: parent
         hoverEnabled: true
         onClicked: {
-            root.checked = !root.checked
-            root.toggled(root.checked)
+            root.checked = !root.checked;
+            root.toggled(root.checked);
         }
     }
+
 }

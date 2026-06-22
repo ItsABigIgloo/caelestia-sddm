@@ -5,7 +5,6 @@ Item {
 
     property int animDuration: 300
     property string currentUser: ""
-
     property int _activeLayer: 0
 
     function prepareForUser(user) {
@@ -21,32 +20,49 @@ Item {
 
     AnimatedImage {
         id: wallpaperA
+
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
         opacity: _activeLayer === 0 ? 1 : 0
-        Behavior on opacity {
-            NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
-        }
         onStatusChanged: {
             if (status === Image.Error)
-                source = "../assets/background"
+                source = "../assets/background";
+
         }
         Component.onCompleted: {
-            source = "../assets/background-" + root.currentUser
+            source = "../assets/background-" + root.currentUser;
         }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: root.animDuration
+                easing: Easing.InOutCubic
+            }
+
+        }
+
     }
 
     AnimatedImage {
         id: wallpaperB
+
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
         opacity: _activeLayer === 1 ? 1 : 0
-        Behavior on opacity {
-            NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
-        }
         onStatusChanged: {
             if (status === Image.Error)
-                source = "../assets/background"
+                source = "../assets/background";
+
         }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: root.animDuration
+                easing: Easing.InOutCubic
+            }
+
+        }
+
     }
+
 }
