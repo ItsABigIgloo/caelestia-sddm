@@ -1,62 +1,179 @@
-# ========================== CONFIG FOR LOCKLIKE =============================
+# =============================================================================
+# CAELESTIA LOCKLIKE — Full Configuration Template
+# =============================================================================
+# Uncomment and set values to override defaults.
+# Locale strings are auto-set by LocaleManager from locales/*.json — leave empty.
+# Colors are auto-synced by Caelestia sync.sh — do not touch.
+# =============================================================================
+
 [General]
-#! SystemInfo (overriden by sync script ignore)
+
+# --- System Info (auto-overridden by sync.sh) ---
 os=Arch
 host=localhost
 
-# ============================================================================
-# Clock
-# ============================================================================
-# 12 hours or 24 Hours true=12 [true | false]
+# --- Clock ---
+# 12-hour mode [true | false] (default: false = 24h)
 ap=false
 
-# ============================================================================
-# WELCOME MESSAGE
-# ============================================================================
-# Enable welcome message [true | false]
-enableWelcomeMessage=true
+# --- Animations ---
+# Crossfade duration in ms (default: 300)
+animDuration=300
+# Delay before crossfade starts in ms (default: 150)
+syncDelay=150
+# Background crossfade blur amount 0.0–1.0 (default: 0.5)
+bgBlur=0.5
 
-# Welcome message background opacity [0.0 to 1.0]
-welcomeBgBlurAmount=0.7
-welcomeColorOpacity=0.7
-# mainCard background opacity and blur [0.0 to 1.0]
-mainCardBlurAmount=0.9
-mainCardColorOpacity=0.9
-mainCardComponentsOpacity=0.9
-# Welcome message background blur [true | false]
-welcomeBgBlur=true
-mainCardBgBlur=true
-sessionPicker=false
+# --- Layout ---
+# Main card margin from screen edge in px (default: 20)
+# mainCardMargin=20
+# Spacing between card elements in px (default: 12)
+# layoutSpacing=12
+# Main card corner radius in px (default: 24)
+# mainCardRadius=24
+# Avatar circle diameter in px (default: 100)
+# avatarCircleSize=100
+# Avatar hexagon width in px (default: 100)
+# avatarHexagonWidth=100
+# Avatar hexagon height in px (default: 120)
+# avatarHexagonHeight=120
 
-# ============================================================================
-# AVATAR
-# ============================================================================
-# Avatar shape [hexagon | circle]
-# hexagon: hexagonal Material Design blob shape (default)
-# circle: circular crop
+# --- Avatar ---
+# Shape [hexagon | circle] (default: hexagon)
 AvatarShape=hexagon
 
-# ============================================================================
-# COLOR SCHEME
-# ============================================================================
-#! Do not touch these! (auto-synced by Caelestia)
-background=#{{ background.hex }}
-mainCard=#{{ background.hex }}
-subComponents=#{{ surfaceContainer.hex }}
-text=#{{ text.hex }}
-textDark=#{{ tertiary.hex }}
-primary=#{{ primary_paletteKeyColor.hex }}
-onPrimary=#{{ onPrimary.hex }}
-secondary=#{{ secondary.hex }}
-onSecondary=#{{ onSecondary.hex }}
-tertiary=#{{ tertiary.hex }}
-onTertiary=#{{ onTertiary.hex }}
-onSuccess=#{{ onSuccess.hex }}
-inverseOnSurface=#{{ inverseOnSurface.hex }}
-surface=#{{ surface.hex }}
-surfaceVariant=#{{ surfaceVariant.hex }}
-surfaceContainerLow=#{{ surfaceContainerLow.hex }}
-surfaceContainer=#{{ surfaceContainer.hex }}
-surfaceContainerHigh=#{{ surfaceContainerHigh.hex }}
-outline=#{{ outline.hex }}
-error=#{{ error.hex }}
+# --- Welcome / Greeting ---
+# Enable dynamic greeting message [true | false] (default: true)
+enableWelcomeMessage=true
+# Blur welcome background [true | false] (default: true)
+welcomeBgBlur=true
+# Welcome background blur strength 0.0–1.0 (default: 0.7)
+welcomeBgBlurAmount=0.7
+# Welcome background color opacity 0.0–1.0 (default: 0.7)
+welcomeColorOpacity=0.7
+
+# --- Main Card ---
+# Blur main card background [true | false] (default: true)
+mainCardBgBlur=true
+# Main card blur amount 0.0–1.0 (default: 0.9)
+mainCardBlurAmount=0.9
+# Main card background color opacity 0.0–1.0 (default: 0.9)
+mainCardColorOpacity=0.9
+# Main card component opacity 0.0–1.0 (default: 0.9)
+mainCardComponentsOpacity=0.9
+
+# --- Session Picker ---
+# Show user session selector [true | false] (default: false)
+sessionPicker=false
+
+# --- Power Dialog ---
+# Require confirmation for power actions [true | false] (default: true)
+powerConfirmEnabled=true
+# Power dialog overlay darkness 0.0–1.0 (default: 0.8)
+powerOverlayOpacity=0.8
+# Power dialog blur strength 0.0–1.0 (default: 1.0)
+powerBlur=1.0
+
+# --- UI Visibility Toggles ---
+# Show/hide individual settings panel items [true | false]
+# showWelcomeToggle=true
+# showWelcomeBgBlur=true
+# showMainCardBgBlur=true
+# showAp=true
+# showSessionPicker=true
+# showPowerConfirm=true
+# showAvatarShape=true
+# showLanguage=true
+
+# =============================================================================
+# LOCALE STRINGS (auto-set by LocaleManager from locales/*.json)
+# Leave empty — they are populated at runtime.
+# =============================================================================
+
+# --- Greeting ---
+greetingMorning=
+greetingAfternoon=
+greetingNight=
+
+# --- Input ---
+passwordPlaceholder=
+loadingText=
+capsLockWarning=
+unlockForNotifications=
+
+# --- Info Fetch ---
+fetchTitle=
+fetchLabels=
+
+# --- Settings Panel ---
+settingsTitle=
+animationSpeed=
+syncDelay=
+backgroundBlur=
+language=
+close=
+
+# --- Power Dialog ---
+shutdown=
+reboot=
+cancel=
+confirmTitle=
+confirmShutdown=
+confirmReboot=
+overlayDarkness=
+powerDialogBlur=
+
+# --- Welcome Section Labels ---
+welcomeMessageLabel=
+welcomeBgBlurLabel=
+welcomeColorOpacityLabel=
+
+# --- Card Section Labels ---
+cardBlurLabel=
+cardOpacityLabel=
+cardColorOpacityLabel=
+cardBlurToggleLabel=
+
+# --- Toggle Labels ---
+apLabel=
+sessionPickerLabel=
+powerConfirmLabel=
+
+# --- Avatar Shape Dropdown ---
+avatarShapeLabel=
+hexagonLabel=
+circleLabel=
+
+# --- Settings Group Titles ---
+groupAnimations=
+groupFonts=
+groupMainCard=
+groupWelcome=
+groupPower=
+groupSystem=
+groupAvatar=
+groupLanguage=
+
+# =============================================================================
+# COLOR SCHEME (auto-synced by Caelestia sync.sh — DO NOT TOUCH)
+# =============================================================================
+background=
+mainCard=
+subComponents=
+text=
+textDark=
+primary=
+onPrimary=
+secondary=
+onSecondary=
+tertiary=
+onTertiary=
+onSuccess=
+inverseOnSurface=
+surface=
+surfaceVariant=
+surfaceContainerLow=
+surfaceContainer=
+surfaceContainerHigh=
+outline=
+error=

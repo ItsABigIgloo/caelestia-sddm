@@ -166,6 +166,30 @@ Item {
         if (data.settingsTitleSizeLabel !== undefined)
             config.settingsTitleSizeLabel = data.settingsTitleSizeLabel;
 
+        if (data.groupAnimations !== undefined)
+            config.groupAnimations = data.groupAnimations;
+
+        if (data.groupFonts !== undefined)
+            config.groupFonts = data.groupFonts;
+
+        if (data.groupMainCard !== undefined)
+            config.groupMainCard = data.groupMainCard;
+
+        if (data.groupWelcome !== undefined)
+            config.groupWelcome = data.groupWelcome;
+
+        if (data.groupPower !== undefined)
+            config.groupPower = data.groupPower;
+
+        if (data.groupSystem !== undefined)
+            config.groupSystem = data.groupSystem;
+
+        if (data.groupAvatar !== undefined)
+            config.groupAvatar = data.groupAvatar;
+
+        if (data.groupLanguage !== undefined)
+            config.groupLanguage = data.groupLanguage;
+
     }
 
     function loadLocale(code) {
