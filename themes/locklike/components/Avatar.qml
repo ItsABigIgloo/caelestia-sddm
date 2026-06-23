@@ -8,15 +8,97 @@ Item {
 
     z: 2
 
-    /// Avatar shape: "hexagon" (Material Design blob) or "circle"
     property string avatarShape: "hexagon"
-
-    // Hexagon mode properties
+    property string currentUser: ""
     property bool hovered: false
     property int hexIndex: 0
+    property int animDuration: 300
+    property int _activeAvatar: 0
     property var shapeGetters: [MaterialShapes.getClamShell, MaterialShapes.getCookie6Sided]
+    property var fallbackCandidates: [
+        "../assets/avatar.face.icon",
+        "../assets/avatar.face",
+        "../assets/avatar.jpg",
+        "../assets/avatar.png"
+    ]
+    property int fallbackIndex: -1
 
-    // Hover interaction (switches hexagon shape on hover; no-op in circle mode)
+    ShapeCanvas {
+        id: hexMask
+        anchors.fill: parent
+        visible: root.avatarShape === "hexagon"
+        roundedPolygon: root.shapeGetters[root.hexIndex]()
+        color: "#000000"
+        clip: true
+    }
+
+    Rectangle {
+        id: circleMask
+        anchors.fill: parent
+        visible: root.avatarShape === "circle"
+        radius: Math.min(width, height) / 2
+        color: "#000000"
+    }
+
+    Image {
+        id: avatarA
+        mipmap: true
+        smooth: true
+        anchors.fill: parent
+        fillMode: Image.PreserveAspectCrop
+        asynchronous: true
+        layer.enabled: true
+        opacity: _activeAvatar === 0 ? 1 : 0
+
+        Behavior on opacity {
+            NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
+        }
+
+        layer.effect: OpacityMask {
+            maskSource: root.avatarShape === "circle" ? circleMask : hexMask
+        }
+
+        onStatusChanged: {
+            if (status === Image.Error) {
+                fallbackIndex++;
+                if (fallbackIndex < fallbackCandidates.length)
+                    source = fallbackCandidates[fallbackIndex];
+            }
+        }
+        Component.onCompleted: {
+            source = currentUser !== ""
+                ? "../assets/avatar-" + currentUser + ".face"
+                : "";
+        }
+    }
+
+    Image {
+        id: avatarB
+        mipmap: true
+        smooth: true
+        anchors.fill: parent
+        fillMode: Image.PreserveAspectCrop
+        asynchronous: true
+        layer.enabled: true
+        opacity: _activeAvatar === 0 ? 0 : 1
+
+        Behavior on opacity {
+            NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
+        }
+
+        layer.effect: OpacityMask {
+            maskSource: root.avatarShape === "circle" ? circleMask : hexMask
+        }
+
+        onStatusChanged: {
+            if (status === Image.Error) {
+                fallbackIndex++;
+                if (fallbackIndex < fallbackCandidates.length)
+                    source = fallbackCandidates[fallbackIndex];
+            }
+        }
+    }
+
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
@@ -34,63 +116,20 @@ Item {
         }
     }
 
-    // --- Mask sources for OpacityMask ---
-
-    // Hexagon shape (used as mask in hexagon mode)
-    ShapeCanvas {
-        id: hexMask
-        anchors.fill: parent
-        visible: root.avatarShape === "hexagon"
-        roundedPolygon: root.shapeGetters[root.hexIndex]()
-        color: "#000000"
-        clip: true
+    function prepareNext() {
+        if (currentUser === "") return;
+        fallbackIndex = -1;
+        var next = currentUser !== ""
+            ? "../assets/avatar-" + currentUser + ".face"
+            : "";
+        var hidden = _activeAvatar === 0 ? avatarB : avatarA;
+        hidden.source = next;
     }
 
-    // Circular mask (used as mask in circle mode)
-    Rectangle {
-        id: circleMask
-        anchors.fill: parent
-        visible: root.avatarShape === "circle"
-        radius: Math.min(width, height) / 2
-        color: "#000000"
+    function crossfade() {
+        if (currentUser === "") return;
+        _activeAvatar = _activeAvatar === 0 ? 1 : 0;
     }
 
-    // --- Profile picture ---
-
-    Image {
-        id: avatarImage
-
-        property var avatarCandidates: ["../assets/avatar.face.icon", "../assets/avatar.face", "../assets/avatar.jpg", "../assets/avatar.png"]
-        property int avatarCandidateIndex: 0
-
-        function loadNextAvatar() {
-            if (avatarCandidateIndex < avatarCandidates.length) {
-                source = avatarCandidates[avatarCandidateIndex];
-                avatarCandidateIndex++;
-            }
-        }
-
-        mipmap: true
-        smooth: true
-        anchors.fill: parent
-        fillMode: Image.PreserveAspectCrop
-        asynchronous: true
-        layer.enabled: true
-        onStatusChanged: {
-            if (status === Image.Error)
-                retryTimer.start();
-        }
-        Component.onCompleted: loadNextAvatar()
-
-        Timer {
-            id: retryTimer
-
-            interval: 0
-            onTriggered: avatarImage.loadNextAvatar()
-        }
-
-        layer.effect: OpacityMask {
-            maskSource: root.avatarShape === "circle" ? circleMask : hexMask
-        }
-    }
+    onCurrentUserChanged: prepareNext()
 }
