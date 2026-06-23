@@ -6,6 +6,10 @@ Item {
     property real rectWidth
     property real rectRadius
     property real rectBigRadius
+    property bool powerConfirmEnabled: false
+
+    signal powerClicked()
+    signal rebootClicked()
 
     anchors.fill: parent
 
@@ -31,6 +35,7 @@ Item {
             anchors.topMargin: 35
             text: "\ue8ac"
             color: config.secondary
+            Behavior on color { ColorAnimation { duration: config.animDuration !== undefined ? config.animDuration : 300 } }
             pointSize: 70
         }
 
@@ -39,14 +44,12 @@ Item {
             parentWidth: powerBtn.width
             parentHeight: powerBtn.height
             parentRadius: powerBtn.radius
-            onClicked: {
-                sddm.powerOff();
-            }
+            onClicked: powerClicked()
         }
 
         Behavior on color {
             ColorAnimation {
-                duration: 200
+                duration: config.animDuration !== undefined ? config.animDuration : 300
             }
         }
     }
@@ -71,6 +74,7 @@ Item {
             anchors.topMargin: 35
             text: "\ue863"
             color: config.secondary
+            Behavior on color { ColorAnimation { duration: config.animDuration !== undefined ? config.animDuration : 300 } }
             pointSize: 70
         }
 
@@ -79,14 +83,12 @@ Item {
             parentWidth: rebootBtn.width
             parentHeight: rebootBtn.height
             parentRadius: rebootBtn.radius
-            onClicked: {
-                sddm.reboot();
-            }
+            onClicked: rebootClicked()
         }
 
         Behavior on color {
             ColorAnimation {
-                duration: 200
+                duration: config.animDuration !== undefined ? config.animDuration : 300
             }
         }
     }
