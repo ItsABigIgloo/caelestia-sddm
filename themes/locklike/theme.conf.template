@@ -21,8 +21,8 @@ ap=false
 animDuration=300
 # Delay before crossfade starts in ms (default: 150)
 syncDelay=150
-# Background crossfade blur amount 0.0–1.0 (default: 0.5)
-bgBlur=0.5
+# Background crossfade blur amount 0.0–1.0 (default: 0)
+bgBlur=0
 
 # --- Layout ---
 # Main card margin from screen edge in px (default: 20)
@@ -49,16 +49,8 @@ enableWelcomeMessage=true
 welcomeBgBlur=true
 # Welcome background blur strength 0.0–1.0 (default: 0.7)
 welcomeBgBlurAmount=0.7
-# Welcome background color opacity 0.0–1.0 (default: 0.7)
-welcomeColorOpacity=0.7
 
 # --- Main Card ---
-# Blur main card background [true | false] (default: true)
-mainCardBgBlur=true
-# Main card blur amount 0.0–1.0 (default: 0.9)
-mainCardBlurAmount=0.9
-# Main card background color opacity 0.0–1.0 (default: 0.9)
-mainCardColorOpacity=0.9
 # Main card component opacity 0.0–1.0 (default: 0.9)
 mainCardComponentsOpacity=0.9
 
@@ -126,7 +118,6 @@ powerDialogBlurLabel=
 # --- Welcome Section Labels ---
 welcomeMessageLabel=
 welcomeBgBlurLabel=
-welcomeColorOpacityLabel=
 
 # --- Card Section Labels ---
 cardBlurLabel=
