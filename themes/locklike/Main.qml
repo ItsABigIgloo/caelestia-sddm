@@ -48,23 +48,88 @@ Rectangle {
 
 
     Component.onCompleted: {
+        function load(key, fallback) {
+            return settingsStore.get(key, fallback);
+        }
+
         config.animDuration = parseInt(config.animDuration) || 300;
         config.syncDelay = parseInt(config.syncDelay) || 150;
-        var ad = settingsStore.get("animDuration", config.animDuration);
+
+        var ad = load("animDuration", config.animDuration);
         root.animDuration = parseInt(ad);
         config.animDuration = parseInt(ad);
-        var sd = settingsStore.get("syncDelay", config.syncDelay);
+
+        var sd = load("syncDelay", config.syncDelay);
         root.syncDelay = parseInt(sd);
         config.syncDelay = parseInt(sd);
-        var bb = settingsStore.get("bgBlur", config.bgBlur);
+
+        var bb = load("bgBlur", config.bgBlur);
         root.bgBlur = parseFloat(bb);
         config.bgBlur = parseFloat(bb);
-        var po = settingsStore.get("powerOverlay", Math.round(root.powerOverlayOpacity * 100));
+
+        var po = load("powerOverlay", Math.round(root.powerOverlayOpacity * 100));
         root.powerOverlayOpacity = parseInt(po) / 100;
         config.powerOverlayOpacity = root.powerOverlayOpacity;
-        var pb = settingsStore.get("powerBlur", Math.round(root.powerBlur * 100));
+
+        var pb = load("powerBlur", Math.round(root.powerBlur * 100));
         root.powerBlur = parseInt(pb) / 100;
         config.powerBlur = root.powerBlur;
+
+        var wm = load("enableWelcomeMessage", config.enableWelcomeMessage);
+        root.welcomeMessageEnabled = wm !== "false";
+        config.enableWelcomeMessage = wm;
+
+        var sp = load("sessionPicker", config.sessionPicker);
+        root.sessionPickerEnabled = sp === "true";
+        config.sessionPicker = sp;
+
+        var pc = load("powerConfirmEnabled", config.powerConfirmEnabled);
+        root.powerConfirmEnabled = pc !== "false";
+        config.powerConfirmEnabled = pc;
+
+        var ap = load("ap", config.ap);
+        root.ap = ap === "true";
+        config.ap = ap;
+
+        var as = load("avatarShape", config.AvatarShape || "hexagon");
+        root.avatarShape = as;
+        config.AvatarShape = as;
+
+        var mb = load("mainCardBlurAmount", config.mainCardBlurAmount);
+        config.mainCardBlurAmount = parseFloat(mb) || 1.0;
+
+        var mo = load("mainCardComponentsOpacity", config.mainCardComponentsOpacity);
+        root.mainCardComponentsOpacity = parseFloat(mo) || 1.0;
+        config.mainCardComponentsOpacity = root.mainCardComponentsOpacity;
+
+        var mbb = load("mainCardBgBlur", config.mainCardBgBlur);
+        root.mainCardBgBlur = mbb === "true";
+        config.mainCardBgBlur = mbb;
+
+        var mco = load("mainCardColorOpacity", config.mainCardColorOpacity);
+        config.mainCardColorOpacity = parseFloat(mco) || 0.9;
+
+        var wbb = load("welcomeBgBlur", config.welcomeBgBlur);
+        root.welcomeBgBlur = wbb === "true";
+        config.welcomeBgBlur = wbb;
+
+        var wba = load("welcomeBgBlurAmount", config.welcomeBgBlurAmount);
+        root.welcomeBgBlurAmount = parseFloat(wba) || 0.7;
+        config.welcomeBgBlurAmount = root.welcomeBgBlurAmount;
+
+        var wco = load("welcomeColorOpacity", config.welcomeColorOpacity);
+        config.welcomeColorOpacity = parseFloat(wco) || 0.7;
+
+        var sf = load("settingsFontSize", config.settingsFontSize);
+        config.settingsFontSize = parseInt(sf) || 18;
+
+        var st = load("settingsTitleSize", config.settingsTitleSize);
+        config.settingsTitleSize = parseInt(st) || 24;
+
+        var savedLocale = load("locale", "");
+        if (savedLocale !== "") {
+            Qt.callLater(function() { localeManager.switchLanguage(savedLocale); });
+        }
     }
 
     onCurrentUserChanged: {
@@ -401,13 +466,39 @@ Rectangle {
                 powerConfirmEnabled: root.powerConfirmEnabled
                 apEnabled: root.ap
                 avatarShape: root.avatarShape
+                syncDelay: root.syncDelay
+                bgBlur: root.bgBlur
+                powerBlur: Math.round(root.powerBlur * 100)
+                powerOverlay: Math.round(root.powerOverlayOpacity * 100)
+                mainCardBlur: root.mainCardBlurAmount
+                mainCardOpacity: root.mainCardComponentsOpacity
+                mainCardBgBlurEnabled: root.mainCardBgBlur
+                mainCardColorOpacityVal: parseFloat(config.mainCardColorOpacity) || 0.9
+                welcomeBgBlurVal: root.welcomeBgBlur
+                welcomeBgBlurAmountVal: root.welcomeBgBlurAmount
+                welcomeColorOpacityVal: parseFloat(config.welcomeColorOpacity) || 0.7
+                settingsFontSize: parseInt(config.settingsFontSize) || 18
+                settingsTitleSize: parseInt(config.settingsTitleSize) || 24
                 localeManager: localeManager
                 onAnimDurationChanged: { var v = rightColumn.animDuration; if (v !== root.animDuration) { root.animDuration = v; config.animDuration = v; settingsStore.set("animDuration", v); } }
-                onWelcomeEnabledChanged: { var v = rightColumn.welcomeEnabled; root.welcomeMessageEnabled = v; config.enableWelcomeMessage = v.toString(); }
-                onSessionPickerEnabledChanged: { var v = rightColumn.sessionPickerEnabled; root.sessionPickerEnabled = v; config.sessionPicker = v.toString(); }
-                onPowerConfirmEnabledChanged: { var v = rightColumn.powerConfirmEnabled; root.powerConfirmEnabled = v; config.powerConfirmEnabled = v.toString(); leftColumn.systemButtons.powerConfirmEnabled = v; }
-                onApEnabledChanged: { var v = rightColumn.apEnabled; root.ap = v; config.ap = v.toString(); }
-                onAvatarShapeChanged: { var v = rightColumn.avatarShape; root.avatarShape = v; config.AvatarShape = v; }
+                onBgBlurChanged: { var v = rightColumn.bgBlur; if (v !== root.bgBlur) { root.bgBlur = v; config.bgBlur = v; settingsStore.set("bgBlur", v); } }
+                onSyncDelayChanged: { var v = rightColumn.syncDelay; if (v !== root.syncDelay) { root.syncDelay = v; config.syncDelay = v; settingsStore.set("syncDelay", v); } }
+                onWelcomeEnabledChanged: { var v = rightColumn.welcomeEnabled; root.welcomeMessageEnabled = v; config.enableWelcomeMessage = v.toString(); settingsStore.set("enableWelcomeMessage", v.toString()); }
+                onSessionPickerEnabledChanged: { var v = rightColumn.sessionPickerEnabled; root.sessionPickerEnabled = v; config.sessionPicker = v.toString(); settingsStore.set("sessionPicker", v.toString()); }
+                onPowerConfirmEnabledChanged: { var v = rightColumn.powerConfirmEnabled; root.powerConfirmEnabled = v; config.powerConfirmEnabled = v.toString(); settingsStore.set("powerConfirmEnabled", v.toString()); leftColumn.systemButtons.powerConfirmEnabled = v; }
+                onApEnabledChanged: { var v = rightColumn.apEnabled; root.ap = v; config.ap = v.toString(); settingsStore.set("ap", v.toString()); }
+                onAvatarShapeChanged: { var v = rightColumn.avatarShape; root.avatarShape = v; config.AvatarShape = v; settingsStore.set("avatarShape", v); }
+                onPowerOverlayChanged: { var v = rightColumn.powerOverlay; root.powerOverlayOpacity = v / 100; config.powerOverlayOpacity = root.powerOverlayOpacity; settingsStore.set("powerOverlay", v); }
+                onPowerBlurChanged: { var v = rightColumn.powerBlur; root.powerBlur = v / 100; config.powerBlur = root.powerBlur; settingsStore.set("powerBlur", v); }
+                onMainCardBlurChanged: { var v = rightColumn.mainCardBlur; config.mainCardBlurAmount = v; settingsStore.set("mainCardBlurAmount", v); }
+                onMainCardOpacityChanged: { var v = rightColumn.mainCardOpacity; root.mainCardComponentsOpacity = v; config.mainCardComponentsOpacity = v; settingsStore.set("mainCardComponentsOpacity", v); }
+                onMainCardBgBlurEnabledChanged: { var v = rightColumn.mainCardBgBlurEnabled; root.mainCardBgBlur = v; config.mainCardBgBlur = v.toString(); settingsStore.set("mainCardBgBlur", v.toString()); }
+                onMainCardColorOpacityValChanged: { var v = rightColumn.mainCardColorOpacityVal; config.mainCardColorOpacity = v; settingsStore.set("mainCardColorOpacity", v); }
+                onWelcomeBgBlurValChanged: { var v = rightColumn.welcomeBgBlurVal; root.welcomeBgBlur = v; config.welcomeBgBlur = v.toString(); settingsStore.set("welcomeBgBlur", v.toString()); }
+                onWelcomeBgBlurAmountValChanged: { var v = rightColumn.welcomeBgBlurAmountVal; root.welcomeBgBlurAmount = v; config.welcomeBgBlurAmount = v; settingsStore.set("welcomeBgBlurAmount", v); }
+                onWelcomeColorOpacityValChanged: { var v = rightColumn.welcomeColorOpacityVal; config.welcomeColorOpacity = v; settingsStore.set("welcomeColorOpacity", v); }
+                onSettingsFontSizeChanged: { var v = rightColumn.settingsFontSize; config.settingsFontSize = v; settingsStore.set("settingsFontSize", v); }
+                onSettingsTitleSizeChanged: { var v = rightColumn.settingsTitleSize; config.settingsTitleSize = v; settingsStore.set("settingsTitleSize", v); }
                 onSettingsOpenChanged: { if (!rightColumn.settingsOpen) keylogger.forceActiveFocus(); }
             }
         }
@@ -445,6 +536,7 @@ Rectangle {
 
         onLanguageChanged: {
             leftColumn.refreshGreeting();
+            settingsStore.set("locale", localeManager.currentLocale);
         }
     }
 

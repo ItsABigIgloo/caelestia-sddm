@@ -107,9 +107,9 @@ fetchLabels=
 
 # --- Settings Panel ---
 settingsTitle=
-animationSpeed=
-syncDelay=
-backgroundBlur=
+animationSpeedLabel=
+syncDelayLabel=
+backgroundBlurLabel=
 language=
 close=
 
@@ -120,8 +120,8 @@ cancel=
 confirmTitle=
 confirmShutdown=
 confirmReboot=
-overlayDarkness=
-powerDialogBlur=
+overlayDarknessLabel=
+powerDialogBlurLabel=
 
 # --- Welcome Section Labels ---
 welcomeMessageLabel=
