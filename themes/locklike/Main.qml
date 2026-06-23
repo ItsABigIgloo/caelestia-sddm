@@ -1,3 +1,4 @@
+import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
@@ -19,9 +20,6 @@ Rectangle {
     property bool firstInput: welcomeMessageEnabled
     property bool loading: false
     property string buffer
-    property real welcomeBgBlurAmount: parseFloat(config.welcomeBgBlurAmount) || 1
-    property bool welcomeBgBlur: config.welcomeBgBlur === "true"
-    property real mainCardBlurAmount: parseFloat(config.mainCardBlurAmount) || 1
     property real mainCardComponentsOpacity: {
         var value = parseFloat(config.mainCardComponentsOpacity);
         if (isNaN(value) || value < 0.6)
@@ -30,7 +28,6 @@ Rectangle {
         return value;
     }
     property bool capsLockOn: false
-    property bool mainCardBgBlur: config.mainCardBgBlur === "true"
     property int sessionIndex
 
     // rounding stuff
@@ -45,7 +42,6 @@ Rectangle {
     property real bgBlur: parseFloat(config.bgBlur) || 0
     property bool powerConfirmEnabled: config.powerConfirmEnabled !== "false"
     property real powerOverlayOpacity: parseFloat(config.powerOverlayOpacity) || 0.8
-    property real powerBlur: parseFloat(config.powerBlur) || 1.0
 
 
     Component.onCompleted: {
@@ -72,10 +68,6 @@ Rectangle {
         root.powerOverlayOpacity = parseInt(po) / 100;
         config.powerOverlayOpacity = root.powerOverlayOpacity;
 
-        var pb = load("powerBlur", Math.round(root.powerBlur * 100));
-        root.powerBlur = parseInt(pb) / 100;
-        config.powerBlur = root.powerBlur;
-
         var wm = load("enableWelcomeMessage", config.enableWelcomeMessage);
         root.welcomeMessageEnabled = wm !== "false";
         config.enableWelcomeMessage = wm;
@@ -96,27 +88,12 @@ Rectangle {
         root.avatarShape = as;
         config.AvatarShape = as;
 
-        var mb = load("mainCardBlurAmount", config.mainCardBlurAmount);
-        config.mainCardBlurAmount = parseFloat(mb) || 1.0;
-
         var mo = load("mainCardComponentsOpacity", config.mainCardComponentsOpacity);
         root.mainCardComponentsOpacity = parseFloat(mo) || 1.0;
         config.mainCardComponentsOpacity = root.mainCardComponentsOpacity;
 
-        var mbb = load("mainCardBgBlur", config.mainCardBgBlur);
-        root.mainCardBgBlur = mbb === "true";
-        config.mainCardBgBlur = mbb;
-
         var mco = load("mainCardColorOpacity", config.mainCardColorOpacity);
         config.mainCardColorOpacity = parseFloat(mco) || 0.9;
-
-        var wbb = load("welcomeBgBlur", config.welcomeBgBlur);
-        root.welcomeBgBlur = wbb === "true";
-        config.welcomeBgBlur = wbb;
-
-        var wba = load("welcomeBgBlurAmount", config.welcomeBgBlurAmount);
-        root.welcomeBgBlurAmount = parseFloat(wba) || 0.7;
-        config.welcomeBgBlurAmount = root.welcomeBgBlurAmount;
 
         var wco = load("welcomeColorOpacity", config.welcomeColorOpacity);
         config.welcomeColorOpacity = parseFloat(wco) || 0.7;
@@ -126,6 +103,30 @@ Rectangle {
 
         var st = load("settingsTitleSize", config.settingsTitleSize);
         config.settingsTitleSize = parseInt(st) || 24;
+
+        var wf = load("welcomeFontSize", config.welcomeFontSize);
+        config.welcomeFontSize = parseInt(wf) || 40;
+
+        var fc = load("fetchFontSize", config.fetchFontSize);
+        config.fetchFontSize = parseInt(fc) || 18;
+
+        var bt = load("buttonFontSize", config.buttonFontSize);
+        config.buttonFontSize = parseInt(bt) || 14;
+
+        var dt = load("dialogTitleSize", config.dialogTitleSize);
+        config.dialogTitleSize = parseInt(dt) || 20;
+
+        var db = load("dialogBodySize", config.dialogBodySize);
+        config.dialogBodySize = parseInt(db) || 14;
+
+        var qf = load("quoteFontSize", config.quoteFontSize);
+        config.quoteFontSize = parseInt(qf) || 20;
+
+        var dl = load("dropdownLabelSize", config.dropdownLabelSize);
+        config.dropdownLabelSize = parseInt(dl) || 14;
+
+        var di = load("dropdownItemSize", config.dropdownItemSize);
+        config.dropdownItemSize = parseInt(di) || 13;
 
         var savedLocale = load("locale", "");
         if (savedLocale !== "") {
@@ -280,8 +281,7 @@ Rectangle {
         rootWidth: root.width
         greetingText: leftColumn.welcomeString
         username: userPicker.currentText
-        blurAmount: root.welcomeBgBlurAmount
-        blurEnabled: root.welcomeBgBlur
+        wallpaperSource: Qt.resolvedUrl(wallpaperComponent.activeSource)
     }
 
     Rectangle {
@@ -301,10 +301,12 @@ Rectangle {
             targetWidth: mainCard.width
             targetHeight: mainCard.height
             animDuration: 0
-            blurAmount: root.mainCardBlurAmount
+            blurAmount: 0.5
+            blurEnabled: false
             bgColor: config.mainCard
             visibleState: !root.firstInput
             radius: 50
+            source: Qt.resolvedUrl("../assets/background")
         }
 
         MainClock {
@@ -347,6 +349,7 @@ Rectangle {
             font.family: googleSansFlex.name
             font.bold: true
             font.variableAxes: mainCard.fontAxesTitle
+            opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
             Behavior on color {
                 ColorAnimation { duration: root.animDuration }
@@ -458,17 +461,20 @@ Rectangle {
                 avatarShape: root.avatarShape
                 syncDelay: root.syncDelay
                 bgBlur: root.bgBlur
-                powerBlur: Math.round(root.powerBlur * 100)
                 powerOverlay: Math.round(root.powerOverlayOpacity * 100)
-                mainCardBlur: root.mainCardBlurAmount
                 mainCardOpacity: root.mainCardComponentsOpacity
-                mainCardBgBlurEnabled: root.mainCardBgBlur
                 mainCardColorOpacityVal: parseFloat(config.mainCardColorOpacity) || 0.9
-                welcomeBgBlurVal: root.welcomeBgBlur
-                welcomeBgBlurAmountVal: root.welcomeBgBlurAmount
                 welcomeColorOpacityVal: parseFloat(config.welcomeColorOpacity) || 0.7
                 settingsFontSize: parseInt(config.settingsFontSize) || 18
                 settingsTitleSize: parseInt(config.settingsTitleSize) || 24
+                welcomeFontSize: parseInt(config.welcomeFontSize) || 40
+                fetchFontSize: parseInt(config.fetchFontSize) || 18
+                buttonFontSize: parseInt(config.buttonFontSize) || 14
+                dialogTitleSize: parseInt(config.dialogTitleSize) || 20
+                dialogBodySize: parseInt(config.dialogBodySize) || 14
+                quoteFontSize: parseInt(config.quoteFontSize) || 20
+                dropdownLabelSize: parseInt(config.dropdownLabelSize) || 14
+                dropdownItemSize: parseInt(config.dropdownItemSize) || 13
                 localeManager: localeManager
                 onAnimDurationChanged: { var v = rightColumn.animDuration; if (v !== root.animDuration) { root.animDuration = v; config.animDuration = v; settingsStore.set("animDuration", v); } }
                 onBgBlurChanged: { var v = rightColumn.bgBlur; if (v !== root.bgBlur) { root.bgBlur = v; config.bgBlur = v; settingsStore.set("bgBlur", v); } }
@@ -479,16 +485,19 @@ Rectangle {
                 onApEnabledChanged: { var v = rightColumn.apEnabled; root.ap = v; config.ap = v.toString(); settingsStore.set("ap", v.toString()); }
                 onAvatarShapeChanged: { var v = rightColumn.avatarShape; root.avatarShape = v; config.AvatarShape = v; settingsStore.set("avatarShape", v); }
                 onPowerOverlayChanged: { var v = rightColumn.powerOverlay; root.powerOverlayOpacity = v / 100; config.powerOverlayOpacity = root.powerOverlayOpacity; settingsStore.set("powerOverlay", v); }
-                onPowerBlurChanged: { var v = rightColumn.powerBlur; root.powerBlur = v / 100; config.powerBlur = root.powerBlur; settingsStore.set("powerBlur", v); }
-                onMainCardBlurChanged: { var v = rightColumn.mainCardBlur; config.mainCardBlurAmount = v; settingsStore.set("mainCardBlurAmount", v); }
                 onMainCardOpacityChanged: { var v = rightColumn.mainCardOpacity; root.mainCardComponentsOpacity = v; config.mainCardComponentsOpacity = v; settingsStore.set("mainCardComponentsOpacity", v); }
-                onMainCardBgBlurEnabledChanged: { var v = rightColumn.mainCardBgBlurEnabled; root.mainCardBgBlur = v; config.mainCardBgBlur = v.toString(); settingsStore.set("mainCardBgBlur", v.toString()); }
                 onMainCardColorOpacityValChanged: { var v = rightColumn.mainCardColorOpacityVal; config.mainCardColorOpacity = v; settingsStore.set("mainCardColorOpacity", v); }
-                onWelcomeBgBlurValChanged: { var v = rightColumn.welcomeBgBlurVal; root.welcomeBgBlur = v; config.welcomeBgBlur = v.toString(); settingsStore.set("welcomeBgBlur", v.toString()); }
-                onWelcomeBgBlurAmountValChanged: { var v = rightColumn.welcomeBgBlurAmountVal; root.welcomeBgBlurAmount = v; config.welcomeBgBlurAmount = v; settingsStore.set("welcomeBgBlurAmount", v); }
                 onWelcomeColorOpacityValChanged: { var v = rightColumn.welcomeColorOpacityVal; config.welcomeColorOpacity = v; settingsStore.set("welcomeColorOpacity", v); }
                 onSettingsFontSizeChanged: { var v = rightColumn.settingsFontSize; config.settingsFontSize = v; settingsStore.set("settingsFontSize", v); }
                 onSettingsTitleSizeChanged: { var v = rightColumn.settingsTitleSize; config.settingsTitleSize = v; settingsStore.set("settingsTitleSize", v); }
+                onWelcomeFontSizeChanged: { var v = rightColumn.welcomeFontSize; config.welcomeFontSize = v; settingsStore.set("welcomeFontSize", v); }
+                onFetchFontSizeChanged: { var v = rightColumn.fetchFontSize; config.fetchFontSize = v; settingsStore.set("fetchFontSize", v); }
+                onButtonFontSizeChanged: { var v = rightColumn.buttonFontSize; config.buttonFontSize = v; settingsStore.set("buttonFontSize", v); }
+                onDialogTitleSizeChanged: { var v = rightColumn.dialogTitleSize; config.dialogTitleSize = v; settingsStore.set("dialogTitleSize", v); }
+                onDialogBodySizeChanged: { var v = rightColumn.dialogBodySize; config.dialogBodySize = v; settingsStore.set("dialogBodySize", v); }
+                onQuoteFontSizeChanged: { var v = rightColumn.quoteFontSize; config.quoteFontSize = v; settingsStore.set("quoteFontSize", v); }
+                onDropdownLabelSizeChanged: { var v = rightColumn.dropdownLabelSize; config.dropdownLabelSize = v; settingsStore.set("dropdownLabelSize", v); }
+                onDropdownItemSizeChanged: { var v = rightColumn.dropdownItemSize; config.dropdownItemSize = v; settingsStore.set("dropdownItemSize", v); }
                 onSettingsOpenChanged: { if (!rightColumn.settingsOpen) keylogger.forceActiveFocus(); }
             }
         }
@@ -554,7 +563,6 @@ Rectangle {
         anchors.fill: parent
         animDuration: root.animDuration
         overlayOpacity: root.powerOverlayOpacity
-        powerBlur: root.powerBlur
         powerConfirmEnabled: root.powerConfirmEnabled
         onConfirmed: function(cmd) {
             if (cmd === "poweroff") sddm.powerOff();

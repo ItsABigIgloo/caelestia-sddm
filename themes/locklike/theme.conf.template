@@ -45,10 +45,6 @@ AvatarShape=hexagon
 # --- Welcome / Greeting ---
 # Enable dynamic greeting message [true | false] (default: true)
 enableWelcomeMessage=true
-# Blur welcome background [true | false] (default: true)
-welcomeBgBlur=true
-# Welcome background blur strength 0.0–1.0 (default: 0.7)
-welcomeBgBlurAmount=0.7
 
 # --- Main Card ---
 # Main card component opacity 0.0–1.0 (default: 0.9)
@@ -63,14 +59,11 @@ sessionPicker=false
 powerConfirmEnabled=true
 # Power dialog overlay darkness 0.0–1.0 (default: 0.8)
 powerOverlayOpacity=0.8
-# Power dialog blur strength 0.0–1.0 (default: 1.0)
-powerBlur=1.0
 
 # --- UI Visibility Toggles ---
 # Show/hide individual settings panel items [true | false]
 # showWelcomeToggle=true
 # showWelcomeBgBlur=true
-# showMainCardBgBlur=true
 # showAp=true
 # showSessionPicker=true
 # showPowerConfirm=true
@@ -113,17 +106,12 @@ confirmTitle=
 confirmShutdown=
 confirmReboot=
 overlayDarknessLabel=
-powerDialogBlurLabel=
 
 # --- Welcome Section Labels ---
 welcomeMessageLabel=
-welcomeBgBlurLabel=
 
 # --- Card Section Labels ---
-cardBlurLabel=
 cardOpacityLabel=
-cardColorOpacityLabel=
-cardBlurToggleLabel=
 
 # --- Toggle Labels ---
 apLabel=

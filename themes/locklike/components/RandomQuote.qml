@@ -6,6 +6,7 @@ Item {
     property alias color: quote.color
     property alias maxWidth: quote.width
     property string locale: "en"
+    property int fontSize: 20
 
     anchors.fill: parent
 
@@ -43,7 +44,7 @@ Item {
             width: 100
             text: ""
             color: "white"
-            font.pointSize: 20
+            font.pixelSize: root.fontSize
             font.family: "Rubik"
             font.italic: true
             wrapMode: Text.WordWrap
@@ -56,6 +57,7 @@ Item {
             width: quote.width
             text: ""
             color: config.primary
+            Behavior on color { ColorAnimation { duration: config.animDuration !== undefined ? config.animDuration : 300 } }
             font.pointSize: 15
             font.family: "CaskaydiaCove NF"
             font.bold: true

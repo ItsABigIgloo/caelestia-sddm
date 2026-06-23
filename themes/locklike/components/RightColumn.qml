@@ -23,16 +23,19 @@ ColumnLayout {
     property int syncDelay: 150
     property real bgBlur: 0.5
     property int powerOverlay: 60
-    property int powerBlur: 100
-    property real mainCardBlur: parseFloat(config.mainCardBlurAmount) || 1.0
     property real mainCardOpacity: parseFloat(config.mainCardComponentsOpacity) || 1.0
-    property bool mainCardBgBlurEnabled: config.mainCardBgBlur === "true"
-    property real welcomeBgBlurAmountVal: parseFloat(config.welcomeBgBlurAmount) || 1.0
-    property bool welcomeBgBlurVal: config.welcomeBgBlur === "true"
     property real welcomeColorOpacityVal: parseFloat(config.welcomeColorOpacity) || 0.7
     property real mainCardColorOpacityVal: parseFloat(config.mainCardColorOpacity) || 0.9
     property int settingsFontSize: parseInt(config.settingsFontSize) || 18
     property int settingsTitleSize: parseInt(config.settingsTitleSize) || 24
+    property int welcomeFontSize: parseInt(config.welcomeFontSize) || 40
+    property int fetchFontSize: parseInt(config.fetchFontSize) || 18
+    property int buttonFontSize: parseInt(config.buttonFontSize) || 14
+    property int dialogTitleSize: parseInt(config.dialogTitleSize) || 20
+    property int dialogBodySize: parseInt(config.dialogBodySize) || 14
+    property int quoteFontSize: parseInt(config.quoteFontSize) || 20
+    property int dropdownLabelSize: parseInt(config.dropdownLabelSize) || 14
+    property int dropdownItemSize: parseInt(config.dropdownItemSize) || 13
 
     function closeSettings() {
         settingsOpen = false;
@@ -56,6 +59,7 @@ ColumnLayout {
             locale: root.locale
             maxWidth: parent.width - 40
             color: config.text
+            fontSize: root.quoteFontSize
         }
 
         Behavior on opacity {
@@ -242,6 +246,102 @@ ColumnLayout {
                         fontSize: root.settingsFontSize
                         onValueModified: root.settingsTitleSize = value
                     }
+
+                    SliderRow {
+                        labelText: config.welcomeFontSizeLabel
+                        sliderValue: root.welcomeFontSize
+                        maxValue: 72
+                        stepSize: 1
+                        valueText: root.welcomeFontSize + "px"
+                        animDuration: root.animDuration
+                        fontSize: root.settingsFontSize
+                        showWhen: config.showWelcomeFontSize !== "false"
+                        onValueModified: root.welcomeFontSize = value
+                    }
+
+                    SliderRow {
+                        labelText: config.quoteFontSizeLabel
+                        sliderValue: root.quoteFontSize
+                        maxValue: 50
+                        stepSize: 1
+                        valueText: root.quoteFontSize + "px"
+                        animDuration: root.animDuration
+                        fontSize: root.settingsFontSize
+                        showWhen: config.showQuoteFontSize !== "false"
+                        onValueModified: root.quoteFontSize = value
+                    }
+
+                    SliderRow {
+                        labelText: config.fetchFontSizeLabel
+                        sliderValue: root.fetchFontSize
+                        maxValue: 30
+                        stepSize: 1
+                        valueText: root.fetchFontSize + "px"
+                        animDuration: root.animDuration
+                        fontSize: root.settingsFontSize
+                        showWhen: config.showFetchFontSize !== "false"
+                        onValueModified: root.fetchFontSize = value
+                    }
+
+                    SliderRow {
+                        labelText: config.buttonFontSizeLabel
+                        sliderValue: root.buttonFontSize
+                        maxValue: 24
+                        stepSize: 1
+                        valueText: root.buttonFontSize + "px"
+                        animDuration: root.animDuration
+                        fontSize: root.settingsFontSize
+                        showWhen: config.showButtonFontSize !== "false"
+                        onValueModified: root.buttonFontSize = value
+                    }
+
+                    SliderRow {
+                        labelText: config.dialogTitleSizeLabel
+                        sliderValue: root.dialogTitleSize
+                        maxValue: 36
+                        stepSize: 1
+                        valueText: root.dialogTitleSize + "px"
+                        animDuration: root.animDuration
+                        fontSize: root.settingsFontSize
+                        showWhen: config.showDialogTitleSize !== "false"
+                        onValueModified: root.dialogTitleSize = value
+                    }
+
+                    SliderRow {
+                        labelText: config.dialogBodySizeLabel
+                        sliderValue: root.dialogBodySize
+                        maxValue: 24
+                        stepSize: 1
+                        valueText: root.dialogBodySize + "px"
+                        animDuration: root.animDuration
+                        fontSize: root.settingsFontSize
+                        showWhen: config.showDialogBodySize !== "false"
+                        onValueModified: root.dialogBodySize = value
+                    }
+
+                    SliderRow {
+                        labelText: config.dropdownLabelSizeLabel
+                        sliderValue: root.dropdownLabelSize
+                        maxValue: 24
+                        stepSize: 1
+                        valueText: root.dropdownLabelSize + "px"
+                        animDuration: root.animDuration
+                        fontSize: root.settingsFontSize
+                        showWhen: config.showDropdownLabelSize !== "false"
+                        onValueModified: root.dropdownLabelSize = value
+                    }
+
+                    SliderRow {
+                        labelText: config.dropdownItemSizeLabel
+                        sliderValue: root.dropdownItemSize
+                        maxValue: 24
+                        stepSize: 1
+                        valueText: root.dropdownItemSize + "px"
+                        animDuration: root.animDuration
+                        fontSize: root.settingsFontSize
+                        showWhen: config.showDropdownItemSize !== "false"
+                        onValueModified: root.dropdownItemSize = value
+                    }
                 }
 
                 SettingsGroup {
@@ -249,18 +349,6 @@ ColumnLayout {
                     groupVisible: config.showMainCardSettingsGroup !== "false"
                     fontSize: root.settingsFontSize
                     animDuration: root.animDuration
-
-                    SliderRow {
-                        labelText: config.cardBlurLabel
-                        sliderValue: Math.round(root.mainCardBlur * 100)
-                        maxValue: 100
-                        stepSize: 1
-                        valueText: Math.round(root.mainCardBlur * 100) + "%"
-                        animDuration: root.animDuration
-                        fontSize: root.settingsFontSize
-                        showWhen: config.showMainCardBlur !== "false"
-                        onValueModified: root.mainCardBlur = value / 100
-                    }
 
                     SliderRow {
                         labelText: config.cardOpacityLabel
@@ -285,14 +373,6 @@ ColumnLayout {
                         showWhen: config.showMainCardColorOpacity !== "false"
                         onValueModified: root.mainCardColorOpacityVal = value / 100
                     }
-
-                    ToggleRow {
-                        labelText: config.cardBlurToggleLabel
-                        toggleChecked: root.mainCardBgBlurEnabled
-                        fontSize: root.settingsFontSize
-                        showWhen: config.showMainCardBgBlur !== "false"
-                        onToggled: root.mainCardBgBlurEnabled = value
-                    }
                 }
 
                 SettingsGroup {
@@ -307,26 +387,6 @@ ColumnLayout {
                         fontSize: root.settingsFontSize
                         showWhen: config.showWelcomeToggle !== "false"
                         onToggled: root.welcomeEnabled = value
-                    }
-
-                    ToggleRow {
-                        labelText: config.welcomeBgBlurLabel
-                        toggleChecked: root.welcomeBgBlurVal
-                        fontSize: root.settingsFontSize
-                        showWhen: config.showWelcomeBgBlur !== "false"
-                        onToggled: root.welcomeBgBlurVal = value
-                    }
-
-                    SliderRow {
-                        labelText: config.welcomeBgBlurLabel
-                        sliderValue: Math.round(root.welcomeBgBlurAmountVal * 100)
-                        maxValue: 100
-                        stepSize: 1
-                        valueText: Math.round(root.welcomeBgBlurAmountVal * 100) + "%"
-                        animDuration: root.animDuration
-                        fontSize: root.settingsFontSize
-                        showWhen: config.showWelcomeBgBlurAmount !== "false"
-                        onValueModified: root.welcomeBgBlurAmountVal = value / 100
                     }
 
                     SliderRow {
@@ -358,18 +418,6 @@ ColumnLayout {
                         fontSize: root.settingsFontSize
                         showWhen: config.showPowerOverlay !== "false"
                         onValueModified: root.powerOverlay = value
-                    }
-
-                    SliderRow {
-                        labelText: config.powerDialogBlurLabel
-                        sliderValue: root.powerBlur
-                        maxValue: 100
-                        stepSize: 1
-                        valueText: root.powerBlur + "%"
-                        animDuration: root.animDuration
-                        fontSize: root.settingsFontSize
-                        showWhen: config.showPowerBlur !== "false"
-                        onValueModified: root.powerBlur = value
                     }
 
                     ToggleRow {

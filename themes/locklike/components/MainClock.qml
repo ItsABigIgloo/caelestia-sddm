@@ -29,35 +29,68 @@ Item {
         source: "../assets/google-sans-flex/GoogleSansFlex.ttf"
     }
 
-    Row {
+    Item {
         id: clock
         anchors.centerIn: parent
+        opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
+        implicitWidth: ampmText.visible
+            ? hourText.implicitWidth + 5 + minuteText.implicitWidth + 8 + ampmText.implicitWidth
+            : hourText.implicitWidth + 5 + minuteText.implicitWidth
+        implicitHeight: Math.max(hourText.implicitHeight, minuteText.implicitHeight)
 
         Text {
             id: hourText
+            x: 0
+            y: 0
 
             renderType: Text.NativeRendering
             font.family: googleSansFlex.name
             font.variableAxes: root.fontAxesHours
             font.pixelSize: Math.round(224 * root.centerScale)
             color: Qt.lighter(config.primary, 1.6)
-            text: Qt.formatTime(root.currentTime, "hh")
+            Behavior on color { ColorAnimation { duration: config.animDuration !== undefined ? config.animDuration : 300 } }
+            text: {
+                var d = root.currentTime;
+                if (root.ap) {
+                    var h = d.getHours() % 12;
+                    if (h === 0) h = 12;
+                    return h.toString();
+                }
+                return d.getHours().toString().padStart(2, '0');
+            }
         }
 
         Item {
-            width: 5
+            x: hourText.x + hourText.width + 2
+            y: 0
+            width: 3
             height: 1
         }
 
         Text {
             id: minuteText
+            x: hourText.x + hourText.width + 2 + 3
 
             renderType: Text.NativeRendering
             font.family: googleSansFlex.name
             font.variableAxes: root.fontAxesMinutes
             font.pixelSize: Math.round(224 * root.centerScale)
             color: config.secondary
-            text: Qt.formatTime(root.currentTime, "mm")
+            Behavior on color { ColorAnimation { duration: config.animDuration !== undefined ? config.animDuration : 300 } }
+            text: root.currentTime.getMinutes().toString().padStart(2, '0')
+        }
+
+        Text {
+            id: ampmText
+            x: minuteText.x + minuteText.width + 8
+            y: minuteText.baselineOffset - baselineOffset
+            visible: root.ap
+
+            renderType: Text.NativeRendering
+            font.family: googleSansFlex.name
+            font.pixelSize: Math.round(60 * root.centerScale)
+            color: config.secondary
+            text: root.currentTime.getHours() >= 12 ? "PM" : "AM"
         }
     }
 
