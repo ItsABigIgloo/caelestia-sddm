@@ -20,8 +20,8 @@ Item {
     readonly property int _menuMax: 160
     readonly property int _gap: 10
     readonly property int _marg: 4
-    readonly property int _fontS: 13
-    readonly property int _fontM: 14
+    readonly property int _fontS: parseInt(config.dropdownItemSize) || 13
+    readonly property int _fontM: parseInt(config.dropdownLabelSize) || 14
     readonly property int _radiusS: 5
     readonly property int _rowPad: 15
     readonly property int _rowSpacing: 6
@@ -141,6 +141,7 @@ Item {
             anchors.fill: parent; anchors.margins: _marg
             model: root.model
             currentIndex: root.currentIndex
+            onModelChanged: currentIndex = Qt.binding(function() { return root.currentIndex; })
             clip: true; boundsBehavior: ListView.StopAtBounds
 
             delegate: Rectangle {

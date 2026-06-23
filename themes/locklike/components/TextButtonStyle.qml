@@ -5,7 +5,7 @@ ButtonStyle {
 
     property string text: ""
 
-    width: 100
+    width: 130
     height: 44
 
     Rectangle {
@@ -25,7 +25,7 @@ ButtonStyle {
             text: root.text
             color: root._hovered || (root.isFocused && root.noHoverActive) ? config.onPrimary : config.text
             font.family: "Rubik"
-            font.pixelSize: 14
+            font.pixelSize: parseInt(config.buttonFontSize) || 14
             font.bold: root._hovered || (root.isFocused && root.noHoverActive)
             Behavior on color { ColorAnimation { duration: root.animDuration } }
             horizontalAlignment: Text.AlignHCenter

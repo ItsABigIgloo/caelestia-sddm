@@ -4,6 +4,8 @@ Item {
     id: topLeftRect
 
     property string welcomeString
+    property int animDuration: 300
+    property int _activeGreeting: 0
 
     function getPhase() {
         var now = new Date();
@@ -16,14 +18,18 @@ Item {
             welcomeString = config.greetingAfternoon;
     }
 
-    Component.onCompleted: getPhase()
+    function crossfadeText() {
+        var hidden = _activeGreeting === 0 ? userNameB : userNameA;
+        hidden.text = userPicker.displayText;
+        _activeGreeting = _activeGreeting === 0 ? 1 : 0;
+    }
 
-    Text {
-        renderType: Text.NativeRendering
-        width: 370
-        text: "<span style='color:" + config.text + ";'>" + topLeftRect.welcomeString + " </span>" + "<span style='color:" + config.primary + ";'>" + userPicker.displayText + "</span>"
-        textFormat: Text.RichText
-        wrapMode: Text.WordWrap
+    Component.onCompleted: {
+        getPhase();
+        userNameA.text = userPicker.displayText;
+    }
+
+    Column {
         anchors.centerIn: parent
 
         Text {
@@ -50,7 +56,7 @@ Item {
                     font.family: "Rubik"; font.bold: false; font.pixelSize: parseInt(config.welcomeFontSize) || 40
                     opacity: _activeGreeting === 0 ? 1 : 0
                     Behavior on opacity {
-                        NumberAnimation { duration: topLeftRect.animDuration; easing: Easing.InOutCubic }
+                        NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
                     }
                 }
 
@@ -63,7 +69,7 @@ Item {
                     font.family: "Rubik"; font.bold: false; font.pixelSize: parseInt(config.welcomeFontSize) || 40
                     opacity: _activeGreeting === 0 ? 0 : 1
                     Behavior on opacity {
-                        NumberAnimation { duration: topLeftRect.animDuration; easing: Easing.InOutCubic }
+                        NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
                     }
                 }
             }

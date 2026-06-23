@@ -29,18 +29,13 @@ Rectangle {
     property int syncDelay: 150
     property real bgBlur: 0.5
     property int powerOverlay: 60
-    property int powerBlur: 100
     property var localeManager: null
     property bool welcomeEnabled: true
-    property real mainCardBlur: parseFloat(config.mainCardBlurAmount) || 1.0
     property real mainCardOpacity: parseFloat(config.mainCardComponentsOpacity) || 1.0
-    property bool mainCardBgBlurEnabled: config.mainCardBgBlur === "true"
     property bool sessionPickerEnabled: config.sessionPicker !== "false"
     property bool powerConfirmEnabled: config.powerConfirmEnabled !== "false"
     property bool apEnabled: config.ap === "true"
     property string avatarShape: config.AvatarShape || "hexagon"
-    property real welcomeBgBlurAmountVal: parseFloat(config.welcomeBgBlurAmount) || 1.0
-    property bool welcomeBgBlurVal: config.welcomeBgBlur === "true"
     property real welcomeColorOpacityVal: parseFloat(config.welcomeColorOpacity) || 0.7
     property real mainCardColorOpacityVal: parseFloat(config.mainCardColorOpacity) || 0.9
     property bool _contentReady: false
@@ -219,28 +214,6 @@ Rectangle {
                 }
 
                 SliderRow {
-                    labelText: config.powerDialogBlur
-                    sliderValue: settingsPanel.powerBlur
-                    maxValue: 100
-                    stepSize: 1
-                    valueText: settingsPanel.powerBlur + "%"
-                    animDuration: settingsPanel.animDuration
-                    showWhen: config.showPowerBlur !== "false"
-                    onValueModified: settingsPanel.powerBlur = value
-                }
-
-                SliderRow {
-                    labelText: config.welcomeBgBlurLabel
-                    sliderValue: Math.round(settingsPanel.welcomeBgBlurAmountVal * 100)
-                    maxValue: 100
-                    stepSize: 1
-                    valueText: Math.round(settingsPanel.welcomeBgBlurAmountVal * 100) + "%"
-                    animDuration: settingsPanel.animDuration
-                    showWhen: config.showWelcomeBgBlurAmount !== "false"
-                    onValueModified: settingsPanel.welcomeBgBlurAmountVal = value / 100
-                }
-
-                SliderRow {
                     labelText: config.welcomeColorOpacityLabel
                     sliderValue: Math.round(settingsPanel.welcomeColorOpacityVal * 100)
                     maxValue: 100
@@ -260,17 +233,6 @@ Rectangle {
                     animDuration: settingsPanel.animDuration
                     showWhen: config.showMainCardColorOpacity !== "false"
                     onValueModified: settingsPanel.mainCardColorOpacityVal = value / 100
-                }
-
-                SliderRow {
-                    labelText: config.cardBlurLabel
-                    sliderValue: Math.round(settingsPanel.mainCardBlur * 100)
-                    maxValue: 100
-                    stepSize: 1
-                    valueText: Math.round(settingsPanel.mainCardBlur * 100) + "%"
-                    animDuration: settingsPanel.animDuration
-                    showWhen: config.showMainCardBlur !== "false"
-                    onValueModified: settingsPanel.mainCardBlur = value / 100
                 }
 
                 SliderRow {
@@ -294,13 +256,6 @@ Rectangle {
                 }
 
                 ToggleRow {
-                    labelText: config.welcomeBgBlurLabel
-                    toggleChecked: settingsPanel.welcomeBgBlurVal
-                    showWhen: config.showWelcomeBgBlur !== "false"
-                    onToggled: settingsPanel.welcomeBgBlurVal = value
-                }
-
-                ToggleRow {
                     labelText: config.apLabel
                     toggleChecked: settingsPanel.apEnabled
                     showWhen: config.showAp !== "false"
@@ -319,13 +274,6 @@ Rectangle {
                     toggleChecked: settingsPanel.powerConfirmEnabled
                     showWhen: config.showPowerConfirm !== "false"
                     onToggled: settingsPanel.powerConfirmEnabled = value
-                }
-
-                ToggleRow {
-                    labelText: config.cardBlurToggleLabel
-                    toggleChecked: settingsPanel.mainCardBgBlurEnabled
-                    showWhen: config.showMainCardBgBlur !== "false"
-                    onToggled: settingsPanel.mainCardBgBlurEnabled = value
                 }
 
                 Item { height: _spaceS; width: 1 }
