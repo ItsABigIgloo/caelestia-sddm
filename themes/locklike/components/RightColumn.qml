@@ -192,7 +192,7 @@ ColumnLayout {
                     animDuration: root.animDuration
 
                     SliderRow {
-                        labelText: config.animationSpeed
+                        labelText: config.animationSpeedLabel
                         sliderValue: root.animDuration
                         maxValue: 1000
                         valueText: root.animDuration === 0 ? "off" : root.animDuration + "ms"
@@ -203,7 +203,7 @@ ColumnLayout {
                     }
 
                     SliderRow {
-                        labelText: config.syncDelay
+                        labelText: config.syncDelayLabel
                         sliderValue: root.syncDelay
                         maxValue: 500
                         valueText: root.syncDelay + "ms"
@@ -349,7 +349,7 @@ ColumnLayout {
                     animDuration: root.animDuration
 
                     SliderRow {
-                        labelText: config.overlayDarkness
+                        labelText: config.overlayDarknessLabel
                         sliderValue: root.powerOverlay
                         maxValue: 100
                         stepSize: 1
@@ -361,7 +361,7 @@ ColumnLayout {
                     }
 
                     SliderRow {
-                        labelText: config.powerDialogBlur
+                        labelText: config.powerDialogBlurLabel
                         sliderValue: root.powerBlur
                         maxValue: 100
                         stepSize: 1
@@ -388,7 +388,7 @@ ColumnLayout {
                     animDuration: root.animDuration
 
                     SliderRow {
-                        labelText: config.backgroundBlur
+                        labelText: config.backgroundBlurLabel
                         sliderValue: Math.round(root.bgBlur * 100)
                         maxValue: 100
                         stepSize: 1
