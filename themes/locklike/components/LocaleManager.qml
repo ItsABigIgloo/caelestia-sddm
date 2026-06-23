@@ -115,23 +115,14 @@ Item {
         if (data.overlayDarknessLabel !== undefined)
             config.overlayDarknessLabel = data.overlayDarknessLabel;
 
-        if (data.powerDialogBlurLabel !== undefined)
-            config.powerDialogBlurLabel = data.powerDialogBlurLabel;
-
         if (data.welcomeMessageLabel !== undefined)
             config.welcomeMessageLabel = data.welcomeMessageLabel;
-
-        if (data.cardBlurLabel !== undefined)
-            config.cardBlurLabel = data.cardBlurLabel;
 
         if (data.cardOpacityLabel !== undefined)
             config.cardOpacityLabel = data.cardOpacityLabel;
 
         if (data.cardColorOpacityLabel !== undefined)
             config.cardColorOpacityLabel = data.cardColorOpacityLabel;
-
-        if (data.welcomeBgBlurLabel !== undefined)
-            config.welcomeBgBlurLabel = data.welcomeBgBlurLabel;
 
         if (data.welcomeColorOpacityLabel !== undefined)
             config.welcomeColorOpacityLabel = data.welcomeColorOpacityLabel;
@@ -144,9 +135,6 @@ Item {
 
         if (data.powerConfirmLabel !== undefined)
             config.powerConfirmLabel = data.powerConfirmLabel;
-
-        if (data.cardBlurToggleLabel !== undefined)
-            config.cardBlurToggleLabel = data.cardBlurToggleLabel;
 
         if (data.avatarShapeLabel !== undefined)
             config.avatarShapeLabel = data.avatarShapeLabel;
@@ -165,6 +153,30 @@ Item {
 
         if (data.settingsTitleSizeLabel !== undefined)
             config.settingsTitleSizeLabel = data.settingsTitleSizeLabel;
+
+        if (data.welcomeFontSizeLabel !== undefined)
+            config.welcomeFontSizeLabel = data.welcomeFontSizeLabel;
+
+        if (data.quoteFontSizeLabel !== undefined)
+            config.quoteFontSizeLabel = data.quoteFontSizeLabel;
+
+        if (data.fetchFontSizeLabel !== undefined)
+            config.fetchFontSizeLabel = data.fetchFontSizeLabel;
+
+        if (data.buttonFontSizeLabel !== undefined)
+            config.buttonFontSizeLabel = data.buttonFontSizeLabel;
+
+        if (data.dialogTitleSizeLabel !== undefined)
+            config.dialogTitleSizeLabel = data.dialogTitleSizeLabel;
+
+        if (data.dialogBodySizeLabel !== undefined)
+            config.dialogBodySizeLabel = data.dialogBodySizeLabel;
+
+        if (data.dropdownLabelSizeLabel !== undefined)
+            config.dropdownLabelSizeLabel = data.dropdownLabelSizeLabel;
+
+        if (data.dropdownItemSizeLabel !== undefined)
+            config.dropdownItemSizeLabel = data.dropdownItemSizeLabel;
 
         if (data.groupAnimations !== undefined)
             config.groupAnimations = data.groupAnimations;

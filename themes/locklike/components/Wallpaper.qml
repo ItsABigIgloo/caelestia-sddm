@@ -5,6 +5,7 @@ Item {
 
     property int animDuration: 300
     property string currentUser: ""
+    property string activeSource: currentUser ? "../assets/background-" + currentUser : "../assets/background"
 
     property int _activeLayer: 0
 

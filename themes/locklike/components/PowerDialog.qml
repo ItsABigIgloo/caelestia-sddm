@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Effects
 import QtQuick.Layouts
 
 Item {
@@ -8,7 +7,6 @@ Item {
     property int actionType: 0
     property int animDuration: 300
     property real overlayOpacity: 0.8
-    property real powerBlur: 1.0
     property bool powerConfirmEnabled: true
 
     property int _focusIndex: 0
@@ -85,13 +83,6 @@ Item {
         anchors.fill: parent
         color: "#000000"
         opacity: 0
-
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            blurEnabled: true
-            blur: root.powerBlur
-            blurMax: 32
-        }
 
         MouseArea {
             anchors.fill: parent
