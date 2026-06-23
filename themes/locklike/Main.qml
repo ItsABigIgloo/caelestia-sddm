@@ -1,9 +1,8 @@
-import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
 import QtQuick.Layouts
-import QtQuick.Window
+import "assets/userColors/userColors.js" as UserColors
 import "components"
 import "widgets"
 
@@ -39,9 +38,141 @@ Rectangle {
     property real midRadius: mainCard.radius / 1.4
     property real smallRadius: mainCard.radius / 2
 
+    property string currentUser: userPicker.currentText
+
+    property int animDuration: parseInt(config.animDuration) || 300
+    property int syncDelay: parseInt(config.syncDelay) || 150
+    property real bgBlur: parseFloat(config.bgBlur) || 0
+    property bool powerConfirmEnabled: config.powerConfirmEnabled !== "false"
+    property real powerOverlayOpacity: parseFloat(config.powerOverlayOpacity) || 0.8
+    property real powerBlur: parseFloat(config.powerBlur) || 1.0
+
+
+    Component.onCompleted: {
+        function load(key, fallback) {
+            return settingsStore.get(key, fallback);
+        }
+
+        config.animDuration = parseInt(config.animDuration) || 300;
+        config.syncDelay = parseInt(config.syncDelay) || 150;
+
+        var ad = load("animDuration", config.animDuration);
+        root.animDuration = parseInt(ad);
+        config.animDuration = parseInt(ad);
+
+        var sd = load("syncDelay", config.syncDelay);
+        root.syncDelay = parseInt(sd);
+        config.syncDelay = parseInt(sd);
+
+        var bb = load("bgBlur", config.bgBlur);
+        root.bgBlur = parseFloat(bb);
+        config.bgBlur = parseFloat(bb);
+
+        var po = load("powerOverlay", Math.round(root.powerOverlayOpacity * 100));
+        root.powerOverlayOpacity = parseInt(po) / 100;
+        config.powerOverlayOpacity = root.powerOverlayOpacity;
+
+        var pb = load("powerBlur", Math.round(root.powerBlur * 100));
+        root.powerBlur = parseInt(pb) / 100;
+        config.powerBlur = root.powerBlur;
+
+        var wm = load("enableWelcomeMessage", config.enableWelcomeMessage);
+        root.welcomeMessageEnabled = wm !== "false";
+        config.enableWelcomeMessage = wm;
+
+        var sp = load("sessionPicker", config.sessionPicker);
+        root.sessionPickerEnabled = sp === "true";
+        config.sessionPicker = sp;
+
+        var pc = load("powerConfirmEnabled", config.powerConfirmEnabled);
+        root.powerConfirmEnabled = pc !== "false";
+        config.powerConfirmEnabled = pc;
+
+        var ap = load("ap", config.ap);
+        root.ap = ap === "true";
+        config.ap = ap;
+
+        var as = load("avatarShape", config.AvatarShape || "hexagon");
+        root.avatarShape = as;
+        config.AvatarShape = as;
+
+        var mb = load("mainCardBlurAmount", config.mainCardBlurAmount);
+        config.mainCardBlurAmount = parseFloat(mb) || 1.0;
+
+        var mo = load("mainCardComponentsOpacity", config.mainCardComponentsOpacity);
+        root.mainCardComponentsOpacity = parseFloat(mo) || 1.0;
+        config.mainCardComponentsOpacity = root.mainCardComponentsOpacity;
+
+        var mbb = load("mainCardBgBlur", config.mainCardBgBlur);
+        root.mainCardBgBlur = mbb === "true";
+        config.mainCardBgBlur = mbb;
+
+        var mco = load("mainCardColorOpacity", config.mainCardColorOpacity);
+        config.mainCardColorOpacity = parseFloat(mco) || 0.9;
+
+        var wbb = load("welcomeBgBlur", config.welcomeBgBlur);
+        root.welcomeBgBlur = wbb === "true";
+        config.welcomeBgBlur = wbb;
+
+        var wba = load("welcomeBgBlurAmount", config.welcomeBgBlurAmount);
+        root.welcomeBgBlurAmount = parseFloat(wba) || 0.7;
+        config.welcomeBgBlurAmount = root.welcomeBgBlurAmount;
+
+        var wco = load("welcomeColorOpacity", config.welcomeColorOpacity);
+        config.welcomeColorOpacity = parseFloat(wco) || 0.7;
+
+        var sf = load("settingsFontSize", config.settingsFontSize);
+        config.settingsFontSize = parseInt(sf) || 18;
+
+        var st = load("settingsTitleSize", config.settingsTitleSize);
+        config.settingsTitleSize = parseInt(st) || 24;
+
+        var savedLocale = load("locale", "");
+        if (savedLocale !== "") {
+            Qt.callLater(function() { localeManager.switchLanguage(savedLocale); });
+        }
+    }
+
+    onCurrentUserChanged: {
+        wallpaperComponent.prepareForUser(currentUser);
+        syncTimer.restart();
+    }
+
+    Timer {
+        id: syncTimer
+        interval: syncDelay
+        onTriggered: {
+            wallpaperComponent.switchLayer();
+
+            var c = UserColors.colors[currentUser] || {};
+            if (c.background) config.background = c.background;
+            if (c.mainCard) config.mainCard = c.mainCard;
+            if (c.subComponents) config.subComponents = c.subComponents;
+            if (c.text) config.text = c.text;
+            if (c.inverseOnSurface) config.inverseOnSurface = c.inverseOnSurface;
+            if (c.primary) config.primary = c.primary;
+            if (c.secondary) config.secondary = c.secondary;
+            if (c.textDark) config.textDark = c.textDark;
+            if (c.onPrimary) config.onPrimary = c.onPrimary;
+            if (c.onSuccess) config.onSuccess = c.onSuccess;
+            if (c.outline) config.outline = c.outline;
+
+            userAvatar.crossfade();
+            leftColumn.crossfadeGreeting();
+            leftColumn.crossfadeFetchPanel();
+        }
+    }
+
+    readonly property int _settingsMargin: 16
+    readonly property int _gap: 10
+
     width: 1920
     height: 1080
-    color: "#131313"
+    color: config.background || "#131313"
+
+    Behavior on color {
+        ColorAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
+    }
 
     Connections {
         function onLoginFailed() {
@@ -59,103 +190,85 @@ Rectangle {
         target: sddm
     }
 
-    AnimatedImage {
-        id: background
-
-        anchors.fill: parent
-        source: "assets/background"
-        fillMode: Image.PreserveAspectCrop
-        onStatusChanged: {
-            if (status === Image.Error)
-                console.log("Background missing, using fallback color");
-        }
-
-        Rectangle {
-            anchors.fill: parent
-            color: "#000000"
-            opacity: firstInput ? 0 : 0.4
-
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 300
-                    easing: Easing.InOutCubic
-                }
-            }
-        }
+    Wallpaper {
+        id: wallpaperComponent
+        animDuration: root.animDuration
+        currentUser: userPicker.currentText
     }
 
-    Item {
-        id: keylogger
-
-        focus: true
-        Keys.onPressed: {
-            if (event.key === Qt.Key_Escape) {
-                if (root.welcomeMessageEnabled)
-                    root.firstInput = true;
-                root.buffer = "";
-                return;
-            }
-            if (event.key === Qt.Key_CapsLock) {
-                root.capsLockOn = !root.capsLockOn;
-                return;
-            }
-            if (event.key === Qt.Key_Tab) {
-                return;
-            }
-            if (root.firstInput) {
-                root.firstInput = false;
-                return;
-            }
-            if (event.key === Qt.Key_Right) {
-                if (userPicker.currentIndex < userModel.count - 1)
-                    userPicker.currentIndex += 1;
-
-                return;
-            }
-            if (event.key === Qt.Key_Left) {
-                if (userPicker.currentIndex > 0)
-                    userPicker.currentIndex -= 1;
-
-                return;
-            }
-            if (event.key === Qt.Key_Up) {
-                if (sessionPickerBtn.selectedIndex < sessionPickerBtn.count - 1)
-                    sessionPickerBtn.selectedIndex += 1;
-                return;
-            }
-            if (event.key === Qt.Key_Down) {
-                if (sessionPickerBtn.selectedIndex > 0)
-                    sessionPickerBtn.selectedIndex -= 1;
-                return;
-            }
-            if (event.key === Qt.Key_Backspace) {
-                root.buffer = root.buffer.slice(0, -1);
-                return;
-            }
-            if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
-                sddm.login(userPicker.currentText, root.buffer, root.sessionIndex);
-                root.buffer = "";
-                root.loading = true;
-                return;
-            }
-            root.buffer += event.text;
+    Rectangle {
+        id: bgOverlay
+        anchors.fill: parent
+        color: "#000000"
+        opacity: firstInput ? 0 : 0.4
+        Behavior on opacity {
+            NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
         }
     }
 
     MultiEffect {
         blurEnabled: true
-        source: background
-        blur: root.firstInput ? 0 : 1
+        source: wallpaperComponent
+        blur: root.bgBlur
         autoPaddingEnabled: false
         blurMultiplier: 1
         blurMax: 64
-        anchors.fill: background
+        anchors.fill: wallpaperComponent
 
         Behavior on blur {
-            NumberAnimation {
-                duration: 400
-                easing: Easing.InOutCubic
-            }
+            NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
+        }
+    }
+
+    KeyboardHandler {
+        id: keylogger
+        welcomeEnabled: root.welcomeMessageEnabled
+        powerDialogVisible: powerDialog.visible
+        settingsOpen: rightColumn.settingsOpen
+        firstInputActive: root.firstInput
+
+        onEscapePressed: {
+            root.buffer = "";
+        }
+        onSettingsCloseRequested: {
+            rightColumn.closeSettings();
+        }
+        onWelcomeResetRequested: {
+            root.firstInput = true;
+        }
+        onFirstInputDismissed: {
+            root.firstInput = false;
+        }
+        onCapsLockToggled: {
+            root.capsLockOn = !root.capsLockOn;
+        }
+        onRightPressed: {
+            if (userPicker.currentIndex < userModel.count - 1)
+                userPicker.currentIndex += 1;
+        }
+        onLeftPressed: {
+            if (userPicker.currentIndex > 0)
+                userPicker.currentIndex -= 1;
+        }
+        onUpPressed: {
+            if (sessionPickerBtn.selectedIndex < sessionPickerBtn.count - 1)
+                sessionPickerBtn.selectedIndex += 1;
+        }
+        onDownPressed: {
+            if (sessionPickerBtn.selectedIndex > 0)
+                sessionPickerBtn.selectedIndex -= 1;
+        }
+        onBackspacePressed: {
+            root.buffer = root.buffer.slice(0, -1);
+        }
+        onEnterPressed: {
+            if (powerDialog.visible) return;
+            sddm.login(userPicker.currentText, root.buffer, root.sessionIndex);
+            root.buffer = "";
+            root.loading = true;
+        }
+        onCharEntered: function(ch) {
+            root.buffer += ch;
         }
     }
 
@@ -165,7 +278,7 @@ Rectangle {
         mainCardRadius: root.midRadius
         rootHeight: root.height
         rootWidth: root.width
-        greetingText: greeting.welcomeString
+        greetingText: leftColumn.welcomeString
         username: userPicker.currentText
         blurAmount: root.welcomeBgBlurAmount
         blurEnabled: root.welcomeBgBlur
@@ -173,13 +286,14 @@ Rectangle {
 
     Rectangle {
         id: mainCard
+        z: 60
 
         width: 1350
         height: 750
         scale: firstInput ? 0.5 : 1
         opacity: firstInput ? 0 : 1
         anchors.centerIn: parent
-        radius: 70
+        radius: parseInt(config.mainCardRadius) || 70
         color: "transparent"
 
         BlurWrapper {
@@ -207,11 +321,13 @@ Rectangle {
         property string day: Qt.formatDateTime(currentTime, "dddd").toUpperCase()
         property string date: Qt.formatDateTime(currentTime, "d MMM").toUpperCase()
 
+        readonly property real centerScale: Math.min(mainCard.width, mainCard.height) / 500
+
         readonly property var fontAxesTitle: ({
                 "wght": 500,
                 "wdth": 30,
                 "ROND": 25,
-                "opsz": 224 * centerScale
+                "opsz": Math.max(16, Math.min(224, 224 * centerScale))
             })
 
         FontLoader {
@@ -231,91 +347,29 @@ Rectangle {
             font.family: googleSansFlex.name
             font.bold: true
             font.variableAxes: mainCard.fontAxesTitle
+
+            Behavior on color {
+                ColorAnimation { duration: root.animDuration }
+            }
         }
 
         RowLayout {
             anchors.fill: parent
-            anchors.margins: 15
-            spacing: 40
+            anchors.margins: parseInt(config.mainCardMargin) || 15
+            spacing: parseInt(config.layoutSpacing) || 40
 
-            ColumnLayout {
-                spacing: 13
-                Layout.alignment: Qt.AlignLeft
-
-                Rectangle {
-                    id: topLeftRect
-
-                    width: 390
-                    height: 220
-                    color: config.subComponents
-                    radius: root.midRadius
-                    opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
-                    clip: true
-
-                    WelcomeText {
-                        id: greeting
-
-                        anchors.centerIn: parent
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.OutBack
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: middleLeftRect
-
-                    width: 390
-                    Layout.fillHeight: true
-                    color: config.subComponents
-                    radius: mainCard.radius / 4
-                    opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
-                    clip: true
-
-                    CaelestiaFetch {
-                        firstInput: root.firstInput
-                        currentUser: userPicker.currentText
-                        currentSession: sessionPickerBtn.currentText
-                        rectHeight: middleLeftRect.height
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.OutBack
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: bottomLeftRect
-
-                    width: 390
-                    height: 190
-                    color: "transparent"
-                    bottomLeftRadius: mainCard.radius / 1.9
-                    radius: root.midRadius / 1.7
-                    opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
-
-                    SystemButtons {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        rectHeight: bottomLeftRect.height
-                        rectWidth: bottomLeftRect.height - 1
-                        rectRadius: bottomLeftRect.radius
-                        rectBigRadius: mainCard.radius / 1.9
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.OutBack
-                        }
-                    }
-                }
+            LeftColumn {
+                id: leftColumn
+                firstInput: root.firstInput
+                mainCardComponentsOpacity: root.mainCardComponentsOpacity
+                animDuration: root.animDuration
+                midRadius: root.midRadius
+                mainCardRadius: mainCard.radius
+                currentUser: userPicker.currentText
+                currentSession: sessionPickerBtn.currentText
+                powerConfirmEnabled: root.powerConfirmEnabled
+                onPowerRequested: powerDialog.show(0)
+                onRebootRequested: powerDialog.show(1)
             }
 
             ColumnLayout {
@@ -326,70 +380,116 @@ Rectangle {
                 Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     color: "transparent"
-                    width: 300
-                    height: 140
+                    Layout.preferredWidth: 300
+                    Layout.preferredHeight: 140
                 }
 
                 Item {
-                    height: 45
+                    Layout.preferredHeight: 45
                 }
 
                 Avatar {
+                    id: userAvatar
                     avatarShape: root.avatarShape
+                    currentUser: root.currentUser
+                    animDuration: root.animDuration
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredWidth: root.avatarShape === "circle" ? 260 : 330
-                    Layout.preferredHeight: root.avatarShape === "circle" ? 260 : 300
+                    Layout.preferredWidth: root.avatarShape === "circle" ? (parseInt(config.avatarCircleSize) || 260) : (parseInt(config.avatarHexagonWidth) || 330)
+                    Layout.preferredHeight: root.avatarShape === "circle" ? (parseInt(config.avatarCircleSize) || 260) : (parseInt(config.avatarHexagonHeight) || 300)
                     Layout.leftMargin: root.avatarShape === "circle" ? 0 : 34
                     Layout.topMargin: root.avatarShape === "circle" ? 20 : 0
                     Layout.bottomMargin: root.avatarShape === "circle" ? 20 : 0
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
                     Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.OutBack
-                        }
+                        NumberAnimation { duration: root.animDuration; easing.type: Easing.OutBack }
                     }
                 }
 
                 PasswordInput {
                     id: inputRect
                     Layout.alignment: Qt.AlignHCenter
+                    animDuration: root.animDuration
                     mainCardComponentsOpacity: root.mainCardComponentsOpacity
                     firstInput: root.firstInput
                     isLoading: root.loading
                     buffer: root.buffer
                     currentUser: userPicker.currentText
                     currentSession: root.sessionIndex
+                    onFocusRequested: keylogger.forceActiveFocus()
                 }
 
                 Text {
-                    Layout.margins: 10
+                    Layout.leftMargin: 10
+                    Layout.rightMargin: 10
+                    Layout.topMargin: 6
                     Layout.alignment: Qt.AlignHCenter
-                    text: "Caps Lock is activated!"
+                    text: config.capsLockWarning
                     font.pointSize: 8
                     font.family: "Roboto"
                     color: config.text
-                    opacity: 0 // Its buggy rnm fix later
+                    opacity: root.capsLockOn ? 1 : 0
+
+                    Behavior on color {
+                        ColorAnimation { duration: root.animDuration }
+                    }
+
                     Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing: Easing.InOutCubic
-                        }
+                        NumberAnimation { duration: root.animDuration; easing: Easing.InOutCubic }
                     }
                 }
                 Item {
-                    height: 20
+                    Layout.preferredHeight: 2 * root._gap
                 }
             }
 
             RightColumn {
+                id: rightColumn
                 firstInput: root.firstInput
                 mainCardComponentsOpacity: root.mainCardComponentsOpacity
                 animDuration: root.animDuration
+                locale: localeManager.currentLocale
                 smallRadius: root.smallRadius
                 mainCardRadius: mainCard.radius
-                locale: localeManager.currentLocale
+                welcomeEnabled: root.welcomeMessageEnabled
+                sessionPickerEnabled: root.sessionPickerEnabled
+                powerConfirmEnabled: root.powerConfirmEnabled
+                apEnabled: root.ap
+                avatarShape: root.avatarShape
+                syncDelay: root.syncDelay
+                bgBlur: root.bgBlur
+                powerBlur: Math.round(root.powerBlur * 100)
+                powerOverlay: Math.round(root.powerOverlayOpacity * 100)
+                mainCardBlur: root.mainCardBlurAmount
+                mainCardOpacity: root.mainCardComponentsOpacity
+                mainCardBgBlurEnabled: root.mainCardBgBlur
+                mainCardColorOpacityVal: parseFloat(config.mainCardColorOpacity) || 0.9
+                welcomeBgBlurVal: root.welcomeBgBlur
+                welcomeBgBlurAmountVal: root.welcomeBgBlurAmount
+                welcomeColorOpacityVal: parseFloat(config.welcomeColorOpacity) || 0.7
+                settingsFontSize: parseInt(config.settingsFontSize) || 18
+                settingsTitleSize: parseInt(config.settingsTitleSize) || 24
+                localeManager: localeManager
+                onAnimDurationChanged: { var v = rightColumn.animDuration; if (v !== root.animDuration) { root.animDuration = v; config.animDuration = v; settingsStore.set("animDuration", v); } }
+                onBgBlurChanged: { var v = rightColumn.bgBlur; if (v !== root.bgBlur) { root.bgBlur = v; config.bgBlur = v; settingsStore.set("bgBlur", v); } }
+                onSyncDelayChanged: { var v = rightColumn.syncDelay; if (v !== root.syncDelay) { root.syncDelay = v; config.syncDelay = v; settingsStore.set("syncDelay", v); } }
+                onWelcomeEnabledChanged: { var v = rightColumn.welcomeEnabled; root.welcomeMessageEnabled = v; config.enableWelcomeMessage = v.toString(); settingsStore.set("enableWelcomeMessage", v.toString()); }
+                onSessionPickerEnabledChanged: { var v = rightColumn.sessionPickerEnabled; root.sessionPickerEnabled = v; config.sessionPicker = v.toString(); settingsStore.set("sessionPicker", v.toString()); }
+                onPowerConfirmEnabledChanged: { var v = rightColumn.powerConfirmEnabled; root.powerConfirmEnabled = v; config.powerConfirmEnabled = v.toString(); settingsStore.set("powerConfirmEnabled", v.toString()); leftColumn.systemButtons.powerConfirmEnabled = v; }
+                onApEnabledChanged: { var v = rightColumn.apEnabled; root.ap = v; config.ap = v.toString(); settingsStore.set("ap", v.toString()); }
+                onAvatarShapeChanged: { var v = rightColumn.avatarShape; root.avatarShape = v; config.AvatarShape = v; settingsStore.set("avatarShape", v); }
+                onPowerOverlayChanged: { var v = rightColumn.powerOverlay; root.powerOverlayOpacity = v / 100; config.powerOverlayOpacity = root.powerOverlayOpacity; settingsStore.set("powerOverlay", v); }
+                onPowerBlurChanged: { var v = rightColumn.powerBlur; root.powerBlur = v / 100; config.powerBlur = root.powerBlur; settingsStore.set("powerBlur", v); }
+                onMainCardBlurChanged: { var v = rightColumn.mainCardBlur; config.mainCardBlurAmount = v; settingsStore.set("mainCardBlurAmount", v); }
+                onMainCardOpacityChanged: { var v = rightColumn.mainCardOpacity; root.mainCardComponentsOpacity = v; config.mainCardComponentsOpacity = v; settingsStore.set("mainCardComponentsOpacity", v); }
+                onMainCardBgBlurEnabledChanged: { var v = rightColumn.mainCardBgBlurEnabled; root.mainCardBgBlur = v; config.mainCardBgBlur = v.toString(); settingsStore.set("mainCardBgBlur", v.toString()); }
+                onMainCardColorOpacityValChanged: { var v = rightColumn.mainCardColorOpacityVal; config.mainCardColorOpacity = v; settingsStore.set("mainCardColorOpacity", v); }
+                onWelcomeBgBlurValChanged: { var v = rightColumn.welcomeBgBlurVal; root.welcomeBgBlur = v; config.welcomeBgBlur = v.toString(); settingsStore.set("welcomeBgBlur", v.toString()); }
+                onWelcomeBgBlurAmountValChanged: { var v = rightColumn.welcomeBgBlurAmountVal; root.welcomeBgBlurAmount = v; config.welcomeBgBlurAmount = v; settingsStore.set("welcomeBgBlurAmount", v); }
+                onWelcomeColorOpacityValChanged: { var v = rightColumn.welcomeColorOpacityVal; config.welcomeColorOpacity = v; settingsStore.set("welcomeColorOpacity", v); }
+                onSettingsFontSizeChanged: { var v = rightColumn.settingsFontSize; config.settingsFontSize = v; settingsStore.set("settingsFontSize", v); }
+                onSettingsTitleSizeChanged: { var v = rightColumn.settingsTitleSize; config.settingsTitleSize = v; settingsStore.set("settingsTitleSize", v); }
+                onSettingsOpenChanged: { if (!rightColumn.settingsOpen) keylogger.forceActiveFocus(); }
             }
         }
 
@@ -408,79 +508,64 @@ Rectangle {
             }
 
             Behavior on opacity {
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.OutBack
-                }
+                NumberAnimation { duration: root.animDuration; easing.type: Easing.OutBack }
             }
         }
 
         Behavior on scale {
-            NumberAnimation {
-                duration: 300
-                easing.type: Easing.OutBack
-            }
+            NumberAnimation { duration: root.animDuration; easing.type: Easing.OutBack }
         }
 
         Behavior on opacity {
-            NumberAnimation {
-                duration: 300
-                easing.type: Easing.OutBack
-            }
+            NumberAnimation { duration: root.animDuration; easing.type: Easing.OutBack }
         }
     }
 
-    ComboBox {
-        // invisible just for now
+    LocaleManager {
+        id: localeManager
+
+        onLanguageChanged: {
+            leftColumn.refreshGreeting();
+            settingsStore.set("locale", localeManager.currentLocale);
+        }
+    }
+
+    SettingsStore {
+        id: settingsStore
+    }
+
+    UserPicker {
         id: userPicker
+    }
 
-        width: 190
-        height: 50
-        anchors.right: parent.right
-        anchors.top: parent.top
-        model: userModel
-        currentIndex: userModel.lastIndex
-        textRole: "name"
-        font.family: "Rubik"
-        font.pixelSize: 20
-        visible: false
-
-        background: Rectangle {
-            color: "#BF131313"
-            radius: 30
-            border.color: "#353535"
-            border.width: 1
+    MouseArea {
+        anchors.fill: parent
+        visible: rightColumn.settingsOpen && !powerDialog.visible
+        z: 50
+        onClicked: {
+            rightColumn.closeSettings();
+            keylogger.forceActiveFocus();
         }
+    }
 
-        contentItem: Text {
-            renderType: Text.NativeRendering
-            text: userPicker.displayText
-            font: userPicker.font
-            color: "#e2e2e2"
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            leftPadding: 0
-            rightPadding: 0
-            topPadding: 0
-            bottomPadding: 0
-            anchors.fill: parent
+    PowerDialog {
+        id: powerDialog
+        z: 200
+        anchors.fill: parent
+        animDuration: root.animDuration
+        overlayOpacity: root.powerOverlayOpacity
+        powerBlur: root.powerBlur
+        powerConfirmEnabled: root.powerConfirmEnabled
+        onConfirmed: function(cmd) {
+            if (cmd === "poweroff") sddm.powerOff();
+            else if (cmd === "reboot") sddm.reboot();
         }
+    }
 
-        indicator: Canvas {
-            x: userPicker.width - 30
-            y: (userPicker.height - 6) / 2
-            width: 12
-            height: 6
-            onPaint: {
-                var context = getContext("2d");
-                context.reset();
-                context.moveTo(0, 0);
-                context.lineTo(width, 0);
-                context.lineTo(width / 2, height);
-                context.closePath();
-                context.fillStyle = "#4cdadb";
-                context.fill();
-            }
+    Connections {
+        target: powerDialog
+        function onVisibleChanged() {
+            if (!powerDialog.visible) keylogger.forceActiveFocus();
         }
     }
 }

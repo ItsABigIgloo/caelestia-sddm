@@ -79,14 +79,14 @@ Item {
         if (data.settingsTitle !== undefined)
             config.settingsTitle = data.settingsTitle;
 
-        if (data.animationSpeed !== undefined)
-            config.animationSpeed = data.animationSpeed;
+        if (data.animationSpeedLabel !== undefined)
+            config.animationSpeedLabel = data.animationSpeedLabel;
 
-        if (data.syncDelay !== undefined)
-            config.syncDelay = data.syncDelay;
+        if (data.syncDelayLabel !== undefined)
+            config.syncDelayLabel = data.syncDelayLabel;
 
-        if (data.backgroundBlur !== undefined)
-            config.backgroundBlur = data.backgroundBlur;
+        if (data.backgroundBlurLabel !== undefined)
+            config.backgroundBlurLabel = data.backgroundBlurLabel;
 
         if (data.language !== undefined)
             config.language = data.language;
@@ -112,11 +112,11 @@ Item {
         if (data.confirmReboot !== undefined)
             config.confirmReboot = data.confirmReboot;
 
-        if (data.overlayDarkness !== undefined)
-            config.overlayDarkness = data.overlayDarkness;
+        if (data.overlayDarknessLabel !== undefined)
+            config.overlayDarknessLabel = data.overlayDarknessLabel;
 
-        if (data.powerDialogBlur !== undefined)
-            config.powerDialogBlur = data.powerDialogBlur;
+        if (data.powerDialogBlurLabel !== undefined)
+            config.powerDialogBlurLabel = data.powerDialogBlurLabel;
 
         if (data.welcomeMessageLabel !== undefined)
             config.welcomeMessageLabel = data.welcomeMessageLabel;
