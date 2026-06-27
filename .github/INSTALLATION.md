@@ -54,7 +54,8 @@ yay -S caelestia-sddm-minimalistv2-git
 
 ## Syncing:
 
-The theme syncs your current wallpaper, avatar, and colors to the SDDM login screen.
+The theme syncs your current wallpaper, avatar, and colors to the SDDM login screen. Only files your user can read normally are synced; missing, unreadable, invalid, or oversized optional files are skipped.
+Readable symlinks, such as an avatar linked from your home directory, are supported.
 
 **Manual Sync:**
 Manually apply changes immediately without rebooting:

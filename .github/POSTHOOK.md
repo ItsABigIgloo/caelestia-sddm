@@ -38,7 +38,10 @@ Add this line (replace `your_username`):
 your_username ALL=(root) NOPASSWD: /usr/share/sddm/themes/caelestia/scripts/sync.sh
 ```
 
-This grants passwordless sudo only for this sync script.
+This grants passwordless sudo only for this installed sync script. Do not replace this with broader sudo access.
+
+> [!NOTE]
+> sync.sh only installs avatar, wallpaper, and generated theme files that your user can read normally. Missing, unreadable, invalid, or oversized files are skipped.
 
 ## 3) Verify
 

@@ -92,7 +92,7 @@ if [ ${#THEMES[@]} -eq 0 ]; then
 fi
 
 echo ""
-read -p "Select theme to install [1-${#THEMES[@]}]: " selection
+read -r -p "Select theme to install [1-${#THEMES[@]}]: " selection
 
 # Validate selection
 if ! [[ "$selection" =~ ^[0-9]+$ ]] || [ "$selection" -lt 1 ] || [ "$selection" -gt ${#THEMES[@]} ]; then
@@ -110,7 +110,12 @@ echo "Installing Caelestia SDDM Theme ($SELECTED_THEME)..."
 sudo mkdir -p "$INSTALL_DIR"
 
 # Copy all files from selected theme
-sudo cp -r "$THEME_SOURCE"/* "$INSTALL_DIR/"
+if find "$THEME_SOURCE" -type l -print -quit | grep -q .; then
+  echo "✗ Unable to install theme due to $THEME_SOURCE containing symlinks." >&2
+  exit 1
+else
+  sudo cp -r "$THEME_SOURCE"/* "$INSTALL_DIR/"
+fi
 
 # Copy universal sync script
 sudo mkdir -p "$INSTALL_DIR/scripts"
@@ -128,15 +133,19 @@ else
   echo "No theme.conf.template found, skipping template creation"
 fi
 
-# 3. Fix permissions so sync.sh have proper root access
-sudo chown -R root:root "$INSTALL_DIR"
-sudo chmod -R 755 "$INSTALL_DIR"
+# 3. Fix permissions so sync.sh has proper root access
+sudo find "$INSTALL_DIR" -type d -exec chmod 755 {} +
+sudo find "$INSTALL_DIR" -type f -exec chmod 644 {} +
+sudo chmod 755 "$INSTALL_DIR/scripts/sync.sh"
+
 if [ -d "$INSTALL_DIR/assets" ]; then
   sudo find "$INSTALL_DIR/assets" -type d -exec chmod 755 {} \;
   sudo find "$INSTALL_DIR/assets" -type f -exec chmod 644 {} \;
 fi
-sudo chmod 644 "$INSTALL_DIR/theme.conf"
-sudo chmod +x "$INSTALL_DIR/scripts/sync.sh"
+
+if [ -f "$INSTALL_DIR/theme.conf" ]; then
+  sudo chmod 644 "$INSTALL_DIR/theme.conf"
+fi
 
 #4. Set the Current theme via drop-in only
 sudo mkdir -p /etc/sddm.conf.d
@@ -168,7 +177,7 @@ EOF
 echo "------------------------------------------------"
 
 # Ask to run post-install checks
-read -p "Run post-install checks? [Y/n]: " run_check
+read -r -p "Run post-install checks? [Y/n]: " run_check
 if [[ -z "$run_check" ]] || [[ "$run_check" =~ ^[Yy]$ ]]; then
   echo ""
   echo "============================================================"
