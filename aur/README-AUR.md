@@ -24,6 +24,8 @@ sudo pacman -R caelestia-sddm-minimalist-git
 
 The PKGBUILD uses a split-package approach where each theme variant conflicts with others (because they all install to `/usr/share/sddm/themes/caelestia/`).
 
+Theme variants must contain regular files and directories only. Packaging rejects symlinks so the installed SDDM theme tree stays self-contained and predictable.
+
 ### Adding a New Theme
 
 1. **Update `pkgname` array:**
