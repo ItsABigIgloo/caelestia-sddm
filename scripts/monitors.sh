@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Generate Xsetup for SDDM based on Hyprland monitor configuration
-# Converts Wayland monitor names to X11 names for xrandr
+# Generates dynamic Xsetup that discovers X11 output names at SDDM login time
 
 set -euo pipefail
 
@@ -52,18 +52,6 @@ fi
 
 log_info "Generating Xsetup from ${MONITOR_CONFIG}..."
 
-# --- Map Wayland to X11 names ---
-get_x11_name() {
-	local wl_name="$1"
-	case "${wl_name}" in
-	DP-[0-9]*) printf "DP-%d" "${wl_name#DP-}" ;;
-	HDMI-A-[0-9]*) printf "HDMI-%d" "${wl_name#HDMI-A-}" ;;
-	HDMI-[0-9]*) printf "HDMI-%d" "${wl_name#HDMI-}" ;;
-	eDP-[0-9]*) printf "eDP-%d" "${wl_name#eDP-}" ;;
-	*) printf '%s' "$wl_name" ;;
-	esac
-}
-
 # --- Detect config format (Lua since Hyprland 0.55, else hyprlang) ---
 is_lua_config() {
 	[[ "${MONITOR_CONFIG}" == *.lua ]] && return 0
@@ -109,55 +97,61 @@ parse_monitors() {
 	fi
 }
 
-# --- Generate xrandr command ---
-XRANDR_CMD="xrandr"
-PRIMARY_SET=false
+# --- Find primary monitor (at position 0x0) ---
+PRIMARY_TYPE=""
+PRIMARY_RES=""
+PRIMARY_RATE=""
+PRIMARY_TRANSFORM=""
 
 while IFS='|' read -r name mode pos transform disabled mirror; do
-	# Skip wildcard / disabled / mirrored entries — no concrete xrandr target
 	[[ -z "$name" || "$disabled" == "true" || -n "$mirror" ]] && continue
+	[[ "$pos" != "0x0" ]] && continue
 	case "$mode" in preferred|auto|"") continue ;; esac
-	case "$pos" in auto|"") continue ;; esac
 
-	XL_NAME=$(get_x11_name "$name")
-	RES=${mode%%@*}
-	RATE=${mode##*@}
-	[[ "$RATE" == "$mode" ]] && RATE=""
-
-	ROTATE=""; REFLECT=""
-	case "${transform:-}" in
-	0) ROTATE="normal" ;;
-	1) ROTATE="left" ;;
-	2) ROTATE="inverted" ;;
-	3) ROTATE="right" ;;
-	4) ROTATE="normal"; REFLECT="x" ;;
-	5) ROTATE="left"; REFLECT="x" ;;
-	6) ROTATE="inverted"; REFLECT="x" ;;
-	7) ROTATE="right"; REFLECT="x" ;;
-	esac
-
-	CMD_PART="--output ${XL_NAME}"
-	[[ -n "$ROTATE" ]] && CMD_PART="${CMD_PART} --rotate ${ROTATE}"
-	[[ -n "$REFLECT" ]] && CMD_PART="${CMD_PART} --reflect ${REFLECT}"
-	CMD_PART="${CMD_PART} --mode ${RES} --pos ${pos}"
-	[[ -n "$RATE" ]] && CMD_PART="${CMD_PART} --rate ${RATE}"
-	XRANDR_CMD="${XRANDR_CMD} ${CMD_PART}"
-
-	if [[ "$pos" == "0x0" && "$PRIMARY_SET" == "false" ]]; then
-		XRANDR_CMD="${XRANDR_CMD} --primary"
-		PRIMARY_SET=true
-	fi
+	PRIMARY_TYPE="${name%%-*}"
+	PRIMARY_RES=${mode%%@*}
+	PRIMARY_RATE=${mode##*@}
+	[[ "$PRIMARY_RATE" == "$mode" ]] && PRIMARY_RATE=""
+	PRIMARY_TRANSFORM="${transform:-}"
+	break
 done < <(parse_monitors)
 
-# --- Write Xsetup ---
-OUTPUT="#!/bin/sh
+if [[ -z "$PRIMARY_TYPE" ]]; then
+	printf '%bError:%b no primary monitor (at position 0x0) found in config\n' "${RED}" "${RESET}" >&2
+	exit 1
+fi
+
+# --- Build primary xrandr options ---
+PRIMARY_OPTS="--mode ${PRIMARY_RES} --pos 0x0"
+[[ -n "$PRIMARY_RATE" ]] && PRIMARY_OPTS="${PRIMARY_OPTS} --rate ${PRIMARY_RATE}"
+case "${PRIMARY_TRANSFORM:-}" in
+1) PRIMARY_OPTS="${PRIMARY_OPTS} --rotate left" ;;
+2) PRIMARY_OPTS="${PRIMARY_OPTS} --rotate inverted" ;;
+3) PRIMARY_OPTS="${PRIMARY_OPTS} --rotate right" ;;
+4) PRIMARY_OPTS="${PRIMARY_OPTS} --reflect x" ;;
+5) PRIMARY_OPTS="${PRIMARY_OPTS} --rotate left --reflect x" ;;
+6) PRIMARY_OPTS="${PRIMARY_OPTS} --rotate inverted --reflect x" ;;
+7) PRIMARY_OPTS="${PRIMARY_OPTS} --rotate right --reflect x" ;;
+esac
+PRIMARY_OPTS="${PRIMARY_OPTS} --primary"
+
+log_info "Primary: ${PRIMARY_TYPE} ${PRIMARY_RES}${PRIMARY_RATE:+@${PRIMARY_RATE}}"
+
+# --- Write dynamic Xsetup (discovers X11 output names at SDDM login time) ---
+cat > "${XSETUP_FILE}" <<EOF
+#!/bin/sh
 # Xsetup - generated from Hyprland monitors.conf
+# Primary: ${PRIMARY_TYPE} ${PRIMARY_RES}${PRIMARY_RATE:+@${PRIMARY_RATE}}
 export DISPLAY=:0
 xrandr > /tmp/xsetup.log 2>&1
-${XRANDR_CMD}
-"
 
-printf '%s' "$OUTPUT" | tee "${XSETUP_FILE}" >/dev/null
+# Find primary output by connector type, fallback to resolution match
+PRIMARY_OUT=\$(awk '/ connected/ && /^${PRIMARY_TYPE}-[0-9]/{print \$1; exit}' /tmp/xsetup.log)
+[ -z "\$PRIMARY_OUT" ] && PRIMARY_OUT=\$(awk '/ connected/{o=\$1} \$1=="${PRIMARY_RES}"{if(o){print o;exit}}' /tmp/xsetup.log)
+
+# Turn off all others, enable primary only
+[ -n "\$PRIMARY_OUT" ] && xrandr \$(awk -v p="\$PRIMARY_OUT" '/ connected/{if(\$1!=p) printf "--output %s --off ", \$1}' /tmp/xsetup.log) --output "\$PRIMARY_OUT" ${PRIMARY_OPTS}
+EOF
 chmod 755 "${XSETUP_FILE}"
 
 # --- Update SDDM config ---
