@@ -64,45 +64,90 @@ get_x11_name() {
 	esac
 }
 
+# --- Detect config format (Lua since Hyprland 0.55, else hyprlang) ---
+is_lua_config() {
+	[[ "${MONITOR_CONFIG}" == *.lua ]] && return 0
+	grep -q 'hl\.monitor(' "${MONITOR_CONFIG}" 2>/dev/null
+}
+
+# --- Extract a field value from a flattened hl.monitor({...}) block ---
+get_lua_field() {
+	local block="$1" key="$2" re
+	re="${key}[[:space:]]*=[[:space:]]*[\"']?([^,\"'{}[:space:]]*)"
+	[[ "$block" =~ $re ]]
+	printf '%s' "${BASH_REMATCH[1]:-}"
+}
+
+# --- Emit normalized monitor records: NAME|MODE|POS|TRANSFORM|DISABLED|MIRROR ---
+parse_monitors() {
+	if is_lua_config; then
+		local block name mode pos transform disabled mirror
+		while IFS= read -r block; do
+			name=$(get_lua_field "$block" output)
+			mode=$(get_lua_field "$block" mode)
+			pos=$(get_lua_field "$block" position)
+			transform=$(get_lua_field "$block" transform)
+			disabled=$(get_lua_field "$block" disabled)
+			mirror=$(get_lua_field "$block" mirror)
+			printf '%s|%s|%s|%s|%s|%s\n' "$name" "$mode" "$pos" "$transform" "$disabled" "$mirror"
+		done < <(awk '
+			/hl\.monitor\(/ { inblock=1; buf=$0 }
+			inblock && $0 !~ /hl\.monitor\(/ { buf=buf" "$0 }
+			inblock && /\)/ { print buf; inblock=0 }
+			' "${MONITOR_CONFIG}")
+	else
+		local line rest name mode pos transform
+		while IFS= read -r line; do
+			[[ "$line" =~ ^monitor[[:space:]]*= ]] || continue
+			rest="${line#*=}"
+			name=$(printf '%s' "$rest" | cut -d',' -f1 | xargs)
+			mode=$(printf '%s' "$rest" | cut -d',' -f2 | xargs)
+			pos=$(printf '%s' "$rest" | cut -d',' -f3 | xargs)
+			transform=$(printf '%s' "$rest" | cut -d',' -f5 | xargs)
+			printf '%s|%s|%s|%s||\n' "$name" "$mode" "$pos" "${transform:-}"
+		done <"${MONITOR_CONFIG}"
+	fi
+}
+
 # --- Generate xrandr command ---
 XRANDR_CMD="xrandr"
 PRIMARY_SET=false
 
-while IFS= read -r line; do
-	[[ "$line" =~ ^monitor[[:space:]]*= ]] || continue
-
-	name=$(printf '%s' "$line" | sed 's/monitor = //' | cut -d',' -f1 | xargs)
-	rate=$(printf '%s' "$line" | sed 's/monitor = //' | cut -d',' -f2 | xargs)
-	pos=$(printf '%s' "$line" | sed 's/monitor = //' | cut -d',' -f3 | xargs)
-
-	transform=""
-	if [[ "$line" =~ transform.*[[:space:]]+[0-9] ]]; then
-		transform=$(printf '%s' "$line" | sed -n 's/.*transform, *\([0-9]\).*/\1/p')
-	fi
+while IFS='|' read -r name mode pos transform disabled mirror; do
+	# Skip wildcard / disabled / mirrored entries — no concrete xrandr target
+	[[ -z "$name" || "$disabled" == "true" || -n "$mirror" ]] && continue
+	case "$mode" in preferred|auto|"") continue ;; esac
+	case "$pos" in auto|"") continue ;; esac
 
 	XL_NAME=$(get_x11_name "$name")
-	RES=${rate%%@*}
-	RATE=${rate##*@}
+	RES=${mode%%@*}
+	RATE=${mode##*@}
+	[[ "$RATE" == "$mode" ]] && RATE=""
 
+	ROTATE=""; REFLECT=""
 	case "${transform:-}" in
 	0) ROTATE="normal" ;;
 	1) ROTATE="left" ;;
 	2) ROTATE="inverted" ;;
 	3) ROTATE="right" ;;
-	*) ROTATE="" ;;
+	4) ROTATE="normal"; REFLECT="x" ;;
+	5) ROTATE="left"; REFLECT="x" ;;
+	6) ROTATE="inverted"; REFLECT="x" ;;
+	7) ROTATE="right"; REFLECT="x" ;;
 	esac
 
-	if [[ -n "$transform" ]]; then
-		XRANDR_CMD="${XRANDR_CMD} --output ${XL_NAME} --rotate ${ROTATE} --mode ${RES} --rate ${RATE} --pos ${pos}"
-	else
-		XRANDR_CMD="${XRANDR_CMD} --output ${XL_NAME} --mode ${RES} --rate ${RATE} --pos ${pos}"
-	fi
+	CMD_PART="--output ${XL_NAME}"
+	[[ -n "$ROTATE" ]] && CMD_PART="${CMD_PART} --rotate ${ROTATE}"
+	[[ -n "$REFLECT" ]] && CMD_PART="${CMD_PART} --reflect ${REFLECT}"
+	CMD_PART="${CMD_PART} --mode ${RES} --pos ${pos}"
+	[[ -n "$RATE" ]] && CMD_PART="${CMD_PART} --rate ${RATE}"
+	XRANDR_CMD="${XRANDR_CMD} ${CMD_PART}"
 
 	if [[ "$pos" == "0x0" && "$PRIMARY_SET" == "false" ]]; then
 		XRANDR_CMD="${XRANDR_CMD} --primary"
 		PRIMARY_SET=true
 	fi
-done <"${MONITOR_CONFIG}"
+done < <(parse_monitors)
 
 # --- Write Xsetup ---
 OUTPUT="#!/bin/sh

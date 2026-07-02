@@ -142,9 +142,14 @@ For a deeper explanation of integration with Caelestia and sync flow, see **[Tem
 
 **Display or monitors not matching Hyprland config**
 
-Fixes multi-display positioning and orientation:
+Fixes multi-display positioning and orientation. Supports both the classic
+hyprlang config and the new Lua config (Hyprland 0.55+); the format is detected
+automatically:
 ```bash
-./scripts/monitors.sh ~/.config/hypr/Monitors.conf
+# hyprlang
+./scripts/monitors.sh ~/path/to/monitor/configuration.conf
+# Lua
+./scripts/monitors.sh ~/path/to/moitor/configuration.lua
 ```
 
 ## Help:
