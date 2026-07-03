@@ -14,9 +14,9 @@ Item {
     property string greetingText
     property string username
     readonly property var fontAxes: ({
-        "wght": 600,
-        "wdth": 80,
-        "ROND": 25,
+        "wght": 700,
+        "wdth": 115,
+        "ROND": 10,
         "opsz": 224
     })
 
@@ -119,6 +119,9 @@ Item {
             font.pointSize: 80
             font.family: googleSansFlex.name
             font.variableAxes: root.fontAxes
+            font.features: ({
+                "liga": 0
+            })
             color: config.text
             opacity: root.firstInput ? 1 : 0
             anchors.centerIn: parent
