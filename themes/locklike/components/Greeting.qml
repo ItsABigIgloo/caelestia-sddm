@@ -119,6 +119,9 @@ Item {
             font.pointSize: 80
             font.family: googleSansFlex.name
             font.variableAxes: root.fontAxes
+            font.features: ({
+                "liga": 0
+            })
             color: config.text
             opacity: root.firstInput ? 1 : 0
             anchors.centerIn: parent
