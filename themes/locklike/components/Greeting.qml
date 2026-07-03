@@ -14,9 +14,9 @@ Item {
     property string greetingText
     property string username
     readonly property var fontAxes: ({
-        "wght": 600,
-        "wdth": 80,
-        "ROND": 25,
+        "wght": 700,
+        "wdth": 115,
+        "ROND": 10,
         "opsz": 224
     })
 
