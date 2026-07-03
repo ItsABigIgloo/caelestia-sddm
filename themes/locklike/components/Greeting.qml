@@ -1,9 +1,10 @@
-import QtQuick
 import Qt5Compat.GraphicalEffects
+import QtQuick
 import QtQuick.Effects
 
 Item {
     id: root
+
     property bool firstInput
     property bool blurEnabled
     property real mainCardRadius
@@ -12,29 +13,29 @@ Item {
     property int rootWidth
     property string greetingText
     property string username
+    readonly property var fontAxes: ({
+        "wght": 600,
+        "wdth": 80,
+        "ROND": 25,
+        "opsz": 224
+    })
+
+    FontLoader {
+        id: googleSansFlex
+
+        source: "../assets/google-sans-flex/GoogleSansFlex.ttf"
+    }
+
     Rectangle {
         id: welcomeTextRectBlur
 
-        width: root.firstInput ? welcomeTextRect.width : welcomeTextRect.width / 10
-        height: root.firstInput ? welcomeTextRect.height : welcomeTextRect.height / 10
+        width: root.firstInput ? welcomeTextRect.width + 30 : welcomeTextRect.width / 10
+        height: root.firstInput ? welcomeTextRect.height + 30 : welcomeTextRect.height / 10
         color: "transparent"
         anchors.centerIn: parent
         radius: root.mainCardRadius
         clip: true
         layer.enabled: true
-
-        Behavior on width {
-            NumberAnimation {
-                duration: 600
-                easing.type: Easing.OutBack
-            }
-        }
-        Behavior on height {
-            NumberAnimation {
-                duration: 600
-                easing.type: Easing.OutBack
-            }
-        }
 
         AnimatedImage {
             id: backgroundBlur
@@ -62,13 +63,31 @@ Item {
                     duration: 400
                     easing: Easing.InOutCubic
                 }
+
             }
+
         }
 
         Rectangle {
             anchors.fill: backgroundBlur
             color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, root.welcomeBgOpacity)
             opacity: root.firstInput ? parseFloat(config.welcomeColorOpacity) : 0
+        }
+
+        Behavior on width {
+            NumberAnimation {
+                duration: 600
+                easing.type: Easing.OutBack
+            }
+
+        }
+
+        Behavior on height {
+            NumberAnimation {
+                duration: 600
+                easing.type: Easing.OutBack
+            }
+
         }
 
         layer.effect: OpacityMask {
@@ -78,7 +97,9 @@ Item {
                 height: welcomeTextRectBlur.height
                 radius: welcomeTextRectBlur.radius
             }
+
         }
+
     }
 
     Item {
@@ -95,8 +116,9 @@ Item {
             renderType: Text.QtRendering
             text: "<span style='color:" + config.text + ";'>" + root.greetingText + " " + "</span>" + "<span style='color:" + config.primary + ";'>" + root.username + "</span>"
             textFormat: Text.RichText
-            font.pointSize: 70
-            font.family: "Roboto Flex"
+            font.pointSize: 80
+            font.family: googleSansFlex.name
+            font.variableAxes: root.fontAxes
             color: config.text
             opacity: root.firstInput ? 1 : 0
             anchors.centerIn: parent
@@ -111,5 +133,7 @@ Item {
             easing.type: Easing.OutBack
             running: root.firstInput ? true : false
         }
+
     }
+
 }
