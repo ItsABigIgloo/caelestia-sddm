@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import M3Shapes
 import "shapes"
 import "shapes/material-shapes.js" as MaterialShapes
 
@@ -9,12 +10,17 @@ Rectangle {
     property alias currentSession: inputRect.currentSession
     property alias currentUser: inputRect.currentUser
     property alias buffer: inputRect.buffer
-    property int lastLength: 0
     onBufferChanged: {
-        if (buffer.length > lastLength) {
-            dots.currentIndex = buffer.length - 1;
-        }
-        lastLength = buffer.length;
+        while (dotModel.count < buffer.length)
+            dotModel.append({
+                shapeIdx: Math.floor(Math.random() * 5)
+            });
+        while (dotModel.count > buffer.length)
+            dotModel.remove(dotModel.count - 1);
+    }
+
+    ListModel {
+        id: dotModel
     }
     property alias isLoading: inputRect.isLoading
     property alias firstInput: inputRect.firstInput
@@ -221,7 +227,6 @@ Rectangle {
                 id: dots
                 spacing: 3
 
-                property int currentIndex: -1
                 property real fullWidth: inputRect.buffer.length * 15 + (inputRect.buffer.length - 1) * 3 + parent.height
 
                 width: fullWidth
@@ -235,53 +240,63 @@ Rectangle {
                 }
 
                 Repeater {
-                    model: inputRect.buffer.length
+                    model: dotModel
 
-                    delegate: ShapeCanvas {
-                        implicitWidth: 15
-                        implicitHeight: 15
+                    delegate: MaterialShape {
+                        id: dot
+
+                        required property int shapeIdx
+
+                        implicitSize: 15
+                        width: 15
+                        height: 15
                         color: "white"
-                        scale: 1.0
-                        opacity: 1.0
+                        scale: 0
+                        opacity: 0
+                        property var shapeQueue: [MaterialShape.Gem, MaterialShape.Sunny, MaterialShape.Cookie4Sided, MaterialShape.VerySunny, MaterialShape.Cookie6Sided]
+                        fromShape: shapeQueue[shapeIdx]
+                        toShape: MaterialShape.Circle
+                        morphProgress: 0
 
-                        property int shapeIndex: isNew ? Math.floor(Math.random() * (4 - 1 + 1)) + 1 : 0
-                        property bool isNew: index === dots.currentIndex
-                        property var shapeGetters: [MaterialShapes.getCircle, MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getCookie6Sided, MaterialShapes.getVerySunny]
-                        roundedPolygon: shapeGetters[shapeIndex]()
+                        SequentialAnimation {
+                            id: initAnim
+                            running: true
 
-
-                        SequentialAnimation on scale {
-                            running: isNew
-                            NumberAnimation {
-                                from: 0
-                                to: 1.4
+                            ParallelAnimation {
+                                NumberAnimation {
+                                    target: dot
+                                    property: "opacity"
+                                    from: 0
+                                    to: 1
+                                    duration: 150
+                                }
+                                SequentialAnimation {
+                                    NumberAnimation {
+                                        target: dot
+                                        property: "scale"
+                                        from: 0
+                                        to: 1.4
+                                        duration: 180
+                                        easing.type: Easing.OutCubic
+                                    }
+                                    NumberAnimation {
+                                        target: dot
+                                        property: "scale"
+                                        to: 1
+                                        duration: 150
+                                    }
+                                }
+                            }
+                            PauseAnimation {
                                 duration: 180
-                                easing.type: Easing.OutCubic
                             }
                             NumberAnimation {
-                                to: 1.0
-                                duration: 150
-                            }
-                        }
-
-                        SequentialAnimation on opacity {
-                            running: isNew
-                            NumberAnimation {
+                                target: dot
+                                property: "morphProgress"
                                 from: 0
                                 to: 1
-                                duration: 200
-                            }
-                        }
-                        Component.onCompleted: {
-                            timerShape.running = true
-                        }
-                        Timer {
-                            id: timerShape
-                            interval: 300
-                            repeat: false
-                            running: false
-                            onTriggered: {
-                                shapeIndex = 0;
+                                duration: 350
+                                easing.type: Easing.OutCubic
                             }
                         }
                     }
