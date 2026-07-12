@@ -1,7 +1,9 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Shapes
 import "shapes"
 import "shapes/material-shapes.js" as MaterialShapes
+import "shapes/shapes/morph.js" as Morph
 
 Rectangle {
     id: passwordRoot
@@ -11,9 +13,27 @@ Rectangle {
     property alias currentUser: inputRect.currentUser
     property alias buffer: inputRect.buffer
 
-    readonly property bool hasM3Shapes: {
-        const c = Qt.createComponent("MorphDots.qml", Component.PreferSynchronous);
-        return c.status === Component.Ready;
+    onBufferChanged: {
+        while (dotModel.count < buffer.length)
+            dotModel.append({
+                shapeIdx: Math.floor(Math.random() * 5)
+            });
+        while (dotModel.count > buffer.length)
+            dotModel.remove(dotModel.count - 1);
+    }
+
+    ListModel {
+        id: dotModel
+    }
+
+    function dotPath(morph, progress, size) {
+        const cubics = morph.asCubics(progress);
+        if (!cubics || cubics.length === 0)
+            return "";
+        let d = "M " + (cubics[0].anchor0X * size) + " " + (cubics[0].anchor0Y * size);
+        for (const c of cubics)
+            d += " C " + (c.control0X * size) + " " + (c.control0Y * size) + " " + (c.control1X * size) + " " + (c.control1Y * size) + " " + (c.anchor1X * size) + " " + (c.anchor1Y * size);
+        return d + " Z";
     }
 
     property alias isLoading: inputRect.isLoading
@@ -217,10 +237,97 @@ Rectangle {
                 }
             }
 
-            Loader {
-                anchors.fill: parent
-                source: passwordRoot.hasM3Shapes ? "MorphDots.qml" : "ClassicDots.qml"
-                onLoaded: item.buffer = Qt.binding(() => inputRect.buffer)
+            Row {
+                id: dots
+                spacing: 3
+
+                property real fullWidth: inputRect.buffer.length * 15 + (inputRect.buffer.length - 1) * 3 + parent.height
+
+                width: fullWidth
+                anchors.centerIn: parent
+
+                Behavior on width {
+                    NumberAnimation {
+                        duration: 150
+                        easing: Easing.OutCubic
+                    }
+                }
+
+                Repeater {
+                    model: dotModel
+
+                    delegate: Item {
+                        id: dot
+
+                        required property int shapeIdx
+
+                        width: 15
+                        height: 15
+                        scale: 0
+                        opacity: 0
+
+                        property var shapeGetters: [MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getVerySunny, MaterialShapes.getCookie6Sided]
+                        property var morph: new Morph.Morph(shapeGetters[shapeIdx](), MaterialShapes.getCircle())
+                        property real morphProgress: 0
+
+                        Shape {
+                            anchors.fill: parent
+                            preferredRendererType: Shape.CurveRenderer
+
+                            ShapePath {
+                                fillColor: "white"
+                                strokeColor: "transparent"
+                                strokeWidth: 0
+
+                                PathSvg {
+                                    path: passwordRoot.dotPath(dot.morph, dot.morphProgress, Math.min(dot.width, dot.height))
+                                }
+                            }
+                        }
+
+                        SequentialAnimation {
+                            id: initAnim
+                            running: true
+
+                            ParallelAnimation {
+                                NumberAnimation {
+                                    target: dot
+                                    property: "opacity"
+                                    from: 0
+                                    to: 1
+                                    duration: 150
+                                }
+                                SequentialAnimation {
+                                    NumberAnimation {
+                                        target: dot
+                                        property: "scale"
+                                        from: 0
+                                        to: 1.4
+                                        duration: 180
+                                        easing.type: Easing.OutCubic
+                                    }
+                                    NumberAnimation {
+                                        target: dot
+                                        property: "scale"
+                                        to: 1
+                                        duration: 150
+                                    }
+                                }
+                            }
+                            PauseAnimation {
+                                duration: 180
+                            }
+                            NumberAnimation {
+                                target: dot
+                                property: "morphProgress"
+                                from: 0
+                                to: 1
+                                duration: 350
+                                easing.type: Easing.OutCubic
+                            }
+                        }
+                    }
+                }
             }
         }
 
