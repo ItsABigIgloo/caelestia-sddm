@@ -237,14 +237,18 @@ Rectangle {
                 }
             }
 
-            Row {
+            ListView {
                 id: dots
+
+                orientation: ListView.Horizontal
                 spacing: 3
+                interactive: false
 
-                property real fullWidth: inputRect.buffer.length * 15 + (inputRect.buffer.length - 1) * 3 + parent.height
-
-                width: fullWidth
+                width: inputRect.buffer.length * 15 + (inputRect.buffer.length - 1) * 3 + parent.height
+                height: 15
                 anchors.centerIn: parent
+
+                model: dotModel
 
                 Behavior on width {
                     NumberAnimation {
@@ -253,78 +257,109 @@ Rectangle {
                     }
                 }
 
-                Repeater {
-                    model: dotModel
+                delegate: Item {
+                    id: dot
 
-                    delegate: Item {
-                        id: dot
+                    required property int shapeIdx
 
-                        required property int shapeIdx
+                    width: 15
+                    height: 15
+                    scale: 0
+                    opacity: 0
 
-                        width: 15
-                        height: 15
-                        scale: 0
-                        opacity: 0
+                    property var shapeGetters: [MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getVerySunny, MaterialShapes.getCookie6Sided]
+                    property var morph: new Morph.Morph(shapeGetters[shapeIdx](), MaterialShapes.getCircle())
+                    property real morphProgress: 0
 
-                        property var shapeGetters: [MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getVerySunny, MaterialShapes.getCookie6Sided]
-                        property var morph: new Morph.Morph(shapeGetters[shapeIdx](), MaterialShapes.getCircle())
-                        property real morphProgress: 0
+                    Shape {
+                        anchors.fill: parent
+                        preferredRendererType: Shape.CurveRenderer
 
-                        Shape {
-                            anchors.fill: parent
-                            preferredRendererType: Shape.CurveRenderer
+                        ShapePath {
+                            fillColor: "white"
+                            strokeColor: "transparent"
+                            strokeWidth: 0
 
-                            ShapePath {
-                                fillColor: "white"
-                                strokeColor: "transparent"
-                                strokeWidth: 0
-
-                                PathSvg {
-                                    path: passwordRoot.dotPath(dot.morph, dot.morphProgress, Math.min(dot.width, dot.height))
-                                }
+                            PathSvg {
+                                path: passwordRoot.dotPath(dot.morph, dot.morphProgress, Math.min(dot.width, dot.height))
                             }
                         }
+                    }
 
-                        SequentialAnimation {
-                            id: initAnim
-                            running: true
+                    SequentialAnimation {
+                        id: initAnim
+                        running: true
 
-                            ParallelAnimation {
+                        ParallelAnimation {
+                            NumberAnimation {
+                                target: dot
+                                property: "opacity"
+                                from: 0
+                                to: 1
+                                duration: 150
+                            }
+                            SequentialAnimation {
                                 NumberAnimation {
                                     target: dot
-                                    property: "opacity"
+                                    property: "scale"
                                     from: 0
+                                    to: 1.4
+                                    duration: 180
+                                    easing.type: Easing.OutCubic
+                                }
+                                NumberAnimation {
+                                    target: dot
+                                    property: "scale"
                                     to: 1
                                     duration: 150
                                 }
-                                SequentialAnimation {
-                                    NumberAnimation {
-                                        target: dot
-                                        property: "scale"
-                                        from: 0
-                                        to: 1.4
-                                        duration: 180
-                                        easing.type: Easing.OutCubic
-                                    }
-                                    NumberAnimation {
-                                        target: dot
-                                        property: "scale"
-                                        to: 1
-                                        duration: 150
-                                    }
-                                }
                             }
-                            PauseAnimation {
-                                duration: 180
+                        }
+                        PauseAnimation {
+                            duration: 180
+                        }
+                        NumberAnimation {
+                            target: dot
+                            property: "morphProgress"
+                            from: 0
+                            to: 1
+                            duration: 350
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+
+                    ListView.onRemove: {
+                        initAnim.stop();
+                        removeAnim.start();
+                    }
+
+                    SequentialAnimation {
+                        id: removeAnim
+
+                        PropertyAction {
+                            target: dot
+                            property: "ListView.delayRemove"
+                            value: true
+                        }
+                        ParallelAnimation {
+                            NumberAnimation {
+                                target: dot
+                                property: "opacity"
+                                to: 0
+                                duration: 150
                             }
                             NumberAnimation {
                                 target: dot
-                                property: "morphProgress"
-                                from: 0
-                                to: 1
-                                duration: 350
-                                easing.type: Easing.OutCubic
+                                property: "scale"
+                                to: 0
+                                duration: 150
+                                easing.type: Easing.InCubic
                             }
+                        }
+                        PropertyAction {
+                            target: dot
+                            property: "ListView.delayRemove"
+                            value: false
                         }
                     }
                 }
