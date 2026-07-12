@@ -1,21 +1,41 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Shapes
 import "shapes"
 import "shapes/material-shapes.js" as MaterialShapes
+import "shapes/shapes/morph.js" as Morph
 
 Rectangle {
+    id: passwordRoot
     color: "transparent"
 
     property alias currentSession: inputRect.currentSession
     property alias currentUser: inputRect.currentUser
     property alias buffer: inputRect.buffer
-    property int lastLength: 0
+
     onBufferChanged: {
-        if (buffer.length > lastLength) {
-            dots.currentIndex = buffer.length - 1;
-        }
-        lastLength = buffer.length;
+        while (dotModel.count < buffer.length)
+            dotModel.append({
+                shapeIdx: Math.floor(Math.random() * 5)
+            });
+        while (dotModel.count > buffer.length)
+            dotModel.remove(dotModel.count - 1);
     }
+
+    ListModel {
+        id: dotModel
+    }
+
+    function dotPath(morph, progress, size) {
+        const cubics = morph.asCubics(progress);
+        if (!cubics || cubics.length === 0)
+            return "";
+        let d = "M " + (cubics[0].anchor0X * size) + " " + (cubics[0].anchor0Y * size);
+        for (const c of cubics)
+            d += " C " + (c.control0X * size) + " " + (c.control0Y * size) + " " + (c.control1X * size) + " " + (c.control1Y * size) + " " + (c.anchor1X * size) + " " + (c.anchor1Y * size);
+        return d + " Z";
+    }
+
     property alias isLoading: inputRect.isLoading
     property alias firstInput: inputRect.firstInput
     property alias mainCardComponentsOpacity: inputRect.mainCardComponentsOpacity
@@ -217,15 +237,18 @@ Rectangle {
                 }
             }
 
-            Row {
+            ListView {
                 id: dots
+
+                orientation: ListView.Horizontal
                 spacing: 3
+                interactive: false
 
-                property int currentIndex: -1
-                property real fullWidth: inputRect.buffer.length * 15 + (inputRect.buffer.length - 1) * 3 + parent.height
-
-                width: fullWidth
+                width: inputRect.buffer.length * 15 + (inputRect.buffer.length - 1) * 3 + parent.height
+                height: 15
                 anchors.centerIn: parent
+
+                model: dotModel
 
                 Behavior on width {
                     NumberAnimation {
@@ -234,55 +257,109 @@ Rectangle {
                     }
                 }
 
-                Repeater {
-                    model: inputRect.buffer.length
+                delegate: Item {
+                    id: dot
 
-                    delegate: ShapeCanvas {
-                        implicitWidth: 15
-                        implicitHeight: 15
-                        color: "white"
-                        scale: 1.0
-                        opacity: 1.0
+                    required property int shapeIdx
 
-                        property int shapeIndex: isNew ? Math.floor(Math.random() * (4 - 1 + 1)) + 1 : 0
-                        property bool isNew: index === dots.currentIndex
-                        property var shapeGetters: [MaterialShapes.getCircle, MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getCookie6Sided, MaterialShapes.getVerySunny]
-                        roundedPolygon: shapeGetters[shapeIndex]()
+                    width: 15
+                    height: 15
+                    scale: 0
+                    opacity: 0
 
+                    property var shapeGetters: [MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getVerySunny, MaterialShapes.getCookie6Sided]
+                    property var morph: new Morph.Morph(shapeGetters[shapeIdx](), MaterialShapes.getCircle())
+                    property real morphProgress: 0
 
-                        SequentialAnimation on scale {
-                            running: isNew
-                            NumberAnimation {
-                                from: 0
-                                to: 1.4
-                                duration: 180
-                                easing.type: Easing.OutCubic
-                            }
-                            NumberAnimation {
-                                to: 1.0
-                                duration: 150
+                    Shape {
+                        anchors.fill: parent
+                        preferredRendererType: Shape.CurveRenderer
+
+                        ShapePath {
+                            fillColor: "white"
+                            strokeColor: "transparent"
+                            strokeWidth: 0
+
+                            PathSvg {
+                                path: passwordRoot.dotPath(dot.morph, dot.morphProgress, Math.min(dot.width, dot.height))
                             }
                         }
+                    }
 
-                        SequentialAnimation on opacity {
-                            running: isNew
+                    SequentialAnimation {
+                        id: initAnim
+                        running: true
+
+                        ParallelAnimation {
                             NumberAnimation {
+                                target: dot
+                                property: "opacity"
                                 from: 0
                                 to: 1
-                                duration: 200
+                                duration: 150
+                            }
+                            SequentialAnimation {
+                                NumberAnimation {
+                                    target: dot
+                                    property: "scale"
+                                    from: 0
+                                    to: 1.4
+                                    duration: 180
+                                    easing.type: Easing.OutCubic
+                                }
+                                NumberAnimation {
+                                    target: dot
+                                    property: "scale"
+                                    to: 1
+                                    duration: 150
+                                }
                             }
                         }
-                        Component.onCompleted: {
-                            timerShape.running = true
+                        PauseAnimation {
+                            duration: 180
                         }
-                        Timer {
-                            id: timerShape
-                            interval: 300
-                            repeat: false
-                            running: false
-                            onTriggered: {
-                                shapeIndex = 0;
+                        NumberAnimation {
+                            target: dot
+                            property: "morphProgress"
+                            from: 0
+                            to: 1
+                            duration: 350
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+
+                    ListView.onRemove: {
+                        initAnim.stop();
+                        removeAnim.start();
+                    }
+
+                    SequentialAnimation {
+                        id: removeAnim
+
+                        PropertyAction {
+                            target: dot
+                            property: "ListView.delayRemove"
+                            value: true
+                        }
+                        ParallelAnimation {
+                            NumberAnimation {
+                                target: dot
+                                property: "opacity"
+                                to: 0
+                                duration: 150
                             }
+                            NumberAnimation {
+                                target: dot
+                                property: "scale"
+                                to: 0
+                                duration: 150
+                                easing.type: Easing.InCubic
+                            }
+                        }
+                        PropertyAction {
+                            target: dot
+                            property: "ListView.delayRemove"
+                            value: false
                         }
                     }
                 }
