@@ -33,7 +33,6 @@ Rectangle {
     property bool capsLockOn: false
     property bool mainCardBgBlur: config.mainCardBgBlur === "true"
     property int sessionIndex
-
     // rounding stuff
     property real largeRadius: mainCard.radius
     property real midRadius: mainCard.radius / 1.4
@@ -68,6 +67,7 @@ Rectangle {
         onStatusChanged: {
             if (status === Image.Error)
                 console.log("Background missing, using fallback color");
+
         }
 
         Rectangle {
@@ -80,8 +80,11 @@ Rectangle {
                     duration: 300
                     easing: Easing.InOutCubic
                 }
+
             }
+
         }
+
     }
 
     Item {
@@ -92,51 +95,54 @@ Rectangle {
             if (event.key === Qt.Key_Escape) {
                 if (root.welcomeMessageEnabled)
                     root.firstInput = true;
+
                 root.buffer = "";
-                return;
+                return ;
             }
             if (event.key === Qt.Key_CapsLock) {
                 root.capsLockOn = !root.capsLockOn;
-                return;
+                return ;
             }
-            if (event.key === Qt.Key_Tab) {
-                return;
-            }
+            if (event.key === Qt.Key_Tab)
+                return ;
+
             if (root.firstInput) {
                 root.firstInput = false;
-                return;
+                return ;
             }
             if (event.key === Qt.Key_Right) {
                 if (userPicker.currentIndex < userModel.count - 1)
                     userPicker.currentIndex += 1;
 
-                return;
+                return ;
             }
             if (event.key === Qt.Key_Left) {
                 if (userPicker.currentIndex > 0)
                     userPicker.currentIndex -= 1;
 
-                return;
+                return ;
             }
             if (event.key === Qt.Key_Up) {
                 if (sessionPickerBtn.selectedIndex < sessionPickerBtn.count - 1)
                     sessionPickerBtn.selectedIndex += 1;
-                return;
+
+                return ;
             }
             if (event.key === Qt.Key_Down) {
                 if (sessionPickerBtn.selectedIndex > 0)
                     sessionPickerBtn.selectedIndex -= 1;
-                return;
+
+                return ;
             }
             if (event.key === Qt.Key_Backspace) {
                 root.buffer = root.buffer.slice(0, -1);
-                return;
+                return ;
             }
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
                 sddm.login(userPicker.currentText, root.buffer, root.sessionIndex);
                 root.buffer = "";
                 root.loading = true;
-                return;
+                return ;
             }
             root.buffer += event.text;
         }
@@ -156,7 +162,9 @@ Rectangle {
                 duration: 400
                 easing: Easing.InOutCubic
             }
+
         }
+
     }
 
     Greeting {
@@ -173,6 +181,16 @@ Rectangle {
 
     Rectangle {
         id: mainCard
+
+        property date currentTime: new Date()
+        property string day: Qt.formatDateTime(currentTime, "dddd").toUpperCase()
+        property string date: Qt.formatDateTime(currentTime, "d MMM").toUpperCase()
+        readonly property var fontAxesTitle: ({
+            "wght": 500,
+            "wdth": 30,
+            "ROND": 25,
+            "opsz": 224
+        })
 
         width: 1350
         height: 750
@@ -201,18 +219,6 @@ Rectangle {
             mainCardComponentsOpacity: root.mainCardComponentsOpacity
             ap: root.ap
         }
-
-        property date currentTime: new Date()
-
-        property string day: Qt.formatDateTime(currentTime, "dddd").toUpperCase()
-        property string date: Qt.formatDateTime(currentTime, "d MMM").toUpperCase()
-
-        readonly property var fontAxesTitle: ({
-                "wght": 500,
-                "wdth": 30,
-                "ROND": 25,
-                "opsz": 224 * centerScale
-            })
 
         FontLoader {
             id: googleSansFlex
@@ -263,7 +269,9 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
+
                     }
+
                 }
 
                 Rectangle {
@@ -288,7 +296,9 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
+
                     }
+
                 }
 
                 Rectangle {
@@ -314,8 +324,11 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
+
                     }
+
                 }
+
             }
 
             ColumnLayout {
@@ -349,11 +362,14 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
+
                     }
+
                 }
 
                 PasswordInput {
                     id: inputRect
+
                     Layout.alignment: Qt.AlignHCenter
                     mainCardComponentsOpacity: root.mainCardComponentsOpacity
                     firstInput: root.firstInput
@@ -371,16 +387,21 @@ Rectangle {
                     font.family: "Roboto"
                     color: config.text
                     opacity: 0 // Its buggy rnm fix later
+
                     Behavior on opacity {
                         NumberAnimation {
                             duration: 300
                             easing: Easing.InOutCubic
                         }
+
                     }
+
                 }
+
                 Item {
                     height: 20
                 }
+
             }
 
             ColumnLayout {
@@ -406,7 +427,9 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
+
                     }
+
                 }
 
                 Rectangle {
@@ -432,6 +455,7 @@ Rectangle {
                         layer.effect: ColorOverlay {
                             color: config.inverseOnSurface
                         }
+
                     }
 
                     Text {
@@ -450,9 +474,13 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
+
                     }
+
                 }
+
             }
+
         }
 
         SessionPicker {
@@ -474,7 +502,9 @@ Rectangle {
                     duration: 300
                     easing.type: Easing.OutBack
                 }
+
             }
+
         }
 
         Behavior on scale {
@@ -482,6 +512,7 @@ Rectangle {
                 duration: 300
                 easing.type: Easing.OutBack
             }
+
         }
 
         Behavior on opacity {
@@ -489,7 +520,9 @@ Rectangle {
                 duration: 300
                 easing.type: Easing.OutBack
             }
+
         }
+
     }
 
     ComboBox {
@@ -544,5 +577,7 @@ Rectangle {
                 context.fill();
             }
         }
+
     }
+
 }
