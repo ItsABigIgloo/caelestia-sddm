@@ -20,7 +20,7 @@ Canvas {
     // Internals: anim
     property var prevRoundedPolygon: null
     property double progress: 1
-    property var morph: new Morph.Morph(roundedPolygon, roundedPolygon)
+    property var morph: null
     property Animation animation: NumberAnimation {
         duration: 350
         easing.type: Easing.BezierSpline
