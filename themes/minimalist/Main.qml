@@ -50,6 +50,7 @@ Rectangle {
             if (event.key === Qt.Key_Escape) {
                 if (Theme.enableWelcomeMessage)
                     root.firstInput = true;
+
                 clearBuffer();
                 return ;
             }

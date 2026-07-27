@@ -9,8 +9,6 @@ Item {
     required property string currentSession
     required property string currentUser
     required property int rectHeight
-
-
     property string os: (config.os || "Arch").split(" ")[0]
     property string host: config.host || "localhost"
     property string session: (root.currentSession || "Hyprland").split(" ")[0]
@@ -33,6 +31,7 @@ Item {
                 font.family: "CaskaydiaCove NF"
                 font.pointSize: 15
             }
+
         }
 
         Text {
@@ -45,6 +44,7 @@ Item {
             Layout.topMargin: 32
             Layout.leftMargin: 8
         }
+
     }
 
     ColumnLayout {
@@ -94,7 +94,9 @@ Item {
                     lineHeightMode: Text.FixedHeight
                     Layout.preferredWidth: 100
                 }
+
             }
+
         }
 
         RowLayout {
@@ -151,6 +153,9 @@ Item {
                 color: config.inverseOnSurface
                 radius: 12
             }
+
         }
+
     }
+
 }

@@ -4,9 +4,7 @@ import QtQuick 2.15
 Column {
     id: root
 
-    spacing: -12
-
-    property real centerScale: 0.90
+    property real centerScale: 0.9
     property date currentTime: new Date()
     readonly property var fontAxesHours: ({
         "wght": 500,
@@ -26,6 +24,8 @@ Column {
         "ROND": 25,
         "opsz": 7
     })
+
+    spacing: -12
 
     Timer {
         interval: 1000

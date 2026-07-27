@@ -10,7 +10,6 @@ Item {
 
     function trigger() {
         bounceAnim.restart();
-
     }
 
     SequentialAnimation {

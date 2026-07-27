@@ -4,17 +4,28 @@ import "shapes"
 import "shapes/material-shapes.js" as MaterialShapes
 
 Item {
-    id: root
+    // --- Mask sources for OpacityMask ---
+    // --- Profile picture ---
 
-    z: 2
+    id: root
 
     /// Avatar shape: "hexagon" (Material Design blob) or "circle"
     property string avatarShape: "hexagon"
-
     // Hexagon mode properties
     property bool hovered: false
     property int hexIndex: 0
     property var shapeGetters: [MaterialShapes.getClamShell, MaterialShapes.getCookie6Sided]
+
+    z: 2
+    onHoveredChanged: {
+        if (root.avatarShape !== "hexagon")
+            return ;
+
+        if (hovered)
+            root.hexIndex = 1;
+        else
+            root.hexIndex = 0;
+    }
 
     // Hover interaction (switches hexagon shape on hover; no-op in circle mode)
     MouseArea {
@@ -24,21 +35,10 @@ Item {
         onExited: hovered = false
     }
 
-    onHoveredChanged: {
-        if (root.avatarShape !== "hexagon")
-            return;
-        if (hovered) {
-            root.hexIndex = 1;
-        } else {
-            root.hexIndex = 0;
-        }
-    }
-
-    // --- Mask sources for OpacityMask ---
-
     // Hexagon shape (used as mask in hexagon mode)
     ShapeCanvas {
         id: hexMask
+
         anchors.fill: parent
         visible: root.avatarShape === "hexagon"
         roundedPolygon: root.shapeGetters[root.hexIndex]()
@@ -49,13 +49,12 @@ Item {
     // Circular mask (used as mask in circle mode)
     Rectangle {
         id: circleMask
+
         anchors.fill: parent
         visible: root.avatarShape === "circle"
         radius: Math.min(width, height) / 2
         color: "#000000"
     }
-
-    // --- Profile picture ---
 
     Image {
         id: avatarImage
@@ -79,6 +78,7 @@ Item {
         onStatusChanged: {
             if (status === Image.Error)
                 retryTimer.start();
+
         }
         Component.onCompleted: loadNextAvatar()
 
@@ -92,5 +92,7 @@ Item {
         layer.effect: OpacityMask {
             maskSource: root.avatarShape === "circle" ? circleMask : hexMask
         }
+
     }
+
 }

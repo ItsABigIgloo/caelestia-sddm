@@ -15,7 +15,7 @@ Button {
     implicitHeight: 64
     hoverEnabled: true
     focusPolicy: Qt.ClickFocus
-    scale: 1.0 + buttonBounce.bounce
+    scale: 1 + buttonBounce.bounce
     onClicked: {
         buttonBounce.trigger();
         if (onClickedAction)

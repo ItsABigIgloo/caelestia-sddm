@@ -12,6 +12,7 @@ Item {
     property var onSwitchUser: null
     // Calculate actual visual dimensions based on the shape bounds
     readonly property var bounds: bgShape.bounds
+    property real hoverBoost: avatarHover.containsMouse ? 0.05 : 0
 
     onCurrentUserIndexChanged: {
         if (avatarImage.status !== Image.Null)
@@ -21,17 +22,7 @@ Item {
     implicitWidth: Theme.avatarFrameSize
     implicitHeight: Theme.avatarShape === "clamshell" ? 220 : Theme.avatarFrameSize
     clip: true
-
-    property real hoverBoost: avatarHover.containsMouse ? 0.05 : 0
-    scale: 1.0 + root.hoverBoost + avatarBounce.bounce
-
-    Behavior on hoverBoost {
-        NumberAnimation {
-            duration: Theme.animDurationFast
-            easing.type: Easing.OutCubic
-        }
-
-    }
+    scale: 1 + root.hoverBoost + avatarBounce.bounce
 
     TapBounce {
         id: avatarBounce
@@ -144,6 +135,13 @@ Item {
             if (root.onSwitchUser)
                 root.onSwitchUser();
 
+        }
+    }
+
+    Behavior on hoverBoost {
+        NumberAnimation {
+            duration: Theme.animDurationFast
+            easing.type: Easing.OutCubic
         }
 
     }

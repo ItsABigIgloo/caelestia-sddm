@@ -38,4 +38,5 @@ Item {
         onTriggered: topLeftRect.getPhase()
         repeat: true
     }
+
 }

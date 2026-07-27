@@ -9,6 +9,7 @@ Item {
     property var items: []
     property int selectedIndex: 0
     property string currentText
+
     Component.onCompleted: {
         root.currentText = sessionArray.sessions[root.selectedIndex].name;
         var arr = [];
@@ -20,7 +21,6 @@ Item {
     onSelectedIndexChanged: {
         root.currentText = sessionArray.sessions[root.selectedIndex].name;
     }
-
     width: labelRect.width + expandBtn.width
     height: 40
     opacity: root.count > 0 ? 1 : 0
@@ -28,17 +28,20 @@ Item {
 
     Instantiator {
         id: sessionArray
-        model: sessionModel
+
         property var sessions: []
+
+        model: sessionModel
 
         delegate: Item {
             Component.onCompleted: {
                 sessionArray.sessions.push({
-                    index: index,
-                    name: model.name
+                    "index": index,
+                    "name": model.name
                 });
             }
         }
+
     }
 
     Rectangle {
@@ -53,7 +56,6 @@ Item {
         topRightRadius: 5
         bottomRightRadius: 5
         color: config.subComponents
-
         width: 210
 
         Row {
@@ -82,6 +84,7 @@ Item {
                 font.family: "Rubik"
                 elide: Text.ElideRight
             }
+
         }
 
         LayerState {
@@ -93,6 +96,7 @@ Item {
             topRightradius: labelRect.topRightRadius
             bottomRightradius: labelRect.bottomRightRadius
         }
+
     }
 
     Rectangle {
@@ -107,22 +111,7 @@ Item {
         topLeftRadius: rad
         bottomLeftRadius: rad
         color: config.primary
-
         width: height
-
-        Behavior on topLeftRadius {
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.InOutCubic
-            }
-        }
-
-        Behavior on bottomLeftRadius {
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.InOutCubic
-            }
-        }
 
         Text {
             id: expandIcon
@@ -140,6 +129,7 @@ Item {
                     duration: 200
                     easing.type: Easing.InOutCubic
                 }
+
             }
 
             Behavior on rotation {
@@ -147,7 +137,9 @@ Item {
                     duration: 200
                     easing.type: Easing.InOutCubic
                 }
+
             }
+
         }
 
         LayerState {
@@ -157,6 +149,23 @@ Item {
             parentRadius: expandBtn.radius
             onClicked: root.expanded = !root.expanded
         }
+
+        Behavior on topLeftRadius {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.InOutCubic
+            }
+
+        }
+
+        Behavior on bottomLeftRadius {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.InOutCubic
+            }
+
+        }
+
     }
 
     Rectangle {
@@ -167,34 +176,14 @@ Item {
         radius: 8
         border.color: config.outline
         border.width: 1
-
         anchors.top: labelRect.bottom
         anchors.topMargin: 4
         anchors.left: labelRect.left
         anchors.leftMargin: -10
         width: 260
         height: Math.min(200, root.count * 36)
-
         clip: true
-
         opacity: root.expanded ? 1 : 0
-        transform: Translate {
-            y: root.expanded ? 0 : -10
-        }
-
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 150
-                easing.type: Easing.InOutCubic
-            }
-        }
-
-        Behavior on y {
-            NumberAnimation {
-                duration: 150
-                easing.type: Easing.InOutCubic
-            }
-        }
 
         ListView {
             id: sessionList
@@ -214,12 +203,6 @@ Item {
                 radius: 4
                 color: index === ListView.view.currentIndex ? config.primary : "transparent"
                 opacity: index === ListView.view.currentIndex ? 0.2 : 1
-
-                Behavior on color {
-                    ColorAnimation {
-                        duration: 100
-                    }
-                }
 
                 MouseArea {
                     anchors.fill: parent
@@ -241,8 +224,38 @@ Item {
                     leftPadding: 4
                     rightPadding: 4
                 }
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: 100
+                    }
+
+                }
+
             }
+
         }
+
+        transform: Translate {
+            y: root.expanded ? 0 : -10
+        }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 150
+                easing.type: Easing.InOutCubic
+            }
+
+        }
+
+        Behavior on y {
+            NumberAnimation {
+                duration: 150
+                easing.type: Easing.InOutCubic
+            }
+
+        }
+
     }
 
     MouseArea {
@@ -253,4 +266,5 @@ Item {
         enabled: root.expanded
         onClicked: root.expanded = false
     }
+
 }

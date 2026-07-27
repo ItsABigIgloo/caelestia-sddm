@@ -48,7 +48,9 @@ Item {
             ColorAnimation {
                 duration: 200
             }
+
         }
+
     }
 
     Rectangle {
@@ -88,6 +90,9 @@ Item {
             ColorAnimation {
                 duration: 200
             }
+
         }
+
     }
+
 }

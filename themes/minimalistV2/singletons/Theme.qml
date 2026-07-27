@@ -10,7 +10,7 @@ QtObject {
     property real avatarFrameSize: {
         if (theme.avatarShape === "clamshell")
             return 300;
-        
+
         if (theme.avatarShape === "circle")
             return 240;
 
@@ -19,7 +19,6 @@ QtObject {
     property real avatarInset: 19
     property string _randomAvatarShape: {
         var shapes = ["circle", "clamshell", "cookie"];
-
         return shapes[Math.floor(Math.random() * shapes.length)];
     }
     property string avatarShape: {

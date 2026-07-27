@@ -50,6 +50,7 @@ QtObject {
         var val = getConfig("welcomeMessage");
         if (val === undefined)
             return "Welcome $USER";
+
         return val.toString().replace(/^"|"$/g, "");
     }
     // effects

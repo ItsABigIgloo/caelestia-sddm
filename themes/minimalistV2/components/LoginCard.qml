@@ -185,7 +185,6 @@ Item {
                                 root.onRestoreFocus();
 
                         }
-
                     }
                 }
 
@@ -212,7 +211,7 @@ Item {
                         font.variableAxes: userSessionRow.textAxes
                         color: userMouseArea.containsMouse ? Theme.mOnSurface : Theme.mPrimary
                         text: root.getUserName(root.currentUserIndex)
-                        scale: 1.0 + userBounce.bounce
+                        scale: 1 + userBounce.bounce
 
                         TapBounce {
                             id: userBounce
@@ -259,7 +258,7 @@ Item {
                         font.variableAxes: userSessionRow.textAxes
                         color: sessionMouseArea.containsMouse ? Theme.mOnSurface : Theme.mPrimary
                         text: root.getSessionName(root.currentSessionIndex)
-                        scale: 1.0 + sessionBounce.bounce
+                        scale: 1 + sessionBounce.bounce
 
                         TapBounce {
                             id: sessionBounce

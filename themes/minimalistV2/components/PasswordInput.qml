@@ -21,7 +21,6 @@ Item {
 
         lastLength = buffer.length;
     }
-
     implicitWidth: 365
     implicitHeight: 48
 
@@ -238,41 +237,15 @@ Item {
                     model: root.buffer.length
 
                     delegate: ShapeCanvas {
-                        implicitWidth: 15
-                        implicitHeight: 15
-                        color: Theme.mOnSurface
-                        opacity: 1.0
-
                         property bool isNew: index === dots.currentIndex
                         property int shapeIndex: isNew ? Math.floor(Math.random() * 4) + 1 : 0
                         property var shapeGetters: [MaterialShapes.getCircle, MaterialShapes.getGem, MaterialShapes.getSunny, MaterialShapes.getCookie4Sided, MaterialShapes.getCookie6Sided, MaterialShapes.getVerySunny]
+
+                        implicitWidth: 15
+                        implicitHeight: 15
+                        color: Theme.mOnSurface
+                        opacity: 1
                         roundedPolygon: shapeGetters[shapeIndex]()
-
-                        SequentialAnimation on scale {
-                            running: isNew
-                            NumberAnimation {
-                                from: 0
-                                to: 1.4
-                                duration: 180
-                                easing.type: Easing.OutCubic
-                            }
-
-                            NumberAnimation {
-                                to: 1.0
-                                duration: 150
-                            }
-
-                        }
-
-                        SequentialAnimation on opacity {
-                            running: isNew
-                            NumberAnimation {
-                                from: 0
-                                to: 1
-                                duration: 200
-                            }
-
-                        }
 
                         Timer {
                             id: timerShape
@@ -281,6 +254,34 @@ Item {
                             repeat: false
                             running: isNew
                             onTriggered: shapeIndex = 0
+                        }
+
+                        SequentialAnimation on scale {
+                            running: isNew
+
+                            NumberAnimation {
+                                from: 0
+                                to: 1.4
+                                duration: 180
+                                easing.type: Easing.OutCubic
+                            }
+
+                            NumberAnimation {
+                                to: 1
+                                duration: 150
+                            }
+
+                        }
+
+                        SequentialAnimation on opacity {
+                            running: isNew
+
+                            NumberAnimation {
+                                from: 0
+                                to: 1
+                                duration: 200
+                            }
+
                         }
 
                     }
