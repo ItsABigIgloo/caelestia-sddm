@@ -128,6 +128,16 @@ For a deeper explanation of integration with Caelestia and sync flow, see **[Tem
 
 ## Troubleshooting:
 
+**SDDM doesn't start and stays in blackscreen (Integrated Graphics CPU + Discrete NVIDIA GPU)**
+
+```bash
+sudo nano /usr/share/sddm/scripts/Xsetup
+
+# inside it add
+xrandr --setprovideroutputsource modesetting NVIDIA-0
+xrandr --auto
+```
+
 **Avatar not updating or showing stale image**
 
 ```bash
