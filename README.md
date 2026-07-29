@@ -26,14 +26,6 @@
 <img src="https://github.com/user-attachments/assets/02207bd5-fa7b-4312-9ff2-583f57fc5f18" alt="MinimalistV2">
 </a>
 
-<div align="center">
-    <h2> Minimalist Theme </h2>
-</div>
-
-<a href="https://github.com/user-attachments/assets/0c907322-d1ea-4e0c-97b3-01db9e92b26b">
-<img src="https://github.com/user-attachments/assets/0c907322-d1ea-4e0c-97b3-01db9e92b26b" alt="Minimalist">
-</a>
-
 ---
 
 ## Requirements
