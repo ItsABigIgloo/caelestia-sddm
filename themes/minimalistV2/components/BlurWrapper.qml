@@ -42,6 +42,13 @@ Item {
             height: 1080
             source: blurCard.source
             fillMode: Image.PreserveAspectCrop
+
+            ShaderEffectSource {
+                anchors.fill: parent
+                sourceItem: Theme.videoItem
+                visible: Theme.videoActive
+            }
+
         }
 
         MultiEffect {

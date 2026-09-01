@@ -6,11 +6,13 @@ QtObject {
 
     property bool configAvailable: false
     property string backgroundSource: "assets/background" // allow for different file extensions
+    property bool videoActive: false
+    property var videoItem: null
     property string fontFamily: "Google Sans Flex"
     property real avatarFrameSize: {
         if (theme.avatarShape === "clamshell")
             return 300;
-        
+
         if (theme.avatarShape === "circle")
             return 240;
 
@@ -19,7 +21,6 @@ QtObject {
     property real avatarInset: 19
     property string _randomAvatarShape: {
         var shapes = ["circle", "clamshell", "cookie"];
-
         return shapes[Math.floor(Math.random() * shapes.length)];
     }
     property string avatarShape: {

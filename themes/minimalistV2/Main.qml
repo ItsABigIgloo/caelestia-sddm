@@ -127,13 +127,16 @@ Rectangle {
     AnimatedImage {
         id: background
 
-        property string src: Theme.backgroundSource
-        property bool isVideo: src.endsWith(".mp4") || src.endsWith(".webm")
-
         anchors.fill: parent
-        source: background.src
+        source: Theme.backgroundSource
         fillMode: Image.PreserveAspectCrop
-        visible: !background.isVideo
+
+        Loader {
+            id: videoLoader
+
+            anchors.fill: parent
+            source: "components/VideoBackground.qml"
+        }
 
         Rectangle {
             anchors.fill: parent
