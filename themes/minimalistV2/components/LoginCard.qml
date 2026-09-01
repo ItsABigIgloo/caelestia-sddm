@@ -156,7 +156,7 @@ Item {
             anchors.fill: parent
             anchors.margins: 16
             radius: Theme.cardRadius - 16
-            color: Theme.withAlpha(Theme.mOnSecondary, Theme.innerCardOpacity)
+            color: Theme.withAlpha(Theme.mSurfaceContainer, Theme.innerCardOpacity)
 
             Column {
                 id: mainContent
