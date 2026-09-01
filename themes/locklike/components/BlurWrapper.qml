@@ -19,6 +19,7 @@ Item {
     property real colorOpacity: 1
     property bool visibleState: true
     property url source: Qt.resolvedUrl("../assets/background")
+    property var videoSourceItem: null
 
     function startAnimation() {
         widthAnim.start();
@@ -57,6 +58,13 @@ Item {
                     console.log("Background missing, using fallback color");
 
             }
+
+            ShaderEffectSource {
+                anchors.fill: parent
+                sourceItem: blurCard.videoSourceItem
+                visible: blurCard.videoSourceItem !== null
+            }
+
         }
 
         MultiEffect {

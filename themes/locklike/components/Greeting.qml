@@ -13,6 +13,7 @@ Item {
     property int rootWidth
     property string greetingText
     property string username
+    property var videoSourceItem: null
     readonly property var fontAxes: ({
         "wght": 700,
         "wdth": 115,
@@ -46,6 +47,13 @@ Item {
             source: "../assets/background"
             fillMode: Image.PreserveAspectCrop
             opacity: root.firstInput ? 1 : 0
+
+            ShaderEffectSource {
+                anchors.fill: parent
+                sourceItem: root.videoSourceItem
+                visible: root.videoSourceItem !== null
+            }
+
         }
 
         MultiEffect {
