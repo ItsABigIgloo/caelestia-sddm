@@ -38,6 +38,7 @@ List of requirements:
 * **qt6-declarative**
 * **qt6-5compat**
 * **qt6-svg**
+* **qt6-multimedia**
 * **Material Symbols**
 * **Rubik Font**
 * **Roboto Font**
