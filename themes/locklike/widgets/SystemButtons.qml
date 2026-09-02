@@ -2,6 +2,8 @@ import "../components"
 import QtQuick
 
 Item {
+    id: root
+
     property real rectHeight
     property real rectWidth
     property real rectRadius
@@ -56,9 +58,9 @@ Item {
 
         anchors.right: parent.right
         anchors.top: parent.top
-        height: rectHeight
-        width: rectWidth
-        radius: bottomLeftRect.radius
+        height: root.rectHeight
+        width: root.rectWidth
+        radius: root.rectRadius
         color: config.subComponents
         clip: true
 

@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import "shapes"
@@ -20,8 +21,8 @@ Item {
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
-        onEntered: hovered = true
-        onExited: hovered = false
+        onEntered: root.hovered = true
+        onExited: root.hovered = false
     }
 
     onHoveredChanged: {

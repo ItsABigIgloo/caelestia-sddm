@@ -13,7 +13,7 @@ Rectangle {
     property bool ap: config.ap === "true" ? true : false
     property bool sessionPickerEnabled: config.sessionPicker === "true" ? true : false
     property string avatarShape: {
-        var shape = config.AvatarShape || "hexagon";
+        const shape = config.AvatarShape || "hexagon";
         return (shape !== "hexagon" && shape !== "circle") ? "hexagon" : shape;
     }
     property bool welcomeMessageEnabled: config.enableWelcomeMessage !== "false"
@@ -24,7 +24,7 @@ Rectangle {
     property bool welcomeBgBlur: config.welcomeBgBlur === "true"
     property real mainCardBlurAmount: parseFloat(config.mainCardBlurAmount) || 1
     property real mainCardComponentsOpacity: {
-        var value = parseFloat(config.mainCardComponentsOpacity);
+        const value = parseFloat(config.mainCardComponentsOpacity);
         if (isNaN(value) || value < 0.6)
             return 1;
 
@@ -79,7 +79,7 @@ Rectangle {
         Rectangle {
             anchors.fill: parent
             color: "#000000"
-            opacity: firstInput ? 0 : 0.4
+            opacity: root.firstInput ? 0 : 0.4
 
             Behavior on opacity {
                 NumberAnimation {
@@ -94,7 +94,7 @@ Rectangle {
         id: keylogger
 
         focus: true
-        Keys.onPressed: {
+        Keys.onPressed: function (event) {
             if (event.key === Qt.Key_Escape) {
                 if (root.welcomeMessageEnabled)
                     root.firstInput = true;
@@ -178,7 +178,7 @@ Rectangle {
         username: userPicker.currentText
         blurAmount: root.welcomeBgBlurAmount
         blurEnabled: root.welcomeBgBlur
-        videoSourceItem: videoLoader.item ? videoLoader.item.activeVideoItem : null
+        videoSourceItem: videoLoader.item ? (videoLoader.item as VideoBackground).activeVideoItem : null
     }
 
     Rectangle {
@@ -196,8 +196,8 @@ Rectangle {
 
         width: 1350
         height: 750
-        scale: firstInput ? 0.5 : 1
-        opacity: firstInput ? 0 : 1
+        scale: root.firstInput ? 0.5 : 1
+        opacity: root.firstInput ? 0 : 1
         anchors.centerIn: parent
         radius: 70
         color: "transparent"
@@ -211,7 +211,7 @@ Rectangle {
             bgColor: config.mainCard
             visibleState: !root.firstInput
             radius: 50
-            videoSourceItem: videoLoader.item ? videoLoader.item.activeVideoItem : null
+            videoSourceItem: videoLoader.item ? (videoLoader.item as VideoBackground).activeVideoItem : null
         }
 
         MainClock {
@@ -265,6 +265,7 @@ Rectangle {
                         id: greeting
 
                         anchors.centerIn: parent
+                        username: userPicker.currentText
                     }
 
                     Behavior on opacity {
@@ -473,7 +474,7 @@ Rectangle {
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.topMargin: mainCard.height - 100
-            currentText: sessionArray.sessions[0].name
+            currentText: sessionPickerBtn.items.length > 0 ? sessionPickerBtn.items[0] : ""
             selectedIndex: 0
             opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
             visible: root.sessionPickerEnabled

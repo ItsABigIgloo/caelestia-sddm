@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Effects
@@ -75,7 +76,7 @@ Item {
 
         Rectangle {
             anchors.fill: backgroundBlur
-            color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, root.welcomeBgOpacity)
+            color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, 1)
             opacity: root.firstInput ? parseFloat(config.welcomeColorOpacity) : 0
         }
 

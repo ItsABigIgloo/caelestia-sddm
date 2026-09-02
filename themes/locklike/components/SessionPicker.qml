@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 
 Item {
@@ -10,8 +11,8 @@ Item {
     property string currentText
     Component.onCompleted: {
         root.currentText = sessionArray.sessions[root.selectedIndex].name;
-        var arr = [];
-        for (var i = 0; i < sessionArray.sessions.length; i++) {
+        const arr = [];
+        for (let i = 0; i < sessionArray.sessions.length; i++) {
             arr.push(sessionArray.sessions[i].name);
         }
         root.items = arr;
@@ -31,6 +32,9 @@ Item {
         property var sessions: []
 
         delegate: Item {
+            required property int index
+            required property var model
+
             Component.onCompleted: {
                 sessionArray.sessions.push({
                     index: index,
@@ -208,6 +212,10 @@ Item {
             implicitHeight: contentHeight
 
             delegate: Rectangle {
+                id: delegateItem
+
+                required property int index
+
                 width: parent.width
                 height: 32
                 radius: 4
@@ -224,15 +232,15 @@ Item {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     onClicked: {
-                        root.selectedIndex = index;
-                        root.currentText = root.items[index];
+                        root.selectedIndex = delegateItem.index;
+                        root.currentText = root.items[delegateItem.index];
                         root.expanded = false;
                     }
                 }
 
                 Text {
                     anchors.centerIn: parent
-                    text: root.items[index]
+                    text: root.items[delegateItem.index]
                     color: config.text
                     font.pixelSize: 13
                     font.family: "Rubik"

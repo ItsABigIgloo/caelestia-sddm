@@ -4,6 +4,7 @@ Item {
     id: topLeftRect
 
     property string welcomeString
+    property string username
 
     function getPhase() {
         var now = new Date();
@@ -21,7 +22,7 @@ Item {
     Text {
         renderType: Text.NativeRendering
         width: 370
-        text: "<span style='color:" + config.text + ";'>" + topLeftRect.welcomeString + " </span>" + "<span style='color:" + config.primary + ";'>" + userPicker.displayText + "</span>"
+        text: "<span style='color:" + config.text + ";'>" + topLeftRect.welcomeString + " </span>" + "<span style='color:" + config.primary + ";'>" + topLeftRect.username + "</span>"
         textFormat: Text.RichText
         wrapMode: Text.WordWrap
         anchors.centerIn: parent

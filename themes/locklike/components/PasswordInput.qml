@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Shapes
 import "shapes"
@@ -38,6 +39,10 @@ Rectangle {
     property alias isLoading: inputRect.isLoading
     property alias firstInput: inputRect.firstInput
     property alias mainCardComponentsOpacity: inputRect.mainCardComponentsOpacity
+
+    function shake() {
+        inputRect.shake();
+    }
 
     Rectangle {
         id: inputRect

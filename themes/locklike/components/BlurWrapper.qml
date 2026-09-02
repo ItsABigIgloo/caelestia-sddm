@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Effects
@@ -35,8 +36,8 @@ Item {
     Rectangle {
         id: rootRect
 
-        width: startWidth
-        height: startHeight
+        width: blurCard.startWidth
+        height: blurCard.startHeight
         radius: blurCard.radius
         color: "transparent"
         opacity: blurCard.visibleState ? 1 : 0

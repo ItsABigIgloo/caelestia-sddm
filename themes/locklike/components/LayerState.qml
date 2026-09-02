@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import Qt5Compat.GraphicalEffects
 
@@ -90,8 +91,8 @@ Item {
     }
     layer.effect: OpacityMask {
         maskSource: Rectangle {
-            width: parentWidth
-            height: parentHeight
+            width: root.parentWidth
+            height: root.parentHeight
             topRightRadius: root.topRightradius
             topLeftRadius: root.topLeftradius
             bottomLeftRadius: root.bottomLeftradius

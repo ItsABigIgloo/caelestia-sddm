@@ -5,7 +5,7 @@ Item {
     id: root
 
     property bool isActive: false
-    readonly property var activeVideoItem: isActive ? videoOutput : null
+    readonly property var activeVideoItem: isActive ? videoSurface : null
     readonly property var candidates: ["mp4", "webm", "mkv", "mov", "m4v", "avi"]
     property int probeIndex: 0
 
@@ -26,7 +26,7 @@ Item {
     MediaPlayer {
         id: player
 
-        videoOutput: videoOutput
+        videoOutput: videoSurface
         loops: MediaPlayer.Infinite
         // Probe failures (missing/corrupt files) fall through to the next
         // candidate extension until one loads, else the image stays visible.
@@ -52,7 +52,7 @@ Item {
     }
 
     VideoOutput {
-        id: videoOutput
+        id: videoSurface
 
         anchors.fill: parent
         fillMode: VideoOutput.PreserveAspectCrop
