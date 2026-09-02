@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Shapes
 import "shapes"
 import "shapes/material-shapes.js" as MaterialShapes

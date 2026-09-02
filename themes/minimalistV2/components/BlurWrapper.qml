@@ -1,4 +1,3 @@
-import "../singletons"
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Effects
