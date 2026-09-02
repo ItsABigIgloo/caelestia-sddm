@@ -1,5 +1,5 @@
-import QtQuick 2.15
 pragma Singleton
+import QtQuick
 
 QtObject {
     id: theme
@@ -87,7 +87,7 @@ QtObject {
         if (!configAvailable)
             return undefined;
 
-        var value = config[key];
+        const value = config[key];
         return value !== undefined ? value : undefined;
     }
 

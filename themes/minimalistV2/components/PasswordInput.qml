@@ -1,5 +1,6 @@
+pragma ComponentBehavior: Bound
 import "../singletons"
-import QtQuick 2.15
+import QtQuick
 import QtQuick.Layouts 1.15
 import "shapes"
 import "shapes/material-shapes.js" as MaterialShapes
@@ -56,9 +57,7 @@ Item {
                     NumberAnimation {
                         duration: Theme.animDurationFast
                     }
-
                 }
-
             }
 
             Text {
@@ -77,11 +76,8 @@ Item {
                     ColorAnimation {
                         duration: Theme.animDurationFast
                     }
-
                 }
-
             }
-
         }
 
         ShapeCanvas {
@@ -116,9 +112,7 @@ Item {
                 NumberAnimation {
                     duration: Theme.animDurationFast
                 }
-
             }
-
         }
 
         SequentialAnimation {
@@ -139,7 +133,6 @@ Item {
                 to: 1
                 duration: 100
             }
-
         }
 
         SequentialAnimation {
@@ -195,7 +188,6 @@ Item {
                 to: 0
                 duration: 50
             }
-
         }
 
         Rectangle {
@@ -221,9 +213,7 @@ Item {
                     NumberAnimation {
                         duration: Theme.animDurationFast
                     }
-
                 }
-
             }
 
             RowLayout {
@@ -238,6 +228,10 @@ Item {
                     model: root.buffer.length
 
                     delegate: ShapeCanvas {
+                        id: dot
+
+                        required property int index
+
                         implicitWidth: 15
                         implicitHeight: 15
                         color: Theme.mOnSurface
@@ -249,7 +243,7 @@ Item {
                         roundedPolygon: shapeGetters[shapeIndex]()
 
                         SequentialAnimation on scale {
-                            running: isNew
+                            running: dot.isNew
                             NumberAnimation {
                                 from: 0
                                 to: 1.4
@@ -261,17 +255,15 @@ Item {
                                 to: 1.0
                                 duration: 150
                             }
-
                         }
 
                         SequentialAnimation on opacity {
-                            running: isNew
+                            running: dot.isNew
                             NumberAnimation {
                                 from: 0
                                 to: 1
                                 duration: 200
                             }
-
                         }
 
                         Timer {
@@ -279,12 +271,10 @@ Item {
 
                             interval: 300
                             repeat: false
-                            running: isNew
-                            onTriggered: shapeIndex = 0
+                            running: dot.isNew
+                            onTriggered: dot.shapeIndex = 0
                         }
-
                     }
-
                 }
 
                 Rectangle {
@@ -293,8 +283,8 @@ Item {
                     property bool blink: true
 
                     visible: root.buffer !== ""
-                    width: 2
-                    height: 25
+                    implicitWidth: 2
+                    implicitHeight: 25
                     color: Theme.mOnSurface
                     opacity: blink ? 1 : 0
 
@@ -309,13 +299,9 @@ Item {
                         NumberAnimation {
                             duration: Theme.animDurationFast
                         }
-
                     }
-
                 }
-
             }
-
         }
 
         Rectangle {
@@ -362,9 +348,7 @@ Item {
                             duration: Theme.animDurationFast
                             easing.type: Easing.OutCubic
                         }
-
                     }
-
                 }
 
                 MouseArea {
@@ -380,7 +364,6 @@ Item {
 
                             if (root.onRestoreFocus)
                                 root.onRestoreFocus();
-
                         }
                     }
                 }
@@ -390,7 +373,6 @@ Item {
                         duration: Theme.animDurationFast
                         easing.type: Easing.OutCubic
                     }
-
                 }
 
                 Behavior on scale {
@@ -398,11 +380,8 @@ Item {
                         duration: Theme.animDurationFast
                         easing.type: Easing.OutCubic
                     }
-
                 }
-
             }
-
         }
 
         Behavior on width {
@@ -410,19 +389,15 @@ Item {
                 duration: Theme.animDurationNormal
                 easing.type: Easing.OutBack
             }
-
         }
-
     }
 
     Connections {
         function onIsErrorChanged() {
             if (root.isError)
                 shakeRotation.start();
-
         }
 
         target: root
     }
-
 }

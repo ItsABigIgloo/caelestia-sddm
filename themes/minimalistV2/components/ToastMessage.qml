@@ -1,5 +1,5 @@
 import "../singletons"
-import QtQuick 2.15
+import QtQuick
 import QtQuick.Layouts 1.15
 
 Rectangle {
@@ -11,7 +11,7 @@ Rectangle {
     property color textColor: Theme.mOnError
     property string iconText: "error"
 
-    signal dismissed()
+    signal dismissed
 
     function show(msg, type) {
         if (type === "warning" || type === "info") {
@@ -61,7 +61,6 @@ Rectangle {
             text: root.message
             color: root.textColor
         }
-
     }
 
     Timer {
@@ -77,7 +76,6 @@ Rectangle {
         function onIsOpenChanged() {
             if (!root.isOpen)
                 root.dismissed();
-
         }
 
         target: root
@@ -88,7 +86,6 @@ Rectangle {
             duration: Theme.animDurationFast
             easing.type: Easing.OutCubic
         }
-
     }
 
     Behavior on scale {
@@ -96,7 +93,5 @@ Rectangle {
             duration: Theme.animDurationFast
             easing.type: Easing.OutBack
         }
-
     }
-
 }

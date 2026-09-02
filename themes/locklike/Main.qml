@@ -13,7 +13,7 @@ Rectangle {
     property bool ap: config.ap === "true" ? true : false
     property bool sessionPickerEnabled: config.sessionPicker === "true" ? true : false
     property string avatarShape: {
-        var shape = config.AvatarShape || "hexagon";
+        const shape = config.AvatarShape || "hexagon";
         return (shape !== "hexagon" && shape !== "circle") ? "hexagon" : shape;
     }
     property bool welcomeMessageEnabled: config.enableWelcomeMessage !== "false"
@@ -24,7 +24,7 @@ Rectangle {
     property bool welcomeBgBlur: config.welcomeBgBlur === "true"
     property real mainCardBlurAmount: parseFloat(config.mainCardBlurAmount) || 1
     property real mainCardComponentsOpacity: {
-        var value = parseFloat(config.mainCardComponentsOpacity);
+        const value = parseFloat(config.mainCardComponentsOpacity);
         if (isNaN(value) || value < 0.6)
             return 1;
 
@@ -67,7 +67,6 @@ Rectangle {
         onStatusChanged: {
             if (status === Image.Error)
                 console.log("Background missing, using fallback color");
-
         }
 
         Loader {
@@ -80,76 +79,73 @@ Rectangle {
         Rectangle {
             anchors.fill: parent
             color: "#000000"
-            opacity: firstInput ? 0 : 0.4
+            opacity: root.firstInput ? 0 : 0.4
 
             Behavior on opacity {
                 NumberAnimation {
                     duration: 300
                     easing: Easing.InOutCubic
                 }
-
             }
-
         }
-
     }
 
     Item {
         id: keylogger
 
         focus: true
-        Keys.onPressed: {
+        Keys.onPressed: function (event) {
             if (event.key === Qt.Key_Escape) {
                 if (root.welcomeMessageEnabled)
                     root.firstInput = true;
 
                 root.buffer = "";
-                return ;
+                return;
             }
             if (event.key === Qt.Key_CapsLock) {
                 root.capsLockOn = !root.capsLockOn;
-                return ;
+                return;
             }
             if (event.key === Qt.Key_Tab)
-                return ;
+                return;
 
             if (root.firstInput) {
                 root.firstInput = false;
-                return ;
+                return;
             }
             if (event.key === Qt.Key_Right) {
                 if (userPicker.currentIndex < userModel.count - 1)
                     userPicker.currentIndex += 1;
 
-                return ;
+                return;
             }
             if (event.key === Qt.Key_Left) {
                 if (userPicker.currentIndex > 0)
                     userPicker.currentIndex -= 1;
 
-                return ;
+                return;
             }
             if (event.key === Qt.Key_Up) {
                 if (sessionPickerBtn.selectedIndex < sessionPickerBtn.count - 1)
                     sessionPickerBtn.selectedIndex += 1;
 
-                return ;
+                return;
             }
             if (event.key === Qt.Key_Down) {
                 if (sessionPickerBtn.selectedIndex > 0)
                     sessionPickerBtn.selectedIndex -= 1;
 
-                return ;
+                return;
             }
             if (event.key === Qt.Key_Backspace) {
                 root.buffer = root.buffer.slice(0, -1);
-                return ;
+                return;
             }
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
                 sddm.login(userPicker.currentText, root.buffer, root.sessionIndex);
                 root.buffer = "";
                 root.loading = true;
-                return ;
+                return;
             }
             root.buffer += event.text;
         }
@@ -169,9 +165,7 @@ Rectangle {
                 duration: 400
                 easing: Easing.InOutCubic
             }
-
         }
-
     }
 
     Greeting {
@@ -184,7 +178,7 @@ Rectangle {
         username: userPicker.currentText
         blurAmount: root.welcomeBgBlurAmount
         blurEnabled: root.welcomeBgBlur
-        videoSourceItem: videoLoader.item ? videoLoader.item.activeVideoItem : null
+        videoSourceItem: videoLoader.item ? (videoLoader.item as VideoBackground).activeVideoItem : null
     }
 
     Rectangle {
@@ -194,16 +188,16 @@ Rectangle {
         property string day: Qt.formatDateTime(currentTime, "dddd").toUpperCase()
         property string date: Qt.formatDateTime(currentTime, "d MMM").toUpperCase()
         readonly property var fontAxesTitle: ({
-            "wght": 500,
-            "wdth": 30,
-            "ROND": 25,
-            "opsz": 224
-        })
+                "wght": 500,
+                "wdth": 30,
+                "ROND": 25,
+                "opsz": 224
+            })
 
         width: 1350
         height: 750
-        scale: firstInput ? 0.5 : 1
-        opacity: firstInput ? 0 : 1
+        scale: root.firstInput ? 0.5 : 1
+        opacity: root.firstInput ? 0 : 1
         anchors.centerIn: parent
         radius: 70
         color: "transparent"
@@ -217,7 +211,7 @@ Rectangle {
             bgColor: config.mainCard
             visibleState: !root.firstInput
             radius: 50
-            videoSourceItem: videoLoader.item ? videoLoader.item.activeVideoItem : null
+            videoSourceItem: videoLoader.item ? (videoLoader.item as VideoBackground).activeVideoItem : null
         }
 
         MainClock {
@@ -271,6 +265,7 @@ Rectangle {
                         id: greeting
 
                         anchors.centerIn: parent
+                        username: userPicker.currentText
                     }
 
                     Behavior on opacity {
@@ -278,9 +273,7 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
-
                     }
-
                 }
 
                 Rectangle {
@@ -305,9 +298,7 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
-
                     }
-
                 }
 
                 Rectangle {
@@ -333,11 +324,8 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
-
                     }
-
                 }
-
             }
 
             ColumnLayout {
@@ -371,9 +359,7 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
-
                     }
-
                 }
 
                 PasswordInput {
@@ -402,15 +388,12 @@ Rectangle {
                             duration: 300
                             easing: Easing.InOutCubic
                         }
-
                     }
-
                 }
 
                 Item {
                     height: 20
                 }
-
             }
 
             ColumnLayout {
@@ -436,9 +419,7 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
-
                     }
-
                 }
 
                 Rectangle {
@@ -464,7 +445,6 @@ Rectangle {
                         layer.effect: ColorOverlay {
                             color: config.inverseOnSurface
                         }
-
                     }
 
                     Text {
@@ -483,13 +463,9 @@ Rectangle {
                             duration: 300
                             easing.type: Easing.OutBack
                         }
-
                     }
-
                 }
-
             }
-
         }
 
         SessionPicker {
@@ -498,7 +474,7 @@ Rectangle {
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.topMargin: mainCard.height - 100
-            currentText: sessionArray.sessions[0].name
+            currentText: sessionPickerBtn.items.length > 0 ? sessionPickerBtn.items[0] : ""
             selectedIndex: 0
             opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
             visible: root.sessionPickerEnabled
@@ -511,9 +487,7 @@ Rectangle {
                     duration: 300
                     easing.type: Easing.OutBack
                 }
-
             }
-
         }
 
         Behavior on scale {
@@ -521,7 +495,6 @@ Rectangle {
                 duration: 300
                 easing.type: Easing.OutBack
             }
-
         }
 
         Behavior on opacity {
@@ -529,9 +502,7 @@ Rectangle {
                 duration: 300
                 easing.type: Easing.OutBack
             }
-
         }
-
     }
 
     ComboBox {
@@ -586,7 +557,5 @@ Rectangle {
                 context.fill();
             }
         }
-
     }
-
 }

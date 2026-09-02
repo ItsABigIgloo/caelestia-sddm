@@ -1,5 +1,5 @@
 import "../singletons"
-import QtQuick 2.15
+import QtQuick
 import QtQuick.Layouts 1.15
 
 ColumnLayout {
@@ -26,5 +26,4 @@ ColumnLayout {
         font.family: Theme.fontFamily
         color: Theme.mOnSurfaceVariant
     }
-
 }

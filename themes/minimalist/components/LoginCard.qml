@@ -1,6 +1,6 @@
 import "../singletons"
 import Qt5Compat.GraphicalEffects
-import QtQuick 2.15
+import QtQuick
 import QtQuick.Layouts 1.15
 
 Item {
@@ -123,7 +123,7 @@ Item {
                     normalColor: Theme.mOnSurface
                     hoverColor: Theme.mError
                     onRestoreFocus: root.onRestoreFocus
-                    onClickedAction: function() {
+                    onClickedAction: function () {
                         sddm.powerOff();
                     }
                 }
@@ -137,11 +137,10 @@ Item {
                     normalColor: Theme.mOnSurface
                     hoverColor: Theme.mHover
                     onRestoreFocus: root.onRestoreFocus
-                    onClickedAction: function() {
+                    onClickedAction: function () {
                         sddm.reboot();
                     }
                 }
-
             }
 
             StyledComboBox {
@@ -163,7 +162,6 @@ Item {
                 font.pixelSize: Math.round(Theme.baseFontSize * 1.5)
                 onRestoreFocus: root.onRestoreFocus
             }
-
         }
 
         gradient: Gradient {
@@ -176,9 +174,7 @@ Item {
                 position: 1
                 color: Theme.withAlpha(Theme.mPrimary, Theme.cardOpacity * 0.36)
             }
-
         }
-
     }
 
     ToastMessage {
@@ -195,7 +191,6 @@ Item {
             duration: Theme.enableWelcomeMessage ? Theme.animDurationNormal : 0
             easing.type: Easing.OutBack
         }
-
     }
 
     Behavior on opacity {
@@ -203,7 +198,5 @@ Item {
             duration: Theme.enableWelcomeMessage ? Theme.animDurationNormal : 0
             easing.type: Easing.OutBack
         }
-
     }
-
 }

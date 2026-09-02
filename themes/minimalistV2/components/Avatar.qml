@@ -1,6 +1,7 @@
+pragma ComponentBehavior: Bound
 import "../singletons"
 import Qt5Compat.GraphicalEffects
-import QtQuick 2.15
+import QtQuick
 import "shapes"
 import "shapes/material-shapes.js" as MaterialShapes
 
@@ -16,7 +17,6 @@ Item {
     onCurrentUserIndexChanged: {
         if (avatarImage.status !== Image.Null)
             avatarImage.rebuildAvatarCandidates();
-
     }
     implicitWidth: Theme.avatarFrameSize
     implicitHeight: Theme.avatarShape === "clamshell" ? 220 : Theme.avatarFrameSize
@@ -30,7 +30,6 @@ Item {
             duration: Theme.animDurationFast
             easing.type: Easing.OutCubic
         }
-
     }
 
     TapBounce {
@@ -87,7 +86,6 @@ Item {
                 var normalized = toSourceUrl(value);
                 if (normalized !== "" && list.indexOf(normalized) === -1)
                     list.push(normalized);
-
             }
 
             function rebuildAvatarCandidates() {
@@ -96,9 +94,9 @@ Item {
                 appendCandidate(list, "../assets/avatar.face");
                 if (root.userModel) {
                     if (root.currentUserIndex >= 0 && root.currentUserIndex < root.userModel.count) {
-                        var modelIndex = root.userModel.index(root.currentUserIndex, 0);
-                        var icon = root.userModel.data(modelIndex, roleIcon);
-                        var homeDir = root.userModel.data(modelIndex, roleHomeDir);
+                        const modelIndex = root.userModel.index(root.currentUserIndex, 0);
+                        const icon = root.userModel.data(modelIndex, roleIcon);
+                        const homeDir = root.userModel.data(modelIndex, roleHomeDir);
                         appendCandidate(list, icon);
                         if (homeDir && homeDir !== "") {
                             appendCandidate(list, homeDir + "/.face.icon");
@@ -121,16 +119,13 @@ Item {
             onStatusChanged: {
                 if (status === Image.Error && avatarCandidateIndex < avatarCandidates.length - 1)
                     avatarCandidateIndex += 1;
-
             }
             Component.onCompleted: rebuildAvatarCandidates()
 
             layer.effect: OpacityMask {
                 maskSource: bgShape
             }
-
         }
-
     }
 
     MouseArea {
@@ -143,9 +138,6 @@ Item {
             avatarBounce.trigger();
             if (root.onSwitchUser)
                 root.onSwitchUser();
-
         }
-
     }
-
 }

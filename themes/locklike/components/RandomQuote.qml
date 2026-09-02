@@ -12,7 +12,7 @@ Item {
         Component.onCompleted: {
             const xhr = new XMLHttpRequest();
             xhr.open("GET", Qt.resolvedUrl("../config/quotes.json"));
-            xhr.onreadystatechange = function() {
+            xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     const data = JSON.parse(xhr.responseText);
                     const index = Math.floor(Math.random() * data.length);
@@ -55,7 +55,5 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
-
     }
-
 }

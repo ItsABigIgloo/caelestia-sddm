@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Effects
@@ -35,8 +36,8 @@ Item {
     Rectangle {
         id: rootRect
 
-        width: startWidth
-        height: startHeight
+        width: blurCard.startWidth
+        height: blurCard.startHeight
         radius: blurCard.radius
         color: "transparent"
         opacity: blurCard.visibleState ? 1 : 0
@@ -56,7 +57,6 @@ Item {
             onStatusChanged: {
                 if (status === Image.Error)
                     console.log("Background missing, using fallback color");
-
             }
 
             ShaderEffectSource {
@@ -64,7 +64,6 @@ Item {
                 sourceItem: blurCard.videoSourceItem
                 visible: blurCard.videoSourceItem !== null
             }
-
         }
 
         MultiEffect {
@@ -82,9 +81,7 @@ Item {
                     duration: blurCard.animDuration
                     easing.type: Easing.InOutCubic
                 }
-
             }
-
         }
 
         Rectangle {
@@ -100,16 +97,13 @@ Item {
                 height: rootRect.height
                 radius: rootRect.radius
             }
-
         }
 
         Behavior on opacity {
             NumberAnimation {
                 duration: blurCard.animDurationOpacity
             }
-
         }
-
     }
 
     PropertyAnimation {
@@ -133,5 +127,4 @@ Item {
         duration: blurCard.animDuration
         easing.type: Easing.OutBack
     }
-
 }

@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Effects
@@ -15,11 +16,11 @@ Item {
     property string username
     property var videoSourceItem: null
     readonly property var fontAxes: ({
-        "wght": 700,
-        "wdth": 115,
-        "ROND": 10,
-        "opsz": 224
-    })
+            "wght": 700,
+            "wdth": 115,
+            "ROND": 10,
+            "opsz": 224
+        })
 
     FontLoader {
         id: googleSansFlex
@@ -53,7 +54,6 @@ Item {
                 sourceItem: root.videoSourceItem
                 visible: root.videoSourceItem !== null
             }
-
         }
 
         MultiEffect {
@@ -71,14 +71,12 @@ Item {
                     duration: 400
                     easing: Easing.InOutCubic
                 }
-
             }
-
         }
 
         Rectangle {
             anchors.fill: backgroundBlur
-            color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, root.welcomeBgOpacity)
+            color: Qt.rgba(parseInt(config.background.substring(1, 3), 16) / 255, parseInt(config.background.substring(3, 5), 16) / 255, parseInt(config.background.substring(5, 7), 16) / 255, 1)
             opacity: root.firstInput ? parseFloat(config.welcomeColorOpacity) : 0
         }
 
@@ -87,7 +85,6 @@ Item {
                 duration: 600
                 easing.type: Easing.OutBack
             }
-
         }
 
         Behavior on height {
@@ -95,7 +92,6 @@ Item {
                 duration: 600
                 easing.type: Easing.OutBack
             }
-
         }
 
         layer.effect: OpacityMask {
@@ -105,9 +101,7 @@ Item {
                 height: welcomeTextRectBlur.height
                 radius: welcomeTextRectBlur.radius
             }
-
         }
-
     }
 
     Item {
@@ -128,8 +122,8 @@ Item {
             font.family: googleSansFlex.name
             font.variableAxes: root.fontAxes
             font.features: ({
-                "liga": 0
-            })
+                    "liga": 0
+                })
             color: config.text
             opacity: root.firstInput ? 1 : 0
             anchors.centerIn: parent
@@ -144,7 +138,5 @@ Item {
             easing.type: Easing.OutBack
             running: root.firstInput ? true : false
         }
-
     }
-
 }

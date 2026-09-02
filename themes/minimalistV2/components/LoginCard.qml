@@ -1,6 +1,7 @@
+pragma ComponentBehavior: Bound
 import "../singletons"
 import Qt5Compat.GraphicalEffects
-import QtQuick 2.15
+import QtQuick
 
 Item {
     id: root
@@ -58,13 +59,13 @@ Item {
     opacity: isActive ? 0 : 1
     onUsersModelChanged: {
         if (usersModel && usersModel.count > 0) {
-            var uIdx = usersModel.lastIndex;
+            const uIdx = usersModel.lastIndex;
             currentUserIndex = (uIdx >= 0 && uIdx < usersModel.count) ? uIdx : 0;
         }
     }
     onSessionsModelChanged: {
         if (sessionsModel && sessionsModel.count > 0) {
-            var sIdx = sessionsModel.lastIndex;
+            const sIdx = sessionsModel.lastIndex;
             currentSessionIndex = (sIdx >= 0 && sIdx < sessionsModel.count) ? sIdx : 0;
         }
     }
@@ -74,21 +75,19 @@ Item {
         } else if (!capsLockOn) {
             if (toast.isOpen && toast.message === "Caps Lock is on")
                 toast.dismiss();
-
         }
     }
     onIsActiveChanged: {
         if (isActive)
             toast.dismiss();
-
     }
     Component.onCompleted: {
         if (usersModel && usersModel.count > 0) {
-            var uIdx = usersModel.lastIndex;
+            const uIdx = usersModel.lastIndex;
             currentUserIndex = (uIdx >= 0 && uIdx < usersModel.count) ? uIdx : 0;
         }
         if (sessionsModel && sessionsModel.count > 0) {
-            var sIdx = sessionsModel.lastIndex;
+            const sIdx = sessionsModel.lastIndex;
             currentSessionIndex = (sIdx >= 0 && sIdx < sessionsModel.count) ? sIdx : 0;
         }
     }
@@ -97,13 +96,15 @@ Item {
         model: root.sessionsModel
 
         delegate: Item {
+            required property int index
+            required property var model
+
             Component.onCompleted: {
-                var arr = root.sessionNames.slice();
+                const arr = root.sessionNames.slice();
                 arr[index] = model.name;
                 root.sessionNames = arr;
             }
         }
-
     }
 
     Rectangle {
@@ -178,14 +179,12 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     currentUserIndex: root.currentUserIndex
                     userModel: root.usersModel
-                    onSwitchUser: function() {
+                    onSwitchUser: function () {
                         if (root.usersModel && root.usersModel.count > 0) {
                             root.currentUserIndex = (root.currentUserIndex + 1) % root.usersModel.count;
                             if (root.onRestoreFocus)
                                 root.onRestoreFocus();
-
                         }
-
                     }
                 }
 
@@ -193,11 +192,11 @@ Item {
                     id: userSessionRow
 
                     readonly property var textAxes: ({
-                        "wght": 550,
-                        "wdth": 40,
-                        "ROND": 25,
-                        "opsz": 7
-                    })
+                            "wght": 550,
+                            "wdth": 40,
+                            "ROND": 25,
+                            "opsz": 7
+                        })
 
                     anchors.horizontalCenter: parent.horizontalCenter
                     spacing: 8
@@ -230,11 +229,9 @@ Item {
                                     root.currentUserIndex = (root.currentUserIndex + 1) % root.usersModel.count;
                                     if (root.onRestoreFocus)
                                         root.onRestoreFocus();
-
                                 }
                             }
                         }
-
                     }
 
                     Text {
@@ -277,13 +274,10 @@ Item {
                                     root.currentSessionIndex = (root.currentSessionIndex + 1) % root.sessionsModel.count;
                                     if (root.onRestoreFocus)
                                         root.onRestoreFocus();
-
                                 }
                             }
                         }
-
                     }
-
                 }
 
                 PasswordInput {
@@ -312,7 +306,7 @@ Item {
                         height: 70
                         iconText: "power_settings_new"
                         onRestoreFocus: root.onRestoreFocus
-                        onClickedAction: function() {
+                        onClickedAction: function () {
                             sddm.powerOff();
                         }
                     }
@@ -324,13 +318,11 @@ Item {
                         height: 70
                         iconText: "restart_alt"
                         onRestoreFocus: root.onRestoreFocus
-                        onClickedAction: function() {
+                        onClickedAction: function () {
                             sddm.reboot();
                         }
                     }
-
                 }
-
             }
 
             Row {
@@ -359,13 +351,9 @@ Item {
                         text: "Click to switch User and Session"
                         verticalAlignment: Text.AlignVCenter
                     }
-
                 }
-
             }
-
         }
-
     }
 
     ToastMessage {
@@ -382,7 +370,6 @@ Item {
             duration: Theme.enableWelcomeMessage ? Theme.animDurationNormal : 0
             easing.type: Easing.OutBack
         }
-
     }
 
     Behavior on opacity {
@@ -390,7 +377,5 @@ Item {
             duration: Theme.enableWelcomeMessage ? Theme.animDurationNormal : 0
             easing.type: Easing.OutBack
         }
-
     }
-
 }

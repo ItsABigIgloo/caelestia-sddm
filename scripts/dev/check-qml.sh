@@ -14,33 +14,21 @@ LINT_ERRORS=0
 FORMAT_DIFFS=0
 TOTAL_FILES=0
 
+# Prefer the Qt 6 qmllint; /usr/bin/qmllint may be the Qt 5 one (e.g. Arch)
+QMLLINT="/usr/lib/qt6/bin/qmllint"
+[ -x "$QMLLINT" ] || QMLLINT="qmllint"
+
 check_file() {
     local file="$1"
     local file_display="${file#$PROJECT_ROOT/}"
     TOTAL_FILES=$((TOTAL_FILES + 1))
 
     # Linting check
-    if ! qmllint "$file" >/dev/null 2>&1; then
+    if ! "$QMLLINT" "$file" >/dev/null 2>&1; then
         echo "✗ Linting errors in: $file_display"
-        qmllint "$file"
+        "$QMLLINT" "$file"
         LINT_ERRORS=$((LINT_ERRORS + 1))
         return 1
-    fi
-
-    # Formatting check
-    local formatted
-    formatted=$(qmlformat "$file" 2>/dev/null)
-
-    if [ -z "$formatted" ]; then
-        echo "✗ Could not format: $file_display"
-        LINT_ERRORS=$((LINT_ERRORS + 1))
-        return 1
-    fi
-
-    if ! diff -q <(cat "$file") <(echo "$formatted") >/dev/null 2>&1; then
-        echo "⚠ Formatting differs: $file_display"
-        FORMAT_DIFFS=$((FORMAT_DIFFS + 1))
-        echo "   Run: ./scripts/dev/format.sh -i \"$file\""
     fi
 
     echo "✓ $file_display"
@@ -71,9 +59,22 @@ main() {
 
     for file in "${files[@]}"; do
         if [ -f "$file" ]; then
-            check_file "$file"
+            check_file "$file" || true
         fi
     done
+
+    echo
+    echo "--- Formatting check ---"
+    FORMAT_STATUS=0
+    python3 "$SCRIPT_DIR/qmlformat.py" --check "${files[@]}" || FORMAT_STATUS=$?
+
+    if [ "$FORMAT_STATUS" -eq 2 ]; then
+        echo
+        echo "✗ FAILED: formatting check could not run (qmlls unavailable)"
+        exit 1
+    elif [ "$FORMAT_STATUS" -ne 0 ]; then
+        FORMAT_DIFFS=$((FORMAT_DIFFS + 1))
+    fi
 
     echo
     echo "=== Summary ==="
@@ -88,7 +89,7 @@ main() {
         exit 1
     elif [ "$FORMAT_DIFFS" -gt 0 ]; then
         echo "⚠ PASSED: Files need formatting"
-        echo "Run: ./scripts/dev/format.sh -i to auto-format"
+        echo "Run: ./scripts/dev/format.sh to auto-format"
         exit 0
     else
         echo "✓ PASSED: All checks passed"

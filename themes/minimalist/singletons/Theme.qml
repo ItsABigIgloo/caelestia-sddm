@@ -1,5 +1,5 @@
-import QtQuick 2.15
 pragma Singleton
+import QtQuick
 
 QtObject {
     id: theme
@@ -16,7 +16,6 @@ QtObject {
             family = family.toString().replace(/^"|"$/g, "");
             if (availableFonts.indexOf(family) !== -1)
                 return family;
-
         }
         return firstAvailable(["Rubik", "Sans"]);
     }
@@ -80,7 +79,6 @@ QtObject {
         for (var i = 0; i < candidates.length; i++) {
             if (availableFonts.indexOf(candidates[i]) !== -1)
                 return candidates[i];
-
         }
         return "sans-serif";
     }

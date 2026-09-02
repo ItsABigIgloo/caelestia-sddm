@@ -1,4 +1,4 @@
-import QtQuick 2.15
+import QtQuick
 
 Item {
     id: control
@@ -10,7 +10,6 @@ Item {
 
     function trigger() {
         bounceAnim.restart();
-
     }
 
     SequentialAnimation {
@@ -31,7 +30,5 @@ Item {
             duration: control.downDuration
             easing.type: Easing.OutBack
         }
-
     }
-
 }

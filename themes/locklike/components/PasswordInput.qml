@@ -1,5 +1,5 @@
+pragma ComponentBehavior: Bound
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Shapes
 import "shapes"
 import "shapes/material-shapes.js" as MaterialShapes
@@ -39,6 +39,10 @@ Rectangle {
     property alias isLoading: inputRect.isLoading
     property alias firstInput: inputRect.firstInput
     property alias mainCardComponentsOpacity: inputRect.mainCardComponentsOpacity
+
+    function shake() {
+        inputRect.shake();
+    }
 
     Rectangle {
         id: inputRect

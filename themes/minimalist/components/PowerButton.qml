@@ -1,7 +1,7 @@
 import "../singletons"
 import Qt5Compat.GraphicalEffects
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 
 Button {
     id: root
@@ -22,7 +22,6 @@ Button {
 
         if (root.onRestoreFocus)
             root.onRestoreFocus();
-
     }
     states: [
         State {
@@ -34,7 +33,6 @@ Button {
                 color: Qt.rgba(Theme.mSurface.r, Theme.mSurface.g, Theme.mSurface.b, 0.4)
                 border.color: Qt.rgba(root.hoverColor.r, root.hoverColor.g, root.hoverColor.b, 0.7)
             }
-
         }
     ]
 
@@ -53,16 +51,13 @@ Button {
             ColorAnimation {
                 duration: 200
             }
-
         }
 
         Behavior on border.color {
             ColorAnimation {
                 duration: 200
             }
-
         }
-
     }
 
     contentItem: Text {
@@ -78,7 +73,6 @@ Button {
             ColorAnimation {
                 duration: 200
             }
-
         }
 
         layer.effect: DropShadow {
@@ -89,7 +83,5 @@ Button {
             samples: 16
             color: Qt.rgba(Theme.mShadow.r, Theme.mShadow.g, Theme.mShadow.b, 0.3)
         }
-
     }
-
 }

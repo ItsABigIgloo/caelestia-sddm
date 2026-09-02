@@ -1,6 +1,6 @@
 import "../singletons"
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import "shapes"
 import "shapes/material-shapes.js" as MaterialShapes
 
@@ -23,7 +23,6 @@ Button {
 
         if (root.onRestoreFocus)
             root.onRestoreFocus();
-
     }
 
     TapBounce {
@@ -40,9 +39,7 @@ Button {
             ColorAnimation {
                 duration: 200
             }
-
         }
-
     }
 
     contentItem: Text {
@@ -57,9 +54,6 @@ Button {
             ColorAnimation {
                 duration: 200
             }
-
         }
-
     }
-
 }

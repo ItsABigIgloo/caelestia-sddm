@@ -2,6 +2,19 @@
 
 Thanks for your interest in contributing to Caelestia SDDM!
 
+## Development Setup
+
+The linting and formatting tools (`qmllint`/`qmlls`) read their config from `.qmlls.ini`. Copy the example to get started:
+
+```bash
+cp .qmlls.ini.example .qmlls.ini
+```
+
+> [!NOTE]
+> The default `importPaths` (`/usr/lib/qt6/qml`) is for Arch. On other distributions check with `qmake6 -query QT_INSTALL_QML` and adjust `importPaths` accordingly.
+
+For formatting we use the `qmlls` binary bundled with the [Qt/QML extension](https://marketplace.visualstudio.com/items?itemName=TheQtCompany.qt-qml) for VS Code and its forks (VSCodium, Code - OSS).
+
 ## Types of Contributions
 
 We welcome all types of contributions:
@@ -11,10 +24,10 @@ We welcome all types of contributions:
 1. Fork the repository
 2. Create a branch (`git checkout -b fix/your-fixes`)
 3. Make your changes
-4. Run the linting and formatting tools:
+4. Format your changes and run the checks:
    ```bash
-   ./scripts/dev/lint.sh
-   ./scripts/dev/format.sh -i
+   ./scripts/dev/format.sh
+   ./scripts/dev/check-qml.sh
    ```
 5. Commit and push
 6. Open a Pull Request
@@ -45,14 +58,14 @@ For updates to the AUR package (PKGBUILD, install script), see **[aur/README-AUR
 
 ## Testing:
 
-1. To Run linting:
+1. To check linting and formatting:
    ```bash
-   ./scripts/dev/lint.sh themes/<theme-name>/
+   ./scripts/dev/check-qml.sh
    ```
 
-2. To Run formatting:
+2. To auto-format:
    ```bash
-   ./scripts/dev/format.sh -i themes/<theme-name>/
+   ./scripts/dev/format.sh
    ```
 
 3. Test it with SDDM test mode:
@@ -65,8 +78,7 @@ For updates to the AUR package (PKGBUILD, install script), see **[aur/README-AUR
 
 Before opening a Pull Request, make sure:
 
-- [ ] Code passes `./scripts/dev/lint.sh`
-- [ ] Code is formatted with `./scripts/dev/format.sh -i`
+- [ ] Code passes `./scripts/dev/check-qml.sh` (lint + formatting)
 - [ ] Both `theme.conf` and `theme.conf.template` are present and match
 - [ ] `metadata.desktop` is fully filled out
 - [ ] Theme works in `sddm-greeter-qt6 --test-mode`

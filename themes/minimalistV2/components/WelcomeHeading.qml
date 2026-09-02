@@ -1,6 +1,6 @@
 import "../singletons"
 import Qt5Compat.GraphicalEffects
-import QtQuick 2.15
+import QtQuick
 
 Text {
     id: root
@@ -15,11 +15,11 @@ Text {
     font.family: Theme.fontFamily
     font.pixelSize: 90
     font.variableAxes: ({
-        "wght": 600,
-        "wdth": 90,
-        "ROND": 25,
-        "opsz": 90
-    })
+            "wght": 600,
+            "wdth": 90,
+            "ROND": 25,
+            "opsz": 90
+        })
     color: Theme.mOnSurface
     opacity: isActive ? 1 : 0
     scale: isActive ? 1 : 0.8
@@ -39,7 +39,6 @@ Text {
             duration: Theme.animDurationNormal
             easing.type: Easing.OutCubic
         }
-
     }
 
     Behavior on scale {
@@ -47,7 +46,5 @@ Text {
             duration: Theme.animDurationNormal
             easing.type: Easing.OutCubic
         }
-
     }
-
 }

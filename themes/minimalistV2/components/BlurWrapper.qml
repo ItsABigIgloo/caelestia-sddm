@@ -1,7 +1,9 @@
-import "../singletons"
+pragma ComponentBehavior: Bound
 import Qt5Compat.GraphicalEffects
-import QtQuick 2.15
+import QtQuick
 import QtQuick.Effects
+
+import "../singletons"
 
 Item {
     id: blurCard
@@ -48,7 +50,6 @@ Item {
                 sourceItem: Theme.videoItem
                 visible: Theme.videoActive
             }
-
         }
 
         MultiEffect {
@@ -67,9 +68,7 @@ Item {
                 height: rootRect.height
                 radius: rootRect.radius
             }
-
         }
-
     }
 
     PropertyAnimation {
@@ -93,5 +92,4 @@ Item {
         duration: blurCard.animDuration
         easing.type: Easing.OutBack
     }
-
 }

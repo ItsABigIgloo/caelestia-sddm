@@ -1,6 +1,6 @@
 import "../singletons"
 import Qt5Compat.GraphicalEffects
-import QtQuick 2.15
+import QtQuick
 
 Text {
     id: root
@@ -34,7 +34,6 @@ Text {
             duration: Theme.animDurationNormal
             easing.type: Easing.OutCubic
         }
-
     }
 
     Behavior on scale {
@@ -42,7 +41,5 @@ Text {
             duration: Theme.animDurationNormal
             easing.type: Easing.OutCubic
         }
-
     }
-
 }

@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Effects
 import QtQuick.Shapes
@@ -162,7 +163,7 @@ Item {
         }
 
         PauseAnimation {
-            duration: 300 * speedFactor
+            duration: 300 * root.speedFactor
         }
 
         ParallelAnimation {
@@ -172,7 +173,7 @@ Item {
                     property: "rotation"
                     from: 0
                     to: 750
-                    duration: 1000 * speedFactor
+                    duration: 1000 * root.speedFactor
                     easing.type: Easing.OutCubic
                 }
 
@@ -181,7 +182,7 @@ Item {
                     property: "rotation"
                     from: 750
                     to: 710
-                    duration: 300 * speedFactor
+                    duration: 300 * root.speedFactor
                     easing.type: Easing.InOutQuad
                 }
 
@@ -190,7 +191,7 @@ Item {
                     property: "rotation"
                     from: 710
                     to: 725
-                    duration: 350 * speedFactor
+                    duration: 350 * root.speedFactor
                     easing.type: Easing.InOutQuad
                 }
 
@@ -199,7 +200,7 @@ Item {
                     property: "rotation"
                     from: 725
                     to: 720
-                    duration: 250 * speedFactor
+                    duration: 250 * root.speedFactor
                     easing.type: Easing.OutQuad
                 }
 
@@ -214,7 +215,7 @@ Item {
                     property: "scale"
                     from: 0
                     to: 1.08
-                    duration: 1000 * speedFactor
+                    duration: 1000 * root.speedFactor
                     easing.type: Easing.OutCubic
                 }
 
@@ -223,7 +224,7 @@ Item {
                     property: "scale"
                     from: 1.08
                     to: 0.96
-                    duration: 200 * speedFactor
+                    duration: 200 * root.speedFactor
                     easing.type: Easing.InOutQuad
                 }
 
@@ -232,7 +233,7 @@ Item {
                     property: "scale"
                     from: 0.96
                     to: 1
-                    duration: 250 * speedFactor
+                    duration: 250 * root.speedFactor
                     easing.type: Easing.OutBack
                     easing.overshoot: 1.05
                 }
@@ -243,7 +244,7 @@ Item {
                 property: "opacity"
                 from: 0
                 to: 1
-                duration: 600 * speedFactor
+                duration: 600 * root.speedFactor
                 easing.type: Easing.InOutQuad
             }
 
@@ -252,13 +253,13 @@ Item {
                 property: "blurAmount"
                 from: 1
                 to: 0
-                duration: 900 * speedFactor
+                duration: 900 * root.speedFactor
                 easing.type: Easing.OutCubic
             }
 
             SequentialAnimation {
                 PauseAnimation {
-                    duration: 1100 * speedFactor
+                    duration: 1100 * root.speedFactor
                 }
 
                 ParallelAnimation {
@@ -267,7 +268,7 @@ Item {
                         property: "star1Opacity"
                         from: 0
                         to: 1
-                        duration: 700 * speedFactor
+                        duration: 700 * root.speedFactor
                         easing.type: Easing.InOutQuad
                     }
 
@@ -277,7 +278,7 @@ Item {
                             property: "star1Scale"
                             from: 0
                             to: 1.08
-                            duration: 500 * speedFactor
+                            duration: 500 * root.speedFactor
                             easing.type: Easing.OutQuad
                         }
 
@@ -286,7 +287,7 @@ Item {
                             property: "star1Scale"
                             from: 1.08
                             to: 1
-                            duration: 400 * speedFactor
+                            duration: 400 * root.speedFactor
                             easing.type: Easing.InOutQuad
                         }
                     }
@@ -295,7 +296,7 @@ Item {
 
             SequentialAnimation {
                 PauseAnimation {
-                    duration: 1250 * speedFactor
+                    duration: 1250 * root.speedFactor
                 }
 
                 ParallelAnimation {
@@ -304,7 +305,7 @@ Item {
                         property: "star2Opacity"
                         from: 0
                         to: 1
-                        duration: 700 * speedFactor
+                        duration: 700 * root.speedFactor
                         easing.type: Easing.InOutQuad
                     }
 
@@ -314,7 +315,7 @@ Item {
                             property: "star2Scale"
                             from: 0
                             to: 1.08
-                            duration: 500 * speedFactor
+                            duration: 500 * root.speedFactor
                             easing.type: Easing.OutQuad
                         }
 
@@ -323,7 +324,7 @@ Item {
                             property: "star2Scale"
                             from: 1.08
                             to: 1
-                            duration: 400 * speedFactor
+                            duration: 400 * root.speedFactor
                             easing.type: Easing.InOutQuad
                         }
                     }
@@ -332,7 +333,7 @@ Item {
 
             SequentialAnimation {
                 PauseAnimation {
-                    duration: 1400 * speedFactor
+                    duration: 1400 * root.speedFactor
                 }
 
                 ParallelAnimation {
@@ -341,7 +342,7 @@ Item {
                         property: "star3Opacity"
                         from: 0
                         to: 1
-                        duration: 700 * speedFactor
+                        duration: 700 * root.speedFactor
                         easing.type: Easing.InOutQuad
                     }
 
@@ -351,7 +352,7 @@ Item {
                             property: "star3Scale"
                             from: 0
                             to: 1.08
-                            duration: 500 * speedFactor
+                            duration: 500 * root.speedFactor
                             easing.type: Easing.OutQuad
                         }
 
@@ -360,7 +361,7 @@ Item {
                             property: "star3Scale"
                             from: 1.08
                             to: 1
-                            duration: 400 * speedFactor
+                            duration: 400 * root.speedFactor
                             easing.type: Easing.InOutQuad
                         }
                     }
@@ -374,7 +375,7 @@ Item {
         loops: Animation.Infinite
 
         PauseAnimation {
-            duration: 2500 * speedFactor
+            duration: 2500 * root.speedFactor
         }
 
         ParallelAnimation {
@@ -386,7 +387,7 @@ Item {
                     property: "y"
                     from: root.star1.y
                     to: root.star1.y - 5
-                    duration: 2500 * speedFactor
+                    duration: 2500 * root.speedFactor
                     easing.type: Easing.InOutQuad
                 }
 
@@ -395,7 +396,7 @@ Item {
                     property: "y"
                     from: root.star1.y - 5
                     to: root.star1.y
-                    duration: 2500 * speedFactor
+                    duration: 2500 * root.speedFactor
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -408,7 +409,7 @@ Item {
                     property: "y"
                     from: root.star2.y
                     to: root.star2.y + 5
-                    duration: 3000 * speedFactor
+                    duration: 3000 * root.speedFactor
                     easing.type: Easing.InOutQuad
                 }
 
@@ -417,7 +418,7 @@ Item {
                     property: "y"
                     from: root.star2.y + 5
                     to: root.star2.y
-                    duration: 3000 * speedFactor
+                    duration: 3000 * root.speedFactor
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -430,7 +431,7 @@ Item {
                     property: "y"
                     from: root.star3.y
                     to: root.star3.y - 5
-                    duration: 2800 * speedFactor
+                    duration: 2800 * root.speedFactor
                     easing.type: Easing.InOutQuad
                 }
 
@@ -439,7 +440,7 @@ Item {
                     property: "y"
                     from: root.star3.y - 5
                     to: root.star3.y
-                    duration: 2800 * speedFactor
+                    duration: 2800 * root.speedFactor
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -452,7 +453,7 @@ Item {
                     property: "scale"
                     from: 1
                     to: 1.08
-                    duration: 2500 * speedFactor
+                    duration: 2500 * root.speedFactor
                     easing.type: Easing.InOutQuad
                 }
 
@@ -461,7 +462,7 @@ Item {
                     property: "scale"
                     from: 1.08
                     to: 1
-                    duration: 2500 * speedFactor
+                    duration: 2500 * root.speedFactor
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -474,7 +475,7 @@ Item {
                     property: "scale"
                     from: 1
                     to: 1.12
-                    duration: 3000 * speedFactor
+                    duration: 3000 * root.speedFactor
                     easing.type: Easing.InOutQuad
                 }
 
@@ -483,7 +484,7 @@ Item {
                     property: "scale"
                     from: 1.12
                     to: 1
-                    duration: 3000 * speedFactor
+                    duration: 3000 * root.speedFactor
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -496,7 +497,7 @@ Item {
                     property: "scale"
                     from: 1
                     to: 1.08
-                    duration: 2800 * speedFactor
+                    duration: 2800 * root.speedFactor
                     easing.type: Easing.InOutQuad
                 }
 
@@ -505,7 +506,7 @@ Item {
                     property: "scale"
                     from: 1.08
                     to: 1
-                    duration: 2800 * speedFactor
+                    duration: 2800 * root.speedFactor
                     easing.type: Easing.InOutQuad
                 }
             }

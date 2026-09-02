@@ -1,6 +1,6 @@
 import "../singletons"
 import Qt5Compat.GraphicalEffects
-import QtQuick 2.15
+import QtQuick
 
 Rectangle {
     id: root
@@ -40,7 +40,6 @@ Rectangle {
             var normalized = toSourceUrl(value);
             if (normalized !== "" && list.indexOf(normalized) === -1)
                 list.push(normalized);
-
         }
 
         function rebuildAvatarCandidates() {
@@ -74,7 +73,6 @@ Rectangle {
         onStatusChanged: {
             if (status === Image.Error && avatarCandidateIndex < avatarCandidates.length - 1)
                 avatarCandidateIndex += 1;
-
         }
         Component.onCompleted: rebuildAvatarCandidates()
 
@@ -93,9 +91,7 @@ Rectangle {
                 height: avatarImage.height
                 radius: Theme.avatarFrameSize / 2
             }
-
         }
-
     }
 
     Rectangle {
@@ -105,5 +101,4 @@ Rectangle {
         border.color: Theme.mPrimary
         border.width: 2
     }
-
 }

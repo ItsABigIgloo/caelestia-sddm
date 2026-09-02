@@ -1,5 +1,6 @@
+pragma ComponentBehavior: Bound
 import Qt5Compat.GraphicalEffects
-import QtQuick 2.15
+import QtQuick
 import "shapes"
 import "shapes/material-shapes.js" as MaterialShapes
 
@@ -20,8 +21,8 @@ Item {
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
-        onEntered: hovered = true
-        onExited: hovered = false
+        onEntered: root.hovered = true
+        onExited: root.hovered = false
     }
 
     onHoveredChanged: {
