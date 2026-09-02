@@ -1,5 +1,5 @@
 import "../singletons"
-import QtQuick 2.15
+import QtQuick
 
 Column {
     id: root

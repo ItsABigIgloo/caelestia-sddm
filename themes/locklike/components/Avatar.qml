@@ -1,5 +1,5 @@
 import Qt5Compat.GraphicalEffects
-import QtQuick 2.15
+import QtQuick
 import "shapes"
 import "shapes/material-shapes.js" as MaterialShapes
 

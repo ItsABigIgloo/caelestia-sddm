@@ -1,5 +1,5 @@
 import "../singletons"
-import QtQuick 2.15
+import QtQuick
 import QtQuick.Layouts 1.15
 import "shapes"
 import "shapes/material-shapes.js" as MaterialShapes

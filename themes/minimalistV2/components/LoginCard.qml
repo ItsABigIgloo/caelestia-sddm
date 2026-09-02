@@ -1,6 +1,6 @@
 import "../singletons"
 import Qt5Compat.GraphicalEffects
-import QtQuick 2.15
+import QtQuick
 
 Item {
     id: root
