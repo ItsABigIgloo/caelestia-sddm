@@ -1,17 +1,16 @@
 import "../singletons"
-import QtQuick 2.15
+import QtQuick
 import QtQuick.Controls 2.15
 
 ComboBox {
     id: root
 
-    property var onRestoreFocus: function() {
-    }
+    property var onRestoreFocus: function () {}
 
     hoverEnabled: true
     focusPolicy: Qt.ClickFocus
     onActivated: onRestoreFocus()
-    Keys.onPressed: function(event) {
+    Keys.onPressed: function (event) {
         if (popup.visible) {
             if (event.key === Qt.Key_Escape) {
                 popup.close();
@@ -36,9 +35,7 @@ ComboBox {
             ColorAnimation {
                 duration: 200
             }
-
         }
-
     }
 
     contentItem: Text {
@@ -88,7 +85,6 @@ ComboBox {
             color: (root.highlightedIndex === index || parent.hovered) ? Theme.mPrimary : "transparent"
             radius: Math.min(Theme.elementRadius, Math.min(parent.width, parent.height) / 2)
         }
-
     }
 
     popup: Popup {
@@ -111,9 +107,7 @@ ComboBox {
             currentIndex: root.highlightedIndex
             clip: true
 
-            ScrollIndicator.vertical: ScrollIndicator {
-            }
-
+            ScrollIndicator.vertical: ScrollIndicator {}
         }
 
         background: Rectangle {
@@ -122,7 +116,5 @@ ComboBox {
             border.width: 2
             radius: Math.min(Theme.elementRadius, Math.min(root.width, popupList.implicitHeight) / 2)
         }
-
     }
-
 }

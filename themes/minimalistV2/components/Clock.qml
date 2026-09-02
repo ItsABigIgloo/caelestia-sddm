@@ -9,23 +9,23 @@ Column {
     property real centerScale: 0.90
     property date currentTime: new Date()
     readonly property var fontAxesHours: ({
-        "wght": 500,
-        "wdth": 30,
-        "ROND": 25,
-        "opsz": 224 * centerScale
-    })
+            "wght": 500,
+            "wdth": 30,
+            "ROND": 25,
+            "opsz": 224 * centerScale
+        })
     readonly property var fontAxesMinutes: ({
-        "wght": 500,
-        "wdth": 30,
-        "ROND": 25,
-        "opsz": 224 * centerScale
-    })
+            "wght": 500,
+            "wdth": 30,
+            "ROND": 25,
+            "opsz": 224 * centerScale
+        })
     readonly property var fontAxesDate: ({
-        "wght": 500,
-        "wdth": 30,
-        "ROND": 25,
-        "opsz": 7
-    })
+            "wght": 500,
+            "wdth": 30,
+            "ROND": 25,
+            "opsz": 7
+        })
 
     Timer {
         interval: 1000
@@ -70,7 +70,6 @@ Column {
             color: Theme.mSecondary
             text: Qt.formatTime(root.currentTime, "mm")
         }
-
     }
 
     Text {
@@ -82,5 +81,4 @@ Column {
         font.variableAxes: root.fontAxesDate
         color: Theme.mPrimary
     }
-
 }

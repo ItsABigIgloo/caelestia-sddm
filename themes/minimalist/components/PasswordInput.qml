@@ -60,9 +60,7 @@ Rectangle {
                 NumberAnimation {
                     duration: Theme.animDurationFast
                 }
-
             }
-
         }
 
         RowLayout {
@@ -80,7 +78,6 @@ Rectangle {
                     height: 12
                     color: Theme.mOnSurface
                 }
-
             }
 
             Rectangle {
@@ -105,13 +102,9 @@ Rectangle {
                     NumberAnimation {
                         duration: Theme.animDurationFast
                     }
-
                 }
-
             }
-
         }
-
     }
 
     Rectangle {
@@ -136,9 +129,7 @@ Rectangle {
                 ColorAnimation {
                     duration: Theme.animDurationFast
                 }
-
             }
-
         }
 
         MouseArea {
@@ -150,7 +141,6 @@ Rectangle {
 
                 if (root.onRestoreFocus)
                     root.onRestoreFocus();
-
             }
         }
 
@@ -158,16 +148,13 @@ Rectangle {
             ColorAnimation {
                 duration: Theme.animDurationFast
             }
-
         }
-
     }
 
     Connections {
         function onIsErrorChanged() {
             if (isError)
                 authPulseAnim.stop();
-
         }
 
         target: root
@@ -213,7 +200,6 @@ Rectangle {
             to: 0
             duration: 50
         }
-
     }
 
     transform: Translate {
@@ -226,7 +212,6 @@ Rectangle {
         ColorAnimation {
             duration: Theme.animDurationFast
         }
-
     }
 
     SequentialAnimation on border.color {
@@ -260,7 +245,5 @@ Rectangle {
         PauseAnimation {
             duration: 500
         }
-
     }
-
 }

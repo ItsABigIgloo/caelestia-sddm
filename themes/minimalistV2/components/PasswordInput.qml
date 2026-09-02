@@ -56,9 +56,7 @@ Item {
                     NumberAnimation {
                         duration: Theme.animDurationFast
                     }
-
                 }
-
             }
 
             Text {
@@ -77,11 +75,8 @@ Item {
                     ColorAnimation {
                         duration: Theme.animDurationFast
                     }
-
                 }
-
             }
-
         }
 
         ShapeCanvas {
@@ -116,9 +111,7 @@ Item {
                 NumberAnimation {
                     duration: Theme.animDurationFast
                 }
-
             }
-
         }
 
         SequentialAnimation {
@@ -139,7 +132,6 @@ Item {
                 to: 1
                 duration: 100
             }
-
         }
 
         SequentialAnimation {
@@ -195,7 +187,6 @@ Item {
                 to: 0
                 duration: 50
             }
-
         }
 
         Rectangle {
@@ -221,9 +212,7 @@ Item {
                     NumberAnimation {
                         duration: Theme.animDurationFast
                     }
-
                 }
-
             }
 
             RowLayout {
@@ -261,7 +250,6 @@ Item {
                                 to: 1.0
                                 duration: 150
                             }
-
                         }
 
                         SequentialAnimation on opacity {
@@ -271,7 +259,6 @@ Item {
                                 to: 1
                                 duration: 200
                             }
-
                         }
 
                         Timer {
@@ -282,9 +269,7 @@ Item {
                             running: isNew
                             onTriggered: shapeIndex = 0
                         }
-
                     }
-
                 }
 
                 Rectangle {
@@ -309,13 +294,9 @@ Item {
                         NumberAnimation {
                             duration: Theme.animDurationFast
                         }
-
                     }
-
                 }
-
             }
-
         }
 
         Rectangle {
@@ -362,9 +343,7 @@ Item {
                             duration: Theme.animDurationFast
                             easing.type: Easing.OutCubic
                         }
-
                     }
-
                 }
 
                 MouseArea {
@@ -380,7 +359,6 @@ Item {
 
                             if (root.onRestoreFocus)
                                 root.onRestoreFocus();
-
                         }
                     }
                 }
@@ -390,7 +368,6 @@ Item {
                         duration: Theme.animDurationFast
                         easing.type: Easing.OutCubic
                     }
-
                 }
 
                 Behavior on scale {
@@ -398,11 +375,8 @@ Item {
                         duration: Theme.animDurationFast
                         easing.type: Easing.OutCubic
                     }
-
                 }
-
             }
-
         }
 
         Behavior on width {
@@ -410,19 +384,15 @@ Item {
                 duration: Theme.animDurationNormal
                 easing.type: Easing.OutBack
             }
-
         }
-
     }
 
     Connections {
         function onIsErrorChanged() {
             if (root.isError)
                 shakeRotation.start();
-
         }
 
         target: root
     }
-
 }

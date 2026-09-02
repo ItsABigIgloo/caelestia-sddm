@@ -16,7 +16,6 @@ Item {
     onCurrentUserIndexChanged: {
         if (avatarImage.status !== Image.Null)
             avatarImage.rebuildAvatarCandidates();
-
     }
     implicitWidth: Theme.avatarFrameSize
     implicitHeight: Theme.avatarShape === "clamshell" ? 220 : Theme.avatarFrameSize
@@ -30,7 +29,6 @@ Item {
             duration: Theme.animDurationFast
             easing.type: Easing.OutCubic
         }
-
     }
 
     TapBounce {
@@ -87,7 +85,6 @@ Item {
                 var normalized = toSourceUrl(value);
                 if (normalized !== "" && list.indexOf(normalized) === -1)
                     list.push(normalized);
-
             }
 
             function rebuildAvatarCandidates() {
@@ -121,16 +118,13 @@ Item {
             onStatusChanged: {
                 if (status === Image.Error && avatarCandidateIndex < avatarCandidates.length - 1)
                     avatarCandidateIndex += 1;
-
             }
             Component.onCompleted: rebuildAvatarCandidates()
 
             layer.effect: OpacityMask {
                 maskSource: bgShape
             }
-
         }
-
     }
 
     MouseArea {
@@ -143,9 +137,6 @@ Item {
             avatarBounce.trigger();
             if (root.onSwitchUser)
                 root.onSwitchUser();
-
         }
-
     }
-
 }

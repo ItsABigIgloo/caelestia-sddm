@@ -56,7 +56,6 @@ Item {
             onStatusChanged: {
                 if (status === Image.Error)
                     console.log("Background missing, using fallback color");
-
             }
 
             ShaderEffectSource {
@@ -82,9 +81,7 @@ Item {
                     duration: blurCard.animDuration
                     easing.type: Easing.InOutCubic
                 }
-
             }
-
         }
 
         Rectangle {
@@ -100,16 +97,13 @@ Item {
                 height: rootRect.height
                 radius: rootRect.radius
             }
-
         }
 
         Behavior on opacity {
             NumberAnimation {
                 duration: blurCard.animDurationOpacity
             }
-
         }
-
     }
 
     PropertyAnimation {
@@ -133,5 +127,4 @@ Item {
         duration: blurCard.animDuration
         easing.type: Easing.OutBack
     }
-
 }

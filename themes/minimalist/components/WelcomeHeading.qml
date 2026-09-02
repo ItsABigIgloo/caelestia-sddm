@@ -34,7 +34,6 @@ Text {
             duration: Theme.animDurationNormal
             easing.type: Easing.OutCubic
         }
-
     }
 
     Behavior on scale {
@@ -42,7 +41,5 @@ Text {
             duration: Theme.animDurationNormal
             easing.type: Easing.OutCubic
         }
-
     }
-
 }

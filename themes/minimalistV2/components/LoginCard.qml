@@ -74,13 +74,11 @@ Item {
         } else if (!capsLockOn) {
             if (toast.isOpen && toast.message === "Caps Lock is on")
                 toast.dismiss();
-
         }
     }
     onIsActiveChanged: {
         if (isActive)
             toast.dismiss();
-
     }
     Component.onCompleted: {
         if (usersModel && usersModel.count > 0) {
@@ -103,7 +101,6 @@ Item {
                 root.sessionNames = arr;
             }
         }
-
     }
 
     Rectangle {
@@ -178,14 +175,12 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     currentUserIndex: root.currentUserIndex
                     userModel: root.usersModel
-                    onSwitchUser: function() {
+                    onSwitchUser: function () {
                         if (root.usersModel && root.usersModel.count > 0) {
                             root.currentUserIndex = (root.currentUserIndex + 1) % root.usersModel.count;
                             if (root.onRestoreFocus)
                                 root.onRestoreFocus();
-
                         }
-
                     }
                 }
 
@@ -193,11 +188,11 @@ Item {
                     id: userSessionRow
 
                     readonly property var textAxes: ({
-                        "wght": 550,
-                        "wdth": 40,
-                        "ROND": 25,
-                        "opsz": 7
-                    })
+                            "wght": 550,
+                            "wdth": 40,
+                            "ROND": 25,
+                            "opsz": 7
+                        })
 
                     anchors.horizontalCenter: parent.horizontalCenter
                     spacing: 8
@@ -230,11 +225,9 @@ Item {
                                     root.currentUserIndex = (root.currentUserIndex + 1) % root.usersModel.count;
                                     if (root.onRestoreFocus)
                                         root.onRestoreFocus();
-
                                 }
                             }
                         }
-
                     }
 
                     Text {
@@ -277,13 +270,10 @@ Item {
                                     root.currentSessionIndex = (root.currentSessionIndex + 1) % root.sessionsModel.count;
                                     if (root.onRestoreFocus)
                                         root.onRestoreFocus();
-
                                 }
                             }
                         }
-
                     }
-
                 }
 
                 PasswordInput {
@@ -312,7 +302,7 @@ Item {
                         height: 70
                         iconText: "power_settings_new"
                         onRestoreFocus: root.onRestoreFocus
-                        onClickedAction: function() {
+                        onClickedAction: function () {
                             sddm.powerOff();
                         }
                     }
@@ -324,13 +314,11 @@ Item {
                         height: 70
                         iconText: "restart_alt"
                         onRestoreFocus: root.onRestoreFocus
-                        onClickedAction: function() {
+                        onClickedAction: function () {
                             sddm.reboot();
                         }
                     }
-
                 }
-
             }
 
             Row {
@@ -359,13 +347,9 @@ Item {
                         text: "Click to switch User and Session"
                         verticalAlignment: Text.AlignVCenter
                     }
-
                 }
-
             }
-
         }
-
     }
 
     ToastMessage {
@@ -382,7 +366,6 @@ Item {
             duration: Theme.enableWelcomeMessage ? Theme.animDurationNormal : 0
             easing.type: Easing.OutBack
         }
-
     }
 
     Behavior on opacity {
@@ -390,7 +373,5 @@ Item {
             duration: Theme.enableWelcomeMessage ? Theme.animDurationNormal : 0
             easing.type: Easing.OutBack
         }
-
     }
-
 }

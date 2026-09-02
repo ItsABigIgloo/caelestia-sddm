@@ -26,5 +26,4 @@ ColumnLayout {
         font.family: Theme.fontFamily
         color: Theme.mOnSurfaceVariant
     }
-
 }

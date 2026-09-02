@@ -23,7 +23,6 @@ Button {
 
         if (root.onRestoreFocus)
             root.onRestoreFocus();
-
     }
 
     TapBounce {
@@ -40,9 +39,7 @@ Button {
             ColorAnimation {
                 duration: 200
             }
-
         }
-
     }
 
     contentItem: Text {
@@ -57,9 +54,6 @@ Button {
             ColorAnimation {
                 duration: 200
             }
-
         }
-
     }
-
 }

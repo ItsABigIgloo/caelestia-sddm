@@ -67,9 +67,7 @@ Item {
                 height: rootRect.height
                 radius: rootRect.radius
             }
-
         }
-
     }
 
     PropertyAnimation {
@@ -93,5 +91,4 @@ Item {
         duration: blurCard.animDuration
         easing.type: Easing.OutBack
     }
-
 }

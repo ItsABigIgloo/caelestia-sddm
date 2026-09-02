@@ -11,5 +11,4 @@ Item {
         font.family: "Material Symbols Rounded"
         font.pointSize: 20
     }
-
 }

@@ -1,5 +1,5 @@
-import QtQuick 2.15
 pragma Singleton
+import QtQuick 2.15
 
 QtObject {
     id: theme
