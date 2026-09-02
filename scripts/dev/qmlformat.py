@@ -27,10 +27,12 @@ def find_qmlls():
         path = os.path.expanduser(cand)
         if os.path.isfile(path):
             return path
-    sys.exit(
+    print(
         "qmlls not found in VS Code, Code - OSS or VSCodium extension storage "
-        "(set QMLLS env to point at a qmlls binary)"
+        "(set QMLLS env to point at a qmlls binary)",
+        file=sys.stderr,
     )
+    sys.exit(2)
 
 GREEN = "\033[0;32m"
 YELLOW = "\033[0;33m"
@@ -41,7 +43,8 @@ RESET = "\033[0m"
 class QmlsClient:
     def __init__(self, binary):
         if not os.path.isfile(binary):
-            sys.exit(f"qmlls not found at {binary}")
+            print(f"qmlls not found at {binary}", file=sys.stderr)
+            sys.exit(2)
         self.proc = subprocess.Popen(
             [binary],
             stdin=subprocess.PIPE,
@@ -119,7 +122,13 @@ def format_file(client, path, text):
     except RuntimeError:
         return None
     client.send("textDocument/didClose", {"textDocument": {"uri": uri}}, notification=True)
-    if resp.get("error") or not resp.get("result"):
+    if resp.get("error"):
+        print(
+            f"  {YELLOW}WARNING{RESET}: {path} (qmlls could not format: "
+            f"{resp['error'].get('message', 'unknown error')})"
+        )
+        return text
+    if not resp.get("result"):
         return text
     return apply_edits(text, resp["result"])
 

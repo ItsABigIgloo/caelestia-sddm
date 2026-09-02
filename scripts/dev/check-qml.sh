@@ -65,7 +65,14 @@ main() {
 
     echo
     echo "--- Formatting check ---"
-    if ! python3 "$SCRIPT_DIR/qmlformat.py" --check "${files[@]}"; then
+    FORMAT_STATUS=0
+    python3 "$SCRIPT_DIR/qmlformat.py" --check "${files[@]}" || FORMAT_STATUS=$?
+
+    if [ "$FORMAT_STATUS" -eq 2 ]; then
+        echo
+        echo "✗ FAILED: formatting check could not run (qmlls unavailable)"
+        exit 1
+    elif [ "$FORMAT_STATUS" -ne 0 ]; then
         FORMAT_DIFFS=$((FORMAT_DIFFS + 1))
     fi
 
