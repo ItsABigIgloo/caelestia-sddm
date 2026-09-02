@@ -158,11 +158,48 @@ fi
 
 # 4. Sync Wallpaper LAST
 WALLPAPER_SRC="$CAEL_STATE/wallpaper/current"
-WALLPAPER_DEST="$THEME_DIR/assets/background"
 MAX_WALLPAPER_BYTES=$((50 * 1024 * 1024))
+MAX_VIDEO_WALLPAPER_BYTES=$((250 * 1024 * 1024))
+WALLPAPER_DEST="$THEME_DIR/assets/background"
 
-if copy_user_file "$WALLPAPER_SRC" "$WALLPAPER_DEST" "$MAX_WALLPAPER_BYTES"; then
-    rm -f -- "$THEME_DIR/assets/background."*
+# Video wallpapers are synced with a proper extension (needed for SDDM to recognize it)
+if command -v file >/dev/null 2>&1; then
+    WALLPAPER_MIME="$(sudo -H -u "$REAL_USER" file -b --mime-type -L "$WALLPAPER_SRC" 2>/dev/null || true)"
+    case "$WALLPAPER_MIME" in
+        video/*)
+            WALLPAPER_EXT=""
+            case "$WALLPAPER_MIME" in
+                video/webm) WALLPAPER_EXT="webm" ;;
+                video/x-matroska) WALLPAPER_EXT="mkv" ;;
+                video/quicktime) WALLPAPER_EXT="mov" ;;
+                video/x-msvideo) WALLPAPER_EXT="avi" ;;
+            esac
+            if [ -z "$WALLPAPER_EXT" ]; then
+                WALLPAPER_TARGET="$(sudo -H -u "$REAL_USER" readlink -f "$WALLPAPER_SRC" 2>/dev/null || true)"
+                TARGET_EXT="$(printf '%s' "${WALLPAPER_TARGET##*.}" | tr '[:upper:]' '[:lower:]')"
+                case "$TARGET_EXT" in
+                    mp4|m4v|webm|mkv|mov|avi) WALLPAPER_EXT="$TARGET_EXT" ;;
+                    *) WALLPAPER_EXT="mp4" ;;
+                esac
+            fi
+            WALLPAPER_DEST="$THEME_DIR/assets/background.$WALLPAPER_EXT"
+            ;;
+    esac
+fi
+
+MAX_BYTES="$MAX_WALLPAPER_BYTES"
+case "$WALLPAPER_DEST" in
+    *.mp4|*.m4v|*.webm|*.mkv|*.mov|*.avi) MAX_BYTES="$MAX_VIDEO_WALLPAPER_BYTES" ;;
+esac
+
+if copy_user_file "$WALLPAPER_SRC" "$WALLPAPER_DEST" "$MAX_BYTES"; then
+    # make sure to remove stale wallpapers
+    # copy first then remove old
+    for old in "$THEME_DIR/assets/background" "$THEME_DIR/assets/background."*; do
+        if [ -e "$old" ] && [ "$old" != "$WALLPAPER_DEST" ]; then
+            rm -f -- "$old"
+        fi
+    done
     echo "✓ Synced background"
 else
     echo "No readable wallpaper found, leaving existing background unchanged."

@@ -70,6 +70,13 @@ Rectangle {
 
         }
 
+        Loader {
+            id: videoLoader
+
+            anchors.fill: parent
+            source: "components/VideoBackground.qml"
+        }
+
         Rectangle {
             anchors.fill: parent
             color: "#000000"
@@ -177,6 +184,7 @@ Rectangle {
         username: userPicker.currentText
         blurAmount: root.welcomeBgBlurAmount
         blurEnabled: root.welcomeBgBlur
+        videoSourceItem: videoLoader.item ? videoLoader.item.activeVideoItem : null
     }
 
     Rectangle {
@@ -209,6 +217,7 @@ Rectangle {
             bgColor: config.mainCard
             visibleState: !root.firstInput
             radius: 50
+            videoSourceItem: videoLoader.item ? videoLoader.item.activeVideoItem : null
         }
 
         MainClock {
