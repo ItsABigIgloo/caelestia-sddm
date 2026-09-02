@@ -1,6 +1,5 @@
 {
     "qt-core.qtInstallationRoot": "/usr/lib/qt6",
-    "editor.defaultFormatter": "theqtcompany.qt-qml",
     "editor.formatOnSave": true,
     "[qml]": {
         "editor.defaultFormatter": "theqtcompany.qt-qml"
