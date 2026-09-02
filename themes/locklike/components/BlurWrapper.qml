@@ -63,7 +63,6 @@ Item {
                 sourceItem: blurCard.videoSourceItem
                 visible: blurCard.videoSourceItem !== null
             }
-
         }
 
         MultiEffect {

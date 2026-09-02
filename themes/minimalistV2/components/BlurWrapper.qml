@@ -47,7 +47,6 @@ Item {
                 sourceItem: Theme.videoItem
                 visible: Theme.videoActive
             }
-
         }
 
         MultiEffect {

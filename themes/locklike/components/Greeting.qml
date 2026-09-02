@@ -53,7 +53,6 @@ Item {
                 sourceItem: root.videoSourceItem
                 visible: root.videoSourceItem !== null
             }
-
         }
 
         MultiEffect {

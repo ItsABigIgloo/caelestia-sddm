@@ -11,7 +11,7 @@ Item {
 
     function probeNext() {
         if (probeIndex >= candidates.length)
-            return ;
+            return;
 
         var ext = candidates[probeIndex];
         probeIndex += 1;
@@ -21,7 +21,6 @@ Item {
     Component.onCompleted: {
         if (config.backgroundVideoEnabled !== "false")
             probeNext();
-
     }
 
     MediaPlayer {
@@ -31,15 +30,15 @@ Item {
         loops: MediaPlayer.Infinite
         // Probe failures (missing/corrupt files) fall through to the next
         // candidate extension until one loads, else the image stays visible.
-        onErrorOccurred: function(error, errorString) {
+        onErrorOccurred: function (error, errorString) {
             if (root.isActive)
-                return ;
+                return;
 
             root.probeNext();
         }
         onMediaStatusChanged: {
             if (root.isActive)
-                return ;
+                return;
 
             if (mediaStatus === MediaPlayer.LoadedMedia) {
                 if (player.hasVideo) {
@@ -59,5 +58,4 @@ Item {
         fillMode: VideoOutput.PreserveAspectCrop
         visible: root.isActive
     }
-
 }
