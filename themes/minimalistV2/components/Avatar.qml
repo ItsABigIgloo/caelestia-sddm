@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import "../singletons"
 import Qt5Compat.GraphicalEffects
 import QtQuick
@@ -93,9 +94,9 @@ Item {
                 appendCandidate(list, "../assets/avatar.face");
                 if (root.userModel) {
                     if (root.currentUserIndex >= 0 && root.currentUserIndex < root.userModel.count) {
-                        var modelIndex = root.userModel.index(root.currentUserIndex, 0);
-                        var icon = root.userModel.data(modelIndex, roleIcon);
-                        var homeDir = root.userModel.data(modelIndex, roleHomeDir);
+                        const modelIndex = root.userModel.index(root.currentUserIndex, 0);
+                        const icon = root.userModel.data(modelIndex, roleIcon);
+                        const homeDir = root.userModel.data(modelIndex, roleHomeDir);
                         appendCandidate(list, icon);
                         if (homeDir && homeDir !== "") {
                             appendCandidate(list, homeDir + "/.face.icon");

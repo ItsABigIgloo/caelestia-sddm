@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import "../singletons"
 import QtQuick
 import QtQuick.Layouts 1.15
@@ -227,6 +228,10 @@ Item {
                     model: root.buffer.length
 
                     delegate: ShapeCanvas {
+                        id: dot
+
+                        required property int index
+
                         implicitWidth: 15
                         implicitHeight: 15
                         color: Theme.mOnSurface
@@ -238,7 +243,7 @@ Item {
                         roundedPolygon: shapeGetters[shapeIndex]()
 
                         SequentialAnimation on scale {
-                            running: isNew
+                            running: dot.isNew
                             NumberAnimation {
                                 from: 0
                                 to: 1.4
@@ -253,7 +258,7 @@ Item {
                         }
 
                         SequentialAnimation on opacity {
-                            running: isNew
+                            running: dot.isNew
                             NumberAnimation {
                                 from: 0
                                 to: 1
@@ -266,8 +271,8 @@ Item {
 
                             interval: 300
                             repeat: false
-                            running: isNew
-                            onTriggered: shapeIndex = 0
+                            running: dot.isNew
+                            onTriggered: dot.shapeIndex = 0
                         }
                     }
                 }
@@ -278,8 +283,8 @@ Item {
                     property bool blink: true
 
                     visible: root.buffer !== ""
-                    width: 2
-                    height: 25
+                    implicitWidth: 2
+                    implicitHeight: 25
                     color: Theme.mOnSurface
                     opacity: blink ? 1 : 0
 

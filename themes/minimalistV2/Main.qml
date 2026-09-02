@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Effects
 import "components"
@@ -11,7 +12,7 @@ Rectangle {
     property bool capsLockOn: (typeof keyboard !== 'undefined') ? keyboard.capsLock : false
     property var userName: {
         if (userModel.count > 0 && userModel.lastIndex >= 0) {
-            var idx = userModel.index(userModel.lastIndex, 0);
+            const idx = userModel.index(userModel.lastIndex, 0);
             return userModel.data(idx, Qt.UserRole + 1);
         }
         return "";
@@ -49,10 +50,10 @@ Rectangle {
                 return;
             }
             if (event.text && event.text.length === 1) {
-                var charStr = event.text.charAt(0);
+                const charStr = event.text.charAt(0);
                 if ((charStr >= "a" && charStr <= "z") || (charStr >= "A" && charStr <= "Z")) {
-                    var isUpper = (charStr === charStr.toUpperCase());
-                    var shiftPressed = (event.modifiers & Qt.ShiftModifier) ? true : false;
+                    const isUpper = (charStr === charStr.toUpperCase());
+                    const shiftPressed = (event.modifiers & Qt.ShiftModifier) ? true : false;
                     root.capsLockOn = (isUpper && !shiftPressed) || (!isUpper && shiftPressed);
                 }
             }
@@ -68,20 +69,20 @@ Rectangle {
                 if (Theme.enableWelcomeMessage)
                     root.firstInput = true;
 
-                clearBuffer();
+                root.clearBuffer();
                 return;
             }
             if (event.key === Qt.Key_Right) {
                 if (userModel.count > 0 && loginCard.currentUserIndex < userModel.count - 1) {
                     loginCard.currentUserIndex += 1;
-                    clearBuffer();
+                    root.clearBuffer();
                 }
                 return;
             }
             if (event.key === Qt.Key_Left) {
                 if (userModel.count > 0 && loginCard.currentUserIndex > 0) {
                     loginCard.currentUserIndex -= 1;
-                    clearBuffer();
+                    root.clearBuffer();
                 }
                 return;
             }
@@ -105,7 +106,7 @@ Rectangle {
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
                 loginCard.showAuthenticating();
                 sddm.login(loginCard.getUserName(loginCard.currentUserIndex), root.buffer, loginCard.currentSessionIndex);
-                clearBuffer();
+                root.clearBuffer();
                 return;
             }
             if (event.text && event.text !== "" && event.text.length === 1) {
@@ -116,7 +117,7 @@ Rectangle {
             // DEBUG: Shift+F to simulate failed login (toggle via debugMode in theme.conf)
             if (Theme.debugMode && event.key === Qt.Key_F && (event.modifiers & Qt.ShiftModifier)) {
                 loginCard.showError("Incorrect password");
-                clearBuffer();
+                root.clearBuffer();
                 return;
             }
         }
@@ -139,7 +140,7 @@ Rectangle {
         Rectangle {
             anchors.fill: parent
             color: Theme.mShadow
-            opacity: firstInput ? 0 : Theme.overlayOpacity
+            opacity: root.firstInput ? 0 : Theme.overlayOpacity
 
             Behavior on opacity {
                 NumberAnimation {
@@ -153,7 +154,7 @@ Rectangle {
         source: background
         anchors.fill: background
         blurEnabled: Theme.blurEnabled
-        blur: firstInput ? 0 : Theme.blurStrength
+        blur: root.firstInput ? 0 : Theme.blurStrength
         blurMax: 64
         blurMultiplier: 1
         autoPaddingEnabled: false
@@ -179,15 +180,15 @@ Rectangle {
         sessionsModel: sessionModel
         buffer: root.buffer
         capsLockOn: root.capsLockOn
-        onRestoreFocus: restoreFocus
+        onRestoreFocus: root.restoreFocus
         onCurrentUserIndexChanged: {
-            clearBuffer();
+            root.clearBuffer();
         }
         onLogin: function () {
             loginCard.showAuthenticating();
             sddm.login(loginCard.getUserName(loginCard.currentUserIndex), root.buffer, loginCard.currentSessionIndex);
-            clearBuffer();
-            restoreFocus();
+            root.clearBuffer();
+            root.restoreFocus();
         }
     }
 
@@ -195,8 +196,8 @@ Rectangle {
         function onLoginFailed() {
             loginCard.clearAuthenticating();
             loginCard.showError("Incorrect password");
-            clearBuffer();
-            restoreFocus();
+            root.clearBuffer();
+            root.restoreFocus();
         }
 
         function onLoginSucceeded() {

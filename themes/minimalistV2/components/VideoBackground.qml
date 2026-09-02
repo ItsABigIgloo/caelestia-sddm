@@ -24,13 +24,13 @@ Item {
     }
     onIsActiveChanged: {
         Theme.videoActive = root.isActive;
-        Theme.videoItem = root.isActive ? videoOutput : null;
+        Theme.videoItem = root.isActive ? videoSurface : null;
     }
 
     MediaPlayer {
         id: player
 
-        videoOutput: videoOutput
+        videoOutput: videoSurface
         loops: MediaPlayer.Infinite
         // Probe failures (missing/corrupt files) fall through to the next
         // candidate extension until one loads, else the image stays visible.
@@ -56,7 +56,7 @@ Item {
     }
 
     VideoOutput {
-        id: videoOutput
+        id: videoSurface
 
         anchors.fill: parent
         fillMode: VideoOutput.PreserveAspectCrop

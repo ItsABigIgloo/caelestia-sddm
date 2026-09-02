@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import "../singletons"
 import QtQuick
 import QtQuick.Controls
@@ -67,22 +68,27 @@ ComboBox {
     }
 
     delegate: ItemDelegate {
+        id: delegateItem
+
+        required property int index
+        required property var model
+
         // Fixed inset to fit inside popup borders and rounded corners
         // Note: This 16px inset is required - making it dynamic breaks item width calculation
         width: root.width - 16
         hoverEnabled: true
 
         contentItem: Text {
-            text: root.textRole ? model[root.textRole] : modelData
+            text: root.textRole ? delegateItem.model[root.textRole] : delegateItem.model.modelData
             font: root.font
-            color: (root.highlightedIndex === index || hovered) ? Theme.mOnPrimary : Theme.mOnSurface
+            color: (root.highlightedIndex === delegateItem.index || delegateItem.hovered) ? Theme.mOnPrimary : Theme.mOnSurface
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Qt.AlignHCenter
             anchors.fill: parent
         }
 
         background: Rectangle {
-            color: (root.highlightedIndex === index || parent.hovered) ? Theme.mPrimary : "transparent"
+            color: (root.highlightedIndex === delegateItem.index || delegateItem.hovered) ? Theme.mPrimary : "transparent"
             radius: Math.min(Theme.elementRadius, Math.min(parent.width, parent.height) / 2)
         }
     }
@@ -90,7 +96,7 @@ ComboBox {
     popup: Popup {
         y: root.height - 1
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-        onClosed: onRestoreFocus()
+        onClosed: root.onRestoreFocus()
         width: root.width
         implicitHeight: popupList.implicitHeight
 

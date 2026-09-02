@@ -87,7 +87,7 @@ QtObject {
         if (!configAvailable)
             return undefined;
 
-        var value = config[key];
+        const value = config[key];
         return value !== undefined ? value : undefined;
     }
 

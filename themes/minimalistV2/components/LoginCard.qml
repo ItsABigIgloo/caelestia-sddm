@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import "../singletons"
 import Qt5Compat.GraphicalEffects
 import QtQuick
@@ -58,13 +59,13 @@ Item {
     opacity: isActive ? 0 : 1
     onUsersModelChanged: {
         if (usersModel && usersModel.count > 0) {
-            var uIdx = usersModel.lastIndex;
+            const uIdx = usersModel.lastIndex;
             currentUserIndex = (uIdx >= 0 && uIdx < usersModel.count) ? uIdx : 0;
         }
     }
     onSessionsModelChanged: {
         if (sessionsModel && sessionsModel.count > 0) {
-            var sIdx = sessionsModel.lastIndex;
+            const sIdx = sessionsModel.lastIndex;
             currentSessionIndex = (sIdx >= 0 && sIdx < sessionsModel.count) ? sIdx : 0;
         }
     }
@@ -82,11 +83,11 @@ Item {
     }
     Component.onCompleted: {
         if (usersModel && usersModel.count > 0) {
-            var uIdx = usersModel.lastIndex;
+            const uIdx = usersModel.lastIndex;
             currentUserIndex = (uIdx >= 0 && uIdx < usersModel.count) ? uIdx : 0;
         }
         if (sessionsModel && sessionsModel.count > 0) {
-            var sIdx = sessionsModel.lastIndex;
+            const sIdx = sessionsModel.lastIndex;
             currentSessionIndex = (sIdx >= 0 && sIdx < sessionsModel.count) ? sIdx : 0;
         }
     }
@@ -95,8 +96,11 @@ Item {
         model: root.sessionsModel
 
         delegate: Item {
+            required property int index
+            required property var model
+
             Component.onCompleted: {
-                var arr = root.sessionNames.slice();
+                const arr = root.sessionNames.slice();
                 arr[index] = model.name;
                 root.sessionNames = arr;
             }
