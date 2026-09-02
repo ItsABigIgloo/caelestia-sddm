@@ -14,15 +14,19 @@ LINT_ERRORS=0
 FORMAT_DIFFS=0
 TOTAL_FILES=0
 
+# Prefer the Qt 6 qmllint; /usr/bin/qmllint may be the Qt 5 one (e.g. Arch)
+QMLLINT="/usr/lib/qt6/bin/qmllint"
+[ -x "$QMLLINT" ] || QMLLINT="qmllint"
+
 check_file() {
     local file="$1"
     local file_display="${file#$PROJECT_ROOT/}"
     TOTAL_FILES=$((TOTAL_FILES + 1))
 
     # Linting check
-    if ! qmllint "$file" >/dev/null 2>&1; then
+    if ! "$QMLLINT" "$file" >/dev/null 2>&1; then
         echo "✗ Linting errors in: $file_display"
-        qmllint "$file"
+        "$QMLLINT" "$file"
         LINT_ERRORS=$((LINT_ERRORS + 1))
         return 1
     fi
