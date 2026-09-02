@@ -13,6 +13,8 @@ cp .qmlls.ini.example .qmlls.ini
 > [!NOTE]
 > The default `importPaths` (`/usr/lib/qt6/qml`) is for Arch. On other distributions check with `qmake6 -query QT_INSTALL_QML` and adjust `importPaths` accordingly.
 
+For formatting we use the `qmlls` binary bundled with the [Qt/QML extension](https://marketplace.visualstudio.com/items?itemName=TheQtCompany.qt-qml) for VS Code and its forks (VSCodium, Code - OSS).
+
 ## Types of Contributions
 
 We welcome all types of contributions:
