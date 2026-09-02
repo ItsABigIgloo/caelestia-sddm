@@ -1,110 +1,22 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-# QML Formatter Script
-# Usage: ./scripts/dev/format.sh [-i] [-n] [files...]
-#   -i  Format files in-place
-#   -n  Do not sort imports (keep original order)
-# If no files specified, formats all .qml files in the project
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
-set -e
+BOLD="\033[1m"
+GREEN="\033[0;32m"
+RESET="\033[0m"
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-INPLACE=0
-NO_SORT=0
-FILES=()
+mapfile -t qml_files < <(find "$ROOT_DIR" -name '*.qml' -not -path '*/build/*' | sort)
 
-for arg in "$@"; do
-    case $arg in
-        -i|--inplace)
-            INPLACE=1
-            shift
-            ;;
-        -n|--no-sort)
-            NO_SORT=1
-            shift
-            ;;
-        -*)
-            echo "Unknown option: $arg" >&2
-            echo "Usage: $0 [-i] [-n] [files...]" >&2
-            exit 1
-            ;;
-        *)
-            FILES+=("$arg")
-            ;;
-    esac
-done
+if [ ${#qml_files[@]} -eq 0 ]; then
+    echo "No QML files found."
+    exit 0
+fi
 
-build_qmlformat_args() {
-    local args=()
-    [ "$INPLACE" -eq 1 ] && args+=("-i")
-    [ "$NO_SORT" -eq 1 ] && args+=("-n")
-    echo "${args[@]}"
-}
+echo -e "${BOLD}=== Formatting QML files with qmlls ===${RESET}"
+python3 "$SCRIPT_DIR/qmlformat.py" "${qml_files[@]}"
+echo
 
-main() {
-    local files=()
-
-    if [ ${#FILES[@]} -gt 0 ]; then
-        files=("${FILES[@]}")
-    else
-        # Find all .qml files in the project
-        while IFS= read -r -d '' file; do
-            files+=("$file")
-        done < <(find "$PROJECT_ROOT" -name "*.qml" -print0 2>/dev/null)
-    fi
-
-    if [ ${#files[@]} -eq 0 ]; then
-        echo "No QML files to format"
-        exit 0
-    fi
-
-    local args
-    args=$(build_qmlformat_args)
-    local mode
-    if [ "$INPLACE" -eq 1 ]; then
-        mode="Formatting in-place"
-    else
-        mode="Previewing formatting"
-    fi
-
-    echo "=== QML Formatter ==="
-    echo "$mode ${#files[@]} file(s)..."
-    [ "$NO_SORT" -eq 1 ] && echo "(imports will not be sorted)"
-    echo
-
-    for file in "${files[@]}"; do
-        if [ ! -f "$file" ]; then
-            echo "✗ File not found: ${file#$PROJECT_ROOT/}"
-            continue
-        fi
-
-        local file_display="${file#$PROJECT_ROOT/}"
-
-        if [ "$INPLACE" -eq 1 ]; then
-            qmlformat $args "$file" >/dev/null 2>&1
-            echo "✓ Formatted: $file_display"
-        else
-            if ! qmlformat $args "$file" >/dev/null 2>&1; then
-                echo "✗ Error formatting: $file_display"
-            else
-                local formatted
-                formatted=$(qmlformat $args "$file" 2>/dev/null)
-
-                if diff -q <(cat "$file") <(echo "$formatted") >/dev/null 2>&1; then
-                    [ "$NO_SORT" -eq 0 ] && echo "✓ Already formatted: $file_display"
-                else
-                    echo "→ Needs formatting: $file_display"
-                    echo "---"
-                    echo "$formatted"
-                    echo "---"
-                fi
-            fi
-        fi
-    done
-
-    echo
-    echo "✓ Done"
-}
-
-main "$@"
+echo -e "${BOLD}${GREEN}Done. Run scripts/check.sh to verify.${RESET}"

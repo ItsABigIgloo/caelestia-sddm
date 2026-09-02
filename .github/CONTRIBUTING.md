@@ -2,6 +2,17 @@
 
 Thanks for your interest in contributing to Caelestia SDDM!
 
+## Development Setup
+
+The linting and formatting tools (`qmllint`/`qmlls`) read their config from `.qmlls.ini`. Copy the example to get started:
+
+```bash
+cp .qmlls.ini.example .qmlls.ini
+```
+
+> [!NOTE]
+> The default `importPaths` (`/usr/lib/qt6/qml`) is for Arch. On other distributions check with `qmake6 -query QT_INSTALL_QML` and adjust `importPaths` accordingly.
+
 ## Types of Contributions
 
 We welcome all types of contributions:
@@ -14,7 +25,7 @@ We welcome all types of contributions:
 4. Run the linting and formatting tools:
    ```bash
    ./scripts/dev/lint.sh
-   ./scripts/dev/format.sh -i
+   ./scripts/dev/format.sh
    ```
 5. Commit and push
 6. Open a Pull Request
@@ -52,7 +63,7 @@ For updates to the AUR package (PKGBUILD, install script), see **[aur/README-AUR
 
 2. To Run formatting:
    ```bash
-   ./scripts/dev/format.sh -i themes/<theme-name>/
+   ./scripts/dev/format.sh
    ```
 
 3. Test it with SDDM test mode:
@@ -66,7 +77,7 @@ For updates to the AUR package (PKGBUILD, install script), see **[aur/README-AUR
 Before opening a Pull Request, make sure:
 
 - [ ] Code passes `./scripts/dev/lint.sh`
-- [ ] Code is formatted with `./scripts/dev/format.sh -i`
+- [ ] Code is formatted with `./scripts/dev/format.sh`
 - [ ] Both `theme.conf` and `theme.conf.template` are present and match
 - [ ] `metadata.desktop` is fully filled out
 - [ ] Theme works in `sddm-greeter-qt6 --test-mode`

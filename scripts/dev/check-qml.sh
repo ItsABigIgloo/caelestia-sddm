@@ -27,22 +27,6 @@ check_file() {
         return 1
     fi
 
-    # Formatting check
-    local formatted
-    formatted=$(qmlformat "$file" 2>/dev/null)
-
-    if [ -z "$formatted" ]; then
-        echo "✗ Could not format: $file_display"
-        LINT_ERRORS=$((LINT_ERRORS + 1))
-        return 1
-    fi
-
-    if ! diff -q <(cat "$file") <(echo "$formatted") >/dev/null 2>&1; then
-        echo "⚠ Formatting differs: $file_display"
-        FORMAT_DIFFS=$((FORMAT_DIFFS + 1))
-        echo "   Run: ./scripts/dev/format.sh -i \"$file\""
-    fi
-
     echo "✓ $file_display"
     return 0
 }
@@ -71,9 +55,15 @@ main() {
 
     for file in "${files[@]}"; do
         if [ -f "$file" ]; then
-            check_file "$file"
+            check_file "$file" || true
         fi
     done
+
+    echo
+    echo "--- Formatting check ---"
+    if ! python3 "$SCRIPT_DIR/qmlformat.py" --check "${files[@]}"; then
+        FORMAT_DIFFS=$((FORMAT_DIFFS + 1))
+    fi
 
     echo
     echo "=== Summary ==="
@@ -88,7 +78,7 @@ main() {
         exit 1
     elif [ "$FORMAT_DIFFS" -gt 0 ]; then
         echo "⚠ PASSED: Files need formatting"
-        echo "Run: ./scripts/dev/format.sh -i to auto-format"
+        echo "Run: ./scripts/dev/format.sh to auto-format"
         exit 0
     else
         echo "✓ PASSED: All checks passed"
