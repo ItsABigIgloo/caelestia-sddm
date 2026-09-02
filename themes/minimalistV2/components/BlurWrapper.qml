@@ -2,6 +2,8 @@ import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Effects
 
+import "../singletons"
+
 Item {
     id: blurCard
 
