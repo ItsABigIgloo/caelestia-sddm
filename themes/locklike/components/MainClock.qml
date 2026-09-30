@@ -41,7 +41,8 @@ Item {
             font.variableAxes: root.fontAxesHours
             font.pixelSize: Math.round(224 * root.centerScale)
             color: Qt.lighter(config.primary, 1.6)
-            text: Qt.formatTime(root.currentTime, "hh")
+            // Qt only switches "hh" to 12-hour when the format contains AP
+            text: root.ap ? Qt.formatTime(root.currentTime, "hh AP").split(" ")[0] : Qt.formatTime(root.currentTime, "hh")
         }
 
         Item {
@@ -59,6 +60,23 @@ Item {
             color: config.secondary
             text: Qt.formatTime(root.currentTime, "mm")
         }
+    }
+
+    Text {
+        id: apText
+
+        visible: root.ap
+        anchors.left: clock.right
+        anchors.leftMargin: Math.round(12 * root.centerScale)
+        anchors.bottom: clock.bottom
+        anchors.bottomMargin: Math.round(48 * root.centerScale)
+
+        renderType: Text.NativeRendering
+        font.family: googleSansFlex.name
+        font.pixelSize: Math.round(48 * root.centerScale)
+        font.weight: Font.Medium
+        color: config.secondary
+        text: Qt.formatTime(root.currentTime, "AP")
     }
 
     Behavior on opacity {
