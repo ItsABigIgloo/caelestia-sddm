@@ -194,6 +194,13 @@ Rectangle {
                 "opsz": 224
             })
 
+        Timer {
+            interval: 60000
+            running: true
+            repeat: true
+            onTriggered: mainCard.currentTime = new Date()
+        }
+
         width: 1350
         height: 750
         scale: root.firstInput ? 0.5 : 1

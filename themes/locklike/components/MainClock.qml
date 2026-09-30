@@ -79,6 +79,13 @@ Item {
         text: Qt.formatTime(root.currentTime, "AP")
     }
 
+    Timer {
+        interval: 1000
+        running: true
+        repeat: true
+        onTriggered: root.currentTime = new Date()
+    }
+
     Behavior on opacity {
         NumberAnimation {
             duration: 300
