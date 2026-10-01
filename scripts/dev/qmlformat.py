@@ -12,6 +12,7 @@ import subprocess
 import sys
 
 QMLLS_CANDIDATES = [
+    "/usr/bin/qmlls6",
     "~/.config/Code/User/globalStorage/theqtcompany.qt-qml/qmlls/files/qmlls",
     "~/.config/Code - OSS/User/globalStorage/theqtcompany.qt-qml/qmlls/files/qmlls",
     "~/.config/VSCodium/User/globalStorage/theqtcompany.qt-qml/qmlls/files/qmlls",
@@ -28,7 +29,7 @@ def find_qmlls():
         if os.path.isfile(path):
             return path
     print(
-        "qmlls not found in VS Code, Code - OSS or VSCodium extension storage "
+        "qmlls not found in path or VS Code extension directories"
         "(set QMLLS env to point at a qmlls binary)",
         file=sys.stderr,
     )
