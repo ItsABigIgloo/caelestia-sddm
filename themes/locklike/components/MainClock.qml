@@ -10,73 +10,120 @@ Item {
     property real centerScale: 1
     property date currentTime: new Date()
 
-    readonly property var fontAxesHours: ({
-            "wght": 500,
-            "wdth": 30,
-            "ROND": 25,
-            "opsz": 224 * centerScale
-        })
-    readonly property var fontAxesMinutes: ({
+    readonly property int hourPx: Math.round(224 * centerScale)
+    readonly property int minutePx: Math.round((ap ? 121.6 : 224) * centerScale)
+    readonly property int apPx: Math.round(48 * centerScale)
+
+    readonly property var fontAxes: ({
             "wght": 500,
             "wdth": 30,
             "ROND": 25,
             "opsz": 224 * centerScale
         })
 
-    FontLoader {
-        id: googleSansFlex
-
-        source: "../assets/google-sans-flex/GoogleSansFlex.ttf"
+    function calcTopOff(metrics: TextMetrics): real {
+        return metrics.tightBoundingRect.y - metrics.boundingRect.y;
     }
 
-    Row {
-        id: clock
+    Item {
+        id: clockBox
+
         anchors.centerIn: parent
+
+        implicitWidth: hourText.implicitWidth + spacer.width + minuteText.implicitWidth
+        implicitHeight: hourMetrics.tightBoundingRect.height
+
+        FontLoader {
+            id: googleSansFlex
+
+            source: "../assets/google-sans-flex/GoogleSansFlex.ttf"
+        }
 
         Text {
             id: hourText
 
+            y: -root.calcTopOff(hourMetrics)
+
             renderType: Text.NativeRendering
             font.family: googleSansFlex.name
-            font.variableAxes: root.fontAxesHours
-            font.pixelSize: Math.round(224 * root.centerScale)
+            font.variableAxes: root.fontAxes
+            font.pixelSize: root.hourPx
             color: Qt.lighter(config.primary, 1.6)
-            // Qt only switches "hh" to 12-hour when the format contains AP
             text: root.ap ? Qt.formatTime(root.currentTime, "hh AP").split(" ")[0] : Qt.formatTime(root.currentTime, "hh")
+
+            TextMetrics {
+                id: hourMetrics
+
+                text: hourText.text
+                font: hourText.font
+            }
         }
 
         Item {
-            width: 5
+            id: spacer
+
+            width: 8
             height: 1
         }
 
         Text {
             id: minuteText
 
+            x: hourText.implicitWidth + spacer.width
+            y: -root.calcTopOff(minuteMetrics)
+
             renderType: Text.NativeRendering
             font.family: googleSansFlex.name
-            font.variableAxes: root.fontAxesMinutes
-            font.pixelSize: Math.round(224 * root.centerScale)
+            font.variableAxes: root.fontAxes
+            font.pixelSize: root.minutePx
             color: config.secondary
             text: Qt.formatTime(root.currentTime, "mm")
+
+            TextMetrics {
+                id: minuteMetrics
+
+                text: minuteText.text
+                font: minuteText.font
+            }
         }
-    }
 
-    Text {
-        id: apText
+        Rectangle {
+            visible: root.ap
+            anchors.left: minuteText.left
+            anchors.leftMargin: minuteMetrics.tightBoundingRect.x
+            y: clockBox.implicitHeight - height
 
-        visible: root.ap
-        anchors.left: clock.right
-        anchors.leftMargin: Math.round(12 * root.centerScale)
-        anchors.bottom: clock.bottom
-        anchors.bottomMargin: Math.round(48 * root.centerScale)
+            radius: Math.round(16 * root.centerScale)
+            color: config.subComponents
+            implicitWidth: minuteMetrics.tightBoundingRect.width
+            implicitHeight: apMetrics.tightBoundingRect.height + Math.round(32 * root.centerScale)
 
-        renderType: Text.NativeRendering
-        font.family: googleSansFlex.name
-        font.pixelSize: Math.round(48 * root.centerScale)
-        font.weight: Font.Medium
-        color: config.secondary
-        text: Qt.formatTime(root.currentTime, "AP")
+            Text {
+                id: apText
+
+                anchors.centerIn: parent
+                width: apMetrics.tightBoundingRect.width
+                height: apMetrics.tightBoundingRect.height
+                transform: Translate {
+                    x: -apMetrics.tightBoundingRect.x
+                    y: -root.calcTopOff(apMetrics)
+                }
+
+                renderType: Text.NativeRendering
+                font.family: googleSansFlex.name
+                font.variableAxes: root.fontAxes
+                font.pixelSize: root.apPx
+                color: config.text
+                text: Qt.formatTime(root.currentTime, "AP")
+
+                TextMetrics {
+                    id: apMetrics
+
+                    text: apText.text
+                    font: apText.font
+                }
+            }
+        }
     }
 
     Timer {
