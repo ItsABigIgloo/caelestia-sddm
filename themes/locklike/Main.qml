@@ -239,7 +239,7 @@ Rectangle {
             text: mainCard.day + " • " + mainCard.date
             font.pixelSize: 20
             font.family: googleSansFlex.name
-            font.weight: Font.DemiBold
+            font.weight: Font.Bold
         }
 
         RowLayout {
