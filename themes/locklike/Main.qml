@@ -187,12 +187,13 @@ Rectangle {
         property date currentTime: new Date()
         property string day: Qt.formatDateTime(currentTime, "dddd").toUpperCase()
         property string date: Qt.formatDateTime(currentTime, "d MMM").toUpperCase()
-        readonly property var fontAxesTitle: ({
-                "wght": 500,
-                "wdth": 30,
-                "ROND": 25,
-                "opsz": 224
-            })
+
+        Timer {
+            interval: 60000
+            running: true
+            repeat: true
+            onTriggered: mainCard.currentTime = new Date()
+        }
 
         width: 1350
         height: 750
@@ -232,14 +233,13 @@ Rectangle {
         Text {
             anchors.horizontalCenter: mainCard.horizontalCenter
             anchors.top: mainCard.top
-            anchors.topMargin: 267
+            anchors.topMargin: 270
             anchors.bottom: parent.bottom
             color: config.text
             text: mainCard.day + " • " + mainCard.date
-            font.pixelSize: 22
+            font.pixelSize: 20
             font.family: googleSansFlex.name
-            font.bold: true
-            font.variableAxes: mainCard.fontAxesTitle
+            font.weight: Font.Bold
         }
 
         RowLayout {
