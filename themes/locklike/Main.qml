@@ -233,7 +233,7 @@ Rectangle {
         Text {
             anchors.horizontalCenter: mainCard.horizontalCenter
             anchors.top: mainCard.top
-            anchors.topMargin: 275
+            anchors.topMargin: 270
             anchors.bottom: parent.bottom
             color: config.text
             text: mainCard.day + " • " + mainCard.date
