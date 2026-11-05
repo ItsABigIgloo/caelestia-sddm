@@ -475,7 +475,7 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.topMargin: mainCard.height - 100
             currentText: sessionPickerBtn.items.length > 0 ? sessionPickerBtn.items[0] : ""
-            selectedIndex: sessionModel.lastIndex,
+            selectedIndex: sessionModel.lastIndex
             opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
             visible: root.sessionPickerEnabled
             onSelectedIndexChanged: {
